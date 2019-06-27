@@ -1,0 +1,6 @@
+ofxGui
+ofxNetwork
+ofxInputField
+ofxNetworkUtils
+ofxOscilloscope
+ofxThreadedLogger
