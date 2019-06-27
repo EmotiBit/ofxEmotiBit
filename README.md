@@ -1,4 +1,4 @@
-# CFL_SW_BiosensorModule
+# ofxEmotiBit
 Software for the biosensor module
 
 ## Requirements
