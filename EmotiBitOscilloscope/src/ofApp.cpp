@@ -137,8 +137,8 @@ void ofApp::setup() {
 	yLims = vector<vector<vector<float>>>
 	{
 		{ // scope panel 1
-			{  -4.f, 4.f  },
-			{  -500.f, 500.f  },
+			{  -8.f, 8.f  },
+			{  -1000.f, 1000.f  },
 			{  0.f,0.f  },
 			{ 0.f,0.f },
 			//{ -0.01f, 3.31f },
