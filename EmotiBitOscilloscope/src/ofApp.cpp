@@ -424,7 +424,7 @@ void ofApp::update() {
 				ss << "," << ofToString(channel) ;
 			}
 			
-			sendEmotiBitPacket(EmotiBitPacket::TypeTag::LSL_MARKER,"LC," + ofToString(sampleToUse.localClock,7) + "TSC," + ofToString(sampleToUse.timestampLocal, 7) + ",TS," + ofToString(sampleToUse.timestamp, 7) + ss.str());
+			sendEmotiBitPacket(EmotiBitPacket::TypeTag::LSL_MARKER, "TSC," + ofToString(sampleToUse.timestampLocal, 7) + ",TS," + ofToString(sampleToUse.timestamp, 7) + ",LC," + ofToString(sampleToUse.localClock, 7) + ",LD"+ ss.str());
 			//cout << EmotiBitPacket::TypeTag::LSL_MARKER << ",LC," << ofToString(sampleToUse.localClock, 7) << ",TSC," << ofToString(sampleToUse.timestampLocal, 7) << ",TS," << ofToString(sampleToUse.timestamp, 7) + ss.str() << endl;
 		}
 	}
