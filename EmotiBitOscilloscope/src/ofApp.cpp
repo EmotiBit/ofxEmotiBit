@@ -424,8 +424,8 @@ void ofApp::update() {
 				ss << "," << ofToString(channel) ;
 			}
 			
-			sendEmotiBitPacket(EmotiBitPacket::TypeTag::LSL_MARKER, "R," + ofToString(sampleToUse.timestamp + lsl.getTimeCor(), 15) + ",S," + ofToString(sampleToUse.timestamp, 15) + ss.str());
-			cout << EmotiBitPacket::TypeTag::LSL_MARKER << ",R," << ofToString(sampleToUse.timestamp + lsl.getTimeCor(), 15) << ",S," << ofToString(sampleToUse.timestamp, 15) + ss.str() << endl;
+			sendEmotiBitPacket(EmotiBitPacket::TypeTag::LSL_MARKER,"LC," + ofToString(sampleToUse.localClock,7) + "TSC," + ofToString(sampleToUse.timestampLocal, 7) + ",TS," + ofToString(sampleToUse.timestamp, 7) + ss.str());
+			cout << EmotiBitPacket::TypeTag::LSL_MARKER << ",LC," << ofToString(sampleToUse.localClock, 7) << ",TSC," << ofToString(sampleToUse.timestampLocal, 7) << ",TS," << ofToString(sampleToUse.timestamp, 7) + ss.str() << endl;
 		}
 	}
 	static uint64_t heartBeatTimer;
@@ -764,8 +764,9 @@ void ofApp::parseIncomingRequestData(EmotiBitPacket::Header header, vector<strin
 	}*/
 	//lslUpdates
 	if (lsl.isConnected()) {
-		sendEmotiBitPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) + "," + ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT) + ",LSLR," + ofToString(lsl::local_clock(), 15) + ",LSLS," + ofToString(lsl::local_clock() - lsl.getTimeCor(), 15));
-		cout << EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME << "," << ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) + "," + ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT) + ",LSLR," + ofToString(lsl::local_clock(), 15) + ",LSLS," + ofToString(lsl::local_clock() - lsl.getTimeCor(), 15) << endl;
+		double lsltime = lsl::local_clock();
+		sendEmotiBitPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) + "," + ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT) + ",LC," + ofToString(lsltime, 7));
+		cout << EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME << "," << ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) + "," + ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT) + ",LC," + ofToString(lsltime, 7) << endl;
 	}
 	sendEmotiBitPacket(EmotiBitPacket::TypeTag::ACK, ofToString(header.packetNumber) + ',' + header.typeTag, 2);
 	//cout << EmotibitPacket::TypeTag::REQUEST_DATA << header.packetNumber << endl;
