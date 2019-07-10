@@ -9,4 +9,6 @@ Software for the biosensor module
 - ofxThreadedLogger - git@github.com:produceconsumerobot/ofxThreadedLogger.git
 - ofxLSL - git@github.com:badfishblues/ofxLSL.git
   - _**NOTE:**_ for lsl support, if developing with visual studio, code should be compiled for x64
-  - liblsl64.dll should always be in the same folder as the .exe (i.e. /bin)
+  - liblsl64.dll should always be in the same folder as the .exe (i.e. EmotiBitOscilloscope/bin/liblsl64.dll)
+  - liblsl64.lib should always be linked to in under _solution properties->linker->general->additional library directories_ and _solution properties->linker->input-> additional dependencies_
+  - both of these libs are handled properly by default, but should be considered if deviating from release code
