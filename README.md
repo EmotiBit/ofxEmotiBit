@@ -1,5 +1,5 @@
 # ofxEmotiBit
-Software for the biosensor module
+Software for the biosensor module. Precompiled executables can be found in releases and run without below requirements.
 
 ## Requirements
 - OF 0.9.8 - https://openframeworks.cc/download/older/
