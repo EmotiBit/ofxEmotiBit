@@ -70,8 +70,8 @@
     <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp">
       <Filter>addons\ofxThreadedLogger\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\EmotiBitUtils\EmotiBitPacket.cpp">
-      <Filter>EmotiBitUtils</Filter>
+    <ClCompile Include="..\src\EmotiBitPacket.cpp">
+      <Filter>addons\ofxEmotiBit\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,15 +150,15 @@
     <Filter Include="addons\ofxThreadedLogger\src">
       <UniqueIdentifier>{CA068CB5-A638-66AF-AE6A-1CDD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EmotiBitUtils">
-      <UniqueIdentifier>{e90bb436-c130-4f3e-a503-9eff500ea241}</UniqueIdentifier>
+    <Filter Include="addons\ofxEmotiBit">
+      <UniqueIdentifier>{1b216f74-b84c-4a16-842d-7c9b609cee25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxEmotiBit\src">
+      <UniqueIdentifier>{fa8062e2-0d36-4c87-a194-c71c38f3b067}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DoubleBuffer.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ofApp.h">
@@ -239,8 +239,11 @@
     <ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h">
       <Filter>addons\ofxThreadedLogger\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\EmotiBitUtils\EmotiBitPacket.h">
-      <Filter>EmotiBitUtils</Filter>
+    <ClInclude Include="..\src\DoubleBuffer.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EmotiBitPacket.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
