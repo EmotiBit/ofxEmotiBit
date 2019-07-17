@@ -1,3 +1,4 @@
+ofxEmotiBit
 ofxGui
 ofxInputField
 ofxLSL

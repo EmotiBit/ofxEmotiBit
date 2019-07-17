@@ -44,6 +44,7 @@ const char* EmotiBitPacket::TypeTag::REQUEST_DATA = "RD\0";
 const char* EmotiBitPacket::TypeTag::PING = "PI\0";
 const char* EmotiBitPacket::TypeTag::PONG = "PO\0";
 
+const char EmotiBitPacket::PACKET_DELIMITER_CSV = '\n';
 const string EmotiBitPacket::TIMESTAMP_STRING_FORMAT = "%Y-%m-%d_%H-%M-%S-%f";
 
 #ifdef ARDUINO
