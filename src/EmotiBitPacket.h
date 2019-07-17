@@ -158,7 +158,7 @@ public:
 		static const char* PONG;
 	};
 	
-	static const char PACKET_DELIMITER_CSV = '\n';
+	static const char PACKET_DELIMITER_CSV;
 	static const string TIMESTAMP_STRING_FORMAT;
 
 	EmotiBitPacket();
