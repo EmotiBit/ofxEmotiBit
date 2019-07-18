@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "Emotibit1.app"
-               BlueprintName = "Emotibit1"
-               ReferencedContainer = "container:Emotibit1.xcodeproj">
+               BuildableName = "EmotiBitDataParser.app"
+               BlueprintName = "EmotiBitDataParser"
+               ReferencedContainer = "container:EmotiBitDataParser.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Emotibit1.app"
-            BlueprintName = "Emotibit1"
-            ReferencedContainer = "container:Emotibit1.xcodeproj">
+            BuildableName = "EmotiBitDataParser.app"
+            BlueprintName = "EmotiBitDataParser"
+            ReferencedContainer = "container:EmotiBitDataParser.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Emotibit1.app"
-            BlueprintName = "Emotibit1"
-            ReferencedContainer = "container:Emotibit1.xcodeproj">
+            BuildableName = "EmotiBitDataParser.app"
+            BlueprintName = "EmotiBitDataParser"
+            ReferencedContainer = "container:EmotiBitDataParser.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "Emotibit1.app"
-            BlueprintName = "Emotibit1"
-            ReferencedContainer = "container:Emotibit1.xcodeproj">
+            BuildableName = "EmotiBitDataParser.app"
+            BlueprintName = "EmotiBitDataParser"
+            ReferencedContainer = "container:EmotiBitDataParser.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
