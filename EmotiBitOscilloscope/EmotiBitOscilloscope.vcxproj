@@ -96,14 +96,14 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\EmotiBitUtils;%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;
-C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
@@ -115,8 +115,7 @@ C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src</Addi
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>liblsl64.lib;
-C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -125,7 +124,7 @@ C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src;%(Add
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <AdditionalDependencies>liblsl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../ofxLSL/libs/labstreaminglayer/lib/win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -135,8 +134,7 @@ C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src;%(Add
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\EmotiBitUtils;%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;
-C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -147,6 +145,7 @@ C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src</Addi
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
@@ -157,8 +156,7 @@ C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src</Addi
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\EmotiBitUtils;%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;
-C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -168,14 +166,15 @@ C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src</Addi
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalLibraryDirectories>..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>liblsl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../ofxLSL/libs/labstreaminglayer/lib/win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\EmotiBitPacket.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitPacket.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp" />
@@ -197,9 +196,9 @@ C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src</Addi
     <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\DoubleBuffer.h" />
-    <ClInclude Include="..\src\EmotiBitPacket.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h" />
+    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitPacket.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h" />
