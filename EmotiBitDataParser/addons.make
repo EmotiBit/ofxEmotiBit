@@ -1,6 +1,7 @@
+ofxEmotiBit
 ofxGui
-ofxNetwork
 ofxInputField
+ofxNetwork
 ofxNetworkUtils
 ofxOscilloscope
 ofxThreadedLogger
