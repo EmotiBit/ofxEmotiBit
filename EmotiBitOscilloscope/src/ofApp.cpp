@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include <cmath>
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -903,6 +904,7 @@ void ofApp::sendBroadcast(string ipAddress) {
 }
 
 string ofApp::ofGetTimestampString(const string& timestampFormat) {
+#if 0
 	std::stringstream str;
 	auto now = std::chrono::system_clock::now();
 	auto t = std::chrono::system_clock::to_time_t(now);    std::chrono::duration<double> s = now - std::chrono::system_clock::from_time_t(t);
@@ -910,6 +912,20 @@ string ofApp::ofGetTimestampString(const string& timestampFormat) {
 	auto tm = *std::localtime(&t);
 	constexpr int bufsize = 256;
 	char buf[bufsize];
+#endif
+	std::stringstream str;
+	//high_resolution_clock is a mirror for the highest resolution clock on a given operating system, this is steady on windows and mac
+	std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> unixTime = std::chrono::duration_cast<std::chrono::duration<double>>(now.time_since_epoch());
+	ofLogNotice() << std::fixed << unixTime.count() * 1000 << std::endl;
+	time_t t = (time_t)(unixTime.count()*1000);
+	
+	unsigned int us = (unixTime.count() - std::trunc(unixTime.count())) * 1000000;
+	//asctime(localtime(&t)) can be used to quickly convert to a char* in the format:  Tue Aug 06 13:51:55 2019
+	auto tm = *std::localtime(&t);
+	constexpr int bufsize = 256;
+	char buf[bufsize];
+
 
 	// Beware! an invalid timestamp string crashes windows apps.
 	// so we have to filter out %i (which is not supported by vs)
@@ -922,7 +938,7 @@ string ofApp::ofGetTimestampString(const string& timestampFormat) {
 		str << buf;
 	}
 	auto ret = str.str();
-
+	ofLogNotice() << ret << '\t' << std::endl;
 
 	return ret;
 }
