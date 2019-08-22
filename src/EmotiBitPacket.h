@@ -156,9 +156,17 @@ public:
 		static const char* REQUEST_DATA;
 		static const char* PING;
 		static const char* PONG;
+        
+//        static vector<string> APERIODIC;
 	};
+    
+    static class TypeTagGroups{
+    public:
+        static const char* const APERIODIC[];
+        static const char* const USER_MESSAGES[];
+    };
 	
-	static const char PACKET_DELIMITER_CSV;
+    static const char PACKET_DELIMITER_CSV;
 	static const string TIMESTAMP_STRING_FORMAT;
 
 	EmotiBitPacket();
