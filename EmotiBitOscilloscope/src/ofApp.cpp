@@ -14,11 +14,13 @@ void ofApp::setup() {
 	hibernateButton.addListener(this, &ofApp::hibernateButtonPressed);
 	sendUserNote.addListener(this, &ofApp::sendExperimenterNoteButton);
 
+	int sendDataWidth = 180;
+
 	int guiXPos = 0;
 	int guiYPos = 20;
 	int guiWidth = 200;
 	int guiPosInc = guiWidth + 1;
-	guiPanels.resize(6);
+	guiPanels.resize(7);
 	int p = 0;
 	guiPanelDevice = p;
 	guiPanels.at(guiPanelDevice).setDefaultWidth(guiWidth);
@@ -30,51 +32,89 @@ void ofApp::setup() {
 	//deviceGroup.add(deviceList.at(deviceList.size() - 1));
 	deviceMenuGroup.add(deviceGroup);
 	guiPanels.at(guiPanelDevice).add(deviceMenuGroup);
+	//guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).minimize();
 	p++;
-	guiXPos += guiPosInc;
+	guiXPos += guiWidth + 1;
+	guiWidth = 180;
 	guiPanelRecord = p;
 	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
+	guiPanels.at(guiPanelRecord).add(recordingButton.set(GUI_STRING_CONTROL_RECORD, false));
+	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setTextColor(recordControlColor); // color of label and x
+	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setFillColor(recordControlColor); // fill color of checkbox
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setUseTTF(true);
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(recordControlColor); // background of whole control
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setHeaderBackgroundColor(recordControlColor); // not cear what this does
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBorderColor(recordControlColor); // not clear what this does
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setFillColor(recordControlColor); // fill color of checkbox
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setSize(5, 10); // size of whole field
 	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
-	guiPanels.at(guiPanelRecord).add(recordingButton.set("Record", false));
-	//guiPanels.at(0).getControl("Record")->setSize(guiWidth, guiYPos * 2);
+	//guiPanels.at(0).getControl(GUI_STRING_CONTROL_RECORD)->setSize(guiWidth, guiYPos * 2);
 	p++;
-	guiWidth = 190;
 	guiXPos += guiWidth + 1;
+	guiWidth = 150;
 	guiPanelMode = p;
 	guiPanels.at(guiPanelMode).setDefaultWidth(guiWidth);
-	guiPanels.at(guiPanelMode).setup("hibernate", "junk.xml", guiXPos, -guiYPos);
+	guiPanels.at(guiPanelMode).setup(GUI_STRING_CONTROL_HIBERNATE, "junk.xml", guiXPos, -guiYPos);
+	guiPanels.at(guiPanelMode).add(hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false));
+	guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setTextColor(hibernateControlColor); // color of label and x
+	guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setFillColor(hibernateControlColor); // fill color of checkbox
 	guiPanels.at(guiPanelMode).add(hibernateStatus.setup("Mode", GUI_STRING_MODE_ACTIVE));
-	guiPanels.at(guiPanelMode).add(hibernateButton.set("Hibernate", false));
 	p++;
-	guiWidth = 150;
 	guiXPos += guiWidth + 1;
+	guiWidth = 190;
 	guiPanelLevels = p;
 	guiPanels.at(guiPanelLevels).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelLevels).setup("batteryStatus", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelLevels).add(batteryStatus.setup("Battery Level", "?"));
 	guiPanels.at(guiPanelLevels).add(sdCardStatus.setup("SD Card Remaining", "93%"));
 	p++;
-	guiWidth = 200;
 	guiXPos += guiWidth + 1;
+	guiWidth = 200;
 	guiPanelErrors = p;
 	guiPanels.at(guiPanelErrors).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelErrors).setup("errorStatus", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelErrors).add(dataClippingCount.set(GUI_STRING_CLIPPING_EVENTS, 0, 0, 0));
 	guiPanels.at(guiPanelErrors).add(dataOverflowCount.set(GUI_STRING_OVERFLOW_EVENTS, 0, 0, 0));
 	p++;
-	guiWidth = 200;
 	guiXPos += guiWidth + 1;
+	guiWidth = 200;
 	guiPanelUserNote = p;
-	guiPanels.at(guiPanelUserNote).setDefaultWidth(ofGetWindowWidth() - guiXPos);
+	guiPanels.at(guiPanelUserNote).setDefaultWidth(ofGetWindowWidth() - guiXPos - sendDataWidth);
 	guiPanels.at(guiPanelUserNote).setup("userNote", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelUserNote).add(userNote.setup("Note:", "[Add a note]"));
-	guiPanels.at(guiPanelUserNote).add(sendUserNote.setup("Send Note"));
+	guiPanels.at(guiPanelUserNote).add(sendUserNote.setup(GUI_STRING_NOTE_BUTTON));
+	guiPanels.at(guiPanelUserNote).getControl(GUI_STRING_NOTE_BUTTON)->setTextColor(noteControlColor); // color of label and x
+	guiPanels.at(guiPanelUserNote).getControl(GUI_STRING_NOTE_BUTTON)->setFillColor(noteControlColor); // fill color of checkbox
 
-	//gui.setup("panel"); // most of the time you don't need a name but don't forget to call setup
-	//gui.add(recordingStatus.set("Recording", false));
-	//gui.add(batteryStatus.set("Battery", 0, 0, 100));
-	//gui.add(sdCardStatus.set("SD Card", 0, 0, 100));
+	p++;
+	guiPanelSendData = p;
+	guiWidth = sendDataWidth;
+	guiXPos = ofGetWindowWidth() - guiWidth - 1;
+	guiPanels.at(guiPanelSendData).setDefaultWidth(guiWidth);
+	guiPanels.at(guiPanelSendData).setup("sendData", "junk.xml", guiXPos, -guiYPos * 2.2);
+	sendDataMenuGroup.setName(GUI_SEND_DATA_MENU_NAME);
+	sendDataMenuGroup.add(sendOptionSelected.set(GUI_STRING_SEND_DATA_VIA, GUI_STRING_SEND_DATA_NONE));
+	sendDataGroup.setName(GUI_OUTPUT_GROUP_NAME);
+	sendDataMenuGroup.add(sendDataGroup);
+	guiPanels.at(guiPanelSendData).add(sendDataMenuGroup);
+	sendDataOptions = {
+		GUI_STRING_SEND_DATA_OSC,
+		GUI_STRING_SEND_DATA_LSL,
+		GUI_STRING_SEND_DATA_MQTT,
+		GUI_STRING_SEND_DATA_TCP,
+		GUI_STRING_SEND_DATA_UDP
+	};
+	for (int j = 0; j < sendDataOptions.size(); j++) {
+		sendDataList.emplace_back(sendDataOptions.at(j), false);
+		sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
+		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
+		guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
+	}
+	guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).minimize();
+	//guiPanels.at(p).minimize();
+	//guiPanels.at(p).minimizeAll();
+
 
 	typeTags = vector<vector<vector<string>>>
 	{
@@ -417,15 +457,15 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket) {
 				}
 			}
 			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::RESET) == 0) {
-				if (guiPanels.at(guiPanelMode).getControl("Hibernate") != NULL) {
-					hibernateButton.set("Hibernate", false);
-					guiPanels.at(guiPanelMode).getControl("Hibernate")->setBackgroundColor(ofColor(0, 0, 0));
+				if (guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE) != NULL) {
+					hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false);
+					guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setBackgroundColor(ofColor(0, 0, 0));
 					hibernateStatus.setBackgroundColor(ofColor(0, 0, 0));
 					hibernateStatus.getParameter().fromString(GUI_STRING_MODE_ACTIVE);
 				}
-				if (guiPanels.at(guiPanelRecord).getControl("Record") != NULL) {
-					recordingButton.set("Record", false);
-					guiPanels.at(guiPanelRecord).getControl("Record")->setBackgroundColor(ofColor(0, 0, 0));
+				if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+					recordingButton.set(GUI_STRING_CONTROL_RECORD, false);
+					guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
 					recordingStatus.setBackgroundColor(ofColor(0, 0, 0));
 					recordingStatus.getParameter().fromString(GUI_STRING_NOT_RECORDING);
 				}
@@ -586,10 +626,10 @@ void ofApp::keyReleased(int key) {
 		sendBroadcast(ips.at(0));
 	}
 	if (key == 'r') { 
-		recordingButton.set("Record", !recordingButton.get());
+		recordingButton.set(GUI_STRING_CONTROL_RECORD, !recordingButton.get());
 	}
 	if (key == 'h') { 
-		hibernateButton.set("Hibernate", !hibernateButton.get());
+		hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, !hibernateButton.get());
 	}
 	if (key == 'i') {
 		drawDataInfo = !drawDataInfo;
@@ -802,15 +842,15 @@ void ofApp::parseIncomingAck(vector<string> splitPacket) {
 		consoleLogger.push("ACK: " + splitPacket.at(dataStart) +  ", " + splitPacket.at(dataStart + 1) + "\n");
 		//cout << "ACK: " << splitPacket.at(dataStart) << ", " << splitPacket.at(dataStart + 1) << endl;
 		if (splitPacket.at(dataStart + 1).compare(EmotiBitPacket::TypeTag::RECORD_BEGIN) == 0) {
-			if (guiPanels.at(guiPanelRecord).getControl("Record") != NULL) {
-				guiPanels.at(guiPanelRecord).getControl("Record")->setBackgroundColor(ofColor(255, 0, 0));
-				recordingStatus.setBackgroundColor(ofColor(255, 0, 0));
+			if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+				guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
+				recordingStatus.setBackgroundColor(recordControlColor);
 				recordingStatus.getParameter().fromString(GUI_STRING_RECORDING);
 			}
 		}
 		else if (splitPacket.at(dataStart + 1).compare(EmotiBitPacket::TypeTag::RECORD_END) == 0) {
-			if (guiPanels.at(guiPanelRecord).getControl("Record") != NULL) {
-				guiPanels.at(guiPanelRecord).getControl("Record")->setBackgroundColor(ofColor(0, 0, 0));
+			if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+				guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
 				recordingStatus.setBackgroundColor(ofColor(0, 0, 0));
 				recordingStatus.getParameter().fromString(GUI_STRING_NOT_RECORDING);
 			}
@@ -819,14 +859,14 @@ void ofApp::parseIncomingAck(vector<string> splitPacket) {
 			userNote.getParameter().fromString("[Add a note]");
 		}
 		else if (splitPacket.at(dataStart + 1).compare(EmotiBitPacket::TypeTag::MODE_HIBERNATE) == 0) {
-			if (guiPanels.at(guiPanelMode).getControl("Hibernate") != NULL) {
-				guiPanels.at(guiPanelMode).getControl("Hibernate")->setBackgroundColor(ofColor(255, 0, 0));
-				hibernateStatus.setBackgroundColor(ofColor(255, 0, 0));
+			if (guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE) != NULL) {
+				guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setBackgroundColor(ofColor(0, 0, 0));
+				hibernateStatus.setBackgroundColor(hibernateControlColor);
 				hibernateStatus.getParameter().fromString(GUI_STRING_MODE_HIBERNATE);
 			}
-			if (guiPanels.at(guiPanelRecord).getControl("Record") != NULL) {
-				recordingButton.set("Record", false);
-				guiPanels.at(guiPanelRecord).getControl("Record")->setBackgroundColor(ofColor(0, 0, 0));
+			if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+				recordingButton.set(GUI_STRING_CONTROL_RECORD, false);
+				guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
 				recordingStatus.setBackgroundColor(ofColor(0, 0, 0));
 				recordingStatus.getParameter().fromString(GUI_STRING_NOT_RECORDING);
 			}
@@ -867,10 +907,36 @@ void ofApp::deviceSelection(bool & selected) {
 	changeConnection(selected);
 }
 
+
+void ofApp::sendDataSelection(bool & selected) {
+	if (selected) {
+		if (sendOptionSelected.get().compare(GUI_STRING_SEND_DATA_NONE) != 0) {	// If there is currently a selected IP address
+			// Unselected it
+			for (int j = 0; j < sendDataList.size(); j++) {
+				if (sendOptionSelected.get().compare(sendDataList.at(j).getName()) == 0) {
+					sendDataList.at(j).set(false);
+				}
+			}
+		}
+
+		// Updated the selected output
+		for (int j = 0; j < sendDataList.size(); j++) {
+			if (sendDataList.at(j).get()) {
+				string output = sendDataList.at(j).getName();
+				sendOptionSelected.set(output);
+			}
+		}
+	}
+	else {
+		sendOptionSelected.set(GUI_STRING_SEND_DATA_NONE);
+	}
+}
+
+
 void ofApp::changeConnection(bool selected) {
 	if (selected) {
 		if (deviceSelected.get().compare(GUI_STRING_NO_EMOTIBIT_SELECTED) != 0) {	// If there is currently a selected IP address
-																																							// Unselected it
+			// Unselected it
 			for (int j = 0; j < deviceList.size(); j++) {
 				if (deviceSelected.get().compare(deviceList.at(j).getName()) == 0) {
 					deviceList.at(j).set(false);

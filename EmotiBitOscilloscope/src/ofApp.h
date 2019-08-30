@@ -45,6 +45,7 @@ public:
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void deviceSelection(bool & selected);
+	void sendDataSelection(bool & selected);
 	bool checkDeviceList(string ip);
 	void changeConnection(bool selected);
 	void sendBroadcast(string ipAddress);
@@ -123,9 +124,15 @@ public:
 	ofParameter<int> dataOverflowCount;
 	ofParameterGroup deviceMenuGroup;
 	ofParameter<string> deviceSelected;
-	ofxLabel currentDevice;
+	//ofxLabel currentDevice;
 	vector<ofParameter<bool>> deviceList;
 	ofParameterGroup deviceGroup;
+	vector<string> sendDataOptions;
+	vector<ofParameter<bool>> sendDataList;
+	//ofxLabel currentSendOption;
+	ofParameter<string> sendOptionSelected;
+	ofParameterGroup sendDataMenuGroup;
+	ofParameterGroup sendDataGroup;
 
 	const string GUI_STRING_NOT_RECORDING = "NOT RECORDING";
 	const string GUI_STRING_RECORDING = "RECORDING";
@@ -136,12 +143,28 @@ public:
 	const string GUI_DEVICE_GROUP_NAME = "EmotiBit Device List";
 	const string GUI_STRING_CLIPPING_EVENTS = "Clipping Events:";
 	const string GUI_STRING_OVERFLOW_EVENTS = "Overflow Events:";
+	const string GUI_SEND_DATA_MENU_NAME = "Send Data Menu";
+	const string GUI_STRING_SEND_DATA_VIA = "Send data via";
+	const string GUI_OUTPUT_GROUP_NAME = "Output List";
+	const string GUI_STRING_SEND_DATA_NONE = "None";
+	const string GUI_STRING_SEND_DATA_LSL = "LSL";
+	const string GUI_STRING_SEND_DATA_OSC = "OSC";
+	const string GUI_STRING_SEND_DATA_MQTT = "MQTT";
+	const string GUI_STRING_SEND_DATA_TCP = "TCP";
+	const string GUI_STRING_SEND_DATA_UDP = "UDP";
+	const string GUI_STRING_NOTE_BUTTON = "LOG NOTE";
+	const string GUI_STRING_CONTROL_RECORD = "RECORD";
+	const string GUI_STRING_CONTROL_HIBERNATE = "HIBERNATE";
+	ofColor recordControlColor = ofColor(255, 69, 78);
+	ofColor hibernateControlColor = ofColor(6, 129, 204);
+	ofColor noteControlColor = ofColor(1, 204, 115);
 	int guiPanelDevice;
 	int guiPanelRecord;
 	int guiPanelMode;
 	int guiPanelLevels;
 	int guiPanelErrors;
 	int guiPanelUserNote;
+	int guiPanelSendData;
 
 	//ofxFloatSlider batteryStatus;
 	//ofxFloatSlider sdCardStatus;
