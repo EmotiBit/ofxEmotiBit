@@ -6,7 +6,8 @@ void ofApp::setup() {
 
 
 	ofBackground(255, 255, 255);
-	legendFont.load(ofToDataPath("verdana.ttf"), 12, true, true);
+	legendFont.load(ofToDataPath("verdanab.ttf"), 11, true, true);
+	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
 
 	recordingButton.addListener(this, &ofApp::recordButtonPressed);
@@ -20,6 +21,7 @@ void ofApp::setup() {
 	guiPanels.resize(6);
 	int p = 0;
 	guiPanelDevice = p;
+	guiPanels.at(guiPanelDevice).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelDevice).setup("selectDevice", "junk.xml", guiXPos, -guiYPos*2.2);
 	deviceMenuGroup.setName(GUI_DEVICE_GROUP_MENU_NAME);
 	deviceMenuGroup.add(deviceSelected.set("EmotiBit", GUI_STRING_NO_EMOTIBIT_SELECTED));
@@ -31,30 +33,38 @@ void ofApp::setup() {
 	p++;
 	guiXPos += guiPosInc;
 	guiPanelRecord = p;
+	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
 	guiPanels.at(guiPanelRecord).add(recordingButton.set("Record", false));
 	//guiPanels.at(0).getControl("Record")->setSize(guiWidth, guiYPos * 2);
 	p++;
-	guiXPos += guiPosInc;
+	guiWidth = 190;
+	guiXPos += guiWidth + 1;
 	guiPanelMode = p;
+	guiPanels.at(guiPanelMode).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelMode).setup("hibernate", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelMode).add(hibernateStatus.setup("Mode", GUI_STRING_MODE_ACTIVE));
 	guiPanels.at(guiPanelMode).add(hibernateButton.set("Hibernate", false));
 	p++;
-	guiXPos += guiPosInc;
+	guiWidth = 150;
+	guiXPos += guiWidth + 1;
 	guiPanelLevels = p;
+	guiPanels.at(guiPanelLevels).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelLevels).setup("batteryStatus", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelLevels).add(batteryStatus.setup("Battery Level", "?"));
-	guiPanels.at(guiPanelLevels).add(sdCardStatus.setup("SD Card Remaining", "?"));
+	guiPanels.at(guiPanelLevels).add(sdCardStatus.setup("SD Card Remaining", "93%"));
 	p++;
-	guiXPos += guiPosInc;
+	guiWidth = 200;
+	guiXPos += guiWidth + 1;
 	guiPanelErrors = p;
+	guiPanels.at(guiPanelErrors).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelErrors).setup("errorStatus", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelErrors).add(dataClippingCount.set(GUI_STRING_CLIPPING_EVENTS, 0, 0, 0));
 	guiPanels.at(guiPanelErrors).add(dataOverflowCount.set(GUI_STRING_OVERFLOW_EVENTS, 0, 0, 0));
 	p++;
-	guiXPos += guiPosInc;
+	guiWidth = 200;
+	guiXPos += guiWidth + 1;
 	guiPanelUserNote = p;
 	guiPanels.at(guiPanelUserNote).setDefaultWidth(ofGetWindowWidth() - guiXPos);
 	guiPanels.at(guiPanelUserNote).setup("userNote", "junk.xml", guiXPos, -guiYPos);
@@ -69,17 +79,17 @@ void ofApp::setup() {
 	typeTags = vector<vector<vector<string>>>
 	{
 		{ // scope panel 1
-			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
-			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
-			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
+			{ EmotiBitPacket::TypeTag::PPG_RED },
+			{ EmotiBitPacket::TypeTag::PPG_INFRARED },
+			{ EmotiBitPacket::TypeTag::PPG_GREEN },
 			{ EmotiBitPacket::TypeTag::EDA },
 			//{ EmotiBitPacket::TypeTag::EDL, EmotiBitPacket::TypeTag::EDR },
 			{ EmotiBitPacket::TypeTag::HUMIDITY_0}
 		},
 		{ // scope panel 2
-			{ EmotiBitPacket::TypeTag::PPG_RED },
-			{ EmotiBitPacket::TypeTag::PPG_INFRARED },
-			{ EmotiBitPacket::TypeTag::PPG_GREEN },
+			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
+			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
+			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
 			{ EmotiBitPacket::TypeTag:: TEMPERATURE_0 },
 			{ EmotiBitPacket::TypeTag::THERMISTOR}
 		}
@@ -101,16 +111,16 @@ void ofApp::setup() {
 	samplingFreqs = vector<vector<float>>
 	{
 		{ // scope panel 1
-			{ 60.f },
-			{ 60.f },
-			{ 60.f },
+			{ 25.f },
+			{ 25.f },
+			{ 25.f },
 			{ 15.f },
 			{ 7.5f }
 		},
 		{ // scope panel 2
-			{ 25.f },
-			{ 25.f },
-			{ 25.f },
+			{ 60.f },
+			{ 60.f },
+			{ 60.f },
 			{ 7.5f },
 			{ 7.5f }
 		}
@@ -119,17 +129,17 @@ void ofApp::setup() {
 	plotNames = vector<vector<vector<string>>>
 	{
 		{ // scope panel 1
-			{ "ACC:X", "ACC:Y", "ACC:Z" },
-			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
-			{ "MAG:X", "MAG:Y", "MAG:Z" },
+			{ "PPG:RED" },
+			{ "PPG:IR" },
+			{ "PPG:GRN" },
 			{ "EDA" },
 			//{ "EDL", "EDR" },
 			{ "HUMIDITY" }
 		},
 		{ // scope panel 2
-			{ "PPG:RED" },
-			{ "PPG:IR" },
-			{ "PPG:GRN" },
+			{ "ACC:X", "ACC:Y", "ACC:Z" },
+			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
+			{ "MAG:X", "MAG:Y", "MAG:Z" },
 			{ "TEMP" },
 			{ "THERM" }
 		}
@@ -137,23 +147,41 @@ void ofApp::setup() {
 	yLims = vector<vector<vector<float>>>
 	{
 		{ // scope panel 1
-			{  -8.f, 8.f  },
-			{  -1000.f, 1000.f  },
+			{  0.f,0.f  },
+			{  0.f,0.f  },
 			{  0.f,0.f  },
 			{ 0.f,0.f },
 			//{ -0.01f, 3.31f },
 			{ 0.f, 0.f  }
 		},
 		{ // scope panel 2
-			{  0.f,0.f  },
-			{  0.f,0.f  },
+			{  -8.f, 8.f  },
+			{  -1000.f, 1000.f  },
 			{  0.f,0.f  },
 			{  0.f,0.f  },
 			{  0.f,0.f  }
 		}
 	};
 
-	plotColors = { ofColor(0,0,0), ofColor(255,0,0) , ofColor(0,191,0), ofColor(0,0,255) };
+	plotColors = vector<vector<vector<ofColor>>>
+	{
+		{ // scope panel 1
+			{ofColor(255, 69, 78)},
+			{ofColor(128, 75, 181)},
+			{ofColor(120, 209, 192)},
+			{ofColor(21, 73, 130)},
+			{ofColor(125, 184, 234)}
+		},
+		{ // scope panel 2
+			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
+			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
+			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
+			{ofColor(234, 174, 68)},
+			{ofColor(239, 97, 82)}
+		}
+	};
+
+	//plotColors = { ofColor(0,0,0), ofColor(255,0,0) , ofColor(0,191,0), ofColor(0,0,255) };
 	float timeWindow = 20.; // seconds
 
 	int guiHeight = guiPanels.at(guiPanels.size() - 1).getPosition().y + guiPanels.at(guiPanels.size() - 1).getHeight();
@@ -166,7 +194,7 @@ void ofApp::setup() {
 
 	for (int w = 0; w < plotNames.size(); w++) {
 		for (int s = 0; s < plotNames.at(w).size(); s++) {
-			scopeWins.at(w).scopes.at(s).setup(timeWindow, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors,
+			scopeWins.at(w).scopes.at(s).setup(timeWindow, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
 				0, 1); // Setup each oscilloscope panel
 			if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
 				scopeWins.at(w).scopes.at(s).autoscaleY(true);
@@ -175,6 +203,8 @@ void ofApp::setup() {
 				scopeWins.at(w).scopes.at(s).setYLims(pair<float, float>(yLims.at(w).at(s).at(0), yLims.at(w).at(s).at(1)));
 			}
 		}
+		scopeWins.at(w).setPlotLineWidth(3);
+		scopeWins.at(w).setAxesFont(axesFont);
 	}
 
 	counter = 0;
@@ -477,7 +507,7 @@ void ofApp::draw() {
 
 					//ofScale(0.5f, 0.5f);
 
-					ofSetColor(plotColors.at(p));
+					ofSetColor(plotColors.at(w).at(s).at(p));
 					ofTranslate(bl.x + padding, bl.y - fontHeight * typeTags.at(w).at(s).size());
 					//ofScale(0.75f, 0.75f);
 					ofTranslate(0, p * fontHeight);

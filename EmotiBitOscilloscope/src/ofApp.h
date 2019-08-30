@@ -83,6 +83,7 @@ public:
 	LoggerThread dataLogger;
 	LoggerThread consoleLogger;
 	ofTrueTypeFont legendFont;
+	ofTrueTypeFont axesFont;
 	ofTrueTypeFont subLegendFont;
 
 	//struct EmotibitPacketHeader_V1 {
@@ -100,7 +101,8 @@ public:
 	vector<vector<float>> samplingFreqs;
 	vector<vector<vector<string>>> plotNames;
 	vector<vector<vector<float>>> yLims;
-	vector<ofColor> plotColors;
+	vector<vector<vector<ofColor>>> plotColors;
+	//vector<ofColor> plotColors;
 
 	vector<vector<vector<int>>> bufferSizes;
 	vector<vector<vector<int>>> dataCounts;
