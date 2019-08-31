@@ -156,7 +156,7 @@ public:
 	const string GUI_STRING_CONTROL_RECORD = "RECORD";
 	const string GUI_STRING_CONTROL_HIBERNATE = "HIBERNATE";
 	ofColor recordControlColor = ofColor(255, 69, 78);
-	ofColor hibernateControlColor = ofColor(6, 129, 204);
+	ofColor hibernateControlColor = ofColor(10, 135, 210);
 	ofColor noteControlColor = ofColor(1, 204, 115);
 	int guiPanelDevice;
 	int guiPanelRecord;
