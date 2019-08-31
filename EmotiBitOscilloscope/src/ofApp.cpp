@@ -17,13 +17,15 @@ void ofApp::setup() {
 	int sendDataWidth = 180;
 
 	int guiXPos = 0;
-	int guiYPos = 20;
-	int guiWidth = 200;
+	int guiYPos = 25;
+	int guiWidth = 220;
 	int guiPosInc = guiWidth + 1;
 	guiPanels.resize(7);
 	int p = 0;
 	guiPanelDevice = p;
 	guiPanels.at(guiPanelDevice).setDefaultWidth(guiWidth);
+	guiPanels.at(guiPanelDevice).setDefaultHeight(guiYPos);
+	guiPanels.at(guiPanelDevice).loadFont(ofToDataPath("verdana.ttf"), 11, true, true);
 	guiPanels.at(guiPanelDevice).setup("selectDevice", "junk.xml", guiXPos, -guiYPos*2.2);
 	deviceMenuGroup.setName(GUI_DEVICE_GROUP_MENU_NAME);
 	deviceMenuGroup.add(deviceSelected.set("EmotiBit", GUI_STRING_NO_EMOTIBIT_SELECTED));
@@ -32,10 +34,9 @@ void ofApp::setup() {
 	//deviceGroup.add(deviceList.at(deviceList.size() - 1));
 	deviceMenuGroup.add(deviceGroup);
 	guiPanels.at(guiPanelDevice).add(deviceMenuGroup);
-	//guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).minimize();
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 180;
+	guiWidth = 210;
 	guiPanelRecord = p;
 	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
@@ -50,9 +51,10 @@ void ofApp::setup() {
 	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setSize(5, 10); // size of whole field
 	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
 	//guiPanels.at(0).getControl(GUI_STRING_CONTROL_RECORD)->setSize(guiWidth, guiYPos * 2);
+	
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 150;
+	guiWidth = 170;
 	guiPanelMode = p;
 	guiPanels.at(guiPanelMode).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelMode).setup(GUI_STRING_CONTROL_HIBERNATE, "junk.xml", guiXPos, -guiYPos);
@@ -62,7 +64,7 @@ void ofApp::setup() {
 	guiPanels.at(guiPanelMode).add(hibernateStatus.setup("Mode", GUI_STRING_MODE_ACTIVE));
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 190;
+	guiWidth = 210;
 	guiPanelLevels = p;
 	guiPanels.at(guiPanelLevels).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelLevels).setup("batteryStatus", "junk.xml", guiXPos, -guiYPos);
@@ -101,9 +103,9 @@ void ofApp::setup() {
 	sendDataOptions = {
 		GUI_STRING_SEND_DATA_OSC,
 		GUI_STRING_SEND_DATA_LSL,
-		GUI_STRING_SEND_DATA_MQTT,
 		GUI_STRING_SEND_DATA_TCP,
-		GUI_STRING_SEND_DATA_UDP
+		GUI_STRING_SEND_DATA_UDP,
+		GUI_STRING_SEND_DATA_MQTT
 	};
 	for (int j = 0; j < sendDataOptions.size(); j++) {
 		sendDataList.emplace_back(sendDataOptions.at(j), false);
@@ -531,7 +533,10 @@ void ofApp::draw() {
 		scopeWins.at(w).plot();
 	}
 	for (int i = 0; i < guiPanels.size(); i++) {
+		ofPushStyle();
+		ofSetLineWidth(5);
 		guiPanels.at(i).draw();
+		ofPopStyle();
 	}
 
 	// Draw dataFreqs and bufferSizes for each stream
