@@ -25,7 +25,7 @@ void ofApp::setup() {
 	guiPanelDevice = p;
 	guiPanels.at(guiPanelDevice).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelDevice).setDefaultHeight(guiYPos);
-	guiPanels.at(guiPanelDevice).loadFont(ofToDataPath("verdana.ttf"), 11, true, true);
+	guiPanels.at(guiPanelDevice).loadFont(ofToDataPath("verdanab.ttf"), 10, true, true);
 	guiPanels.at(guiPanelDevice).setup("selectDevice", "junk.xml", guiXPos, -guiYPos*2.2);
 	deviceMenuGroup.setName(GUI_DEVICE_GROUP_MENU_NAME);
 	deviceMenuGroup.add(deviceSelected.set("EmotiBit", GUI_STRING_NO_EMOTIBIT_SELECTED));
@@ -43,11 +43,11 @@ void ofApp::setup() {
 	guiPanels.at(guiPanelRecord).add(recordingButton.set(GUI_STRING_CONTROL_RECORD, false));
 	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setTextColor(recordControlColor); // color of label and x
 	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setFillColor(recordControlColor); // fill color of checkbox
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->loadFont(ofToDataPath("verdanab.ttf"), 11, true, true); // Seems to affect all guiPanels
 	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setUseTTF(true);
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(recordControlColor); // background of whole control
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setHeaderBackgroundColor(recordControlColor); // not cear what this does
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBorderColor(recordControlColor); // not clear what this does
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setFillColor(recordControlColor); // fill color of checkbox
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0,0,255)); // background of whole control
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setHeaderBackgroundColor(ofColor(255,255,0)); // not cear what this does
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBorderColor(ofColor(0,255,0)); // not clear what this does
 	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setSize(5, 10); // size of whole field
 	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
 	//guiPanels.at(0).getControl(GUI_STRING_CONTROL_RECORD)->setSize(guiWidth, guiYPos * 2);
