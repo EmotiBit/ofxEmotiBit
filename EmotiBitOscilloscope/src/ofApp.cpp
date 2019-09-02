@@ -205,6 +205,24 @@ void ofApp::setup() {
 		}
 	};
 
+	vector<vector<float>> minYSpans = vector<vector<float>>
+	{
+		{ // scope panel 1
+			{  0.f },
+			{  0.f },
+			{  0.f },
+			{ 0.01f },
+			{ 1.f  }
+		},
+		{ // scope panel 2
+			{ 0.f },
+			{ 0.f },
+			{ 0.f },
+			{ 0.5f },
+			{ 500.f }
+		}
+	};
+
 	plotColors = vector<vector<vector<ofColor>>>
 	{
 		{ // scope panel 1
@@ -239,7 +257,7 @@ void ofApp::setup() {
 			scopeWins.at(w).scopes.at(s).setup(timeWindow, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
 				0, 1); // Setup each oscilloscope panel
 			if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
-				scopeWins.at(w).scopes.at(s).autoscaleY(true);
+				scopeWins.at(w).scopes.at(s).autoscaleY(true, minYSpans.at(w).at(s));
 			}
 			else {
 				scopeWins.at(w).scopes.at(s).setYLims(pair<float, float>(yLims.at(w).at(s).at(0), yLims.at(w).at(s).at(1)));
