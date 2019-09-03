@@ -217,7 +217,7 @@ void ofApp::setup() {
 		{ // scope panel 2
 			{ 0.f },
 			{ 0.f },
-			{ 0.f },
+			{ 50.f },
 			{ 0.5f },
 			{ 500.f }
 		}
