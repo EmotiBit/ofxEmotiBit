@@ -71,17 +71,19 @@ void ofApp::setup() {
 		{ // scope panel 1
 			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
 			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
-			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
-			{ EmotiBitPacket::TypeTag::EDA },
-			//{ EmotiBitPacket::TypeTag::EDL, EmotiBitPacket::TypeTag::EDR },
-			{ EmotiBitPacket::TypeTag::HUMIDITY_0}
+            { EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
+            { EmotiBitPacket::TypeTag::EDA },
+//            { EmotiBitPacket::TypeTag::EDL, EmotiBitPacket::TypeTag::EDR },
+            { EmotiBitPacket::TypeTag::HUMIDITY_0}
 		},
 		{ // scope panel 2
 			{ EmotiBitPacket::TypeTag::PPG_RED },
 			{ EmotiBitPacket::TypeTag::PPG_INFRARED },
 			{ EmotiBitPacket::TypeTag::PPG_GREEN },
-			{ EmotiBitPacket::TypeTag:: TEMPERATURE_0 },
-			{ EmotiBitPacket::TypeTag::THERMISTOR}
+            { EmotiBitPacket::TypeTag::EDL },
+            { EmotiBitPacket::TypeTag::EDR },
+//            { EmotiBitPacket::TypeTag:: TEMPERATURE_0 },
+//            { EmotiBitPacket::TypeTag::THERMISTOR}
 		}
 	};
 	// Create an index mapping for each type tag
@@ -130,8 +132,10 @@ void ofApp::setup() {
 			{ "PPG:RED" },
 			{ "PPG:IR" },
 			{ "PPG:GRN" },
-			{ "TEMP" },
-			{ "THERM" }
+//            { "TEMP" },
+//            { "THERM" },
+            { "EDL" },
+            { "EDR" }
 		}
 	};
 	yLims = vector<vector<vector<float>>>
