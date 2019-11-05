@@ -164,7 +164,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-
       <AdditionalDependencies>liblsl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../ofxLSL/libs/labstreaminglayer/lib/win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
@@ -195,6 +194,7 @@
     <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\ofxEmotiBitVersion.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h" />
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitPacket.h" />

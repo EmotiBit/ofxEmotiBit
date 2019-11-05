@@ -8,6 +8,7 @@
 #include "ofxGui.h"
 #include "ofxInputField.h"
 #include "EmotiBitPacket.h"
+#include "ofxEmotiBitVersion.h"
 
 class ofApp : public ofBaseApp {
 public:

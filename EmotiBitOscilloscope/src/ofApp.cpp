@@ -2,6 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+
+	writeOfxEmotiBitVersionFile();
+	ofSetWindowTitle("EmotiBit Oscilloscope (v" + ofxEmotiBitVersion + ")");
+
 	connectionPort = 30000;
 
 

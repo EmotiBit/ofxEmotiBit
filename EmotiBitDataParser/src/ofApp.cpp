@@ -5,6 +5,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+
+	writeOfxEmotiBitVersionFile();
+	ofSetWindowTitle("EmotiBit Data Parser (v" + ofxEmotiBitVersion + ")");
+
 	ofBackground(255, 255, 255);
 	legendFont.load(ofToDataPath("verdana.ttf"), 12, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
@@ -33,8 +37,6 @@ void ofApp::setup() {
 	linesPerLoop = 1000;
 
 	fileExt = ".csv";
-
-
 }
 
 
@@ -359,7 +361,7 @@ void ofApp::draw() {
 	for (int i = 0; i < guiPanels.size(); i++) {
 		guiPanels.at(i).draw();
 	}
-	
+
 	if (currentState == State::PARSING_TIMESTAMPS) {
 		legendFont.drawString("PARSING_TIMESTAMPS", 10, 100);
 	}
@@ -368,6 +370,7 @@ void ofApp::draw() {
 	}
 
 	legendFont.drawString(dataLine, 10, 200);
+
 
 	//legendFont.drawString("Frame rate: " + ofToString(ofGetFrameRate()), 10, 300);
 

@@ -10,7 +10,7 @@
 #include "ofxLSL.h"
 #include "DoubleBuffer.h"
 #include "EmotiBitPacket.h"
-
+#include "ofxEmotiBitVersion.h"
 
 class ofApp : public ofBaseApp {
 public:
