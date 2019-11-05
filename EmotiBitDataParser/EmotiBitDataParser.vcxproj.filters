@@ -1,216 +1,224 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup>
-		<ClCompile Include="src\ofApp.cpp">
-			<Filter>src</Filter>
-		</ClCompile>
-		<ClCompile Include="src\main.cpp">
-			<Filter>src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitPacket.cpp">
-			<Filter>addons\ofxEmotiBit\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxInputField\src\ofxInputField.cpp">
-			<Filter>addons\ofxInputField\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.cpp">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPManager.cpp">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.cpp">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.cpp">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\IPAddressRange.cpp">
-			<Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkInterfaceListener.cpp">
-			<Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkUtils.cpp">
-			<Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.cpp">
-			<Filter>addons\ofxOscilloscope\src</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp">
-			<Filter>addons\ofxThreadedLogger\src</Filter>
-		</ClCompile>
-	</ItemGroup>
-	<ItemGroup>
-		<Filter Include="src">
-			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons">
-			<UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxEmotiBit">
-			<UniqueIdentifier>{D5BAEE0B-17C8-94EC-18FD-28FF}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxEmotiBit\src">
-			<UniqueIdentifier>{E6176BF7-A69F-78A5-E517-F6F5}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxGui">
-			<UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxGui\src">
-			<UniqueIdentifier>{645E9533-4DCD-6179-1CDF-CB65}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxInputField">
-			<UniqueIdentifier>{D638171E-C38D-0A35-CFB3-8971}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxInputField\src">
-			<UniqueIdentifier>{A25CD3D6-9534-BE4E-B514-C157}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetwork">
-			<UniqueIdentifier>{01A15744-29A6-108D-08E9-83A7}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetwork\src">
-			<UniqueIdentifier>{3D1C10C7-8F35-E796-9C70-F5F3}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetworkUtils">
-			<UniqueIdentifier>{70602827-0B05-E0AB-D576-41B5}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetworkUtils\src">
-			<UniqueIdentifier>{2CEAFECC-CC03-CFEC-AD86-E0B8}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetworkUtils\libs">
-			<UniqueIdentifier>{70900355-8B0B-5038-EE2C-607E}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils">
-			<UniqueIdentifier>{9B0998B0-859D-7FAF-E7E3-357F}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils\include">
-			<UniqueIdentifier>{0D08502A-641D-DA92-1520-1AF4}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx">
-			<UniqueIdentifier>{FB36A9AF-C5D5-2D1A-6465-8E8C}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net">
-			<UniqueIdentifier>{F6603996-7AC9-0971-4D3A-9F4B}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils\src">
-			<UniqueIdentifier>{C86DFC67-EF96-D121-C612-E620}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxOscilloscope">
-			<UniqueIdentifier>{CB6C7742-41F7-9C67-52CA-71E8}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxOscilloscope\src">
-			<UniqueIdentifier>{BBA04344-3B3C-EEBB-B886-25E4}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxThreadedLogger">
-			<UniqueIdentifier>{832094C4-8614-2B4B-A60F-4240}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="addons\ofxThreadedLogger\src">
-			<UniqueIdentifier>{CA068CB5-A638-66AF-AE6A-1CDD}</UniqueIdentifier>
-		</Filter>
-	</ItemGroup>
-	<ItemGroup>
-		<ClInclude Include="src\ofApp.h">
-			<Filter>src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h">
-			<Filter>addons\ofxEmotiBit\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitPacket.h">
-			<Filter>addons\ofxEmotiBit\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
-			<Filter>addons\ofxGui\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxInputField\src\ofxInputField.h">
-			<Filter>addons\ofxInputField\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetwork.h">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetworkUtils.h">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.h">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPManager.h">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.h">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.h">
-			<Filter>addons\ofxNetwork\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetworkUtils\src\ofxNetworkUtils.h">
-			<Filter>addons\ofxNetworkUtils\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\IPAddressRange.h">
-			<Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkInterfaceListener.h">
-			<Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkUtils.h">
-			<Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.h">
-			<Filter>addons\ofxOscilloscope\src</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h">
-			<Filter>addons\ofxThreadedLogger\src</Filter>
-		</ClInclude>
-	</ItemGroup>
-	<ItemGroup>
-		<ResourceCompile Include="icon.rc" />
-	</ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ofApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitPacket.cpp">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxInputField\src\ofxInputField.cpp">
+      <Filter>addons\ofxInputField\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.cpp">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPManager.cpp">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.cpp">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.cpp">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\IPAddressRange.cpp">
+      <Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkInterfaceListener.cpp">
+      <Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkUtils.cpp">
+      <Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.cpp">
+      <Filter>addons\ofxOscilloscope\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp">
+      <Filter>addons\ofxThreadedLogger\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons">
+      <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxEmotiBit">
+      <UniqueIdentifier>{D5BAEE0B-17C8-94EC-18FD-28FF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxEmotiBit\src">
+      <UniqueIdentifier>{E6176BF7-A69F-78A5-E517-F6F5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGui">
+      <UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGui\src">
+      <UniqueIdentifier>{645E9533-4DCD-6179-1CDF-CB65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxInputField">
+      <UniqueIdentifier>{D638171E-C38D-0A35-CFB3-8971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxInputField\src">
+      <UniqueIdentifier>{A25CD3D6-9534-BE4E-B514-C157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetwork">
+      <UniqueIdentifier>{01A15744-29A6-108D-08E9-83A7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetwork\src">
+      <UniqueIdentifier>{3D1C10C7-8F35-E796-9C70-F5F3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetworkUtils">
+      <UniqueIdentifier>{70602827-0B05-E0AB-D576-41B5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetworkUtils\src">
+      <UniqueIdentifier>{2CEAFECC-CC03-CFEC-AD86-E0B8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetworkUtils\libs">
+      <UniqueIdentifier>{70900355-8B0B-5038-EE2C-607E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils">
+      <UniqueIdentifier>{9B0998B0-859D-7FAF-E7E3-357F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils\include">
+      <UniqueIdentifier>{0D08502A-641D-DA92-1520-1AF4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx">
+      <UniqueIdentifier>{FB36A9AF-C5D5-2D1A-6465-8E8C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net">
+      <UniqueIdentifier>{F6603996-7AC9-0971-4D3A-9F4B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetworkUtils\libs\ofxNetworkUtils\src">
+      <UniqueIdentifier>{C86DFC67-EF96-D121-C612-E620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxOscilloscope">
+      <UniqueIdentifier>{CB6C7742-41F7-9C67-52CA-71E8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxOscilloscope\src">
+      <UniqueIdentifier>{BBA04344-3B3C-EEBB-B886-25E4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxThreadedLogger">
+      <UniqueIdentifier>{832094C4-8614-2B4B-A60F-4240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxThreadedLogger\src">
+      <UniqueIdentifier>{CA068CB5-A638-66AF-AE6A-1CDD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitPacket.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxInputField\src\ofxInputField.h">
+      <Filter>addons\ofxInputField\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetwork.h">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetworkUtils.h">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.h">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPManager.h">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.h">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.h">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetworkUtils\src\ofxNetworkUtils.h">
+      <Filter>addons\ofxNetworkUtils\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\IPAddressRange.h">
+      <Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkInterfaceListener.h">
+      <Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkUtils.h">
+      <Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.h">
+      <Filter>addons\ofxOscilloscope\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h">
+      <Filter>addons\ofxThreadedLogger\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxEmotiBitVersion.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="icon.ico" />
+  </ItemGroup>
 </Project>
