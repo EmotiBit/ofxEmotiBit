@@ -44,6 +44,14 @@ const char* EmotiBitPacket::TypeTag::REQUEST_DATA = "RD\0";
 const char* EmotiBitPacket::TypeTag::PING = "PI\0";
 const char* EmotiBitPacket::TypeTag::PONG = "PO\0";
 
+const uint8_t nAperiodicTypeTags = 2;
+const uint8_t nUserMessagesTypeTags = 1;
+const char* const EmotiBitPacket::TypeTagGroups::APERIODIC[nAperiodicTypeTags] = {EmotiBitPacket::TypeTag::DATA_CLIPPING,
+    EmotiBitPacket::TypeTag::DATA_OVERFLOW};
+const char* const EmotiBitPacket::TypeTagGroups::USER_MESSAGES[nUserMessagesTypeTags] = {EmotiBitPacket::TypeTag::USER_NOTE};
+
+//vector<string> EmotiBitPacket::TypeTag::APERIODIC.push_back(EmotiBitPacket::TypeTag::DATA_CLIPPING);
+
 const char EmotiBitPacket::PACKET_DELIMITER_CSV = '\n';
 const string EmotiBitPacket::TIMESTAMP_STRING_FORMAT = "%Y-%m-%d_%H-%M-%S-%f";
 

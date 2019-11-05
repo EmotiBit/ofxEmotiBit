@@ -515,47 +515,99 @@ void ofApp::parseDataLine(string packet) {
 			
 			//outFile.open(outFilePath.c_str(), ios::out | ios::app);
 			//if (outFile.is_open()) {
-			auto indexPtr = timestamps.find(typeTag);
-			if (indexPtr != timestamps.end()) {	// we have a previous timestamp!
-				prevtimestamp = indexPtr->second;
-				indexPtr->second = timestamp;
-			}
-			else {
-				timestamps.emplace(typeTag, timestamp);
-				prevtimestamp = timestamp;
-			}
+            
+            
+            auto indexPtr = timestamps.find(typeTag);
+            if (indexPtr != timestamps.end()) {	// we have a previous timestamp!
+                prevtimestamp = indexPtr->second;
+                indexPtr->second = timestamp;
+            }
+            else {
+                timestamps.emplace(typeTag, timestamp);
+                prevtimestamp = timestamp;
+            }
 
-			auto loggerPtr = loggers.find(typeTag);
-			if (loggerPtr == loggers.end()) {	// we don't have a logger already
-				string outFilePath = inFileDir + inFileBase + "_" + typeTag + fileExt;
-				cout << "Creating file: " << outFilePath << endl;
-				loggers.emplace(typeTag, new LoggerThread("", outFilePath));
-				loggerPtr = loggers.find(typeTag);
-				loggerPtr->second->startThread();
-				loggerPtr->second->push("EpochTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
-			}
-			for (int i = 0; i < dataLength; i++) {
-				if (i + 6 >= splitData.size()) {
-					cout << "Error: dataLength > size, " << packet << endl;
-				}
-				else {
-					//uint32_t interpTimestamp = ofMap(i + 1, 0, dataLength, prevtimestamp, timestamp);
-					long double interpTimestamp = linterp(i + 1, 0, dataLength, prevtimestamp, timestamp);
-					long double epochTimestamp = linterp(interpTimestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
-					loggerPtr->second->push(
-						ofToString(epochTimestamp, 6) + "," +
-						ofToString(interpTimestamp, 3) + "," +
-						splitData.at(1) + "," +
-						splitData.at(2) + "," +
-						splitData.at(3) + "," +
-						splitData.at(4) + "," +
-						splitData.at(5) + "," +
-						splitData.at(i + 6) +
-						'\n'
-					);
-					//outFile << interpTimestamp << "," << packetNumber << "," << dataLength << "," << typeTag << "," << protocolVersion << "," << dataReliability << "," << splitData.at(i + 6) << endl;
-				}
-			}
+            auto loggerPtr = loggers.find(typeTag);
+            if (loggerPtr == loggers.end()) {	// we don't have a logger already
+                string outFilePath = inFileDir + inFileBase + "_" + typeTag + fileExt;
+                cout << "Creating file: " << outFilePath << endl;
+                loggers.emplace(typeTag, new LoggerThread("", outFilePath));
+                loggerPtr = loggers.find(typeTag);
+                loggerPtr->second->startThread();
+                loggerPtr->second->push("EpochTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
+            }
+            
+            if (typeTag == EmotiBitPacket::TypeTagGroups::APERIODIC[0] || typeTag == EmotiBitPacket::TypeTagGroups::APERIODIC[1] ) { //for aperiodic
+                for (int i = 0; i < dataLength; i++) {
+                    if (i + 6 >= splitData.size()) {
+                        cout << "Error: dataLength > size, " << packet << endl;
+                    }
+                    else {
+                        long double epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+                        loggerPtr->second->push(
+                                                
+                            ofToString(epochTimestamp, 6) + "," +
+                            ofToString(timestamp, 3) + "," +
+                            splitData.at(1) + "," +
+                            splitData.at(2) + "," +
+                            splitData.at(3) + "," +
+                            splitData.at(4) + "," +
+                            splitData.at(5) + "," +
+                            splitData.at(i+6) +
+                            '\n'
+                        );
+                    }
+                }
+            }
+            else if (typeTag == EmotiBitPacket::TypeTagGroups::USER_MESSAGES[0]){ // for push messages
+                if (splitData.size()!= 8) {
+                    cout << "Error: userNote package error " << packet << endl;
+                }
+                else {
+//                        long double epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+                    std::string computerTime = splitData.at(6);
+                    size_t lastDelim = computerTime.find_last_of('-'); // find subsecond decimal
+                    size_t lastNChar = computerTime.size() - lastDelim - 1;
+                    std::time_t c = getEpochTime(std::wstring(computerTime.begin(), computerTime.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+                    loggerPtr->second->push(
+                        ofToString((long double)c, 6) + "," +
+                        ofToString(timestamp, 3) + "," +
+                        splitData.at(1) + "," +
+                        splitData.at(2) + "," +
+                        splitData.at(3) + "," +
+                        splitData.at(4) + "," +
+                        splitData.at(5) + "," +
+                        splitData.at(7) +
+                        '\n'
+                        );
+                }
+                
+            }
+            else { // if typetag is periodic
+                for (int i = 0; i < dataLength; i++) {
+                    if (i + 6 >= splitData.size()) {
+                        cout << "Error: dataLength > size, " << packet << endl;
+                    }
+                    else {
+                        //uint32_t interpTimestamp = ofMap(i + 1, 0, dataLength, prevtimestamp, timestamp);
+                        long double interpTimestamp = linterp(i + 1, 0, dataLength, prevtimestamp, timestamp);
+                        long double epochTimestamp = linterp(interpTimestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+                        loggerPtr->second->push(
+                            ofToString(epochTimestamp, 6) + "," +
+                            ofToString(interpTimestamp, 3) + "," +
+                            splitData.at(1) + "," +
+                            splitData.at(2) + "," +
+                            splitData.at(3) + "," +
+                            splitData.at(4) + "," +
+                            splitData.at(5) + "," +
+                            splitData.at(i + 6) +
+                            '\n'
+                        );
+                        //outFile << interpTimestamp << "," << packetNumber << "," << dataLength << "," << typeTag << "," << protocolVersion << "," << dataReliability << "," << splitData.at(i + 6) << endl;
+                    }
+                }
+            }
+            
 			//outFile.close();
 		//}
 		}
