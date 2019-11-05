@@ -6,20 +6,26 @@ void ofApp::setup() {
 
 
 	ofBackground(255, 255, 255);
-	legendFont.load(ofToDataPath("verdana.ttf"), 12, true, true);
+	legendFont.load(ofToDataPath("verdanab.ttf"), 11, true, true);
+	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
 
 	recordingButton.addListener(this, &ofApp::recordButtonPressed);
 	hibernateButton.addListener(this, &ofApp::hibernateButtonPressed);
 	sendUserNote.addListener(this, &ofApp::sendExperimenterNoteButton);
 
+	int sendDataWidth = 180;
+
 	int guiXPos = 0;
-	int guiYPos = 20;
-	int guiWidth = 200;
+	int guiYPos = 25;
+	int guiWidth = 220;
 	int guiPosInc = guiWidth + 1;
-	guiPanels.resize(6);
+	guiPanels.resize(7);
 	int p = 0;
 	guiPanelDevice = p;
+	guiPanels.at(guiPanelDevice).setDefaultWidth(guiWidth);
+	guiPanels.at(guiPanelDevice).setDefaultHeight(guiYPos);
+	guiPanels.at(guiPanelDevice).loadFont(ofToDataPath("verdanab.ttf"), 10, true, true);
 	guiPanels.at(guiPanelDevice).setup("selectDevice", "junk.xml", guiXPos, -guiYPos*2.2);
 	deviceMenuGroup.setName(GUI_DEVICE_GROUP_MENU_NAME);
 	deviceMenuGroup.add(deviceSelected.set("EmotiBit", GUI_STRING_NO_EMOTIBIT_SELECTED));
@@ -29,57 +35,103 @@ void ofApp::setup() {
 	deviceMenuGroup.add(deviceGroup);
 	guiPanels.at(guiPanelDevice).add(deviceMenuGroup);
 	p++;
-	guiXPos += guiPosInc;
+	guiXPos += guiWidth + 1;
+	guiWidth = 210;
 	guiPanelRecord = p;
+	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
+	guiPanels.at(guiPanelRecord).add(recordingButton.set(GUI_STRING_CONTROL_RECORD, false));
+	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setTextColor(recordControlColor); // color of label and x
+	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setFillColor(recordControlColor); // fill color of checkbox
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->loadFont(ofToDataPath("verdanab.ttf"), 11, true, true); // Seems to affect all guiPanels
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setUseTTF(true);
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0,0,255)); // background of whole control
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setHeaderBackgroundColor(ofColor(255,255,0)); // not cear what this does
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBorderColor(ofColor(0,255,0)); // not clear what this does
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setSize(5, 10); // size of whole field
 	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
-	guiPanels.at(guiPanelRecord).add(recordingButton.set("Record", false));
-	//guiPanels.at(0).getControl("Record")->setSize(guiWidth, guiYPos * 2);
+	//guiPanels.at(0).getControl(GUI_STRING_CONTROL_RECORD)->setSize(guiWidth, guiYPos * 2);
+	
 	p++;
-	guiXPos += guiPosInc;
+	guiXPos += guiWidth + 1;
+	guiWidth = 170;
 	guiPanelMode = p;
-	guiPanels.at(guiPanelMode).setup("hibernate", "junk.xml", guiXPos, -guiYPos);
+	guiPanels.at(guiPanelMode).setDefaultWidth(guiWidth);
+	guiPanels.at(guiPanelMode).setup(GUI_STRING_CONTROL_HIBERNATE, "junk.xml", guiXPos, -guiYPos);
+	guiPanels.at(guiPanelMode).add(hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false));
+	guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setTextColor(hibernateControlColor); // color of label and x
+	guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setFillColor(hibernateControlColor); // fill color of checkbox
 	guiPanels.at(guiPanelMode).add(hibernateStatus.setup("Mode", GUI_STRING_MODE_ACTIVE));
-	guiPanels.at(guiPanelMode).add(hibernateButton.set("Hibernate", false));
 	p++;
-	guiXPos += guiPosInc;
+	guiXPos += guiWidth + 1;
+	guiWidth = 210;
 	guiPanelLevels = p;
+	guiPanels.at(guiPanelLevels).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelLevels).setup("batteryStatus", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelLevels).add(batteryStatus.setup("Battery Level", "?"));
-	guiPanels.at(guiPanelLevels).add(sdCardStatus.setup("SD Card Remaining", "?"));
+	guiPanels.at(guiPanelLevels).add(sdCardStatus.setup("SD Card Remaining", "93%"));
 	p++;
-	guiXPos += guiPosInc;
+	guiXPos += guiWidth + 1;
+	guiWidth = 200;
 	guiPanelErrors = p;
+	guiPanels.at(guiPanelErrors).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelErrors).setup("errorStatus", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelErrors).add(dataClippingCount.set(GUI_STRING_CLIPPING_EVENTS, 0, 0, 0));
 	guiPanels.at(guiPanelErrors).add(dataOverflowCount.set(GUI_STRING_OVERFLOW_EVENTS, 0, 0, 0));
 	p++;
-	guiXPos += guiPosInc;
+	guiXPos += guiWidth + 1;
+	guiWidth = 200;
 	guiPanelUserNote = p;
-	guiPanels.at(guiPanelUserNote).setDefaultWidth(ofGetWindowWidth() - guiXPos);
+	guiPanels.at(guiPanelUserNote).setDefaultWidth(ofGetWindowWidth() - guiXPos - sendDataWidth);
 	guiPanels.at(guiPanelUserNote).setup("userNote", "junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(guiPanelUserNote).add(userNote.setup("Note:", "[Add a note]"));
-	guiPanels.at(guiPanelUserNote).add(sendUserNote.setup("Send Note"));
+	guiPanels.at(guiPanelUserNote).add(sendUserNote.setup(GUI_STRING_NOTE_BUTTON));
+	guiPanels.at(guiPanelUserNote).getControl(GUI_STRING_NOTE_BUTTON)->setTextColor(noteControlColor); // color of label and x
+	guiPanels.at(guiPanelUserNote).getControl(GUI_STRING_NOTE_BUTTON)->setFillColor(noteControlColor); // fill color of checkbox
 
-	//gui.setup("panel"); // most of the time you don't need a name but don't forget to call setup
-	//gui.add(recordingStatus.set("Recording", false));
-	//gui.add(batteryStatus.set("Battery", 0, 0, 100));
-	//gui.add(sdCardStatus.set("SD Card", 0, 0, 100));
+	p++;
+	guiPanelSendData = p;
+	guiWidth = sendDataWidth;
+	guiXPos = ofGetWindowWidth() - guiWidth - 1;
+	guiPanels.at(guiPanelSendData).setDefaultWidth(guiWidth);
+	guiPanels.at(guiPanelSendData).setup("sendData", "junk.xml", guiXPos, -guiYPos * 2.2);
+	sendDataMenuGroup.setName(GUI_SEND_DATA_MENU_NAME);
+	sendDataMenuGroup.add(sendOptionSelected.set(GUI_STRING_SEND_DATA_VIA, GUI_STRING_SEND_DATA_NONE));
+	sendDataGroup.setName(GUI_OUTPUT_GROUP_NAME);
+	sendDataMenuGroup.add(sendDataGroup);
+	guiPanels.at(guiPanelSendData).add(sendDataMenuGroup);
+	sendDataOptions = {
+		GUI_STRING_SEND_DATA_OSC,
+		GUI_STRING_SEND_DATA_LSL,
+		GUI_STRING_SEND_DATA_TCP,
+		GUI_STRING_SEND_DATA_UDP,
+		GUI_STRING_SEND_DATA_MQTT
+	};
+	for (int j = 0; j < sendDataOptions.size(); j++) {
+		sendDataList.emplace_back(sendDataOptions.at(j), false);
+		sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
+		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
+		guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
+	}
+	guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).minimize();
+	//guiPanels.at(p).minimize();
+	//guiPanels.at(p).minimizeAll();
+
 
 	typeTags = vector<vector<vector<string>>>
 	{
 		{ // scope panel 1
-			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
-			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
-			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
+			{ EmotiBitPacket::TypeTag::PPG_RED },
+			{ EmotiBitPacket::TypeTag::PPG_INFRARED },
+			{ EmotiBitPacket::TypeTag::PPG_GREEN },
 			{ EmotiBitPacket::TypeTag::EDA },
 			//{ EmotiBitPacket::TypeTag::EDL, EmotiBitPacket::TypeTag::EDR },
 			{ EmotiBitPacket::TypeTag::HUMIDITY_0}
 		},
 		{ // scope panel 2
-			{ EmotiBitPacket::TypeTag::PPG_RED },
-			{ EmotiBitPacket::TypeTag::PPG_INFRARED },
-			{ EmotiBitPacket::TypeTag::PPG_GREEN },
+			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
+			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
+			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
 			{ EmotiBitPacket::TypeTag:: TEMPERATURE_0 },
 			{ EmotiBitPacket::TypeTag::THERMISTOR}
 		}
@@ -101,9 +153,9 @@ void ofApp::setup() {
 	samplingFreqs = vector<vector<float>>
 	{
 		{ // scope panel 1
-			{ 60.f },
-			{ 60.f },
-			{ 60.f },
+			{ 25.f },
+			{ 25.f },
+			{ 25.f },
 			{ 15.f },
 			{ 7.5f }
 		},
@@ -119,17 +171,17 @@ void ofApp::setup() {
 	plotNames = vector<vector<vector<string>>>
 	{
 		{ // scope panel 1
-			{ "ACC:X", "ACC:Y", "ACC:Z" },
-			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
-			{ "MAG:X", "MAG:Y", "MAG:Z" },
+			{ "PPG:RED" },
+			{ "PPG:IR" },
+			{ "PPG:GRN" },
 			{ "EDA" },
 			//{ "EDL", "EDR" },
 			{ "HUMIDITY" }
 		},
 		{ // scope panel 2
-			{ "PPG:RED" },
-			{ "PPG:IR" },
-			{ "PPG:GRN" },
+			{ "ACC:X", "ACC:Y", "ACC:Z" },
+			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
+			{ "MAG:X", "MAG:Y", "MAG:Z" },
 			{ "TEMP" },
 			{ "THERM" }
 		}
@@ -137,23 +189,59 @@ void ofApp::setup() {
 	yLims = vector<vector<vector<float>>>
 	{
 		{ // scope panel 1
-			{  -8.f, 8.f  },
-			{  -1000.f, 1000.f  },
+			{  0.f,0.f  },
+			{  0.f,0.f  },
 			{  0.f,0.f  },
 			{ 0.f,0.f },
 			//{ -0.01f, 3.31f },
 			{ 0.f, 0.f  }
 		},
 		{ // scope panel 2
-			{  0.f,0.f  },
-			{  0.f,0.f  },
+			{  -8.f, 8.f  },
+			{  -1000.f, 1000.f  },
 			{  0.f,0.f  },
 			{  0.f,0.f  },
 			{  0.f,0.f  }
 		}
 	};
 
-	plotColors = { ofColor(0,0,0), ofColor(255,0,0) , ofColor(0,191,0), ofColor(0,0,255) };
+	vector<vector<float>> minYSpans = vector<vector<float>>
+	{
+		{ // scope panel 1
+			{  0.f },
+			{  0.f },
+			{  0.f },
+			{ 0.01f },
+			{ 1.f  }
+		},
+		{ // scope panel 2
+			{ 0.f },
+			{ 0.f },
+			{ 50.f },
+			{ 0.5f },
+			{ 500.f }
+		}
+	};
+
+	plotColors = vector<vector<vector<ofColor>>>
+	{
+		{ // scope panel 1
+			{ofColor(255, 69, 78)},
+			{ofColor(128, 75, 181)},
+			{ofColor(120, 209, 192)},
+			{ofColor(21, 73, 130)},
+			{ofColor(125, 184, 234)}
+		},
+		{ // scope panel 2
+			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
+			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
+			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
+			{ofColor(234, 174, 68)},
+			{ofColor(239, 97, 82)}
+		}
+	};
+
+	//plotColors = { ofColor(0,0,0), ofColor(255,0,0) , ofColor(0,191,0), ofColor(0,0,255) };
 	float timeWindow = 20.; // seconds
 
 	int guiHeight = guiPanels.at(guiPanels.size() - 1).getPosition().y + guiPanels.at(guiPanels.size() - 1).getHeight();
@@ -166,15 +254,17 @@ void ofApp::setup() {
 
 	for (int w = 0; w < plotNames.size(); w++) {
 		for (int s = 0; s < plotNames.at(w).size(); s++) {
-			scopeWins.at(w).scopes.at(s).setup(timeWindow, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors,
+			scopeWins.at(w).scopes.at(s).setup(timeWindow, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
 				0, 1); // Setup each oscilloscope panel
 			if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
-				scopeWins.at(w).scopes.at(s).autoscaleY(true);
+				scopeWins.at(w).scopes.at(s).autoscaleY(true, minYSpans.at(w).at(s));
 			}
 			else {
 				scopeWins.at(w).scopes.at(s).setYLims(pair<float, float>(yLims.at(w).at(s).at(0), yLims.at(w).at(s).at(1)));
 			}
 		}
+		scopeWins.at(w).setPlotLineWidth(3);
+		scopeWins.at(w).setAxesFont(axesFont);
 	}
 
 	counter = 0;
@@ -387,15 +477,15 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket) {
 				}
 			}
 			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::RESET) == 0) {
-				if (guiPanels.at(guiPanelMode).getControl("Hibernate") != NULL) {
-					hibernateButton.set("Hibernate", false);
-					guiPanels.at(guiPanelMode).getControl("Hibernate")->setBackgroundColor(ofColor(0, 0, 0));
+				if (guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE) != NULL) {
+					hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false);
+					guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setBackgroundColor(ofColor(0, 0, 0));
 					hibernateStatus.setBackgroundColor(ofColor(0, 0, 0));
 					hibernateStatus.getParameter().fromString(GUI_STRING_MODE_ACTIVE);
 				}
-				if (guiPanels.at(guiPanelRecord).getControl("Record") != NULL) {
-					recordingButton.set("Record", false);
-					guiPanels.at(guiPanelRecord).getControl("Record")->setBackgroundColor(ofColor(0, 0, 0));
+				if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+					recordingButton.set(GUI_STRING_CONTROL_RECORD, false);
+					guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
 					recordingStatus.setBackgroundColor(ofColor(0, 0, 0));
 					recordingStatus.getParameter().fromString(GUI_STRING_NOT_RECORDING);
 				}
@@ -461,7 +551,10 @@ void ofApp::draw() {
 		scopeWins.at(w).plot();
 	}
 	for (int i = 0; i < guiPanels.size(); i++) {
+		ofPushStyle();
+		ofSetLineWidth(5);
 		guiPanels.at(i).draw();
+		ofPopStyle();
 	}
 
 	// Draw dataFreqs and bufferSizes for each stream
@@ -477,7 +570,7 @@ void ofApp::draw() {
 
 					//ofScale(0.5f, 0.5f);
 
-					ofSetColor(plotColors.at(p));
+					ofSetColor(plotColors.at(w).at(s).at(p));
 					ofTranslate(bl.x + padding, bl.y - fontHeight * typeTags.at(w).at(s).size());
 					//ofScale(0.75f, 0.75f);
 					ofTranslate(0, p * fontHeight);
@@ -556,10 +649,10 @@ void ofApp::keyReleased(int key) {
 		sendBroadcast(ips.at(0));
 	}
 	if (key == 'r') { 
-		recordingButton.set("Record", !recordingButton.get());
+		recordingButton.set(GUI_STRING_CONTROL_RECORD, !recordingButton.get());
 	}
 	if (key == 'h') { 
-		hibernateButton.set("Hibernate", !hibernateButton.get());
+		hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, !hibernateButton.get());
 	}
 	if (key == 'i') {
 		drawDataInfo = !drawDataInfo;
@@ -772,15 +865,15 @@ void ofApp::parseIncomingAck(vector<string> splitPacket) {
 		consoleLogger.push("ACK: " + splitPacket.at(dataStart) +  ", " + splitPacket.at(dataStart + 1) + "\n");
 		//cout << "ACK: " << splitPacket.at(dataStart) << ", " << splitPacket.at(dataStart + 1) << endl;
 		if (splitPacket.at(dataStart + 1).compare(EmotiBitPacket::TypeTag::RECORD_BEGIN) == 0) {
-			if (guiPanels.at(guiPanelRecord).getControl("Record") != NULL) {
-				guiPanels.at(guiPanelRecord).getControl("Record")->setBackgroundColor(ofColor(255, 0, 0));
-				recordingStatus.setBackgroundColor(ofColor(255, 0, 0));
+			if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+				guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
+				recordingStatus.setBackgroundColor(recordControlColor);
 				recordingStatus.getParameter().fromString(GUI_STRING_RECORDING);
 			}
 		}
 		else if (splitPacket.at(dataStart + 1).compare(EmotiBitPacket::TypeTag::RECORD_END) == 0) {
-			if (guiPanels.at(guiPanelRecord).getControl("Record") != NULL) {
-				guiPanels.at(guiPanelRecord).getControl("Record")->setBackgroundColor(ofColor(0, 0, 0));
+			if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+				guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
 				recordingStatus.setBackgroundColor(ofColor(0, 0, 0));
 				recordingStatus.getParameter().fromString(GUI_STRING_NOT_RECORDING);
 			}
@@ -789,14 +882,14 @@ void ofApp::parseIncomingAck(vector<string> splitPacket) {
 			userNote.getParameter().fromString("[Add a note]");
 		}
 		else if (splitPacket.at(dataStart + 1).compare(EmotiBitPacket::TypeTag::MODE_HIBERNATE) == 0) {
-			if (guiPanels.at(guiPanelMode).getControl("Hibernate") != NULL) {
-				guiPanels.at(guiPanelMode).getControl("Hibernate")->setBackgroundColor(ofColor(255, 0, 0));
-				hibernateStatus.setBackgroundColor(ofColor(255, 0, 0));
+			if (guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE) != NULL) {
+				guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setBackgroundColor(ofColor(0, 0, 0));
+				hibernateStatus.setBackgroundColor(hibernateControlColor);
 				hibernateStatus.getParameter().fromString(GUI_STRING_MODE_HIBERNATE);
 			}
-			if (guiPanels.at(guiPanelRecord).getControl("Record") != NULL) {
-				recordingButton.set("Record", false);
-				guiPanels.at(guiPanelRecord).getControl("Record")->setBackgroundColor(ofColor(0, 0, 0));
+			if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+				recordingButton.set(GUI_STRING_CONTROL_RECORD, false);
+				guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
 				recordingStatus.setBackgroundColor(ofColor(0, 0, 0));
 				recordingStatus.getParameter().fromString(GUI_STRING_NOT_RECORDING);
 			}
@@ -837,10 +930,36 @@ void ofApp::deviceSelection(bool & selected) {
 	changeConnection(selected);
 }
 
+
+void ofApp::sendDataSelection(bool & selected) {
+	if (selected) {
+		if (sendOptionSelected.get().compare(GUI_STRING_SEND_DATA_NONE) != 0) {	// If there is currently a selected IP address
+			// Unselected it
+			for (int j = 0; j < sendDataList.size(); j++) {
+				if (sendOptionSelected.get().compare(sendDataList.at(j).getName()) == 0) {
+					sendDataList.at(j).set(false);
+				}
+			}
+		}
+
+		// Updated the selected output
+		for (int j = 0; j < sendDataList.size(); j++) {
+			if (sendDataList.at(j).get()) {
+				string output = sendDataList.at(j).getName();
+				sendOptionSelected.set(output);
+			}
+		}
+	}
+	else {
+		sendOptionSelected.set(GUI_STRING_SEND_DATA_NONE);
+	}
+}
+
+
 void ofApp::changeConnection(bool selected) {
 	if (selected) {
 		if (deviceSelected.get().compare(GUI_STRING_NO_EMOTIBIT_SELECTED) != 0) {	// If there is currently a selected IP address
-																																							// Unselected it
+			// Unselected it
 			for (int j = 0; j < deviceList.size(); j++) {
 				if (deviceSelected.get().compare(deviceList.at(j).getName()) == 0) {
 					deviceList.at(j).set(false);
