@@ -605,7 +605,7 @@ void ofApp::exit() {
 		runConnectionThread = false;
 	}
 
-	udpConnection.Close();
+	//udpConnection.Close();
 	//connectionThread->join();
 	//try {
 	//	delete connectionThread;
