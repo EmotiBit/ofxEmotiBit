@@ -1,0 +1,2 @@
+ofxNetwork
+ofxEmotiBit
