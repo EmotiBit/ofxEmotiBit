@@ -28,12 +28,14 @@ void ofApp::draw(){
 
 	string data;
 	emotiBitWiFi.readData(data);
-	cout << "Data: " << data;
+	if (data.length() > 0) {
+		cout << "Data: " << data;
+	}
 
 	ofSetHexColor(0x000000);
 	ofDrawBitmapString("Data: \n" + data, 10, 20);
 
-	ofDrawBitmapString("EmotBits:\n" + allIps, 10, 50);
+	ofDrawBitmapString("EmotBits:\n" + allIps, 10, 60);
 
 }
 
@@ -46,8 +48,10 @@ void ofApp::keyPressed(int key){
 void ofApp::keyReleased(int key){
 	if ((char)key == 'c')
 	{
-		emotiBitWiFi.connect(emotibitIps.begin()->first);
-		//emotiBitWiFi.connect("192.168.0.36");
+		if (emotibitIps.size() > 0) {
+			emotiBitWiFi.connect(emotibitIps.begin()->first);
+			//emotiBitWiFi.connect("192.168.0.36");
+		}
 	}
 	else if ((char)key == 'd')
 	{
@@ -55,7 +59,9 @@ void ofApp::keyReleased(int key){
 	}
 	else if ((char)key == 'r')
 	{
-		emotiBitWiFi.sendControl(emotiBitWiFi.createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN));
+		string packet = emotiBitWiFi.createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN);
+		cout << packet;
+		emotiBitWiFi.sendControl(packet);
 	}
 }
 
