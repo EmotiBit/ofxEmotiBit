@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include "ofmain.h"
 
 
 // ToDo: Add functionality to convert string to Arduino String
@@ -16,8 +16,20 @@ namespace EmotiBit
 			str = "";
 		}
 
-		String(std::string s) :
-			str(s) {}
+		String(std::string s)
+		{
+			str = s;
+		}
+
+		String& operator=(const String& s) {
+			str = s.str;
+			return *this;
+		}
+
+		String& operator=(const string& s) {
+			str = s;
+			return *this;
+		}
 
 		size_t indexOf(char val, size_t from) const
 		{
@@ -37,6 +49,11 @@ namespace EmotiBit
 		size_t length() const
 		{
 			return str.length();
+		}
+
+		int toInt() const
+		{
+			return ofToInt(str);
 		}
 
 	private:

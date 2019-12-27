@@ -59,7 +59,7 @@ void ofApp::keyReleased(int key){
 	}
 	else if ((char)key == 'r')
 	{
-		string packet = emotiBitWiFi.createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN);
+		string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, emotiBitWiFi.controlPacketCounter++, "", 0);
 		cout << packet;
 		emotiBitWiFi.sendControl(packet);
 	}

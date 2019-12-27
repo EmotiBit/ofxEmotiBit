@@ -86,6 +86,9 @@
     <ClInclude Include="..\..\EmotiBit_XPlat_Utils\EmotiBitPacket.h">
       <Filter>addons\EmotiBit_XPlat_Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ArduinoString.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

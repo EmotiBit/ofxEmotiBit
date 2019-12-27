@@ -105,9 +105,15 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 						if (valuePos > -1 && ofToInt(value) == dataPort)
 						{
 							// Establish / maintain connected status
-							isConnected = true;
-							isStartingConnection = false;
-							lastPong = ofGetElapsedTimeMillis();
+							if (isStartingConnection)
+							{
+								isConnected = true;
+								isStartingConnection = false;
+							}
+							if (isConnected)
+							{
+								lastPong = ofGetElapsedTimeMillis();
+							}
 						}
 					}
 				}

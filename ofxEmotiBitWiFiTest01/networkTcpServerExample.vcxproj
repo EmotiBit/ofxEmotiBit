@@ -183,6 +183,7 @@
     <ClInclude Include="..\src\DoubleBuffer.h" />
     <ClInclude Include="..\src\EmotiBitWiFiHost.h" />
     <ClInclude Include="..\src\ofxEmotiBitVersion.h" />
+    <ClInclude Include="..\src\ArduinoString.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPManager.h" />
     <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetwork.h" />
