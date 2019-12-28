@@ -70,6 +70,7 @@ public:
 	int8_t sendControl(string& packet);
 	//uint8_t readControl(string& packet);
 	int8_t readData(string& message);
+	int8_t flushData();
 	//int8_t sendUdp(WiFiUDP& udp, const String& message, const IPAddress& ip, const uint16_t& port);
 	unordered_map<string, EmotiBitStatus> getEmotiBitIPs();	// <IP address, availability to connect>
 	vector<string> getLocalIPs();

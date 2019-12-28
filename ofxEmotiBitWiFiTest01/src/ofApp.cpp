@@ -5,7 +5,7 @@
 void ofApp::setup(){
 	// we don't want to be running too fast
 	ofSetVerticalSync(true);
-	ofSetFrameRate(3);
+	ofSetFrameRate(60);
 
 	logger.setFilename("EmotiBitWiFiLog.txt");
 	logger.setDirPath(ofToDataPath(""));

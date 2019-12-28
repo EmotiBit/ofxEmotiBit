@@ -297,11 +297,20 @@ int8_t EmotiBitWiFiHost::disconnect()
 		}
 		controlCxnMutex.unlock();
 
-		//dataCxn.Close();
+		flushData();
 		connectedEmotibitIp = "";
 		isConnected = false;
 		isStartingConnection = false;
 	}
+
+	return SUCCESS;
+}
+
+int8_t EmotiBitWiFiHost::flushData()
+{
+	const int maxSize = 32768;
+	char udpMessage[maxSize];
+	while (dataCxn.Receive(udpMessage, maxSize) > 0);
 
 	return SUCCESS;
 }
