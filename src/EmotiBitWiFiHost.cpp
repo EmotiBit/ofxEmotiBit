@@ -114,7 +114,7 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 							{
 								isConnected = true;
 								isStartingConnection = false;
-								dataCxn.Create();
+								//dataCxn.Create();
 							}
 							if (isConnected)
 							{
@@ -297,7 +297,7 @@ int8_t EmotiBitWiFiHost::disconnect()
 		}
 		controlCxnMutex.unlock();
 
-		dataCxn.Close();
+		//dataCxn.Close();
 		connectedEmotibitIp = "";
 		isConnected = false;
 		isStartingConnection = false;

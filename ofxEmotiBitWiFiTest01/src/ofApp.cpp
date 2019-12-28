@@ -7,6 +7,11 @@ void ofApp::setup(){
 	ofSetVerticalSync(true);
 	ofSetFrameRate(3);
 
+	logger.setFilename("EmotiBitWiFiLog.txt");
+	logger.setDirPath(ofToDataPath(""));
+
+	logger.startThread();
+
 	emotiBitWiFi.begin();
 }
 
@@ -18,24 +23,32 @@ void ofApp::update()
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	string allIps = "";
-
-	emotibitIps = emotiBitWiFi.getEmotiBitIPs();
-	for (auto it = emotibitIps.begin(); it != emotibitIps.end(); it++)
-	{
-		allIps += it->first + "\n";
-	}
-
 	string data;
 	emotiBitWiFi.readData(data);
 	if (data.length() > 0) {
-		cout << "Data: " << data;
+		logger.push("Data: " + data);
+		//cout << "Data: " << data;
 	}
 
 	ofSetHexColor(0x000000);
 	ofDrawBitmapString("Data: \n" + data, 10, 20);
+	ofDrawBitmapString("Connected: " + emotiBitWiFi.connectedEmotibitIp, 10, 60);
+	ofDrawBitmapString("EmotBits:\n", 10, 100);
 
-	ofDrawBitmapString("EmotBits:\n" + allIps, 10, 60);
+	emotibitIps = emotiBitWiFi.getEmotiBitIPs();
+	int y = 100;
+	for (auto it = emotibitIps.begin(); it != emotibitIps.end(); it++)
+	{
+		if (it->second.isAvailable)
+		{
+			ofSetHexColor(0x000000);
+		}
+		else
+		{
+			ofSetHexColor(0x888888);
+		}
+		ofDrawBitmapString(it->first, 10, y+=20);
+	}
 
 }
 
@@ -45,7 +58,9 @@ void ofApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
+void ofApp::keyReleased(int k){
+	char key = (char)k;
+	cout << "keyReleased: " << (char)key << endl;
 	if ((char)key == 'c')
 	{
 		if (emotibitIps.size() > 0) {
@@ -53,15 +68,33 @@ void ofApp::keyReleased(int key){
 			//emotiBitWiFi.connect("192.168.0.36");
 		}
 	}
-	else if ((char)key == 'd')
+	else if (key == 'd')
 	{
 		emotiBitWiFi.disconnect();
 	}
-	else if ((char)key == 'r')
+	else if (key == 'r')
 	{
 		string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, emotiBitWiFi.controlPacketCounter++, "", 0);
 		cout << packet;
 		emotiBitWiFi.sendControl(packet);
+	}
+	else if (key == '1' || key == '2' || key == '3' || key == '4' || key == '5'
+		|| key == '6' || key == '7' || key == '8' || key == '9')
+	{
+		connectTo(ofToInt(ofToString(key)));
+	}
+}
+
+void ofApp::connectTo(int i)
+{
+	int counter = 0;
+	for (auto it = emotibitIps.begin(); it != emotibitIps.end(); it++)
+	{
+		counter++;
+		if (counter == i)
+		{
+			emotiBitWiFi.connect(it->first);
+		}
 	}
 }
 

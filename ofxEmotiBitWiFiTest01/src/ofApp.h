@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "EmotiBitWiFiHost.h"
+#include "ofxThreadedLogger.h"
 
 
 class ofApp : public ofBaseApp{
@@ -22,10 +23,13 @@ class ofApp : public ofBaseApp{
 		void mouseExited(int x, int y);
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);		
+		void gotMessage(ofMessage msg);	
+		void connectTo(int i);
 		
 		EmotiBitWiFiHost emotiBitWiFi;
-		unordered_map<string, bool> emotibitIps;
+		unordered_map<string, EmotiBitStatus> emotibitIps;
+
+		LoggerThread logger;
 
 		ofTrueTypeFont  mono;
 		ofTrueTypeFont  monosm;

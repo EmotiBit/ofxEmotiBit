@@ -25,6 +25,9 @@
     <ClCompile Include="..\..\EmotiBit_XPlat_Utils\EmotiBitPacket.cpp">
       <Filter>addons\EmotiBit_XPlat_Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ofxThreadedLogger\src\ofxThreadedLogger.cpp">
+      <Filter>addons\ofxThreadedLogger\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -47,6 +50,12 @@
     </Filter>
     <Filter Include="addons\ofxEmotiBit\src">
       <UniqueIdentifier>{d77cda53-0045-4b36-bc80-16e17afd10c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxThreadedLogger">
+      <UniqueIdentifier>{a2b3914c-a8ce-440e-ac63-a527b69c0899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxThreadedLogger\src">
+      <UniqueIdentifier>{f0fe64c9-b75a-4aff-8644-e33037adfd73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="..\src\ArduinoString.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxThreadedLogger\src\ofxThreadedLogger.h">
+      <Filter>addons\ofxThreadedLogger\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

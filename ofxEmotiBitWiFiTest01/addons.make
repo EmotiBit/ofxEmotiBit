@@ -1,2 +1,3 @@
 ofxNetwork
 ofxEmotiBit
+ofxThreadedLogger
