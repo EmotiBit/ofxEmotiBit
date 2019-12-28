@@ -92,7 +92,12 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 					{
 						cout << "Emotibit: " << ip << ", " << port << endl;
 						// Add ip address to our list
-						_emotibitIps.emplace(ip, ofToInt(value) == EMOTIBIT_AVAILABLE);	
+						auto it = _emotibitIps.emplace(ip, EmotiBitStatus(ofToInt(value) == EMOTIBIT_AVAILABLE));
+						if (!it.second)
+						{
+							// if it's not a new ip address, update the status
+							it.first->second = EmotiBitStatus(ofToInt(value) == EMOTIBIT_AVAILABLE);
+						}
 					}
 				}
 				else if (header.typeTag.compare(EmotiBitPacket::TypeTag::PONG) == 0)
@@ -109,6 +114,7 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 							{
 								isConnected = true;
 								isStartingConnection = false;
+								dataCxn.Create();
 							}
 							if (isConnected)
 							{
@@ -164,12 +170,31 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 		}
 	}
 
+	// Check to see if connection has timed out
 	if (isConnected)
 	{
 		if (ofGetElapsedTimeMillis() - connectionTimer > connectionTimeout)
 		{
 			disconnect();
 		}
+	}
+
+	// Check to see if EmotiBit availability is stale or needs purging
+	for (auto it = _emotibitIps.begin(); it != _emotibitIps.end(); it++)
+	{
+		if (ofGetElapsedTimeMillis() - it->second.lastSeen > availabilityTimeout)
+		{
+			it->second.isAvailable = false;
+		}
+
+		//if (ofGetElapsedTimeMillis() - it->second.lastSeen > ipPurgeTimeout)
+		//{
+		//	_emotibitIps.erase(it);
+		//}
+		//else
+		//{
+		//	it++;
+		//}
 	}
 
 	return SUCCESS;
@@ -268,12 +293,14 @@ int8_t EmotiBitWiFiHost::disconnect()
 			if (ip.compare(connectedEmotibitIp) == 0)
 			{
 				controlCxn.send(i, packet);
-				connectedEmotibitIp = "";
-				isConnected = false;
-				isStartingConnection = false;
 			}
 		}
 		controlCxnMutex.unlock();
+
+		dataCxn.Close();
+		connectedEmotibitIp = "";
+		isConnected = false;
+		isStartingConnection = false;
 	}
 
 	return SUCCESS;
@@ -287,7 +314,7 @@ int8_t EmotiBitWiFiHost::connect(string ip)
 		emotibitIpsMutex.lock();
 		try
 		{
-			if (ip.compare("") != 0 && _emotibitIps.at(ip))	// If the ip is on our list and available
+			if (ip.compare("") != 0 && _emotibitIps.at(ip).isAvailable)	// If the ip is on our list and available
 			{
 				connectedEmotibitIp = ip;
 				isStartingConnection = true;
@@ -302,7 +329,7 @@ int8_t EmotiBitWiFiHost::connect(string ip)
 	return SUCCESS;
 }
 
-unordered_map<string, bool> EmotiBitWiFiHost::getEmotiBitIPs()
+unordered_map<string, EmotiBitStatus> EmotiBitWiFiHost::getEmotiBitIPs()
 {
 	//emotibitIpsMutex.lock();
 	//unordered_map<string, bool> output;
