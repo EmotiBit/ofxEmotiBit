@@ -24,7 +24,6 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);	
-		void connectTo(int i);
 		
 		EmotiBitWiFiHost emotiBitWiFi;
 		unordered_map<string, EmotiBitStatus> emotibitIps;

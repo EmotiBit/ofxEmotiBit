@@ -3,16 +3,16 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	// we don't want to be running too fast
-	ofSetVerticalSync(true);
-	ofSetFrameRate(60);
+	//ofSetVerticalSync(true);
+	//ofSetFrameRate(60);
 
-	logger.setFilename("EmotiBitWiFiLog.txt");
+	emotiBitWiFi.begin();
+
+	logger.setFilename("EmotiBitWiFiLog" + ofToString(emotiBitWiFi.dataPort) + ".txt");
 	logger.setDirPath(ofToDataPath(""));
 
 	logger.startThread();
 
-	emotiBitWiFi.begin();
 }
 
 //--------------------------------------------------------------
@@ -23,17 +23,19 @@ void ofApp::update()
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	vector<string> dataPackets;
+	emotiBitWiFi.readData(dataPackets);
 	string data;
-	emotiBitWiFi.readData(data);
-	if (data.length() > 0) {
-		logger.push("Data: " + data);
-		//cout << "Data: " << data;
+	for (string packet : dataPackets)
+	{
+		logger.push("Data: " + packet);
+		data = packet;
 	}
 
 	ofSetHexColor(0x000000);
 	ofDrawBitmapString("Data: \n" + data, 10, 20);
 	ofDrawBitmapString("Connected: " + emotiBitWiFi.connectedEmotibitIp, 10, 60);
-	ofDrawBitmapString("EmotBits:\n", 10, 100);
+	ofDrawBitmapString("EmotiBits:\n", 10, 100);
 
 	emotibitIps = emotiBitWiFi.getEmotiBitIPs();
 	int y = 100;
@@ -81,22 +83,10 @@ void ofApp::keyReleased(int k){
 	else if (key == '1' || key == '2' || key == '3' || key == '4' || key == '5'
 		|| key == '6' || key == '7' || key == '8' || key == '9')
 	{
-		connectTo(ofToInt(ofToString(key)));
+		emotiBitWiFi.connect(ofToInt(ofToString(key)) - 1);
 	}
 }
 
-void ofApp::connectTo(int i)
-{
-	int counter = 0;
-	for (auto it = emotibitIps.begin(); it != emotibitIps.end(); it++)
-	{
-		counter++;
-		if (counter == i)
-		{
-			emotiBitWiFi.connect(it->first);
-		}
-	}
-}
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
@@ -142,4 +132,3 @@ void ofApp::gotMessage(ofMessage msg){
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
-

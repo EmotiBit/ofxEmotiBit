@@ -8,12 +8,14 @@
 #pragma once
 
 #include <unordered_set>
+#include <atomic>
 
 // ToDo: Extend code to work with Android
 #include "ofMain.h"
 #include "ofxNetwork.h"
 #include "EmotiBitPacket.h"
 #include "EmotiBitComms.h"
+#include "DoubleBuffer.h"
 
 using namespace EmotiBit;
 
@@ -30,10 +32,9 @@ class EmotiBitWiFiHost
 {
 public:
 
-
 	static const uint8_t SUCCESS = 0;
 	static const uint8_t FAIL = -1;
-	static const int32_t EMOTIBIT_AVAILABLE = -1;
+
 	uint16_t advertisingInterval = 500;		// Milliseconds between sending advertising messages
 	uint16_t startCxnInterval = 100;
 
@@ -41,11 +42,15 @@ public:
 	ofxUDPManager dataCxn;
 	ofxTCPServer controlCxn;
 
+	std::thread* dataThread;
+
 	std::mutex controlCxnMutex;
+	std::mutex dataCxnMutex;
 	std::mutex emotibitIpsMutex;
 
 	uint16_t advertisingPort;
 	uint16_t dataPort;
+	uint16_t sendDataPort;
 	uint16_t controlPort;
 	string advertisingIp;				// broadcast address
 	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
@@ -53,8 +58,11 @@ public:
 	bool isConnected;
 	bool isStartingConnection;
 
-	uint16_t advertisingPacketCounter;
-	uint16_t controlPacketCounter;
+	uint16_t advertisingPacketCounter = 0;
+	uint16_t controlPacketCounter = 0;
+	uint16_t dataPacketCounter = 0;
+
+	DoubleBuffer<string> dataPackets;
 
 	uint16_t pingInterval = 500;
 	uint64_t connectionTimer;
@@ -62,14 +70,23 @@ public:
 	uint16_t availabilityTimeout = 5000;
 	uint16_t ipPurgeTimeout = 15000;
 
+	atomic_bool stopDataThread = false;
+	uint16_t receivedDataPacketNumber = 60000;	// Tracks packet numbers (for multi-send). Starts at arbitrary large number.
 
+	~EmotiBitWiFiHost();
 	int8_t begin();
 	int8_t processAdvertising();
 	int8_t connect(string ip);
+	int8_t connect(uint8_t i);
 	int8_t disconnect();
-	int8_t sendControl(string& packet);
+	int8_t sendControl(const string& packet);
 	//uint8_t readControl(string& packet);
-	int8_t readData(string& message);
+	void readUdp(ofxUDPManager &udp, string& message, string ipFilter = "");	// If ipFilter is empty it reports the result
+	void readData(vector<string> &packets);
+	void updateData();
+	int8_t sendData(const string& packet);
+	void processRequestData(const string& packet);
+	void updateDataThread();
 	int8_t flushData();
 	//int8_t sendUdp(WiFiUDP& udp, const String& message, const IPAddress& ip, const uint16_t& port);
 	unordered_map<string, EmotiBitStatus> getEmotiBitIPs();	// <IP address, availability to connect>

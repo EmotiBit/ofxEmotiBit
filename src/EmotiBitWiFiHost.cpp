@@ -1,5 +1,13 @@
 #include "EmotiBitWiFiHost.h"
 
+
+EmotiBitWiFiHost::~EmotiBitWiFiHost()
+{
+	stopDataThread = true;
+	dataThread->join();
+	delete(dataThread);
+}
+
 int8_t EmotiBitWiFiHost::begin()
 {
 	advertisingPort = EmotiBitComms::WIFI_ADVERTISING_PORT;
@@ -13,23 +21,27 @@ int8_t EmotiBitWiFiHost::begin()
 	advertisingCxn.SetNonBlocking(true);
 	advertisingCxn.SetReceiveBufferSize(pow(2, 10));
 
-	dataPort = 3002;
+	dataPort = EmotiBitComms::WIFI_ADVERTISING_PORT + 1;
 	dataCxn.Create();
+	dataCxn.SetReuseAddress(false);
 	while (!dataCxn.Bind(dataPort))
 	{
 		// Try to bind dataPort until we find one that's available
-		dataPort++;
+		dataPort += 2;
+		cout << "Trying data port: " << dataPort << endl;
 	}
 	//dataCxn.SetEnableBroadcast(false);
 	dataCxn.SetNonBlocking(true);
 	dataCxn.SetReceiveBufferSize(pow(2, 15));
 
-	controlPort = 11998;
+	controlPort = dataPort + 1;
 	controlCxn.setMessageDelimiter(ofToString(EmotiBitPacket::PACKET_DELIMITER_CSV));
 	while (!controlCxn.setup(controlPort))
 	{
 		// Try to setup a controlPort until we find one that's available
-		controlPort++;
+		controlPort += 2;
+		controlCxn.close();
+		cout << "Trying control port: " << controlPort << endl;
 	}
 
 	cout << "EmotiBit data port: " << dataPort << endl;
@@ -40,6 +52,8 @@ int8_t EmotiBitWiFiHost::begin()
 	connectedEmotibitIp = "";
 	isConnected = false;
 	isStartingConnection = false;
+
+	dataThread = new std::thread(&EmotiBitWiFiHost::updateDataThread, this);
 
 	return SUCCESS;
 }
@@ -90,13 +104,13 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 					int16_t valuePos = EmotiBitPacket::getPacketKeyedValue(packet, EmotiBitPacket::PayloadLabel::DATA_PORT, value, dataStartChar);
 					if (valuePos > -1)
 					{
-						cout << "Emotibit: " << ip << ", " << port << endl;
+						cout << "EmotiBit: " << ip << ":" << port << endl;
 						// Add ip address to our list
-						auto it = _emotibitIps.emplace(ip, EmotiBitStatus(ofToInt(value) == EMOTIBIT_AVAILABLE));
+						auto it = _emotibitIps.emplace(ip, EmotiBitStatus(ofToInt(value) == EmotiBitComms::EMOTIBIT_AVAILABLE));
 						if (!it.second)
 						{
 							// if it's not a new ip address, update the status
-							it.first->second = EmotiBitStatus(ofToInt(value) == EMOTIBIT_AVAILABLE);
+							it.first->second = EmotiBitStatus(ofToInt(value) == EmotiBitComms::EMOTIBIT_AVAILABLE);
 						}
 					}
 				}
@@ -112,6 +126,7 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 							// Establish / maintain connected status
 							if (isStartingConnection)
 							{
+								flushData();
 								isConnected = true;
 								isStartingConnection = false;
 								//dataCxn.Create();
@@ -200,7 +215,7 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 	return SUCCESS;
 }
 
-int8_t EmotiBitWiFiHost::sendControl(string& packet)
+int8_t EmotiBitWiFiHost::sendControl(const string& packet)
 {
 	controlCxnMutex.lock();
 	for (unsigned int i = 0; i < (unsigned int)controlCxn.getLastID(); i++)
@@ -260,26 +275,153 @@ int8_t EmotiBitWiFiHost::sendControl(string& packet)
 //	return SUCCESS;
 //}
 
-int8_t EmotiBitWiFiHost::readData(string& message)
+void EmotiBitWiFiHost::readUdp(ofxUDPManager &udp, string& message, string ipFilter)
 {
 	const int maxSize = 32768;
 	static char udpMessage[maxSize];
+	int msgSize;
 	string ip;
 	int port;
-	int msgSize;
-	msgSize = dataCxn.Receive(udpMessage, maxSize);
-	dataCxn.GetRemoteAddr(ip, port);
-	if (ip.compare(connectedEmotibitIp) == 0 && port == dataPort)
+	msgSize = udp.Receive(udpMessage, maxSize);
+	udp.GetRemoteAddr(ip, port);
+	if (ipFilter.length() == 0 || ip.compare(ipFilter) == 0) // && portFilter > -1 && port == portFilter)
 	{
 		message = udpMessage;
-		if (message.length() > 0)
-		{
-			//isConnected = true;
-			//isStartingConnection = false;
-		}
 	}
+	else
+	{
+		message = "";
+	}
+}
 
-	return SUCCESS;
+void EmotiBitWiFiHost::updateData()
+{
+	string message;
+	dataCxnMutex.lock();
+	readUdp(dataCxn, message, connectedEmotibitIp);
+	dataCxnMutex.unlock();
+
+	if (message.size() > 0)
+	{
+		string packet;
+		EmotiBitPacket::Header header;
+		size_t startChar = 0;
+		size_t endChar;
+		do
+		{
+			endChar = message.find_first_of(EmotiBitPacket::PACKET_DELIMITER_CSV, startChar);
+			if (endChar == string::npos)
+			{
+				cout << "**** MALFORMED MESSAGE **** : no packet delimiter found" << endl;
+			}
+			else
+			{
+				if (endChar == startChar)
+				{
+					cout << "**** EMPTY MESSAGE **** " << endl;
+				}
+				else
+				{
+					packet = message.substr(startChar, endChar - startChar + 1);	// extract packet
+
+					int16_t dataStartChar = EmotiBitPacket::getHeader(packet, header);	// read header
+					if (dataStartChar == EmotiBitPacket::MALFORMED_HEADER)
+					{
+						cout << "**** MALFORMED PACKET **** : no header data found" << endl;
+					}
+					else
+					{
+						if (isConnected)
+						{
+							// Connect a channel to handle time syncing
+							dataCxnMutex.lock();
+							string ip;
+							int port;
+							dataCxn.GetRemoteAddr(ip, port);
+							if (port != sendDataPort)
+							{
+								sendDataPort = port;
+								dataCxn.Connect(ip.c_str(), port);
+								advertisingCxn.SetEnableBroadcast(false);
+							}
+							dataCxnMutex.unlock();
+						}
+						// We got a well-formed packet header
+						if (header.packetNumber != receivedDataPacketNumber)
+						{
+							// Skip duplicates packets (e.g. from multi-send protocols)
+							receivedDataPacketNumber = header.packetNumber;
+							if (header.typeTag.compare(EmotiBitPacket::TypeTag::REQUEST_DATA) == 0)
+							{
+								// Process data requests
+								processRequestData(packet);
+							}
+							dataPackets.push_back(packet);
+						}
+					}
+				}
+			}
+			startChar = endChar + 1;
+		} while (endChar != string::npos && startChar < message.size());	// until all packet delimiters are processed
+	}
+}
+
+void EmotiBitWiFiHost::updateDataThread()
+{
+	while (!stopDataThread)
+	{
+		updateData();
+		std::this_thread::yield();
+	}
+}
+
+void EmotiBitWiFiHost::processRequestData(const string& packet)
+{
+	// Request Data
+	string element;
+	int16_t dataStartChar;
+	do
+	{
+		// Parse through requested packet elements and data
+		dataStartChar = EmotiBitPacket::getPacketElement(packet, element, dataStartChar);
+
+		if (element.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0)
+		{
+			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, dataPacketCounter++, ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT), 1);
+			sendData(packet);
+		}
+		if (element.compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
+		{
+			// ToDo: implement UTC timestamp
+		}
+		//if (lsl.isConnected()) {
+		//	double lsltime = lsl::local_clock();
+		//	sendEmotiBitPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) + "," + ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT) + ",LC," + ofToString(lsltime, 7));
+		//	//cout << EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME << "," << ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) + "," + ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT) + ",LC," + ofToString(lsltime, 7) << endl;
+		//}
+		//sendEmotiBitPacket(EmotiBitPacket::TypeTag::ACK, ofToString(header.packetNumber) + ',' + header.typeTag, 2);
+		////cout << EmotibitPacket::TypeTag::REQUEST_DATA << header.packetNumber << endl;
+	} while (dataStartChar > 0);
+}
+
+int8_t EmotiBitWiFiHost::sendData(const string& packet)
+{
+	if (isConnected)
+	{
+		dataCxnMutex.lock();
+		dataCxn.Send(packet.c_str(), packet.length());
+		dataCxnMutex.unlock();
+		return SUCCESS;
+	}
+	else
+	{
+		return FAIL;
+	}
+}
+
+void EmotiBitWiFiHost::readData(vector<string> &packets)
+{
+	 dataPackets.get(packets);
 }
 
 int8_t EmotiBitWiFiHost::disconnect()
@@ -310,7 +452,9 @@ int8_t EmotiBitWiFiHost::flushData()
 {
 	const int maxSize = 32768;
 	char udpMessage[maxSize];
+	dataCxnMutex.lock();
 	while (dataCxn.Receive(udpMessage, maxSize) > 0);
+	dataCxnMutex.unlock();
 
 	return SUCCESS;
 }
@@ -336,6 +480,20 @@ int8_t EmotiBitWiFiHost::connect(string ip)
 	}
 
 	return SUCCESS;
+}
+
+int8_t EmotiBitWiFiHost::connect(uint8_t i)
+{
+	int counter = 0;
+	for (auto it = _emotibitIps.begin(); it != _emotibitIps.end(); it++)
+	{
+		if (counter == i)
+		{
+			return connect(it->first);
+		}
+		counter++;
+	}
+	return FAIL;
 }
 
 unordered_map<string, EmotiBitStatus> EmotiBitWiFiHost::getEmotiBitIPs()
