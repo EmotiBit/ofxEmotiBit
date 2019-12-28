@@ -46,8 +46,8 @@ public:
 	uint16_t controlPacketCounter;
 
 	uint16_t pingInterval = 500;
-	uint64_t lastPong;
-	uint16_t disconnectTimeout = 5000;
+	uint64_t connectionTimer;
+	uint16_t connectionTimeout = 10000;
 
 	int8_t begin();
 	int8_t processAdvertising();

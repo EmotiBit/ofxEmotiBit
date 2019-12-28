@@ -112,7 +112,7 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 							}
 							if (isConnected)
 							{
-								lastPong = ofGetElapsedTimeMillis();
+								connectionTimer = ofGetElapsedTimeMillis();
 							}
 						}
 					}
@@ -161,6 +161,14 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 			advertisingCxn.Connect(connectedEmotibitIp.c_str(), advertisingPort);
 			advertisingCxn.SetEnableBroadcast(false);
 			advertisingCxn.Send(packet.c_str(), packet.length());
+		}
+	}
+
+	if (isConnected)
+	{
+		if (ofGetElapsedTimeMillis() - connectionTimer > connectionTimeout)
+		{
+			disconnect();
 		}
 	}
 
@@ -236,7 +244,7 @@ int8_t EmotiBitWiFiHost::readData(string& message)
 	int msgSize;
 	msgSize = dataCxn.Receive(udpMessage, maxSize);
 	dataCxn.GetRemoteAddr(ip, port);
-	if (ip.compare(connectedEmotibitIp) == 0)
+	if (ip.compare(connectedEmotibitIp) == 0 && port == dataPort)
 	{
 		message = udpMessage;
 		if (message.length() > 0)
