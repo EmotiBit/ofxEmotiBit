@@ -26,10 +26,21 @@ void ofApp::draw(){
 	vector<string> dataPackets;
 	emotiBitWiFi.readData(dataPackets);
 	string data;
+	static uint32_t missedPackets = 0;
+	static uint16_t lastPacketNumber = 0;
+	EmotiBitPacket::Header header;
 	for (string packet : dataPackets)
 	{
-		logger.push("Data: " + packet);
+		logger.push(packet);
 		data = packet;
+
+		EmotiBitPacket::getHeader(packet, header);
+		if (header.packetNumber - lastPacketNumber > 1)
+		{
+			missedPackets += header.packetNumber - (lastPacketNumber + 1);
+			lastPacketNumber = header.packetNumber;
+			cout << "MISSED PACKETS -- TOTAL: " << missedPackets << endl;
+		}
 	}
 
 	ofSetHexColor(0x000000);

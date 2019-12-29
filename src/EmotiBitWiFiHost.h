@@ -85,7 +85,7 @@ public:
 	void readData(vector<string> &packets);
 	void updateData();
 	int8_t sendData(const string& packet);
-	void processRequestData(const string& packet);
+	void processRequestData(const string& packet, int16_t dataStartChar);
 	void updateDataThread();
 	int8_t flushData();
 	//int8_t sendUdp(WiFiUDP& udp, const String& message, const IPAddress& ip, const uint16_t& port);

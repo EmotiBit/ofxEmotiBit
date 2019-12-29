@@ -352,9 +352,10 @@ void EmotiBitWiFiHost::updateData()
 							}
 							if (header.packetNumber == receivedDataPacketNumber)
 							{
+								// THIS DOESN'T WORK YET
 								// Skip duplicates packets (e.g. from multi-send protocols)
 								// Note this assumes the whole message is a duplicate
-								continue;
+								//continue;
 							}
 							else
 							{
@@ -365,7 +366,7 @@ void EmotiBitWiFiHost::updateData()
 						if (header.typeTag.compare(EmotiBitPacket::TypeTag::REQUEST_DATA) == 0)
 						{
 							// Process data requests
-							processRequestData(packet);
+							processRequestData(packet, dataStartChar);
 						}
 						dataPackets.push_back(packet);
 					}
@@ -385,11 +386,11 @@ void EmotiBitWiFiHost::updateDataThread()
 	}
 }
 
-void EmotiBitWiFiHost::processRequestData(const string& packet)
+void EmotiBitWiFiHost::processRequestData(const string& packet, int16_t dataStartChar)
 {
 	// Request Data
 	string element;
-	int16_t dataStartChar;
+	string outPacket;
 	do
 	{
 		// Parse through requested packet elements and data
@@ -397,8 +398,8 @@ void EmotiBitWiFiHost::processRequestData(const string& packet)
 
 		if (element.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0)
 		{
-			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, dataPacketCounter++, ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT), 1);
-			sendData(packet);
+			outPacket = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, dataPacketCounter++, ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT), 1);
+			sendData(outPacket);
 		}
 		if (element.compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
 		{
@@ -412,6 +413,13 @@ void EmotiBitWiFiHost::processRequestData(const string& packet)
 		//sendEmotiBitPacket(EmotiBitPacket::TypeTag::ACK, ofToString(header.packetNumber) + ',' + header.typeTag, 2);
 		////cout << EmotibitPacket::TypeTag::REQUEST_DATA << header.packetNumber << endl;
 	} while (dataStartChar > 0);
+	EmotiBitPacket::Header header;
+	EmotiBitPacket::getHeader(packet, header);
+	vector<string> payload;
+	payload.push_back(ofToString(header.packetNumber));
+	payload.push_back(header.typeTag);
+	outPacket = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::ACK, dataPacketCounter++, payload);
+	sendData(outPacket);
 }
 
 int8_t EmotiBitWiFiHost::sendData(const string& packet)
