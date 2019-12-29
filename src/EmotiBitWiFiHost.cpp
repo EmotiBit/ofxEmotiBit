@@ -331,33 +331,43 @@ void EmotiBitWiFiHost::updateData()
 					}
 					else
 					{
-						if (isConnected)
-						{
-							// Connect a channel to handle time syncing
-							dataCxnMutex.lock();
-							string ip;
-							int port;
-							dataCxn.GetRemoteAddr(ip, port);
-							if (port != sendDataPort)
-							{
-								sendDataPort = port;
-								dataCxn.Connect(ip.c_str(), port);
-								advertisingCxn.SetEnableBroadcast(false);
-							}
-							dataCxnMutex.unlock();
-						}
 						// We got a well-formed packet header
-						if (header.packetNumber != receivedDataPacketNumber)
+						if (startChar == 0)
 						{
-							// Skip duplicates packets (e.g. from multi-send protocols)
-							receivedDataPacketNumber = header.packetNumber;
-							if (header.typeTag.compare(EmotiBitPacket::TypeTag::REQUEST_DATA) == 0)
+							// This is the first packet in the message
+							if (isConnected)
 							{
-								// Process data requests
-								processRequestData(packet);
+								// Connect a channel to handle time syncing
+								dataCxnMutex.lock();
+								string ip;
+								int port;
+								dataCxn.GetRemoteAddr(ip, port);
+								if (port != sendDataPort)
+								{
+									sendDataPort = port;
+									dataCxn.Connect(ip.c_str(), port);
+									advertisingCxn.SetEnableBroadcast(false);
+								}
+								dataCxnMutex.unlock();
 							}
-							dataPackets.push_back(packet);
+							if (header.packetNumber == receivedDataPacketNumber)
+							{
+								// Skip duplicates packets (e.g. from multi-send protocols)
+								// Note this assumes the whole message is a duplicate
+								continue;
+							}
+							else
+							{
+								// Keep track of packetNumbers we've seen
+								receivedDataPacketNumber = header.packetNumber;
+							}
 						}
+						if (header.typeTag.compare(EmotiBitPacket::TypeTag::REQUEST_DATA) == 0)
+						{
+							// Process data requests
+							processRequestData(packet);
+						}
+						dataPackets.push_back(packet);
 					}
 				}
 			}
