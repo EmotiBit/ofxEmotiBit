@@ -10,6 +10,7 @@
 #include "ofxLSL.h"
 #include "DoubleBuffer.h"
 #include "EmotiBitPacket.h"
+#include "EmotiBitWiFiHost.h"
 #include "ofxEmotiBitVersion.h"
 
 class ofApp : public ofBaseApp {
