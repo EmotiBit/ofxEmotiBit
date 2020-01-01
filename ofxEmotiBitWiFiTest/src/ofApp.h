@@ -29,6 +29,7 @@ class ofApp : public ofBaseApp{
 		unordered_map<string, EmotiBitStatus> emotibitIps;
 
 		LoggerThread logger;
+		bool logData;
 
 		ofTrueTypeFont  mono;
 		ofTrueTypeFont  monosm;
