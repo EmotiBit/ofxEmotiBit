@@ -136,8 +136,8 @@ void ofApp::setup() {
 			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
 			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
 			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
-			{ EmotiBitPacket::TypeTag:: TEMPERATURE_0 },
-			{ EmotiBitPacket::TypeTag::THERMISTOR}
+			{ EmotiBitPacket::TypeTag::TEMPERATURE_0 },
+			{ EmotiBitPacket::TypeTag::THERMOPILE}
 		}
 	};
 	// Create an index mapping for each type tag
@@ -305,9 +305,15 @@ void ofApp::setup() {
 	//char devPort[] = mySerial.getDevicePath();
 	//printf("%s",devPort);
 	dataLogger.setFilename("dataLog.txt");
-	dataLogger.startThread();
+	if (logData)
+	{
+		dataLogger.startThread();
+	}
 	consoleLogger.setFilename("consoleLog.txt");
-	consoleLogger.startThread();
+	if (logConsole)
+	{
+		consoleLogger.startThread();
+	}
 
 	connectionThread = new std::thread(&ofApp::parseUdp, this);
 	//Start up lsl connection on a seperate thread

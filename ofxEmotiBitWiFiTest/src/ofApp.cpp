@@ -10,9 +10,12 @@ void ofApp::setup(){
 
 	logger.setFilename("EmotiBitWiFiLog" + ofToString(emotiBitWiFi.dataPort) + ".txt");
 	logger.setDirPath(ofToDataPath(""));
+	logData = false;
 
-	logger.startThread();
-
+	if (logData)
+	{
+		logger.startThread();
+	}
 }
 
 //--------------------------------------------------------------
@@ -31,7 +34,10 @@ void ofApp::draw(){
 	EmotiBitPacket::Header header;
 	for (string packet : dataPackets)
 	{
-		logger.push(packet);
+		if (logData)
+		{
+			logger.push(packet);
+		}
 		data = packet;
 
 		EmotiBitPacket::getHeader(packet, header);
@@ -95,6 +101,14 @@ void ofApp::keyReleased(int k){
 		|| key == '6' || key == '7' || key == '8' || key == '9')
 	{
 		emotiBitWiFi.connect(ofToInt(ofToString(key)) - 1);
+	}
+	else if (key == '+')
+	{
+		logData = !logData;
+		if (logData)
+		{
+			logger.startThread();
+		}
 	}
 }
 

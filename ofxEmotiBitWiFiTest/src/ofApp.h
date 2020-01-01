@@ -33,9 +33,5 @@ class ofApp : public ofBaseApp{
 
 		ofTrueTypeFont  mono;
 		ofTrueTypeFont  monosm;
-
-		vector <string> storeText;
-		uint64_t lastSent;
-		uint16_t cleintId;
 };
 

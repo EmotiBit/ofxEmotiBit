@@ -84,9 +84,14 @@ public:
 	ofxUDPManager udpConnection;
 	LoggerThread dataLogger;
 	LoggerThread consoleLogger;
+	bool logData;
+	bool logConsole;
 	ofTrueTypeFont legendFont;
 	ofTrueTypeFont axesFont;
 	ofTrueTypeFont subLegendFont;
+
+	EmotiBitWiFiHost emotiBitWiFi;
+	unordered_map<string, EmotiBitStatus> emotibitIps;
 
 	//struct EmotibitPacketHeader_V1 {
 	//	uint32_t timestamp;  // milliseconds since EmotiBit bootup
@@ -198,4 +203,5 @@ public:
 
 	int nDataClippingEvents = 0;
 	int nDataOverflowEvents = 0;
+
 };
