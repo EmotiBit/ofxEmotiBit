@@ -34,6 +34,10 @@ int8_t EmotiBitWiFiHost::begin()
 	dataCxn.SetNonBlocking(true);
 	dataCxn.SetReceiveBufferSize(pow(2, 15));
 
+	cout << "dataCxn GetMaxMsgSize" << dataCxn.GetMaxMsgSize() << endl;
+	cout << "dataCxn GetReceiveBufferSize" << dataCxn.GetReceiveBufferSize() << endl;
+	cout << "dataCxn GetTimeoutReceive" << dataCxn.GetTimeoutReceive() << endl;
+
 	controlPort = dataPort + 1;
 	controlCxn.setMessageDelimiter(ofToString(EmotiBitPacket::PACKET_DELIMITER_CSV));
 	while (!controlCxn.setup(controlPort))

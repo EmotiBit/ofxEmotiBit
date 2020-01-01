@@ -278,32 +278,9 @@ void ofApp::setup() {
 
 	isPaused = false;
 
-	vector<string> ips = getLocalIPs();
-	//sendBroadcast(ips.at(0));
+	logData = false;
+	logConsole = false;
 
-	udpConnection.Create();
-	vector<string> ipSplit = ofSplitString(ips.at(0), ".");
-	string ipAddress = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2) + "." + ofToString(255);
-	cout << ipAddress << endl;
-	udpConnection.Connect(ipAddress.c_str(), connectionPort);
-	udpConnection.SetEnableBroadcast(true);
-	udpConnection.SetNonBlocking(true);
-	string message = "hi";
-	string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-	sendEmotiBitPacket(EmotiBitPacket::TypeTag::PPG_INFRARED, localTime);
-	// udpConnection.Send(message.c_str(), message.length());
-	udpConnection.GetMaxMsgSize();
-	udpConnection.GetReceiveBufferSize();
-	udpConnection.GetTimeoutReceive();
-	udpConnection.SetReceiveBufferSize(pow(2, 15));
-
-	cout << "GetMaxMsgSize" <<  udpConnection.GetMaxMsgSize() << endl;
-	cout << "GetReceiveBufferSize" <<  udpConnection.GetReceiveBufferSize() << endl;
-	cout << "GetTimeoutReceive" <<  udpConnection.GetTimeoutReceive() << endl;
-
-	//mySerial.getDeviceList();
-	//char devPort[] = mySerial.getDevicePath();
-	//printf("%s",devPort);
 	dataLogger.setFilename("dataLog.txt");
 	if (logData)
 	{
@@ -315,204 +292,13 @@ void ofApp::setup() {
 		consoleLogger.startThread();
 	}
 
-	connectionThread = new std::thread(&ofApp::parseUdp, this);
 	//Start up lsl connection on a seperate thread
 	lsl.start();
-
-	//mySerial.setup("COM35", 115200);
-}
-
-//--------------------------------------------------------------
-void ofApp::parseUdp() {
-	static char udpMessage[100000];
-
-	string ip;
-	int port;
-	int msgSize;
-	while (runConnectionThread) {
-		// Packet parsing thread loop
-		if (true) {
-			ofScopedLock lock(connectionLock);
-			msgSize = udpConnection.Receive(udpMessage, 100000);
-			udpConnection.GetRemoteAddr(ip, port);
-		}
-		if (port > 0 && msgSize > 0) {
-			//cout << "Remote ip: " << ip << ", port: " << port << " , size: " << msgSize << endl;
-			//consoleLogger.push("Remote ip: " + ip + ", port: " + ofToString(port) + " , size: " + ofToString(msgSize) + '\n');
-			
-			if (checkDeviceList(ip)) {
-				// Device is selected, process the message!
-				string message = udpMessage;
-				messageLen = message.length();
-				vector<string> splitPacket = ofSplitString(message, ofToString(EmotiBitPacket::PACKET_DELIMITER_CSV));	// split data into separate value pairs
-				for (int i = 0; i < splitPacket.size(); i++) {
-					if (splitPacket.at(i).find(",,") < splitPacket.at(i).size()) {
-						malformedMessages++;
-						cout << "**** MALFORMED MESSAGE " << malformedMessages << ", " << messageLen << " ',,' ****" << endl;
-						cout << splitPacket.at(i) << endl;
-					}
-					if (splitPacket.at(i).length() > 0) {
-						parsePacket(splitPacket.at(i));
-					}
-				}
-			}
-		}
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::parseSerial() {
-	// Read the incoming data
-	bool noData = false;
-	int myByte;
-	while (!noData) {
-		myByte = mySerial.readByte();
-		if (myByte == OF_SERIAL_NO_DATA) {
-			noData = true;
-		}
-		else if (myByte == OF_SERIAL_ERROR)
-		{
-			printf("an error occurred");
-			noData = true;
-		}
-		else {
-			if ((char)myByte != EmotiBitPacket::PACKET_DELIMITER_CSV) {
-				// Add the char to the incoming string until we have a line break
-				stringData = stringData + (char)myByte;
-			}
-			else {
-				// If we finished a data line, parse the data
-				parsePacket(stringData);
-				stringData = "";
-			}
-		}
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::parsePacket(string packet) {
-
-	dataLogger.push(packet);
-	dataLogger.push(ofToString(EmotiBitPacket::PACKET_DELIMITER_CSV));
-	ofToInt("1");
-
-	vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
-
-	EmotiBitPacket::Header packetHeader;
-	if (!EmotiBitPacket::getHeader(splitPacket, packetHeader)) {
-		malformedMessages++;
-		cout << "**** MALFORMED MESSAGE " << malformedMessages << ", " << messageLen << " ****" << endl;
-		cout << packet << endl;
-		return;
-	}
-
-	// process fast response packet types
-	if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::REQUEST_DATA) == 0) {
-		parseIncomingRequestData(packetHeader, splitPacket); // ToDo
-	}
-	else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::ACK) == 0) {
-		parseIncomingAck(splitPacket); // ToDo
-	}
-	else {
-		// add it to the buffer of messages to parse
-		// messageBuffer is thread-safe
-		messageBuffer.push_back(packet);
-	}
-}
-
-void ofApp::processSlowResponseMessage(string packet) {
-	vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
-	processSlowResponseMessage(splitPacket);
-}
-
-void ofApp::processSlowResponseMessage(vector<string> splitPacket) {
-
-	EmotiBitPacket::Header packetHeader;
-	if (EmotiBitPacket::getHeader(splitPacket, packetHeader)) {
-		if (packetHeader.dataLength >= MAX_BUFFER_LENGTH) {
-			bufferUnderruns++;
-			cout << "**** POSSIBLE BUFFER UNDERRUN EVENT " << bufferUnderruns << ", " << packetHeader.dataLength << " ****" << endl;
-		}
-
-		auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
-		if (indexPtr != typeTagIndexes.end()) {	// We're plotting this packet's typeTag!
-			vector<vector<float>> data;
-			int w = indexPtr->second.at(0); // Scope window
-			int s = indexPtr->second.at(1); // Scope
-			int p = indexPtr->second.at(2); // Plot
-			data.resize(typeTags.at(w).at(s).size());
-			for (int n = EmotiBitPacket::Header::length; n < splitPacket.size(); n++) {
-				data.at(p).emplace_back(ofToFloat(splitPacket.at(n))); // 
-			}
-			if (!isPaused) {
-				scopeWins.at(w).scopes.at(s).updateData(data);
-			}
-			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
-			dataCounts.at(w).at(s).at(p) = dataCounts.at(w).at(s).at(p) + packetHeader.dataLength;
-
-		}
-		else {
-			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_VOLTAGE) == 0) {
-					batteryStatus.getParameter().fromString(splitPacket.at(6) + "V");
-			}
-			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_PERCENT) == 0) {
-					batteryStatus.getParameter().fromString(splitPacket.at(6) + "%");
-			}
-			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::DATA_CLIPPING) == 0) {
-				for (int n = EmotiBitPacket::Header::length; n < splitPacket.size(); n++) {
-					for (int w = 0; w < typeTags.size(); w++) {
-						for (int s = 0; s < typeTags.at(w).size(); s++) {
-							for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
-								if (splitPacket.at(n).compare(typeTags.at(w).at(s).at(p)) == 0) {
-									dataClippingCount++;
-									guiPanels.at(guiPanelErrors).getControl(GUI_STRING_CLIPPING_EVENTS)->setBackgroundColor(ofColor(255, 0, 0));
-								}
-							}
-						}
-					}
-				}
-			}
-			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::DATA_OVERFLOW) == 0) {
-				for (int n = EmotiBitPacket::Header::length; n < splitPacket.size(); n++) {
-					for (int w = 0; w < typeTags.size(); w++) {
-						for (int s = 0; s < typeTags.at(w).size(); s++) {
-							for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
-								if (splitPacket.at(n).compare(typeTags.at(w).at(s).at(p)) == 0) {
-									dataOverflowCount++;
-									guiPanels.at(guiPanelErrors).getControl(GUI_STRING_OVERFLOW_EVENTS)->setBackgroundColor(ofColor(255, 0, 0));
-								}
-							}
-						}
-					}
-				}
-			}
-			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::RESET) == 0) {
-				if (guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE) != NULL) {
-					hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false);
-					guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setBackgroundColor(ofColor(0, 0, 0));
-					hibernateStatus.setBackgroundColor(ofColor(0, 0, 0));
-					hibernateStatus.getParameter().fromString(GUI_STRING_MODE_ACTIVE);
-				}
-				if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
-					recordingButton.set(GUI_STRING_CONTROL_RECORD, false);
-					guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
-					recordingStatus.setBackgroundColor(ofColor(0, 0, 0));
-					recordingStatus.getParameter().fromString(GUI_STRING_NOT_RECORDING);
-				}
-			}
-		}
-	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	if (plotUdpData) {
-		//parseUdp();
-		vector<string> messages = messageBuffer.get();
-		for (int j = 0; j < messages.size(); j++) {
-			processSlowResponseMessage(messages.at(j));
-		}
-	}
+	emotiBitWiFi.processAdvertising();
 
 	if (lsl.isConnected()) {
 		auto buffer = lsl.flush();
@@ -523,32 +309,23 @@ void ofApp::update() {
 			for (auto channel : sampleToUse.sample) {
 				ss << "," << ofToString(channel) ;
 			}
-			
-			sendEmotiBitPacket(EmotiBitPacket::TypeTag::LSL_MARKER, "TSC," + ofToString(sampleToUse.timestampLocal, 7) + ",TS," + ofToString(sampleToUse.timestamp, 7) + ",LC," + ofToString(sampleToUse.localClock, 7) + ",LD"+ ss.str());
-			//cout << EmotiBitPacket::TypeTag::LSL_MARKER << ",LC," << ofToString(sampleToUse.localClock, 7) << ",TSC," << ofToString(sampleToUse.timestampLocal, 7) << ",TS," << ofToString(sampleToUse.timestamp, 7) + ss.str() << endl;
-		}
-	}
-	static uint64_t heartBeatTimer;
-	int heartBeatDelay = 2000;
-	if (ofGetElapsedTimeMillis() - heartBeatTimer > heartBeatDelay) {
-		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-		guiPanels.at(guiPanelErrors).getControl(GUI_STRING_CLIPPING_EVENTS)->setBackgroundColor(ofColor(0, 0, 0));
-		guiPanels.at(guiPanelErrors).getControl(GUI_STRING_OVERFLOW_EVENTS)->setBackgroundColor(ofColor(0, 0, 0));
-		if (true) {
-			sendEmotiBitPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, localTime);
-		}
-		heartBeatTimer = ofGetElapsedTimeMillis();
 
-		for (int w = 0; w < typeTags.size(); w++) {
-			for (int s = 0; s < typeTags.at(w).size(); s++) {
-				for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
-					float newDataWeight = (dataFreqs.at(w).at(s).at(p) == 0) ? 1.f : 0.1f;
-					dataFreqs.at(w).at(s).at(p) = smoother(dataFreqs.at(w).at(s).at(p), dataCounts.at(w).at(s).at(p) * 1000 / heartBeatDelay, newDataWeight);
-					dataCounts.at(w).at(s).at(p) = 0;
-				}
-			}
+			vector<string> payload;
+			payload.push_back("TSC");
+			payload.push_back(ofToString(sampleToUse.timestampLocal, 7));
+			payload.push_back("TS");
+			payload.push_back(ofToString(sampleToUse.timestamp, 7));
+			payload.push_back("LC");
+			payload.push_back(ofToString(sampleToUse.localClock, 7));
+			payload.push_back("LD");
+			payload.push_back(ss.str());
+			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::LSL_MARKER, emotiBitWiFi.controlPacketCounter++, payload);
+			emotiBitWiFi.sendControl(packet);
+			//cout << packet;
 		}
 	}
+
+
 }
 
 //--------------------------------------------------------------
