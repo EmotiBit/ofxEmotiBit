@@ -2,8 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxOscilloscope.h"
-#include "ofxNetwork.h"
-#include "ofxNetworkUtils.h"
+//#include "ofxNetwork.h"
+//#include "ofxNetworkUtils.h"
 #include "ofxThreadedLogger.h"
 #include "ofxGui.h"
 #include "ofxInputField.h"
@@ -30,14 +30,14 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-	void parsePacket(string dataString);
-	void parseUdp();
-	void parseSerial();
-	vector<string> getLocalIPs();
-	void sendEmotiBitPacket(string typeTag, string data = "", uint16_t dataLength = 1, uint16_t protocolVersion = 1, uint16_t dataReliability = 100);
-	void sendEmotiBitPacket(ofxUDPManager &udpManager, string typeTag, string data = "", uint16_t dataLength = 1, uint16_t protocolVersion = 1, uint16_t dataReliability = 100);
-	void parseIncomingAck(vector<string> splitPacket);
-	void parseIncomingRequestData(EmotiBitPacket::Header header, vector<string> splitPacket);
+	//void parsePacket(string dataString);
+	//void parseUdp();
+	//void parseSerial();
+	//vector<string> getLocalIPs();
+	//void sendEmotiBitPacket(string typeTag, string data = "", uint16_t dataLength = 1, uint16_t protocolVersion = 1, uint16_t dataReliability = 100);
+	//void sendEmotiBitPacket(ofxUDPManager &udpManager, string typeTag, string data = "", uint16_t dataLength = 1, uint16_t protocolVersion = 1, uint16_t dataReliability = 100);
+	//void parseIncomingAck(vector<string> splitPacket);
+	//void parseIncomingRequestData(EmotiBitPacket::Header header, vector<string> splitPacket);
 
 	void recordButtonPressed(bool & recording);
 	void hibernateButtonPressed(bool & hibernate);
@@ -46,14 +46,15 @@ public:
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void deviceSelection(bool & selected);
+	//void deviceGroupSelection(ofParameter<bool> &device);
+	void deviceGroupSelection(ofAbstractParameter& device);
 	void sendDataSelection(bool & selected);
-	bool checkDeviceList(string ip);
+	void updateDeviceList();
+	//bool checkDeviceList(string ip, bool available = true);
 	void changeConnection(bool selected);
-	void sendBroadcast(string ipAddress);
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
-
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -164,6 +165,8 @@ public:
 	ofColor recordControlColor = ofColor(255, 69, 78);
 	ofColor hibernateControlColor = ofColor(10, 135, 210);
 	ofColor noteControlColor = ofColor(1, 204, 115);
+	ofColor deviceAvailableColor = ofColor(255, 255, 255);
+	ofColor deviceNotAvailableColor = ofColor(128, 128, 128);
 	int guiPanelDevice;
 	int guiPanelRecord;
 	int guiPanelMode;
@@ -193,12 +196,12 @@ public:
 	uint16_t MAX_BUFFER_LENGTH = 64;
 	size_t messageLen = 0;
 
-	DoubleBuffer<string> messageBuffer; 
-	ofMutex connectionLock;
-	std::thread* connectionThread;
-	bool runConnectionThread = true;
+	//DoubleBuffer<string> messageBuffer; 
+	//ofMutex connectionLock;
+	//std::thread* connectionThread;
+	//bool runConnectionThread = true;
 
-	int connectionPort;
+	//int connectionPort;
 	bool drawDataInfo = false;
 
 	int nDataClippingEvents = 0;

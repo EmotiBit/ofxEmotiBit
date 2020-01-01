@@ -62,7 +62,7 @@ int8_t EmotiBitWiFiHost::begin()
 	return SUCCESS;
 }
 
-int8_t EmotiBitWiFiHost::processAdvertising()
+int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 {
 	const int maxSize = 32768;
 
@@ -142,6 +142,10 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 						}
 					}
 				}
+				else
+				{
+					infoPackets.push_back(packet);
+				}
 			}
 		}
 	}
@@ -154,10 +158,10 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 		{
 			pingTimer = ofGetElapsedTimeMillis();
 
-			vector<string> data;
-			data.push_back(EmotiBitPacket::PayloadLabel::DATA_PORT);
-			data.push_back(ofToString(dataPort));
-			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::PING, advertisingPacketCounter++, data);
+			vector<string> payload;
+			payload.push_back(EmotiBitPacket::PayloadLabel::DATA_PORT);
+			payload.push_back(ofToString(dataPort));
+			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::PING, advertisingPacketCounter++, payload);
 
 			cout << "Sent: " << packet;
 			advertisingCxn.Connect(connectedEmotibitIp.c_str(), advertisingPort);
@@ -175,12 +179,12 @@ int8_t EmotiBitWiFiHost::processAdvertising()
 			startCxnTimer = ofGetElapsedTimeMillis();
 
 			// Send a connect message to the selected EmotiBit
-			vector<string> data;
-			data.push_back(EmotiBitPacket::PayloadLabel::CONTROL_PORT);
-			data.push_back(ofToString(controlPort));
-			data.push_back(EmotiBitPacket::PayloadLabel::DATA_PORT);
-			data.push_back(ofToString(dataPort));
-			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT, advertisingPacketCounter++, data);
+			vector<string> payload;
+			payload.push_back(EmotiBitPacket::PayloadLabel::CONTROL_PORT);
+			payload.push_back(ofToString(controlPort));
+			payload.push_back(EmotiBitPacket::PayloadLabel::DATA_PORT);
+			payload.push_back(ofToString(dataPort));
+			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT, advertisingPacketCounter++, payload);
 			
 			cout << "Sent: " << packet;
 			advertisingCxn.Connect(connectedEmotibitIp.c_str(), advertisingPort);

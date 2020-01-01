@@ -75,7 +75,7 @@ public:
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
-	int8_t processAdvertising();
+	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
 	int8_t connect(uint8_t i);
 	int8_t disconnect();
