@@ -7,9 +7,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitPacket.cpp">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
@@ -66,6 +63,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp">
       <Filter>addons\ofxThreadedLogger\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EmotiBitWiFiHost.cpp">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\EmotiBit_XPlat_Utils\EmotiBitPacket.cpp">
+      <Filter>addons\EmotiBit_XPlat_Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,15 +153,15 @@
     <Filter Include="addons\ofxThreadedLogger\src">
       <UniqueIdentifier>{CA068CB5-A638-66AF-AE6A-1CDD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="addons\EmotiBit_XPlat_Utils">
+      <UniqueIdentifier>{2f5f9d33-501d-4adb-b404-f22ab3e6e52a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitPacket.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
@@ -236,8 +239,20 @@
     <ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h">
       <Filter>addons\ofxThreadedLogger\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ArduinoString.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EmotiBitWiFiHost.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\ofxEmotiBitVersion.h">
-      <Filter>src</Filter>
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EmotiBit_XPlat_Utils\EmotiBitComms.h">
+      <Filter>addons\EmotiBit_XPlat_Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EmotiBit_XPlat_Utils\EmotiBitPacket.h">
+      <Filter>addons\EmotiBit_XPlat_Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
