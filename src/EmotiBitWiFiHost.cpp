@@ -15,7 +15,7 @@ int8_t EmotiBitWiFiHost::begin()
 	advertisingCxn.Create();
 	vector<string> ipSplit = ofSplitString(ips.at(0), ".");
 	advertisingIp = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2) + "." + ofToString(255);
-	cout << advertisingIp << endl;
+	ofLogNotice() << "EmotiBit host advertising IP: " << advertisingIp;
 	advertisingCxn.Connect(advertisingIp.c_str(), advertisingPort);
 	advertisingCxn.SetEnableBroadcast(true);
 	advertisingCxn.SetNonBlocking(true);
@@ -28,15 +28,15 @@ int8_t EmotiBitWiFiHost::begin()
 	{
 		// Try to bind dataPort until we find one that's available
 		dataPort += 2;
-		cout << "Trying data port: " << dataPort << endl;
+		ofLogNotice() << "Trying data port: " << dataPort;
 	}
 	//dataCxn.SetEnableBroadcast(false);
 	dataCxn.SetNonBlocking(true);
 	dataCxn.SetReceiveBufferSize(pow(2, 15));
 
-	cout << "dataCxn GetMaxMsgSize" << dataCxn.GetMaxMsgSize() << endl;
-	cout << "dataCxn GetReceiveBufferSize" << dataCxn.GetReceiveBufferSize() << endl;
-	cout << "dataCxn GetTimeoutReceive" << dataCxn.GetTimeoutReceive() << endl;
+	ofLogNotice() << "dataCxn GetMaxMsgSize: " << dataCxn.GetMaxMsgSize();
+	ofLogNotice() << "dataCxn GetReceiveBufferSize: " << dataCxn.GetReceiveBufferSize();
+	ofLogNotice() << "dataCxn GetTimeoutReceive: " << dataCxn.GetTimeoutReceive();
 
 	controlPort = dataPort + 1;
 	controlCxn.setMessageDelimiter(ofToString(EmotiBitPacket::PACKET_DELIMITER_CSV));
@@ -45,11 +45,11 @@ int8_t EmotiBitWiFiHost::begin()
 		// Try to setup a controlPort until we find one that's available
 		controlPort += 2;
 		controlCxn.close();
-		cout << "Trying control port: " << controlPort << endl;
+		ofLogNotice() << "Trying control port: " << controlPort;
 	}
 
-	cout << "EmotiBit data port: " << dataPort << endl;
-	cout << "EmotiBit control port: " << controlPort << endl;
+	ofLogNotice() << "EmotiBit data port: " << dataPort;
+	ofLogNotice() << "EmotiBit control port: " << controlPort;
 
 	advertisingPacketCounter = 0;
 	controlPacketCounter = 0;
@@ -77,7 +77,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 
 		// Send advertising message
 		string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0);
-		cout << "Sent: " << packet;
+		ofLogVerbose() << "Sent: " << packet;
 		advertisingCxn.Send(packet.c_str(), packet.length());
 	}
 
@@ -88,7 +88,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 	if (msgSize > 0)
 	{
 		string message = udpMessage;
-		cout << "Received: " << message;
+		ofLogVerbose() << "Received: " << message;
 
 		int port;
 		string ip;
@@ -108,7 +108,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 					int16_t valuePos = EmotiBitPacket::getPacketKeyedValue(packet, EmotiBitPacket::PayloadLabel::DATA_PORT, value, dataStartChar);
 					if (valuePos > -1)
 					{
-						cout << "EmotiBit: " << ip << ":" << port << endl;
+						ofLogVerbose() << "EmotiBit: " << ip << ":" << port;
 						// Add ip address to our list
 						auto it = _emotibitIps.emplace(ip, EmotiBitStatus(ofToInt(value) == EmotiBitComms::EMOTIBIT_AVAILABLE));
 						if (!it.second)
@@ -163,7 +163,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 			payload.push_back(ofToString(dataPort));
 			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::PING, advertisingPacketCounter++, payload);
 
-			cout << "Sent: " << packet;
+			ofLogVerbose() << "Sent: " << packet;
 			advertisingCxn.Connect(connectedEmotibitIp.c_str(), advertisingPort);
 			advertisingCxn.SetEnableBroadcast(false);
 			advertisingCxn.Send(packet.c_str(), packet.length());
@@ -186,7 +186,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 			payload.push_back(ofToString(dataPort));
 			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT, advertisingPacketCounter++, payload);
 			
-			cout << "Sent: " << packet;
+			ofLogVerbose() << "Sent: " << packet;
 			advertisingCxn.Connect(connectedEmotibitIp.c_str(), advertisingPort);
 			advertisingCxn.SetEnableBroadcast(false);
 			advertisingCxn.Send(packet.c_str(), packet.length());
@@ -238,7 +238,7 @@ int8_t EmotiBitWiFiHost::sendControl(const string& packet)
 		//isConnected = true;
 		//isStartingConnection = false;
 
-		cout << "Sending: " << packet << endl;
+		ofLogVerbose() << "Sending: " << packet;
 		controlCxn.send(i, packet);
 	}
 	controlCxnMutex.unlock();
@@ -320,13 +320,13 @@ void EmotiBitWiFiHost::updateData()
 			endChar = message.find_first_of(EmotiBitPacket::PACKET_DELIMITER_CSV, startChar);
 			if (endChar == string::npos)
 			{
-				cout << "**** MALFORMED MESSAGE **** : no packet delimiter found" << endl;
+				ofLogWarning() << "**** MALFORMED MESSAGE **** : no packet delimiter found";
 			}
 			else
 			{
 				if (endChar == startChar)
 				{
-					cout << "**** EMPTY MESSAGE **** " << endl;
+					ofLogWarning() << "**** EMPTY MESSAGE **** ";
 				}
 				else
 				{
@@ -335,7 +335,7 @@ void EmotiBitWiFiHost::updateData()
 					int16_t dataStartChar = EmotiBitPacket::getHeader(packet, header);	// read header
 					if (dataStartChar == EmotiBitPacket::MALFORMED_HEADER)
 					{
-						cout << "**** MALFORMED PACKET **** : no header data found" << endl;
+						ofLogWarning() << "**** MALFORMED PACKET **** : no header data found";
 					}
 					else
 					{
@@ -500,7 +500,8 @@ int8_t EmotiBitWiFiHost::connect(string ip)
 			}
 		}
 		catch (const std::out_of_range& oor) {
-			std::cout << "EmotiBit " << ip << " not found" << endl;
+			ofLogWarning() << "EmotiBit " << ip << " not found";
+			oor;
 		}
 		emotibitIpsMutex.unlock();
 	}

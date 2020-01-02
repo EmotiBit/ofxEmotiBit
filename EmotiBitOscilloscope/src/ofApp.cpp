@@ -4,6 +4,7 @@
 void ofApp::setup() {
 	ofSetFrameRate(30);
 	ofBackground(255, 255, 255);
+	ofSetLogLevel(OF_LOG_NOTICE);
 
 	writeOfxEmotiBitVersionFile();
 
