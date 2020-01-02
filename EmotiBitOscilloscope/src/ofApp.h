@@ -45,16 +45,16 @@ public:
 	template <class T>
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
-	void deviceSelection(bool & selected);
-	//void deviceGroupSelection(ofParameter<bool> &device);
 	void deviceGroupSelection(ofAbstractParameter& device);
 	void sendDataSelection(bool & selected);
 	void updateDeviceList();
-	//bool checkDeviceList(string ip, bool available = true);
-	void changeConnection(bool selected);
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
+	void setupGui();
+	void setupOscilloscopes();
+	void updateLsl();
+	void clearOscilloscopes();
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
