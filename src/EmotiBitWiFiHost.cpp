@@ -21,24 +21,9 @@ int8_t EmotiBitWiFiHost::begin()
 	advertisingCxn.SetNonBlocking(true);
 	advertisingCxn.SetReceiveBufferSize(pow(2, 10));
 
-	dataPort = EmotiBitComms::WIFI_ADVERTISING_PORT + 1;
-	dataCxn.Create();
-	dataCxn.SetReuseAddress(false);
-	while (!dataCxn.Bind(dataPort))
-	{
-		// Try to bind dataPort until we find one that's available
-		dataPort += 2;
-		ofLogNotice() << "Trying data port: " << dataPort;
-	}
-	//dataCxn.SetEnableBroadcast(false);
-	dataCxn.SetNonBlocking(true);
-	dataCxn.SetReceiveBufferSize(pow(2, 15));
+	_startDataCxn(EmotiBitComms::WIFI_ADVERTISING_PORT + 1);
 
-	ofLogNotice() << "dataCxn GetMaxMsgSize: " << dataCxn.GetMaxMsgSize();
-	ofLogNotice() << "dataCxn GetReceiveBufferSize: " << dataCxn.GetReceiveBufferSize();
-	ofLogNotice() << "dataCxn GetTimeoutReceive: " << dataCxn.GetTimeoutReceive();
-
-	controlPort = dataPort + 1;
+	controlPort = _dataPort + 1;
 	controlCxn.setMessageDelimiter(ofToString(EmotiBitPacket::PACKET_DELIMITER_CSV));
 	while (!controlCxn.setup(controlPort))
 	{
@@ -48,13 +33,13 @@ int8_t EmotiBitWiFiHost::begin()
 		ofLogNotice() << "Trying control port: " << controlPort;
 	}
 
-	ofLogNotice() << "EmotiBit data port: " << dataPort;
+	ofLogNotice() << "EmotiBit data port: " << _dataPort;
 	ofLogNotice() << "EmotiBit control port: " << controlPort;
 
 	advertisingPacketCounter = 0;
 	controlPacketCounter = 0;
 	connectedEmotibitIp = "";
-	isConnected = false;
+	_isConnected = false;
 	isStartingConnection = false;
 
 	dataThread = new std::thread(&EmotiBitWiFiHost::updateDataThread, this);
@@ -125,17 +110,17 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 					{
 						string value;
 						int16_t valuePos = EmotiBitPacket::getPacketKeyedValue(packet, EmotiBitPacket::PayloadLabel::DATA_PORT, value, dataStartChar);
-						if (valuePos > -1 && ofToInt(value) == dataPort)
+						if (valuePos > -1 && ofToInt(value) == _dataPort)
 						{
 							// Establish / maintain connected status
 							if (isStartingConnection)
 							{
 								flushData();
-								isConnected = true;
+								_isConnected = true;
 								isStartingConnection = false;
 								//dataCxn.Create();
 							}
-							if (isConnected)
+							if (_isConnected)
 							{
 								connectionTimer = ofGetElapsedTimeMillis();
 							}
@@ -150,7 +135,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 		}
 	}
 
-	if (isConnected)
+	if (_isConnected)
 	{
 		// If we're connected, periodically send a PING to EmotiBit
 		static uint64_t pingTimer = ofGetElapsedTimeMillis();
@@ -160,7 +145,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 
 			vector<string> payload;
 			payload.push_back(EmotiBitPacket::PayloadLabel::DATA_PORT);
-			payload.push_back(ofToString(dataPort));
+			payload.push_back(ofToString(_dataPort));
 			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::PING, advertisingPacketCounter++, payload);
 
 			ofLogVerbose() << "Sent: " << packet;
@@ -183,7 +168,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 			payload.push_back(EmotiBitPacket::PayloadLabel::CONTROL_PORT);
 			payload.push_back(ofToString(controlPort));
 			payload.push_back(EmotiBitPacket::PayloadLabel::DATA_PORT);
-			payload.push_back(ofToString(dataPort));
+			payload.push_back(ofToString(_dataPort));
 			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT, advertisingPacketCounter++, payload);
 			
 			ofLogVerbose() << "Sent: " << packet;
@@ -194,7 +179,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 	}
 
 	// Check to see if connection has timed out
-	if (isConnected)
+	if (_isConnected)
 	{
 		if (ofGetElapsedTimeMillis() - connectionTimer > connectionTimeout)
 		{
@@ -235,7 +220,7 @@ int8_t EmotiBitWiFiHost::sendControl(const string& packet)
 
 		if (ip.compare(connectedEmotibitIp) != 0) continue;	// Confirm this is the EmotiBit IP we're connected to
 
-		//isConnected = true;
+		//_isConnected = true;
 		//isStartingConnection = false;
 
 		ofLogVerbose() << "Sending: " << packet;
@@ -249,7 +234,7 @@ int8_t EmotiBitWiFiHost::sendControl(const string& packet)
 // ToDo: Implement readControl()
 //uint8_t EmotiBitWiFiHost::readControl(string& packet)
 //{
-//	if (isConnected) {
+//	if (_isConnected) {
 //
 //		// for each connected client lets get the data being sent and lets print it to the screen
 //		for (unsigned int i = 0; i < (unsigned int)controlCxn.getLastID(); i++) {
@@ -309,6 +294,12 @@ void EmotiBitWiFiHost::updateData()
 	readUdp(dataCxn, message, connectedEmotibitIp);
 	dataCxnMutex.unlock();
 
+	if (!_isConnected)
+	{
+		// flush the data if we're not connected
+		return;
+	}
+
 	if (message.size() > 0)
 	{
 		string packet;
@@ -343,7 +334,7 @@ void EmotiBitWiFiHost::updateData()
 						if (startChar == 0)
 						{
 							// This is the first packet in the message
-							if (isConnected)
+							if (_isConnected)
 							{
 								// Connect a channel to handle time syncing
 								dataCxnMutex.lock();
@@ -432,7 +423,7 @@ void EmotiBitWiFiHost::processRequestData(const string& packet, int16_t dataStar
 
 int8_t EmotiBitWiFiHost::sendData(const string& packet)
 {
-	if (isConnected)
+	if (_isConnected)
 	{
 		dataCxnMutex.lock();
 		dataCxn.Send(packet.c_str(), packet.length());
@@ -452,7 +443,7 @@ void EmotiBitWiFiHost::readData(vector<string> &packets)
 
 int8_t EmotiBitWiFiHost::disconnect()
 {
-	if (isConnected)
+	if (_isConnected)
 	{
 		controlCxnMutex.lock();
 		string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::EMOTIBIT_DISCONNECT, controlPacketCounter++, "", 0);
@@ -465,11 +456,37 @@ int8_t EmotiBitWiFiHost::disconnect()
 		}
 		controlCxnMutex.unlock();
 
+		dataCxnMutex.lock();
 		flushData();
+		dataCxn.Close();
+		_startDataCxn(controlPort + 1);
+		dataCxnMutex.unlock();
 		connectedEmotibitIp = "";
-		isConnected = false;
+		_isConnected = false;
 		isStartingConnection = false;
 	}
+
+	return SUCCESS;
+}
+
+int8_t EmotiBitWiFiHost::_startDataCxn(uint16_t dataPort)
+{
+	_dataPort = dataPort;
+	dataCxn.Create();
+	dataCxn.SetReuseAddress(false);
+	while (!dataCxn.Bind(_dataPort))
+	{
+		// Try to bind _dataPort until we find one that's available
+		_dataPort += 2;
+		ofLogNotice() << "Trying data port: " << _dataPort;
+	}
+	//dataCxn.SetEnableBroadcast(false);
+	dataCxn.SetNonBlocking(true);
+	dataCxn.SetReceiveBufferSize(pow(2, 15));
+
+	ofLogNotice() << "dataCxn GetMaxMsgSize: " << dataCxn.GetMaxMsgSize();
+	ofLogNotice() << "dataCxn GetReceiveBufferSize: " << dataCxn.GetReceiveBufferSize();
+	ofLogNotice() << "dataCxn GetTimeoutReceive: " << dataCxn.GetTimeoutReceive();
 
 	return SUCCESS;
 }
@@ -478,9 +495,11 @@ int8_t EmotiBitWiFiHost::flushData()
 {
 	const int maxSize = 32768;
 	char udpMessage[maxSize];
-	dataCxnMutex.lock();
+	
 	while (dataCxn.Receive(udpMessage, maxSize) > 0);
-	dataCxnMutex.unlock();
+	//dataCxn.Close();
+	//dataCxn.Create();
+	
 
 	return SUCCESS;
 }
@@ -488,7 +507,7 @@ int8_t EmotiBitWiFiHost::flushData()
 // Connecting is done asynchronously because attempts are repeated over UDP until connected
 int8_t EmotiBitWiFiHost::connect(string ip)
 {
-	if (!isStartingConnection && !isConnected)
+	if (!isStartingConnection && !_isConnected)
 	{
 		emotibitIpsMutex.lock();
 		try
@@ -616,4 +635,9 @@ vector<string> EmotiBitWiFiHost::getLocalIPs()
 #endif
 
 	return result;
+}
+
+bool EmotiBitWiFiHost::isConnected()
+{
+	return _isConnected;
 }

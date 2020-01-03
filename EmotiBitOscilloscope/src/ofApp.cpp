@@ -48,14 +48,15 @@ void ofApp::update() {
 		}
 	}
 
-	updateDeviceList();
+	updateMenuButtons();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
 	ofPushMatrix();
 	ofTranslate(0, drawYTranslate);
-	ofScale(((float)ofGetWidth()) / 1500.f, ((float)ofGetHeight()) / 900.f * drawYScale);
+	//ofScale(((float)ofGetWidth()) / 1500.f, ((float)ofGetHeight()) / 900.f * drawYScale);	// This breaks buttons
+	ofScale(1, drawYScale);	// for debugging menus
 
 	for (int w = 0; w < scopeWins.size(); w++) {
 		scopeWins.at(w).plot();
@@ -159,6 +160,16 @@ void ofApp::keyReleased(int key) {
 			consoleLogger.startThread();
 		}
 	}
+	if (key == 'r') {
+		cout << "RECORD_BEGIN" << endl;
+		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, emotiBitWiFi.controlPacketCounter++, localTime, 1));
+	}
+	if (key == 'e') {
+		cout << "RECORD_END" << endl;
+		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, emotiBitWiFi.controlPacketCounter++, localTime, 1));
+	}
 }
 
 
@@ -205,13 +216,6 @@ void ofApp::recordButtonPressed(bool & recording) {
 	else {
 		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
 		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, emotiBitWiFi.controlPacketCounter++, localTime, 1));
-	}
-}
-
-void ofApp::hibernateButtonPressed(bool & hibernate) {
-	if (hibernate) {
-		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::MODE_HIBERNATE, emotiBitWiFi.controlPacketCounter++, localTime, 1));
 	}
 }
 
@@ -280,7 +284,7 @@ void ofApp::updateDeviceList()
 	}
 
 	// Update selected device
-	if (emotiBitWiFi.isConnected)
+	if (emotiBitWiFi.isConnected())
 	{
 		deviceSelected.set(emotiBitWiFi.connectedEmotibitIp);
 	}
@@ -328,7 +332,66 @@ void ofApp::updateDeviceList()
 	}
 }
 
-//void ofApp::deviceGroupSelection(ofParameter<bool> &device)
+void ofApp::powerModeSelection(ofAbstractParameter& mode)
+{
+	// Remove listener during list management
+	ofRemoveListener(powerModeGroup.parameterChangedE(), this, &ofApp::powerModeSelection);
+
+	bool selected = mode.cast<bool>().get();
+	if (selected)
+	{
+		// Box checked
+
+		// Unselect other options
+		for (auto option = powerModeList.begin(); option != powerModeList.end(); option++)
+		{
+			if (option->getName().compare(mode.getName()) != 0)
+			{
+				option->set(false);
+			}
+		}
+
+		string packet;
+		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+		if (mode.getName().compare(GUI_STRING_NORMAL_POWER) == 0)
+		{
+			_powerMode = PowerMode::NORMAL_POWER;
+			packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::MODE_NORMAL_POWER, 
+				emotiBitWiFi.controlPacketCounter++, localTime, 1);
+		}
+		else if (mode.getName().compare(GUI_STRING_LOW_POWER) == 0)
+		{
+			_powerMode = PowerMode::LOW_POWER;
+			packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::MODE_LOW_POWER, 
+				emotiBitWiFi.controlPacketCounter++, localTime, 1);
+		}
+		else if (mode.getName().compare(GUI_STRING_WIRELESS_OFF) == 0)
+		{
+			_powerMode = PowerMode::WIRELESS_OFF;
+			packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::MODE_WIRELESS_OFF, 
+				emotiBitWiFi.controlPacketCounter++, localTime, 1);
+		}
+		else if (mode.getName().compare(GUI_STRING_HIBERNATE) == 0)
+		{
+			_powerMode = PowerMode::HIBERNATE;
+			packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::MODE_HIBERNATE, 
+				emotiBitWiFi.controlPacketCounter++, localTime, 1);
+		}
+		if (packet.length() > 0)
+		{
+			emotiBitWiFi.sendControl(packet);
+		}
+	}
+	else
+	{
+		// Box unchecking not permitted on this list. Re-check box.
+		mode.cast<bool>().set(true);
+	}
+
+	// Re-add the listener
+	ofAddListener(powerModeGroup.parameterChangedE(), this, &ofApp::powerModeSelection);
+}
+
 void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 {
 	string ip = device.getName();
@@ -349,10 +412,15 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 			}
 			else
 			{
-				if (emotiBitWiFi.isConnected)
+				if (emotiBitWiFi.isConnected())
 				{
 					// If we're already connected, first disconnect
 					emotiBitWiFi.disconnect();
+					// ToDo: verify this is thread-safe
+					vector<string> dataPackets;
+					emotiBitWiFi.readData(dataPackets);
+					emotiBitWiFi.readData(dataPackets);
+					clearOscilloscopes();
 				}
 				// ToDo: consider if we need a delay here
 				emotiBitWiFi.connect(ip);
@@ -367,6 +435,11 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 		{
 			// The device we're connected to has been unchecked... disconnect
 			emotiBitWiFi.disconnect();
+			// ToDo: verify this is thread-safe
+			vector<string> dataPackets;
+			emotiBitWiFi.readData(dataPackets);
+			emotiBitWiFi.readData(dataPackets);
+			clearOscilloscopes();
 		}
 	}
 }
@@ -425,17 +498,21 @@ void ofApp::processSlowResponseMessage(string packet) {
 	processSlowResponseMessage(splitPacket);
 }
 
-void ofApp::processSlowResponseMessage(vector<string> splitPacket) {
+void ofApp::processSlowResponseMessage(vector<string> splitPacket) 
+{
 
 	EmotiBitPacket::Header packetHeader;
-	if (EmotiBitPacket::getHeader(splitPacket, packetHeader)) {
-		if (packetHeader.dataLength >= MAX_BUFFER_LENGTH) {
+	if (EmotiBitPacket::getHeader(splitPacket, packetHeader)) 
+	{
+		if (packetHeader.dataLength >= MAX_BUFFER_LENGTH) 
+		{
 			bufferUnderruns++;
 			cout << "**** POSSIBLE BUFFER UNDERRUN EVENT " << bufferUnderruns << ", " << packetHeader.dataLength << " ****" << endl;
 		}
 
 		auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
-		if (indexPtr != typeTagIndexes.end()) {	// We're plotting this packet's typeTag!
+		if (indexPtr != typeTagIndexes.end()) 
+		{	// We're plotting this packet's typeTag!
 			vector<vector<float>> data;
 			int w = indexPtr->second.at(0); // Scope window
 			int s = indexPtr->second.at(1); // Scope
@@ -451,14 +528,23 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket) {
 			dataCounts.at(w).at(s).at(p) = dataCounts.at(w).at(s).at(p) + packetHeader.dataLength;
 
 		}
-		else {
-			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_VOLTAGE) == 0) {
-				batteryStatus.getParameter().fromString(splitPacket.at(6) + "V");
+		else 
+		{
+			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_VOLTAGE) == 0) 
+			{
+				deviceSelected.set(GUI_STRING_NO_EMOTIBIT_SELECTED);
+				batteryStatus.fromString(splitPacket.at(6) + "V");
 			}
-			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_PERCENT) == 0) {
-				batteryStatus.getParameter().fromString(splitPacket.at(6) + "%");
+			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_PERCENT) == 0) 
+			{
+				batteryStatus.fromString(splitPacket.at(6) + "%");
 			}
-			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::DATA_CLIPPING) == 0) {
+			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EMOTIBIT_MODE) == 0) 
+			{
+				processModePacket(splitPacket);
+			}
+			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::DATA_CLIPPING) == 0) 
+			{
 				for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) {
 					for (int w = 0; w < typeTags.size(); w++) {
 						for (int s = 0; s < typeTags.at(w).size(); s++) {
@@ -472,7 +558,8 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket) {
 					}
 				}
 			}
-			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::DATA_OVERFLOW) == 0) {
+			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::DATA_OVERFLOW) == 0) 
+			{
 				for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) {
 					for (int w = 0; w < typeTags.size(); w++) {
 						for (int s = 0; s < typeTags.at(w).size(); s++) {
@@ -486,14 +573,18 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket) {
 					}
 				}
 			}
-			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::RESET) == 0) {
-				if (guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE) != NULL) {
-					hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false);
-					guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setBackgroundColor(ofColor(0, 0, 0));
-					hibernateStatus.setBackgroundColor(ofColor(0, 0, 0));
-					hibernateStatus.getParameter().fromString(GUI_STRING_MODE_ACTIVE);
-				}
+			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::RESET) == 0) 
+			{
+				//if (guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE) != NULL) {
+				//	hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false);
+				//	guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setBackgroundColor(ofColor(0, 0, 0));
+				//	hibernateStatus.setBackgroundColor(ofColor(0, 0, 0));
+				//	hibernateStatus.getParameter().fromString(GUI_STRING_MODE_ACTIVE);
+				//}
 				if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+					recordingButton.removeListener(this, &ofApp::recordButtonPressed);
+					recordingButton.set(false);
+					recordingButton.addListener(this, &ofApp::recordButtonPressed);
 					recordingButton.set(GUI_STRING_CONTROL_RECORD, false);
 					guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
 					recordingStatus.setBackgroundColor(ofColor(0, 0, 0));
@@ -515,16 +606,17 @@ void ofApp::setupGui()
 
 
 	recordingButton.addListener(this, &ofApp::recordButtonPressed);
-	hibernateButton.addListener(this, &ofApp::hibernateButtonPressed);
 	sendUserNote.addListener(this, &ofApp::sendExperimenterNoteButton);
 
 	int sendDataWidth = 180;
 
 	int guiXPos = 0;
 	int guiYPos = 25;
-	int guiWidth = 220;
+	int guiWidth = 250;
 	int guiPosInc = guiWidth + 1;
 	guiPanels.resize(7);
+
+	// Device Menu
 	int p = 0;
 	guiPanelDevice = p;
 	guiPanels.at(guiPanelDevice).setDefaultWidth(guiWidth);
@@ -540,9 +632,11 @@ void ofApp::setupGui()
 	guiPanels.at(guiPanelDevice).add(deviceMenuGroup);
 	//guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME)
 	ofAddListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
+
+	// Recording Status
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 210;
+	guiWidth = 249;
 	guiPanelRecord = p;
 	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
@@ -558,24 +652,53 @@ void ofApp::setupGui()
 	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
 	//guiPanels.at(0).getControl(GUI_STRING_CONTROL_RECORD)->setSize(guiWidth, guiYPos * 2);
 
+	//p++;
+	//guiXPos += guiWidth + 1;
+	//guiWidth = 170;
+	//guiPanelMode = p;
+	//guiPanels.at(guiPanelMode).setDefaultWidth(guiWidth);
+	//guiPanels.at(guiPanelMode).setup(GUI_STRING_CONTROL_HIBERNATE, "junk.xml", guiXPos, -guiYPos);
+	//guiPanels.at(guiPanelMode).add(hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false));
+	//guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setTextColor(hibernateControlColor); // color of label and x
+	//guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setFillColor(hibernateControlColor); // fill color of checkbox
+	//guiPanels.at(guiPanelMode).add(hibernateStatus.setup("Mode", GUI_STRING_MODE_ACTIVE));
+	//p++;
+	//guiXPos += guiWidth + 1;
+	//guiWidth = 210;
+	//guiPanelLevels = p;
+	//guiPanels.at(guiPanelLevels).setDefaultWidth(guiWidth);
+	//guiPanels.at(guiPanelLevels).setup("batteryStatus", "junk.xml", guiXPos, -guiYPos);
+	//guiPanels.at(guiPanelLevels).add(batteryStatus.setup("Battery Level", "?"));
+	//guiPanels.at(guiPanelLevels).add(sdCardStatus.setup("SD Card Remaining", "93%"));
+
+	// Power Status Menu
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 170;
-	guiPanelMode = p;
-	guiPanels.at(guiPanelMode).setDefaultWidth(guiWidth);
-	guiPanels.at(guiPanelMode).setup(GUI_STRING_CONTROL_HIBERNATE, "junk.xml", guiXPos, -guiYPos);
-	guiPanels.at(guiPanelMode).add(hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false));
-	guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setTextColor(hibernateControlColor); // color of label and x
-	guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setFillColor(hibernateControlColor); // fill color of checkbox
-	guiPanels.at(guiPanelMode).add(hibernateStatus.setup("Mode", GUI_STRING_MODE_ACTIVE));
-	p++;
-	guiXPos += guiWidth + 1;
-	guiWidth = 210;
-	guiPanelLevels = p;
-	guiPanels.at(guiPanelLevels).setDefaultWidth(guiWidth);
-	guiPanels.at(guiPanelLevels).setup("batteryStatus", "junk.xml", guiXPos, -guiYPos);
-	guiPanels.at(guiPanelLevels).add(batteryStatus.setup("Battery Level", "?"));
-	guiPanels.at(guiPanelLevels).add(sdCardStatus.setup("SD Card Remaining", "93%"));
+	guiWidth = 250;
+	guiPanelPowerStatus = p;
+	guiPanels.at(guiPanelPowerStatus).setDefaultWidth(guiWidth);
+	guiPanels.at(guiPanelPowerStatus).setup("powerStatus", "junk.xml", guiXPos, -guiYPos * 2.2);
+	powerStatusMenuGroup.setName(GUI_POWER_STATUS_MENU_NAME);
+	powerStatusMenuGroup.add(batteryStatus.set("Battery Level", "?"));
+	powerModeGroup.setName(GUI_POWER_MODE_GROUP_NAME);
+	powerStatusMenuGroup.add(powerModeGroup);
+	guiPanels.at(guiPanelPowerStatus).add(powerStatusMenuGroup);
+	powerModeOptions = {
+		GUI_STRING_NORMAL_POWER,
+		GUI_STRING_LOW_POWER,
+		GUI_STRING_WIRELESS_OFF,
+		GUI_STRING_HIBERNATE
+	};
+	for (int j = 0; j < powerModeOptions.size(); j++) {
+		powerModeList.emplace_back(powerModeOptions.at(j), false);
+		//sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
+		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
+		guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_STATUS_MENU_NAME).getGroup(GUI_POWER_MODE_GROUP_NAME).add(powerModeList.at(powerModeList.size() - 1));
+	}
+	guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_STATUS_MENU_NAME).getGroup(GUI_POWER_MODE_GROUP_NAME).minimize();
+	ofAddListener(powerModeGroup.parameterChangedE(), this, &ofApp::powerModeSelection);
+
+	// Error Status
 	p++;
 	guiXPos += guiWidth + 1;
 	guiWidth = 200;
@@ -585,6 +708,8 @@ void ofApp::setupGui()
 	guiPanels.at(guiPanelErrors).add(dataClippingCount.set(GUI_STRING_CLIPPING_EVENTS, 0, 0, 0));
 	guiPanels.at(guiPanelErrors).add(dataOverflowCount.set(GUI_STRING_OVERFLOW_EVENTS, 0, 0, 0));
 	p++;
+
+	// User Note
 	guiXPos += guiWidth + 1;
 	guiWidth = 200;
 	guiPanelUserNote = p;
@@ -595,6 +720,7 @@ void ofApp::setupGui()
 	guiPanels.at(guiPanelUserNote).getControl(GUI_STRING_NOTE_BUTTON)->setTextColor(noteControlColor); // color of label and x
 	guiPanels.at(guiPanelUserNote).getControl(GUI_STRING_NOTE_BUTTON)->setFillColor(noteControlColor); // fill color of checkbox
 
+	// Send Data Menu
 	p++;
 	guiPanelSendData = p;
 	guiWidth = sendDataWidth;
@@ -825,5 +951,115 @@ void ofApp::clearOscilloscopes()
 {
 	for (int w = 0; w < scopeWins.size(); w++) {
 		scopeWins.at(w).clearData();
+	}
+}
+
+void ofApp::updateMenuButtons()
+{
+	if (!emotiBitWiFi.isConnected())
+	{
+		_recording = false;
+		_powerMode = PowerMode::NORMAL_POWER;
+	}
+
+	if (_recording)
+	{
+		// ToDo: also control button/checkbox
+		// ofRemoveListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
+		recordingButton.removeListener(this, &ofApp::recordButtonPressed);
+		recordingButton.set(true);
+		recordingButton.addListener(this, &ofApp::recordButtonPressed);
+		if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+			guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
+			recordingStatus.setBackgroundColor(recordControlColor);
+			recordingStatus.getParameter().fromString(GUI_STRING_RECORDING);
+		}
+	}
+	else
+	{
+		recordingButton.removeListener(this, &ofApp::recordButtonPressed);
+		recordingButton.set(false);
+		recordingButton.addListener(this, &ofApp::recordButtonPressed);
+		if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
+			guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
+			recordingStatus.setBackgroundColor(ofColor(0, 0, 0));
+			recordingStatus.getParameter().fromString(GUI_STRING_NOT_RECORDING);
+		}
+	}
+
+	// Set Power Mode Options
+	string optionName = GUI_STRING_NORMAL_POWER;
+	if (_powerMode == PowerMode::NORMAL_POWER)
+	{
+		optionName = GUI_STRING_NORMAL_POWER;
+	}
+	else if (_powerMode == PowerMode::LOW_POWER)
+	{
+		optionName = GUI_STRING_LOW_POWER;
+	}
+	else if(_powerMode == PowerMode::WIRELESS_OFF)
+	{
+		optionName = GUI_STRING_WIRELESS_OFF;
+	}
+	else if (_powerMode == PowerMode::HIBERNATE)
+	{
+		optionName = GUI_STRING_HIBERNATE;
+	}
+	ofRemoveListener(powerModeGroup.parameterChangedE(), this, &ofApp::powerModeSelection);
+	for (auto option = powerModeList.begin(); option != powerModeList.end(); option++)
+	{
+		if (option->getName().compare(optionName) == 0)
+		{
+			option->set(true);
+		}
+		else
+		{
+			option->set(false);
+		}
+	}
+	ofAddListener(powerModeGroup.parameterChangedE(), this, &ofApp::powerModeSelection);
+
+	updateDeviceList();
+}
+
+void ofApp::processModePacket(vector<string> &splitPacket)
+{
+	size_t startIndex = EmotiBitPacket::headerLength;
+	string value;
+
+	if (EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::PayloadLabel::RECORDING_STATUS, value) > -1)
+	{
+		if (value.compare(EmotiBitPacket::TypeTag::RECORD_BEGIN) == 0)
+		{
+			_recording = true;
+		}
+		else if (value.compare(EmotiBitPacket::TypeTag::RECORD_END) == 0)
+		{
+			_recording = false;
+		}
+	}
+
+	if (EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::PayloadLabel::POWER_STATUS, value) > -1)
+	{
+		if (value.compare(EmotiBitPacket::TypeTag::MODE_NORMAL_POWER) == 0)
+		{
+			_powerMode = PowerMode::NORMAL_POWER;
+		}
+		else if (value.compare(EmotiBitPacket::TypeTag::MODE_LOW_POWER) == 0)
+		{
+			_powerMode = PowerMode::LOW_POWER;
+		}
+		else if (value.compare(EmotiBitPacket::TypeTag::MODE_MAX_LOW_POWER) == 0)
+		{
+			_powerMode = PowerMode::MAX_LOW_POWER;
+		}
+		else if (value.compare(EmotiBitPacket::TypeTag::MODE_WIRELESS_OFF) == 0)
+		{
+			_powerMode = PowerMode::WIRELESS_OFF;
+		}
+		else if (value.compare(EmotiBitPacket::TypeTag::MODE_HIBERNATE) == 0)
+		{
+			_powerMode = PowerMode::HIBERNATE;
+		}
 	}
 }

@@ -49,13 +49,13 @@ public:
 	std::mutex emotibitIpsMutex;
 
 	uint16_t advertisingPort;
-	uint16_t dataPort;
+	uint16_t _dataPort;
 	uint16_t sendDataPort;
 	uint16_t controlPort;
 	string advertisingIp;				// broadcast address
 	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
 	string connectedEmotibitIp;
-	bool isConnected;
+	bool _isConnected;
 	bool isStartingConnection;
 
 	uint16_t advertisingPacketCounter = 0;
@@ -93,6 +93,8 @@ public:
 	vector<string> getLocalIPs();
 	//string createPacket(string typeTag, string data = "", uint16_t dataLength = 0, uint8_t protocolVersion = 1, uint8_t dataReliability = 100);
 	//string createPacket(string typeTag, vector<string> data, uint8_t protocolVersion = 1, uint8_t dataReliability = 100);
+	bool isConnected();
+	int8_t _startDataCxn(uint16_t dataPort);
 
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 };

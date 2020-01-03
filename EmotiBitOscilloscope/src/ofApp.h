@@ -40,12 +40,12 @@ public:
 	//void parseIncomingRequestData(EmotiBitPacket::Header header, vector<string> splitPacket);
 
 	void recordButtonPressed(bool & recording);
-	void hibernateButtonPressed(bool & hibernate);
 	void sendExperimenterNoteButton();
 	template <class T>
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void deviceGroupSelection(ofAbstractParameter& device);
+	void powerModeSelection(ofAbstractParameter& mode);
 	void sendDataSelection(bool & selected);
 	void updateDeviceList();
 	void processSlowResponseMessage(string message);
@@ -55,6 +55,8 @@ public:
 	void setupOscilloscopes();
 	void updateLsl();
 	void clearOscilloscopes();
+	void processModePacket(vector<string> &splitPacket);
+	void updateMenuButtons();
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -121,7 +123,8 @@ public:
 	ofxLabel recordingStatus;
 	ofParameter<bool> hibernateButton;
 	ofxLabel hibernateStatus;
-	ofxLabel batteryStatus; 
+	//ofxLabel batteryStatus; 
+	ofParameter<string> batteryStatus;
 	ofxLabel sdCardStatus;
 	//ofParameter<float> batteryStatus;
 	//ofParameter<float> sdCardStatus;
@@ -140,6 +143,10 @@ public:
 	ofParameter<string> sendOptionSelected;
 	ofParameterGroup sendDataMenuGroup;
 	ofParameterGroup sendDataGroup;
+	ofParameterGroup powerStatusMenuGroup;
+	ofParameterGroup powerModeGroup;
+	vector<string> powerModeOptions;
+	vector<ofParameter<bool>> powerModeList;
 
 	const string GUI_STRING_NOT_RECORDING = "NOT RECORDING";
 	const string GUI_STRING_RECORDING = "RECORDING";
@@ -162,6 +169,14 @@ public:
 	const string GUI_STRING_NOTE_BUTTON = "LOG NOTE";
 	const string GUI_STRING_CONTROL_RECORD = "RECORD";
 	const string GUI_STRING_CONTROL_HIBERNATE = "HIBERNATE";
+
+	const string GUI_POWER_STATUS_MENU_NAME = "RECORD";
+	const string GUI_POWER_MODE_GROUP_NAME = "Power Mode";
+	const string GUI_STRING_NORMAL_POWER = "Normal (OTA Data)";
+	const string GUI_STRING_LOW_POWER = "Low Power (No OTA Data)";
+	const string GUI_STRING_WIRELESS_OFF = "Wireless Off";
+	const string GUI_STRING_HIBERNATE = "Hibernate";
+
 	ofColor recordControlColor = ofColor(255, 69, 78);
 	ofColor hibernateControlColor = ofColor(10, 135, 210);
 	ofColor noteControlColor = ofColor(1, 204, 115);
@@ -169,8 +184,9 @@ public:
 	ofColor deviceNotAvailableColor = ofColor(128, 128, 128);
 	int guiPanelDevice;
 	int guiPanelRecord;
-	int guiPanelMode;
-	int guiPanelLevels;
+	//int guiPanelMode;
+	//int guiPanelLevels;
+	int guiPanelPowerStatus;
 	int guiPanelErrors;
 	int guiPanelUserNote;
 	int guiPanelSendData;
@@ -206,5 +222,16 @@ public:
 
 	int nDataClippingEvents = 0;
 	int nDataOverflowEvents = 0;
+
+	bool _recording = false;
+	enum class PowerMode {
+		HIBERNATE,
+		WIRELESS_OFF,					// fully shutdown wireless
+		MAX_LOW_POWER,	// data not sent, time-syncing accuracy low
+		LOW_POWER,			// data not sent, time-syncing accuracy high
+		NORMAL_POWER,				// data sending, time-syncing accuracy high
+		length
+	};
+	PowerMode _powerMode = PowerMode::NORMAL_POWER;
 
 };
