@@ -204,6 +204,7 @@ public:
   vector<ofxPanel> guiPanels;
 
 	bool plotUdpData = true;
+	bool DEBUGGING = false;
 
 	int drawYTranslate = 0;
 	float drawYScale = 1.f;

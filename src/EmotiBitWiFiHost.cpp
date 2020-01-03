@@ -458,8 +458,8 @@ int8_t EmotiBitWiFiHost::disconnect()
 
 		dataCxnMutex.lock();
 		flushData();
-		dataCxn.Close();
-		_startDataCxn(controlPort + 1);
+		//dataCxn.Close();
+		//_startDataCxn(controlPort + 1);
 		dataCxnMutex.unlock();
 		connectedEmotibitIp = "";
 		_isConnected = false;

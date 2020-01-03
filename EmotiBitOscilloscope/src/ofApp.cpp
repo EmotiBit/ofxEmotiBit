@@ -124,13 +124,16 @@ void ofApp::keyPressed(int key) {
 			scopeWins.at(w).decrementTimeWindow();
 		}
 	}
-	if (key == OF_KEY_UP) {
-		drawYTranslate--;
-		drawYScale = (drawYScale * 900.f + 1.f) / 900.f;
-	}
-	if (key == OF_KEY_DOWN) {
-		drawYTranslate++;
-		drawYScale = (drawYScale * 900.f - 1.f) / 900.f;
+	if (DEBUGGING)
+	{
+		if (key == OF_KEY_UP) {
+			drawYTranslate--;
+			drawYScale = (drawYScale * 900.f + 1.f) / 900.f;
+		}
+		if (key == OF_KEY_DOWN) {
+			drawYTranslate++;
+			drawYScale = (drawYScale * 900.f - 1.f) / 900.f;
+		}
 	}
 }
 
@@ -160,15 +163,9 @@ void ofApp::keyReleased(int key) {
 			consoleLogger.startThread();
 		}
 	}
-	if (key == 'r') {
-		cout << "RECORD_BEGIN" << endl;
-		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, emotiBitWiFi.controlPacketCounter++, localTime, 1));
-	}
-	if (key == 'e') {
-		cout << "RECORD_END" << endl;
-		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, emotiBitWiFi.controlPacketCounter++, localTime, 1));
+	if (key == 'D')
+	{
+		DEBUGGING = true;
 	}
 }
 
@@ -608,7 +605,7 @@ void ofApp::setupGui()
 	recordingButton.addListener(this, &ofApp::recordButtonPressed);
 	sendUserNote.addListener(this, &ofApp::sendExperimenterNoteButton);
 
-	int sendDataWidth = 180;
+	int sendDataWidth = 200;
 
 	int guiXPos = 0;
 	int guiYPos = 25;
@@ -674,7 +671,7 @@ void ofApp::setupGui()
 	// Power Status Menu
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 250;
+	guiWidth = 249;
 	guiPanelPowerStatus = p;
 	guiPanels.at(guiPanelPowerStatus).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelPowerStatus).setup("powerStatus", "junk.xml", guiXPos, -guiYPos * 2.2);
@@ -1056,10 +1053,12 @@ void ofApp::processModePacket(vector<string> &splitPacket)
 		else if (value.compare(EmotiBitPacket::TypeTag::MODE_WIRELESS_OFF) == 0)
 		{
 			_powerMode = PowerMode::WIRELESS_OFF;
+			emotiBitWiFi.disconnect();
 		}
 		else if (value.compare(EmotiBitPacket::TypeTag::MODE_HIBERNATE) == 0)
 		{
 			_powerMode = PowerMode::HIBERNATE;
+			emotiBitWiFi.disconnect();
 		}
 	}
 }
