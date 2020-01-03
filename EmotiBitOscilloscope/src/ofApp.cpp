@@ -100,7 +100,36 @@ void ofApp::draw() {
 	}
 	ofPopMatrix();
 
-	//legendFont.drawString(ofToString(ofGetFrameRate()), 100, 100);
+	// Draw console
+	string _consoleString = "Status: ";
+	if (isPaused)
+	{
+		_consoleString += "Data visualizer paused";
+	}
+	else
+	{
+		if (_powerMode == PowerMode::LOW_POWER)
+		{
+			_consoleString += "Low Power Mode";
+		}
+		else if (_powerMode == PowerMode::NORMAL_POWER)
+		{
+			_consoleString += "Data streaming";
+		}
+	}
+
+	int consoleTextPadding = 3;
+	ofPushStyle();
+	ofFill();
+	ofSetColor(0, 0, 0);
+	ofDrawRectangle(0, ofGetWindowHeight() - _consoleHeight, ofGetWindowWidth(), _consoleHeight);
+	ofPopStyle();
+	ofPushStyle();
+	ofSetColor(255, 255, 255);
+	axesFont.drawString(_consoleString, 10, ofGetWindowHeight() - _consoleHeight / 2 + consoleTextPadding);
+	ofPopStyle();
+
+
 }
 
 //--------------------------------------------------------------
@@ -218,7 +247,7 @@ void ofApp::recordButtonPressed(bool & recording) {
 
 void ofApp::sendExperimenterNoteButton() {
 	string note = userNote.getParameter().toString();
-	if (note.compare("[Add a note]") != 0) {
+	if (note.compare("[Add a note]") != 0 && emotiBitWiFi.isConnected()) {
 		vector<string> payload;
 		payload.push_back(ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT));
 		payload.push_back(note);
@@ -305,7 +334,7 @@ void ofApp::updateDeviceList()
 		}
 		else
 		{
-			textColor = deviceNotAvailableColor;
+			textColor = notAvailableColor;
 		}
 		guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).getControl(ip)->setTextColor(textColor);
 
@@ -442,6 +471,14 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 }
 
 void ofApp::sendDataSelection(bool & selected) {
+
+	// All outputs are disabled until code is written to support output channels
+	for (int j = 0; j < sendDataList.size(); j++) {
+		sendDataList.at(j).set(false);
+	}
+
+	return;
+
 	if (selected) {
 		if (sendOptionSelected.get().compare(GUI_STRING_SEND_DATA_NONE) != 0) {	// If there is currently a selected IP address
 			// Unselected it
@@ -601,6 +638,8 @@ void ofApp::setupGui()
 	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
 
+	_consoleHeight = 21;
+
 
 	recordingButton.addListener(this, &ofApp::recordButtonPressed);
 	sendUserNote.addListener(this, &ofApp::sendExperimenterNoteButton);
@@ -611,7 +650,7 @@ void ofApp::setupGui()
 	int guiYPos = 25;
 	int guiWidth = 250;
 	int guiPosInc = guiWidth + 1;
-	guiPanels.resize(7);
+	guiPanels.resize(6);
 
 	// Device Menu
 	int p = 0;
@@ -630,43 +669,6 @@ void ofApp::setupGui()
 	//guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME)
 	ofAddListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
 
-	// Recording Status
-	p++;
-	guiXPos += guiWidth + 1;
-	guiWidth = 249;
-	guiPanelRecord = p;
-	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
-	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
-	guiPanels.at(guiPanelRecord).add(recordingButton.set(GUI_STRING_CONTROL_RECORD, false));
-	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setTextColor(recordControlColor); // color of label and x
-	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setFillColor(recordControlColor); // fill color of checkbox
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->loadFont(ofToDataPath("verdanab.ttf"), 11, true, true); // Seems to affect all guiPanels
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setUseTTF(true);
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0,0,255)); // background of whole control
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setHeaderBackgroundColor(ofColor(255,255,0)); // not cear what this does
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBorderColor(ofColor(0,255,0)); // not clear what this does
-	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setSize(5, 10); // size of whole field
-	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
-	//guiPanels.at(0).getControl(GUI_STRING_CONTROL_RECORD)->setSize(guiWidth, guiYPos * 2);
-
-	//p++;
-	//guiXPos += guiWidth + 1;
-	//guiWidth = 170;
-	//guiPanelMode = p;
-	//guiPanels.at(guiPanelMode).setDefaultWidth(guiWidth);
-	//guiPanels.at(guiPanelMode).setup(GUI_STRING_CONTROL_HIBERNATE, "junk.xml", guiXPos, -guiYPos);
-	//guiPanels.at(guiPanelMode).add(hibernateButton.set(GUI_STRING_CONTROL_HIBERNATE, false));
-	//guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setTextColor(hibernateControlColor); // color of label and x
-	//guiPanels.at(guiPanelMode).getControl(GUI_STRING_CONTROL_HIBERNATE)->setFillColor(hibernateControlColor); // fill color of checkbox
-	//guiPanels.at(guiPanelMode).add(hibernateStatus.setup("Mode", GUI_STRING_MODE_ACTIVE));
-	//p++;
-	//guiXPos += guiWidth + 1;
-	//guiWidth = 210;
-	//guiPanelLevels = p;
-	//guiPanels.at(guiPanelLevels).setDefaultWidth(guiWidth);
-	//guiPanels.at(guiPanelLevels).setup("batteryStatus", "junk.xml", guiXPos, -guiYPos);
-	//guiPanels.at(guiPanelLevels).add(batteryStatus.setup("Battery Level", "?"));
-	//guiPanels.at(guiPanelLevels).add(sdCardStatus.setup("SD Card Remaining", "93%"));
 
 	// Power Status Menu
 	p++;
@@ -694,6 +696,25 @@ void ofApp::setupGui()
 	}
 	guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_STATUS_MENU_NAME).getGroup(GUI_POWER_MODE_GROUP_NAME).minimize();
 	ofAddListener(powerModeGroup.parameterChangedE(), this, &ofApp::powerModeSelection);
+
+	// Recording Status
+	p++;
+	guiXPos += guiWidth + 1;
+	guiWidth = 249;
+	guiPanelRecord = p;
+	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
+	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
+	guiPanels.at(guiPanelRecord).add(recordingButton.set(GUI_STRING_CONTROL_RECORD, false));
+	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setTextColor(recordControlColor); // color of label and x
+	guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setFillColor(recordControlColor); // fill color of checkbox
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->loadFont(ofToDataPath("verdanab.ttf"), 11, true, true); // Seems to affect all guiPanels
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setUseTTF(true);
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0,0,255)); // background of whole control
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setHeaderBackgroundColor(ofColor(255,255,0)); // not cear what this does
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBorderColor(ofColor(0,255,0)); // not clear what this does
+	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setSize(5, 10); // size of whole field
+	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
+	//guiPanels.at(0).getControl(GUI_STRING_CONTROL_RECORD)->setSize(guiWidth, guiYPos * 2);
 
 	// Error Status
 	p++;
@@ -741,6 +762,8 @@ void ofApp::setupGui()
 		sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
 		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
 		guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
+		// All outputs disabled until supporting code written
+		guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(notAvailableColor);
 	}
 	guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).minimize();
 	//guiPanels.at(p).minimize();
@@ -877,8 +900,8 @@ void ofApp::setupOscilloscopes()
 	float timeWindow = 20.; // seconds
 
 	int guiHeight = guiPanels.at(guiPanels.size() - 1).getPosition().y + guiPanels.at(guiPanels.size() - 1).getHeight();
-	ofRectangle scopeArea = ofRectangle(ofPoint(0, guiHeight), ofPoint(ofGetWidth() / 2, ofGetHeight()));
-	ofRectangle scopeArea2 = ofRectangle(ofPoint(ofGetWidth() / 2, guiHeight), ofPoint(ofGetWidth(), ofGetHeight()));
+	ofRectangle scopeArea = ofRectangle(ofPoint(0, guiHeight), ofPoint(ofGetWidth() / 2, ofGetHeight() - _consoleHeight));
+	ofRectangle scopeArea2 = ofRectangle(ofPoint(ofGetWidth() / 2, guiHeight), ofPoint(ofGetWidth(), ofGetHeight() - _consoleHeight));
 
 
 	scopeWins.emplace_back(plotNames.at(0).size(), scopeArea, legendFont); // Setup the multiScope panel

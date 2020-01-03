@@ -181,7 +181,8 @@ public:
 	ofColor hibernateControlColor = ofColor(10, 135, 210);
 	ofColor noteControlColor = ofColor(1, 204, 115);
 	ofColor deviceAvailableColor = ofColor(255, 255, 255);
-	ofColor deviceNotAvailableColor = ofColor(128, 128, 128);
+	ofColor notAvailableColor = ofColor(128, 128, 128);
+
 	int guiPanelDevice;
 	int guiPanelRecord;
 	//int guiPanelMode;
@@ -190,6 +191,8 @@ public:
 	int guiPanelErrors;
 	int guiPanelUserNote;
 	int guiPanelSendData;
+
+	int _consoleHeight;
 
 	//ofxFloatSlider batteryStatus;
 	//ofxFloatSlider sdCardStatus;
