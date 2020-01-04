@@ -57,6 +57,8 @@ public:
 	void clearOscilloscopes();
 	void processModePacket(vector<string> &splitPacket);
 	void updateMenuButtons();
+	void drawConsole();
+	void drawOscilloscopes();
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -172,8 +174,8 @@ public:
 
 	const string GUI_POWER_STATUS_MENU_NAME = "RECORD";
 	const string GUI_POWER_MODE_GROUP_NAME = "Power Mode";
-	const string GUI_STRING_NORMAL_POWER = "Normal (OTA Data)";
-	const string GUI_STRING_LOW_POWER = "Low Power (No OTA Data)";
+	const string GUI_STRING_NORMAL_POWER =	"Normal            (data streaming)";
+	const string GUI_STRING_LOW_POWER =			"Low Power      (no streaming)";
 	const string GUI_STRING_WIRELESS_OFF = "Wireless Off";
 	const string GUI_STRING_HIBERNATE = "Hibernate";
 
@@ -236,6 +238,6 @@ public:
 		NORMAL_POWER,				// data sending, time-syncing accuracy high
 		length
 	};
-	PowerMode _powerMode = PowerMode::NORMAL_POWER;
+	PowerMode _powerMode = PowerMode::LOW_POWER;
 
 };

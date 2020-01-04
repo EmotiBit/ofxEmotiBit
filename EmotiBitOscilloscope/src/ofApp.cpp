@@ -53,83 +53,8 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofPushMatrix();
-	ofTranslate(0, drawYTranslate);
-	//ofScale(((float)ofGetWidth()) / 1500.f, ((float)ofGetHeight()) / 900.f * drawYScale);	// This breaks buttons
-	ofScale(1, drawYScale);	// for debugging menus
-
-	for (int w = 0; w < scopeWins.size(); w++) {
-		scopeWins.at(w).plot();
-	}
-	for (int i = 0; i < guiPanels.size(); i++) {
-		ofPushStyle();
-		ofSetLineWidth(5);
-		guiPanels.at(i).draw();
-		ofPopStyle();
-	}
-
-	// Draw dataFreqs and bufferSizes for each stream
-	if (drawDataInfo) {
-		for (int w = 0; w < typeTags.size(); w++) {
-			for (int s = 0; s < typeTags.at(w).size(); s++) {
-				ofPoint bl = scopeWins.at(w).scopes.at(s).getPosition().getBottomLeft();
-				for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
-					int padding = 10;
-					int fontHeight = 9;
-					ofPushMatrix();
-					ofPushStyle();
-
-					//ofScale(0.5f, 0.5f);
-
-					ofSetColor(plotColors.at(w).at(s).at(p));
-					ofTranslate(bl.x + padding, bl.y - fontHeight * typeTags.at(w).at(s).size());
-					//ofScale(0.75f, 0.75f);
-					ofTranslate(0, p * fontHeight);
-
-					subLegendFont.drawString(ofToString(bufferSizes.at(w).at(s).at(p)) + " (Bffr)", 0, 0);
-
-					ofTranslate(0, (-fontHeight) * (int)(typeTags.at(w).at(s).size() + 1));
-
-					subLegendFont.drawString(ofToString((int)dataFreqs.at(w).at(s).at(p)) + " (Hz)", 0, 0);
-
-					ofPopStyle();
-					ofPopMatrix();
-				}
-			}
-		}
-	}
-	ofPopMatrix();
-
-	// Draw console
-	string _consoleString = "Status: ";
-	if (isPaused)
-	{
-		_consoleString += "Data visualizer paused";
-	}
-	else
-	{
-		if (_powerMode == PowerMode::LOW_POWER)
-		{
-			_consoleString += "Low Power Mode";
-		}
-		else if (_powerMode == PowerMode::NORMAL_POWER)
-		{
-			_consoleString += "Data streaming";
-		}
-	}
-
-	int consoleTextPadding = 3;
-	ofPushStyle();
-	ofFill();
-	ofSetColor(0, 0, 0);
-	ofDrawRectangle(0, ofGetWindowHeight() - _consoleHeight, ofGetWindowWidth(), _consoleHeight);
-	ofPopStyle();
-	ofPushStyle();
-	ofSetColor(255, 255, 255);
-	axesFont.drawString(_consoleString, 10, ofGetWindowHeight() - _consoleHeight / 2 + consoleTextPadding);
-	ofPopStyle();
-
-
+	drawOscilloscopes();
+	drawConsole();
 }
 
 //--------------------------------------------------------------
@@ -252,6 +177,7 @@ void ofApp::sendExperimenterNoteButton() {
 		payload.push_back(ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT));
 		payload.push_back(note);
 		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::USER_NOTE, emotiBitWiFi.controlPacketCounter++, payload));
+		userNote.getParameter().fromString("[Add a note]");
 	}
 }
 
@@ -673,7 +599,7 @@ void ofApp::setupGui()
 	// Power Status Menu
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 249;
+	guiWidth = 279;
 	guiPanelPowerStatus = p;
 	guiPanels.at(guiPanelPowerStatus).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelPowerStatus).setup("powerStatus", "junk.xml", guiXPos, -guiYPos * 2.2);
@@ -700,7 +626,7 @@ void ofApp::setupGui()
 	// Recording Status
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 249;
+	guiWidth = 219;
 	guiPanelRecord = p;
 	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
@@ -979,7 +905,7 @@ void ofApp::updateMenuButtons()
 	if (!emotiBitWiFi.isConnected())
 	{
 		_recording = false;
-		_powerMode = PowerMode::NORMAL_POWER;
+		_powerMode = PowerMode::LOW_POWER;
 	}
 
 	if (_recording)
@@ -1084,4 +1010,96 @@ void ofApp::processModePacket(vector<string> &splitPacket)
 			emotiBitWiFi.disconnect();
 		}
 	}
+}
+
+void ofApp::drawConsole()
+{
+	// Draw console
+	string _consoleString = "Status: ";
+	if (isPaused)
+	{
+		_consoleString += "Data visualizer paused";
+	}
+	else
+	{
+		if (_powerMode == PowerMode::LOW_POWER)
+		{
+			_consoleString += "Low power mode";
+		}
+		else if (_powerMode == PowerMode::NORMAL_POWER)
+		{
+			_consoleString += "Data streaming";
+		}
+		else if (_powerMode == PowerMode::WIRELESS_OFF)
+		{
+			_consoleString += "Wireless off";
+		}
+		else if (_powerMode == PowerMode::HIBERNATE)
+		{
+			_consoleString += "Hibernating";
+		}
+	}
+
+	int consoleTextPadding = 3;
+	ofPushStyle();
+	ofFill();
+	ofSetColor(0, 0, 0);
+	ofDrawRectangle(0, ofGetWindowHeight() - _consoleHeight, ofGetWindowWidth(), _consoleHeight);
+	ofPopStyle();
+	ofPushStyle();
+	ofSetColor(255, 255, 255);
+	axesFont.drawString(_consoleString, 10, ofGetWindowHeight() - _consoleHeight / 2 + consoleTextPadding);
+	ofPopStyle();
+
+}
+
+void ofApp::drawOscilloscopes()
+{
+	ofPushMatrix();
+	ofTranslate(0, drawYTranslate);
+	ofScale(1, drawYScale);	// for debugging menus
+
+	for (int w = 0; w < scopeWins.size(); w++) {
+		scopeWins.at(w).plot();
+	}
+	for (int i = 0; i < guiPanels.size(); i++) {
+		ofPushStyle();
+		ofSetLineWidth(5);
+		guiPanels.at(i).draw();
+		ofPopStyle();
+	}
+
+	// Draw dataFreqs and bufferSizes for each stream
+	if (drawDataInfo) {
+		for (int w = 0; w < typeTags.size(); w++) {
+			for (int s = 0; s < typeTags.at(w).size(); s++) {
+				ofPoint bl = scopeWins.at(w).scopes.at(s).getPosition().getBottomLeft();
+				for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
+					int padding = 10;
+					int fontHeight = 9;
+					ofPushMatrix();
+					ofPushStyle();
+
+					//ofScale(0.5f, 0.5f);
+
+					ofSetColor(plotColors.at(w).at(s).at(p));
+					ofTranslate(bl.x + padding, bl.y - fontHeight * typeTags.at(w).at(s).size());
+					//ofScale(0.75f, 0.75f);
+					ofTranslate(0, p * fontHeight);
+
+					subLegendFont.drawString(ofToString(bufferSizes.at(w).at(s).at(p)) + " (Bffr)", 0, 0);
+
+					ofTranslate(0, (-fontHeight) * (int)(typeTags.at(w).at(s).size() + 1));
+
+					subLegendFont.drawString(ofToString((int)dataFreqs.at(w).at(s).at(p)) + " (Hz)", 0, 0);
+
+					ofPopStyle();
+					ofPopMatrix();
+				}
+			}
+		}
+	}
+	ofPopMatrix();
+
+
 }

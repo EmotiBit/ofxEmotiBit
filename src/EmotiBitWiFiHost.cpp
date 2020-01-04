@@ -321,7 +321,7 @@ void EmotiBitWiFiHost::updateData()
 				}
 				else
 				{
-					packet = message.substr(startChar, endChar - startChar + 1);	// extract packet
+					packet = message.substr(startChar, endChar - startChar);	// extract packet
 
 					int16_t dataStartChar = EmotiBitPacket::getHeader(packet, header);	// read header
 					if (dataStartChar == EmotiBitPacket::MALFORMED_HEADER)
