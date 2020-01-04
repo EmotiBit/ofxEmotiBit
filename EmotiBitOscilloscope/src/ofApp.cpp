@@ -823,7 +823,7 @@ void ofApp::setupOscilloscopes()
 	};
 
 	//plotColors = { ofColor(0,0,0), ofColor(255,0,0) , ofColor(0,191,0), ofColor(0,0,255) };
-	float timeWindow = 20.; // seconds
+	float timeWindow = 10.; // seconds
 
 	int guiHeight = guiPanels.at(guiPanels.size() - 1).getPosition().y + guiPanels.at(guiPanels.size() - 1).getHeight();
 	ofRectangle scopeArea = ofRectangle(ofPoint(0, guiHeight), ofPoint(ofGetWidth() / 2, ofGetHeight() - _consoleHeight));
