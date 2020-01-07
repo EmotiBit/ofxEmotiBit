@@ -376,6 +376,7 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 				}
 				// ToDo: consider if we need a delay here
 				emotiBitWiFi.connect(ip);
+				_powerMode = PowerMode::LOW_POWER;
 				clearOscilloscopes();
 			}
 		}
@@ -905,7 +906,6 @@ void ofApp::updateMenuButtons()
 	if (!emotiBitWiFi.isConnected())
 	{
 		_recording = false;
-		_powerMode = PowerMode::LOW_POWER;
 	}
 
 	if (_recording)
