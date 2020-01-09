@@ -44,7 +44,7 @@ void ofApp::update() {
 		processSlowResponseMessage(packet);
 		if (logData)
 		{
-			dataLogger.push(packet);
+			dataLogger.push(packet + '\n');
 		}
 	}
 
