@@ -915,6 +915,15 @@ void ofApp::updateMenuButtons()
 	if (!emotiBitWiFi.isConnected())
 	{
 		_recording = false;
+		batteryStatus.fromString("");
+		_powerMode = PowerMode::length;
+		guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_STATUS_MENU_NAME).getGroup(GUI_POWER_MODE_GROUP_NAME).minimize();
+		//if (guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).isMinimized())
+		//{
+		//	guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).maximize();
+		//}
+		dataClippingCount = 0;
+		dataOverflowCount = 0;
 	}
 
 	if (_recording)
