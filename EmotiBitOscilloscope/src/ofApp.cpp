@@ -93,7 +93,7 @@ void ofApp::keyPressed(int key) {
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key) {
-	cout << "Key Released: " << key << "\n";
+	cout << "Key Released: " << (char)key << endl;
 
 	if (key == ' ') {
 		isPaused = !isPaused;
@@ -108,13 +108,22 @@ void ofApp::keyReleased(int key) {
 	{
 		logData = !logData;
 		logConsole = !logConsole;
+		cout << "Data logging: " << logData << endl;
 		if (logData)
 		{
 			dataLogger.startThread();
 		}
+		else
+		{
+			dataLogger.stopThread();
+		}
 		if (logConsole)
 		{
 			consoleLogger.startThread();
+		}
+		else
+		{
+			consoleLogger.stopThread();
 		}
 	}
 	if (key == 'D')
