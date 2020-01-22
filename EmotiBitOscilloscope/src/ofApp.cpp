@@ -802,7 +802,7 @@ void ofApp::setupOscilloscopes()
 			{  0.f },
 			{  0.f },
 			{  0.f },
-			{ 0.01f },
+			{ 0.0001f },
 			{ 1.f  }
 		},
 		{ // scope panel 2
