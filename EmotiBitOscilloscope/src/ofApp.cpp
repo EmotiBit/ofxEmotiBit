@@ -91,6 +91,17 @@ void ofApp::keyPressed(int key) {
 			drawYScale = (drawYScale * 900.f - 1.f) / 900.f;
 		}
 	}
+	if (ofGetElapsedTimef() < 5) {
+		// Enter special modes if keys pressed in first few seconds
+		if (key == 'T')
+		{
+			if (!testingMode)
+			{
+				cout << "Entering Testing Mode" << endl;
+				testingMode = true;
+			}
+		}
+	}
 }
 
 //--------------------------------------------------------------
@@ -482,50 +493,10 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			cout << "**** POSSIBLE BUFFER UNDERRUN EVENT " << bufferUnderruns << ", " << packetHeader.dataLength << " ****" << endl;
 		}
 
-		// Code to handle EDR RMS estimation for testing
-		// Plan
-		// LP filter at 1Hz
-		// Store last 5 seconds
-		// Find max - min for last 5 seconds
-
-		float edaFs = 15;
-		float edaRmsWinLen = 5.f; // seconds
-		float lpFreq = 1.f;
-		static deque<float> edaRmsQueue;
-		static ofxBiquadFilter1f edaRmsFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, lpFreq / edaFs, 0.7071);
-		float elLpFreq = 0.2f;
-		static ofxBiquadFilter1f elFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, elLpFreq / edaFs, 0.7071);
-		static float el;
-		static float minEdaRms;
-		static float maxEdaRms;
-		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDL) == 0)
+		if (testingMode)
 		{
-			for (size_t i = 0; i < packetHeader.dataLength; i++)
-			{
-				el = elFilter.update(ofToFloat(splitPacket.at(EmotiBitPacket::headerLength + i)));
-			}
+			printTestingData(splitPacket, packetHeader);
 		}
-
-		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDR) == 0)
-		{
-			for (size_t i = 0; i < packetHeader.dataLength; i++)
-			{
-				edaRmsQueue.push_back(edaRmsFilter.update(ofToFloat(splitPacket.at(EmotiBitPacket::headerLength + i))));
-			}
-			while (edaRmsQueue.size() > edaFs * edaRmsWinLen)
-			{
-				edaRmsQueue.pop_front();
-			}
-
-			minEdaRms = 1000;
-			maxEdaRms = -1000;
-			for (size_t i = 0; i < edaRmsQueue.size(); i++)
-			{
-				minEdaRms = std::min(minEdaRms, edaRmsQueue.at(i));
-				maxEdaRms = std::max(maxEdaRms, edaRmsQueue.at(i));
-			}
-		}
-		cout << "EL :" << ofToString(el, 3) << " -- EDA RMS " << lpFreq << " Hz, " << edaRmsWinLen << " Seconds: "<< ofToString(maxEdaRms - minEdaRms, 3) << endl;
 
 		auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
 		if (indexPtr != typeTagIndexes.end()) 
@@ -762,8 +733,8 @@ void ofApp::setupOscilloscopes()
 			{ EmotiBitPacket::TypeTag::PPG_RED },
 			{ EmotiBitPacket::TypeTag::PPG_INFRARED },
 			{ EmotiBitPacket::TypeTag::PPG_GREEN },
-			//{ EmotiBitPacket::TypeTag::EDA },
-			{ EmotiBitPacket::TypeTag::EDR },
+			{ EmotiBitPacket::TypeTag::EDA },
+			//{ EmotiBitPacket::TypeTag::EDR },
 			//{ EmotiBitPacket::TypeTag::EDL, EmotiBitPacket::TypeTag::EDR },
 			{ EmotiBitPacket::TypeTag::HUMIDITY_0}
 		},
@@ -813,8 +784,8 @@ void ofApp::setupOscilloscopes()
 			{ "PPG:RED" },
 			{ "PPG:IR" },
 			{ "PPG:GRN" },
-			//{ "EDA" },
-			{ "EDR" },
+			{ "EDA" },
+			//{ "EDR" },
 			//{ "EDL", "EDR" },
 			{ "HUMIDITY" }
 		},
@@ -851,7 +822,7 @@ void ofApp::setupOscilloscopes()
 			{  0.f },
 			{  0.f },
 			{  0.f },
-			{ 0.0001f },
+			{ 0.001f },
 			{ 1.f  }
 		},
 		{ // scope panel 2
@@ -1169,4 +1140,52 @@ void ofApp::drawOscilloscopes()
 	ofPopMatrix();
 
 
+}
+
+void ofApp::printTestingData(vector<string> splitPacket, EmotiBitPacket::Header packetHeader)
+{
+		// Code to handle EDR RMS estimation for testing
+		// Plan
+		// LP filter at 1Hz
+		// Store last 5 seconds
+		// Find max - min for last 5 seconds
+
+		float edaFs = 15;
+		float edaRmsWinLen = 5.f; // seconds
+		float lpFreq = 1.f;
+		static deque<float> edaRmsQueue;
+		static ofxBiquadFilter1f edaRmsFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, lpFreq / edaFs, 0.7071);
+		float elLpFreq = 0.2f;
+		static ofxBiquadFilter1f elFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, elLpFreq / edaFs, 0.7071);
+		static float el;
+		static float minEdaRms;
+		static float maxEdaRms;
+		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDL) == 0)
+		{
+			for (size_t i = 0; i < packetHeader.dataLength; i++)
+			{
+				el = elFilter.update(ofToFloat(splitPacket.at(EmotiBitPacket::headerLength + i)));
+			}
+		}
+
+		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDR) == 0)
+		{
+			for (size_t i = 0; i < packetHeader.dataLength; i++)
+			{
+				edaRmsQueue.push_back(edaRmsFilter.update(ofToFloat(splitPacket.at(EmotiBitPacket::headerLength + i))));
+			}
+			while (edaRmsQueue.size() > edaFs * edaRmsWinLen)
+			{
+				edaRmsQueue.pop_front();
+			}
+
+			minEdaRms = 1000;
+			maxEdaRms = -1000;
+			for (size_t i = 0; i < edaRmsQueue.size(); i++)
+			{
+				minEdaRms = std::min(minEdaRms, edaRmsQueue.at(i));
+				maxEdaRms = std::max(maxEdaRms, edaRmsQueue.at(i));
+			}
+		}
+		cout << "EL :" << ofToString(el, 3) << " -- EDR RMS " << lpFreq << " Hz, " << edaRmsWinLen << " Seconds: " << ofToString(maxEdaRms - minEdaRms, 3) << endl;
 }
