@@ -1187,5 +1187,5 @@ void ofApp::printTestingData(vector<string> splitPacket, EmotiBitPacket::Header 
 				maxEdaRms = std::max(maxEdaRms, edaRmsQueue.at(i));
 			}
 		}
-		cout << "EL :" << ofToString(el, 3) << " -- EDR RMS " << lpFreq << " Hz, " << edaRmsWinLen << " Seconds: " << ofToString(maxEdaRms - minEdaRms, 3) << endl;
+		cout << "EL :" << ofToString(el, 6) << " -- EDR RMS " << lpFreq << " Hz, " << edaRmsWinLen << " Seconds: " << ofToString(maxEdaRms - minEdaRms, 6) << endl;
 }
