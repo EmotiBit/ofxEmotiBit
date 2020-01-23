@@ -59,6 +59,7 @@ public:
 	void updateMenuButtons();
 	void drawConsole();
 	void drawOscilloscopes();
+	void printTestingData(vector<string> splitPacket, EmotiBitPacket::Header packetHeader);
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -230,6 +231,7 @@ public:
 	int nDataOverflowEvents = 0;
 
 	bool _recording = false;
+	bool testingMode = false;
 	enum class PowerMode {
 		HIBERNATE,
 		WIRELESS_OFF,					// fully shutdown wireless
