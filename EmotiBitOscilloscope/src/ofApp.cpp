@@ -742,8 +742,8 @@ void ofApp::setupOscilloscopes()
 			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
 			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
 			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
-			{ EmotiBitPacket::TypeTag::TEMPERATURE_0 },
-			{ EmotiBitPacket::TypeTag::THERMOPILE}
+			{ EmotiBitPacket::TypeTag::THERMOPILE},
+			{ EmotiBitPacket::TypeTag::TEMPERATURE_0 }
 		}
 	};
 	// Create an index mapping for each type tag
@@ -793,8 +793,8 @@ void ofApp::setupOscilloscopes()
 			{ "ACC:X", "ACC:Y", "ACC:Z" },
 			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
 			{ "MAG:X", "MAG:Y", "MAG:Z" },
-			{ "TEMP" },
-			{ "THERM" }
+			{ "THERM" },
+			{ "TEMP" }
 		}
 	};
 	yLims = vector<vector<vector<float>>>
@@ -822,14 +822,14 @@ void ofApp::setupOscilloscopes()
 			{  0.f },
 			{  0.f },
 			{  0.f },
-			{ 0.001f },
+			{ 0.01f },
 			{ 1.f  }
 		},
 		{ // scope panel 2
 			{ 0.f },
 			{ 0.f },
 			{ 50.f },
-			{ 0.5f },
+			{ 2.f },
 			{ 2.f }
 		}
 	};
@@ -847,8 +847,8 @@ void ofApp::setupOscilloscopes()
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
-			{ofColor(234, 174, 68)},
-			{ofColor(239, 97, 82)}
+			{ofColor(239, 97, 82)},
+			{ofColor(234, 174, 68)}
 		}
 	};
 
