@@ -43,9 +43,11 @@ public:
 	void updateEda(const vector<string> &splitPacket, const EmotiBitPacket::Header &packetHeader);
 	void updatePpg(const vector<string> &splitPacket, const EmotiBitPacket::Header &packetHeader);
 	void printResults();
-	void recordEdlResult();
-	void recordEdrResult();
+	void pushEdlEdrResult();
+	void pushEdrP2pResult();
 	void recordPpgResult();
 	void clearEdaResults();
 	void clearPpgResults();
+	void popEdlEdrResult();
+	void popEdrP2pResult();
 };

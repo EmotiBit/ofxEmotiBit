@@ -166,14 +166,14 @@ void EmotiBitTestingHelper::printResults()
 	_testingResultsLog.push("\n********\n");
 }
 
-void EmotiBitTestingHelper::recordEdlResult()
+void EmotiBitTestingHelper::pushEdlEdrResult()
 {
 	_results.edl.push_back(_edl);
 	_results.edr.push_back(_edr);
 	printResults();
 }
 
-void EmotiBitTestingHelper::recordEdrResult()
+void EmotiBitTestingHelper::pushEdrP2pResult()
 {
 	_results.edrP2P.push_back(_edrFiltP2P);
 	printResults();
@@ -200,5 +200,18 @@ void EmotiBitTestingHelper::clearPpgResults()
 	_results.ppgRed = -1;
 	_results.ppgIR = -1;
 	_results.ppgGreen = -1;
+	printResults();
+}
+
+void EmotiBitTestingHelper::popEdlEdrResult()
+{
+	_results.edl.pop_back();
+	_results.edr.pop_back();
+	printResults();
+}
+
+void EmotiBitTestingHelper::popEdrP2pResult()
+{
+	_results.edrP2P.pop_back();
 	printResults();
 }

@@ -152,11 +152,19 @@ void ofApp::keyReleased(int key) {
 		}
 		if (key == 'l')
 		{
-			_testingHelper.recordEdlResult();
+			_testingHelper.pushEdlEdrResult();
+		}
+		if (key == 'L')
+		{
+			_testingHelper.popEdlEdrResult();
 		}
 		if (key == 'r')
 		{
-			_testingHelper.recordEdrResult();
+			_testingHelper.pushEdrP2pResult();
+		}
+		if (key == 'R')
+		{
+			_testingHelper.popEdrP2pResult();
 		}
 		if (key == 'c')
 		{
