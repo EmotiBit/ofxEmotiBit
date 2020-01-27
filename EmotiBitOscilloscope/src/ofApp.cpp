@@ -175,10 +175,17 @@ void ofApp::keyReleased(int key) {
 		{
 			_testingHelper.popEdrP2pResult();
 		}
+		if (key == 't')
+		{
+			_testingHelper.pushThermopileResult();
+		}
+		if (key == 'T')
+		{
+			_testingHelper.popThermopileResult();
+		}
 		if (key == 'c')
 		{
-			_testingHelper.clearEdaResults();
-			_testingHelper.clearPpgResults();
+			_testingHelper.clearAllResults();
 		}
 	}
 }
@@ -243,6 +250,7 @@ void ofApp::sendExperimenterNoteButton() {
 	if (_testingHelper.testingOn)
 	{
 		_testingHelper.updateSerialNumber(note);
+		_testingHelper.updateTestStatus(note);
 	}
 }
 
@@ -865,7 +873,7 @@ void ofApp::setupOscilloscopes()
 			{  0.f },
 			{  0.f },
 			{  0.f },
-			{ 0.02f },
+			{ 0.01f },
 			{ 1.f  }
 		},
 		{ // scope panel 2
@@ -1054,11 +1062,21 @@ void ofApp::processModePacket(vector<string> &splitPacket)
 	size_t startIndex = EmotiBitPacket::headerLength;
 	string value;
 
-	if (EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::PayloadLabel::RECORDING_STATUS, value) > -1)
+	int pos = EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::PayloadLabel::RECORDING_STATUS, value);
+	if (pos > -1)
 	{
 		if (value.compare(EmotiBitPacket::TypeTag::RECORD_BEGIN) == 0)
 		{
 			_recording = true;
+			// See if we got a filename for the file we're recording to
+			if (pos + 1 < splitPacket.size())
+			{
+				string filename = splitPacket.at(pos + 1);
+				if (filename.size() > 4 && filename.substr(filename.size() - 4, 4).compare(".csv") == 0)
+				{
+					_testingHelper.updateSdCardFilename(filename);
+				}
+			}
 		}
 		else if (value.compare(EmotiBitPacket::TypeTag::RECORD_END) == 0)
 		{
@@ -1097,6 +1115,10 @@ void ofApp::drawConsole()
 {
 	// Draw console
 	string _consoleString = "Status: ";
+	if (_testingHelper.testingOn)
+	{
+		_consoleString += "TESTING MODE ON -- ";
+	}
 	if (isPaused)
 	{
 		_consoleString += "Data visualizer paused";

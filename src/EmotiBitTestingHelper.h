@@ -20,17 +20,22 @@ public:
 	float _ppgRed;
 	float _ppgIR;
 	float _ppgGreen;
-	string _serialNumber;
+	float _thermopile;
+	
 	bool testingOn = false;
 
 	struct Results
 	{
+		string serialNumber;
+		string sdCardFilename;
 		vector<float> edl;
 		vector<float> edr;
 		vector<float> edrP2P;
+		vector<float> thermopile;
 		float ppgRed;
 		float ppgIR;
 		float ppgGreen;
+		string testStatus = "";
 	};
 
 	Results _results;
@@ -40,8 +45,11 @@ public:
 	void setLogFilename(const string &filename);
 	void update(const vector<string> &splitPacket, const EmotiBitPacket::Header &packetHeader);
 	void updateSerialNumber(const string &serialNumber);
+	void updateTestStatus(const string &userNote);
+	void updateSdCardFilename(const string &filename);
 	void updateEda(const vector<string> &splitPacket, const EmotiBitPacket::Header &packetHeader);
 	void updatePpg(const vector<string> &splitPacket, const EmotiBitPacket::Header &packetHeader);
+	void updateThermopile(const vector<string> &splitPacket, const EmotiBitPacket::Header &packetHeader);
 	void printResults();
 	void pushEdlEdrResult();
 	void pushEdrP2pResult();
@@ -50,4 +58,7 @@ public:
 	void clearPpgResults();
 	void popEdlEdrResult();
 	void popEdrP2pResult();
+	void pushThermopileResult();
+	void popThermopileResult();
+	void clearAllResults();
 };
