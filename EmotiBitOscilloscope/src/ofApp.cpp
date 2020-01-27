@@ -100,6 +100,15 @@ void ofApp::keyPressed(int key) {
 				cout << "Entering Testing Mode" << endl;
 				_testingHelper.setLogFilename("testingResults.txt");
 				_testingHelper.testingOn = true;
+
+				// Remove minYspans for testing
+				for (int w = 0; w < plotNames.size(); w++) {
+					for (int s = 0; s < plotNames.at(w).size(); s++) {
+						if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
+							scopeWins.at(w).scopes.at(s).autoscaleY(true);
+						}
+					}
+				}
 			}
 		}
 	}
