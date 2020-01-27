@@ -173,6 +173,7 @@
     <ClCompile Include="..\..\EmotiBit_XPlat_Utils\EmotiBitPacket.cpp" />
     <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.cpp" />
     <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp" />
+    <ClCompile Include="..\src\EmotiBitTestingHelper.cpp" />
     <ClCompile Include="..\src\EmotiBitWiFiHost.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.h" />
     <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />
     <ClInclude Include="..\src\ArduinoString.h" />
+    <ClInclude Include="..\src\EmotiBitTestingHelper.h" />
     <ClInclude Include="..\src\EmotiBitWiFiHost.h" />
     <ClInclude Include="..\src\ofxEmotiBitVersion.h" />
     <ClInclude Include="src\ofApp.h" />

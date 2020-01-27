@@ -76,6 +76,9 @@
     <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp">
       <Filter>addons\ofxBiquadFilter\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\EmotiBitTestingHelper.cpp">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -271,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.h">
       <Filter>addons\ofxBiquadFilter\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EmotiBitTestingHelper.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

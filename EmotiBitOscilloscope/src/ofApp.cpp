@@ -95,10 +95,11 @@ void ofApp::keyPressed(int key) {
 		// Enter special modes if keys pressed in first few seconds
 		if (key == 'T')
 		{
-			if (!testingMode)
+			if (!_testingHelper.testingOn)
 			{
 				cout << "Entering Testing Mode" << endl;
-				testingMode = true;
+				_testingHelper.setLogFilename("testingResults.txt");
+				_testingHelper.testingOn = true;
 			}
 		}
 	}
@@ -142,6 +143,26 @@ void ofApp::keyReleased(int key) {
 	if (key == 'D')
 	{
 		DEBUGGING = true;
+	}
+	if (_testingHelper.testingOn)
+	{
+		if (key == 'p')
+		{
+			_testingHelper.recordPpgResult();
+		}
+		if (key == 'l')
+		{
+			_testingHelper.recordEdlResult();
+		}
+		if (key == 'r')
+		{
+			_testingHelper.recordEdrResult();
+		}
+		if (key == 'c')
+		{
+			_testingHelper.clearEdaResults();
+			_testingHelper.clearPpgResults();
+		}
 	}
 }
 
@@ -200,6 +221,11 @@ void ofApp::sendExperimenterNoteButton() {
 		payload.push_back(note);
 		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::USER_NOTE, emotiBitWiFi.controlPacketCounter++, payload));
 		userNote.getParameter().fromString("[Add a note]");
+	}
+
+	if (_testingHelper.testingOn)
+	{
+		_testingHelper.updateSerialNumber(note);
 	}
 }
 
@@ -493,9 +519,9 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			cout << "**** POSSIBLE BUFFER UNDERRUN EVENT " << bufferUnderruns << ", " << packetHeader.dataLength << " ****" << endl;
 		}
 
-		if (testingMode)
+		if (_testingHelper.testingOn)
 		{
-			printTestingData(splitPacket, packetHeader);
+			_testingHelper.update(splitPacket, packetHeader);
 		}
 
 		auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
@@ -822,7 +848,7 @@ void ofApp::setupOscilloscopes()
 			{  0.f },
 			{  0.f },
 			{  0.f },
-			{ 0.01f },
+			{ 0.02f },
 			{ 1.f  }
 		},
 		{ // scope panel 2
@@ -1141,51 +1167,51 @@ void ofApp::drawOscilloscopes()
 
 
 }
-
-void ofApp::printTestingData(vector<string> splitPacket, EmotiBitPacket::Header packetHeader)
-{
-		// Code to handle EDR RMS estimation for testing
-		// Plan
-		// LP filter at 1Hz
-		// Store last 5 seconds
-		// Find max - min for last 5 seconds
-
-		float edaFs = 15;
-		float edaRmsWinLen = 5.f; // seconds
-		float lpFreq = 1.f;
-		static deque<float> edaRmsQueue;
-		static ofxBiquadFilter1f edaRmsFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, lpFreq / edaFs, 0.7071);
-		float elLpFreq = 0.2f;
-		static ofxBiquadFilter1f elFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, elLpFreq / edaFs, 0.7071);
-		static float el;
-		static float minEdaRms;
-		static float maxEdaRms;
-		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDL) == 0)
-		{
-			for (size_t i = 0; i < packetHeader.dataLength; i++)
-			{
-				el = elFilter.update(ofToFloat(splitPacket.at(EmotiBitPacket::headerLength + i)));
-			}
-		}
-
-		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDR) == 0)
-		{
-			for (size_t i = 0; i < packetHeader.dataLength; i++)
-			{
-				edaRmsQueue.push_back(edaRmsFilter.update(ofToFloat(splitPacket.at(EmotiBitPacket::headerLength + i))));
-			}
-			while (edaRmsQueue.size() > edaFs * edaRmsWinLen)
-			{
-				edaRmsQueue.pop_front();
-			}
-
-			minEdaRms = 1000;
-			maxEdaRms = -1000;
-			for (size_t i = 0; i < edaRmsQueue.size(); i++)
-			{
-				minEdaRms = std::min(minEdaRms, edaRmsQueue.at(i));
-				maxEdaRms = std::max(maxEdaRms, edaRmsQueue.at(i));
-			}
-		}
-		cout << "EL :" << ofToString(el, 6) << " -- EDR RMS " << lpFreq << " Hz, " << edaRmsWinLen << " Seconds: " << ofToString(maxEdaRms - minEdaRms, 6) << endl;
-}
+//
+//void ofApp::printTestingData(vector<string> splitPacket, EmotiBitPacket::Header packetHeader)
+//{
+//		// Code to handle EDR RMS estimation for testing
+//		// Plan
+//		// LP filter at 1Hz
+//		// Store last 5 seconds
+//		// Find max - min for last 5 seconds
+//
+//		float edaFs = 15;
+//		float edaRmsWinLen = 5.f; // seconds
+//		float lpFreq = 1.f;
+//		static deque<float> edaRmsQueue;
+//		static ofxBiquadFilter1f edaRmsFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, lpFreq / edaFs, 0.7071);
+//		float elLpFreq = 0.2f;
+//		static ofxBiquadFilter1f elFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, elLpFreq / edaFs, 0.7071);
+//		static float el;
+//		static float minEdaRms;
+//		static float maxEdaRms;
+//		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDL) == 0)
+//		{
+//			for (size_t i = 0; i < packetHeader.dataLength; i++)
+//			{
+//				el = elFilter.update(ofToFloat(splitPacket.at(EmotiBitPacket::headerLength + i)));
+//			}
+//		}
+//
+//		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDR) == 0)
+//		{
+//			for (size_t i = 0; i < packetHeader.dataLength; i++)
+//			{
+//				edaRmsQueue.push_back(edaRmsFilter.update(ofToFloat(splitPacket.at(EmotiBitPacket::headerLength + i))));
+//			}
+//			while (edaRmsQueue.size() > edaFs * edaRmsWinLen)
+//			{
+//				edaRmsQueue.pop_front();
+//			}
+//
+//			minEdaRms = 1000;
+//			maxEdaRms = -1000;
+//			for (size_t i = 0; i < edaRmsQueue.size(); i++)
+//			{
+//				minEdaRms = std::min(minEdaRms, edaRmsQueue.at(i));
+//				maxEdaRms = std::max(maxEdaRms, edaRmsQueue.at(i));
+//			}
+//		}
+//		cout << "EL :" << ofToString(el, 6) << " -- EDR RMS " << lpFreq << " Hz, " << edaRmsWinLen << " Seconds: " << ofToString(maxEdaRms - minEdaRms, 6) << endl;
+//}

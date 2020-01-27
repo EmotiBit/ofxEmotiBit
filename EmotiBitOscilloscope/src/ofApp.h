@@ -12,6 +12,7 @@
 #include "EmotiBitPacket.h"
 #include "EmotiBitWiFiHost.h"
 #include "ofxEmotiBitVersion.h"
+#include "EmotiBitTestingHelper.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -59,7 +60,7 @@ public:
 	void updateMenuButtons();
 	void drawConsole();
 	void drawOscilloscopes();
-	void printTestingData(vector<string> splitPacket, EmotiBitPacket::Header packetHeader);
+	//void printTestingData(vector<string> splitPacket, EmotiBitPacket::Header packetHeader);
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -231,7 +232,8 @@ public:
 	int nDataOverflowEvents = 0;
 
 	bool _recording = false;
-	bool testingMode = false;
+	//bool testingMode = false;
+	EmotiBitTestingHelper _testingHelper;
 	enum class PowerMode {
 		HIBERNATE,
 		WIRELESS_OFF,					// fully shutdown wireless
