@@ -250,7 +250,7 @@ void ofApp::sendExperimenterNoteButton() {
 	if (_testingHelper.testingOn)
 	{
 		_testingHelper.updateSerialNumber(note);
-		_testingHelper.updateTestStatus(note);
+		//_testingHelper.updateTestStatus(note);
 	}
 }
 

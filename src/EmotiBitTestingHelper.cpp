@@ -40,14 +40,14 @@ void EmotiBitTestingHelper::updateSerialNumber(const string &userNote)
 	}
 }
 
-void EmotiBitTestingHelper::updateTestStatus(const string &userNote)
-{
-	if (userNote.compare("PASS") == 0 || userNote.compare("FAIL") == 0)
-	{
-		_results.testStatus = userNote;
-		printResults();
-	}
-}
+//void EmotiBitTestingHelper::updateTestStatus(const string &userNote)
+//{
+//	if (userNote.compare("PASS") == 0 || userNote.compare("FAIL") == 0)
+//	{
+//		_results.testStatus = userNote;
+//		printResults();
+//	}
+//}
 
 void EmotiBitTestingHelper::updateSdCardFilename(const string &filename)
 {
@@ -185,9 +185,9 @@ void EmotiBitTestingHelper::printResults()
 	{
 		_testingResultsLog.push(ofToString(result, 2) + ", ");
 	}
-	_testingResultsLog.push("\n");
-	_testingResultsLog.push("Status: ");
-	_testingResultsLog.push(_results.testStatus);
+	//_testingResultsLog.push("\n");
+	//_testingResultsLog.push("Status: ");
+	//_testingResultsLog.push(_results.testStatus);
 
 	// Serialize the print
 	_testingResultsLog.push("\n--\n");
@@ -214,9 +214,9 @@ void EmotiBitTestingHelper::printResults()
 	{
 		_testingResultsLog.push(ofToString(result, 2) + ", ");
 	}
-	_testingResultsLog.push("(Status), ");
-	_testingResultsLog.push(_results.testStatus);
-	_testingResultsLog.push("\n********\n");
+	//_testingResultsLog.push("(Status), ");
+	//_testingResultsLog.push(_results.testStatus);
+	//_testingResultsLog.push("\n********\n");
 }
 
 void EmotiBitTestingHelper::pushEdlEdrResult()
