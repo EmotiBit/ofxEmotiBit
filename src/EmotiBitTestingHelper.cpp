@@ -2,7 +2,148 @@
 
 EmotiBitTestingHelper::EmotiBitTestingHelper()
 {
+	connectArduino(0);
+}
 
+void EmotiBitTestingHelper::connectArduino(int i)
+{
+	serial.listDevices();
+	vector<ofSerialDeviceInfo> info = serial.getDeviceList();
+	if (info.size() > i)
+	{
+		arduinoConnected = arduino.connect(info.at(i).getDeviceName());
+		if (arduinoConnected)
+		{
+			for (auto pin : _edlTestPins)
+			{
+				arduino.sendDigitalPinMode(pin, ARD_OUTPUT);
+				arduino.sendDigital(pin, ARD_HIGH);
+			}
+			for (auto pin : _edrTestPins)
+			{
+				arduino.sendDigitalPinMode(pin, ARD_OUTPUT);
+				arduino.sendDigital(pin, ARD_HIGH);
+			}
+		}
+	}
+}
+
+void EmotiBitTestingHelper::startEdaTest()
+{
+	if (!arduinoConnected)
+	{
+		connectArduino(0);
+	}
+	if (arduinoConnected)
+	{
+		for (auto pin : _edlTestPins)
+		{
+			arduino.sendDigitalPinMode(pin, ARD_OUTPUT);
+			arduino.sendDigital(pin, ARD_HIGH);
+		}
+		for (auto pin : _edrTestPins)
+		{
+			arduino.sendDigitalPinMode(pin, ARD_OUTPUT);
+			arduino.sendDigital(pin, ARD_HIGH);
+		}
+		edaTestStarted = true;
+		edlChangeTimer = ofGetElapsedTimeMillis();
+	}
+}
+
+void EmotiBitTestingHelper::updateEdaTestOutput()
+{
+	if (edaTestStarted)
+	{
+		// Plan
+		// Hold EDL at 0 for 10 seconds
+		// Read EDL
+		// Cycle EDL at 10K, 100K, 1M, 10M for 10 seconds
+		//	Read EDL
+		//	Cycle EDR x 5
+		//		Hold EDR at 0K, 1K, 2K, 3K, 4.3K, 5.3K, 6.3K, 7.3K, 8.2K, 9.2K, 10.2K, 11.2K, 12.5K, 13.5, 14.5, 15.5 and reverse for 1/30 secs
+		//	Read edrP2P
+		int edlChangeDelay = 10000;
+		int edrChangeDelay = 33;
+		static bool edrStarted = false;
+		static int edlPinState = 0;
+		static int  edrPinState = 0;
+		int nEdrCycles = 5;
+		static int edrCycle = 0;
+
+		if (ofGetElapsedTimeMillis() - edlChangeTimer > edlChangeDelay)
+		{
+			pushEdlEdrResult();
+			edrChangeTimer = ofGetElapsedTimeMillis();
+			edrStarted = true;
+		}
+		if (edrStarted && ofGetElapsedTimeMillis() - edrChangeTimer > edrChangeDelay)
+		{
+			edrChangeTimer = ofGetElapsedTimeMillis();
+			edrPinState++;
+			if (edrPinState == _edrPinStates.size())
+			{
+				edrPinState = 0;
+				edrCycle++;
+			}
+			if (edrCycle == nEdrCycles)
+			{
+				pushEdrP2pResult();
+				edrStarted = false;
+				edlChangeTimer = ofGetElapsedTimeMillis();
+				edlPinState++;
+			}
+			if (edlPinState == _edlPinStates.size())
+			{
+				edaTestStarted = false;
+				edlPinState = 0;
+			}
+			setEdlPins(edlPinState);
+			setEdrPins(edrPinState);
+		}
+	}
+}
+
+void EmotiBitTestingHelper::setEdlPins(int state)
+{
+	if (state < _edlPinStates.size())
+	{
+		for (size_t j = 0; j < _edlPinStates.at(state).size(); j++)
+		{
+			if (j < _edlTestPins.size())
+			{
+				if (_edlPinStates.at(state).at(j))
+				{
+					arduino.sendDigital(_edlTestPins.at(j), ARD_LOW);
+				}
+				else
+				{
+					arduino.sendDigital(_edlTestPins.at(j), ARD_HIGH);
+				}
+			}
+		}
+	}
+}
+
+void EmotiBitTestingHelper::setEdrPins(int state)
+{
+	if (state < _edrPinStates.size())
+	{
+		for (size_t j = 0; j < _edrPinStates.at(state).size(); j++)
+		{
+			if (j < _edrTestPins.size())
+			{
+				if (_edrPinStates.at(state).at(j))
+				{
+					arduino.sendDigital(_edrTestPins.at(j), ARD_LOW);
+				}
+				else
+				{
+					arduino.sendDigital(_edrTestPins.at(j), ARD_HIGH);
+				}
+			}
+		}
+	}
 }
 
 

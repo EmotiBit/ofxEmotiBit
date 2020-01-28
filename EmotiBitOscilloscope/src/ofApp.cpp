@@ -51,6 +51,11 @@ void ofApp::update() {
 	}
 
 	updateMenuButtons();
+
+	if (!_testingHelper.testingOn)
+	{
+		_testingHelper.updateEdaTestOutput();
+	}
 }
 
 //--------------------------------------------------------------
@@ -186,6 +191,14 @@ void ofApp::keyReleased(int key) {
 		if (key == 'c')
 		{
 			_testingHelper.clearAllResults();
+		}
+		if (key == 'e')
+		{
+			_testingHelper.startEdaTest();
+		}
+		if (key > (int) '0' && key <= (int) '9')
+		{
+			_testingHelper.connectArduino(key - (int) '0');
 		}
 	}
 }

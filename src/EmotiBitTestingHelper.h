@@ -23,6 +23,57 @@ public:
 	float _thermopile;
 	
 	bool testingOn = false;
+	bool edaTestStarted = false;
+	bool arduinoConnected = false;
+	uint64_t edlChangeTimer;
+	uint64_t edrChangeTimer;
+	vector<int> _edlTestPins = { 6, 7, 8, 9 };
+	vector<int> _edrTestPins = { 10, 11, 12, 13 };
+	vector<vector<bool>> _edlPinStates = 
+	{ 
+		{0, 0, 0, 0}, 
+		{1, 0, 0, 0}, 
+		{0, 1, 0, 0}, 
+		{0, 0, 1, 0}, 
+		{0, 0, 0, 1} 
+	};
+
+	vector<vector<bool>> _edrPinStates =
+	{
+		{0, 0, 0, 0},
+		{1, 0, 0, 0},
+		{0, 1, 0, 0},
+		{1, 1, 0, 0},
+		{0, 0, 1, 0},
+		{1, 0, 1, 0},
+		{0, 1, 1, 0},
+		{1, 1, 1, 0},
+		{0, 0, 0, 1},
+		{1, 0, 0, 1},
+		{0, 1, 0, 1},
+		{1, 1, 0, 1},
+		{0, 0, 1, 1},
+		{1, 0, 1, 1},
+		{0, 1, 1, 1},
+		{1, 1, 1, 1},
+		{0, 1, 1, 1},
+		{1, 0, 1, 1},
+		{0, 0, 1, 1},
+		{1, 1, 0, 1},
+		{0, 1, 0, 1},
+		{1, 0, 0, 1},
+		{0, 0, 0, 1},
+		{1, 1, 1, 0},
+		{0, 1, 1, 0},
+		{1, 0, 1, 0},
+		{0, 0, 1, 0},
+		{1, 1, 0, 0},
+		{0, 1, 0, 0},
+		{1, 0, 0, 0}
+	};
+
+	ofArduino	arduino;
+	ofSerial serial;
 
 	struct Results
 	{
@@ -61,4 +112,10 @@ public:
 	void pushThermopileResult();
 	void popThermopileResult();
 	void clearAllResults();
+	void connectArduino(int i);
+	void startEdaTest();
+	void updateEdaTestOutput();
+	void setEdlPins(int state);
+	void setEdrPins(int state);
+	
 };
