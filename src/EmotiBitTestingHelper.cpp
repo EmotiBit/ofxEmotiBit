@@ -216,7 +216,7 @@ void EmotiBitTestingHelper::printResults()
 	}
 	//_testingResultsLog.push("(Status), ");
 	//_testingResultsLog.push(_results.testStatus);
-	//_testingResultsLog.push("\n********\n");
+	_testingResultsLog.push("\n********\n");
 }
 
 void EmotiBitTestingHelper::pushEdlEdrResult()
