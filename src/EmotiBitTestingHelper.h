@@ -45,7 +45,7 @@ public:
 	void setLogFilename(const string &filename);
 	void update(const vector<string> &splitPacket, const EmotiBitPacket::Header &packetHeader);
 	void updateSerialNumber(const string &serialNumber);
-	void updateTestStatus(const string &userNote);
+	//void updateTestStatus(const string &userNote);
 	void updateSdCardFilename(const string &filename);
 	void updateEda(const vector<string> &splitPacket, const EmotiBitPacket::Header &packetHeader);
 	void updatePpg(const vector<string> &splitPacket, const EmotiBitPacket::Header &packetHeader);
