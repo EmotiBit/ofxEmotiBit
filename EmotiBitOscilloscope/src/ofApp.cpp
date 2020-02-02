@@ -153,6 +153,47 @@ void ofApp::keyReleased(int key) {
 	{
 		DEBUGGING = true;
 	}
+	if (DEBUGGING) {
+		if (key == 'l')
+		{
+			int w = 0;
+			int s = 3;
+			int p = 0;
+			vector<int> indexes{ w, s, p };
+			typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
+			typeTags.at(w).at(s).at(p) = EmotiBitPacket::TypeTag::EDL;
+			typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
+			plotNames.at(w).at(s).at(p) = "EDL";
+			scopeWins.at(w).scopes.at(s).setVariableNames(plotNames.at(w).at(s));
+			scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
+		}
+		if (key == 'r')
+		{
+			int w = 0;
+			int s = 3;
+			int p = 0;
+			vector<int> indexes{ w, s, p };
+			typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
+			typeTags.at(w).at(s).at(p) = EmotiBitPacket::TypeTag::EDR;
+			typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
+			plotNames.at(w).at(s).at(p) = "EDR";
+			scopeWins.at(w).scopes.at(s).setVariableNames(plotNames.at(w).at(s));
+			scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
+		}
+		if (key == 'a')
+		{
+			int w = 0;
+			int s = 3;
+			int p = 0;
+			vector<int> indexes{ w, s, p };
+			typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
+			typeTags.at(w).at(s).at(p) = EmotiBitPacket::TypeTag::EDA;
+			typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
+			plotNames.at(w).at(s).at(p) = "EDA";
+			scopeWins.at(w).scopes.at(s).setVariableNames(plotNames.at(w).at(s));
+			scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
+		}
+	}
 	if (_testingHelper.testingOn)
 	{
 		if (key == 'p')
