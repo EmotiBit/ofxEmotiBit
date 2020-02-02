@@ -23,14 +23,14 @@ void ofApp::setup() {
 	guiPanels.at(0).setDefaultWidth(guiWidth);
 	guiPanels.at(0).setup("startRecording","junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(0).add(processStatus.setup("Status", GUI_STATUS_IDLE));
-	guiPanels.at(0).add(processButton.set("Process", false));
+	guiPanels.at(0).add(processButton.set("<- Click here to load EmotiBit data file", false));
 	guiXPos += guiPosInc;
 	//guiPanels.at(1).setDefaultWidth(ofGetWindowWidth() - guiXPos);
 	//guiPanels.at(1).setup("paths", "junk.xml", guiXPos, -guiYPos);
 	//guiPanels.at(1).add(inputPath.setup("Input Path:", "[Add path to EmotiBit csv file]"));
 	//guiPanels.at(1).add(outputPath.setup("Output Path:", "[Add path to output directory]"));
 
-	dataLine = "Click 'Process' to load data file";
+	dataLine = "Click above to load data file";
 
 	ofSetColor(128, 128, 128);
 
