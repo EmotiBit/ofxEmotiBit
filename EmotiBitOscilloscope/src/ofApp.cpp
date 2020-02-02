@@ -639,7 +639,8 @@ void ofApp::setupGui()
 
 	ofSetWindowTitle("EmotiBit Oscilloscope (v" + ofxEmotiBitVersion + ")");
 
-	legendFont.load(ofToDataPath("verdanab.ttf"), 11, true, true);
+	string legendFontFilename = "verdanab.ttf";
+	legendFont.load(ofToDataPath(legendFontFilename), 11, true, true);
 	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
 
@@ -662,7 +663,11 @@ void ofApp::setupGui()
 	guiPanelDevice = p;
 	guiPanels.at(guiPanelDevice).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelDevice).setDefaultHeight(guiYPos);
-	guiPanels.at(guiPanelDevice).loadFont(ofToDataPath("verdanab.ttf"), 10, true, true);
+	if (legendFont.isLoaded())
+	{
+		// Check to see if legend font loaded before adding to gui panel to avoid blank text
+		guiPanels.at(guiPanelDevice).loadFont(ofToDataPath(legendFontFilename), 10, true, true);
+	}
 	guiPanels.at(guiPanelDevice).setup("selectDevice", "junk.xml", guiXPos, -guiYPos * 2.2);
 	deviceMenuGroup.setName(GUI_DEVICE_GROUP_MENU_NAME);
 	deviceMenuGroup.add(deviceSelected.set("EmotiBit", GUI_STRING_NO_EMOTIBIT_SELECTED));
