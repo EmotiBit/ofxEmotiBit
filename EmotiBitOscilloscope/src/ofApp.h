@@ -152,6 +152,8 @@ public:
 	vector<string> powerModeOptions;
 	vector<ofParameter<bool>> powerModeList;
 
+	string _recordingFilename = "";
+
 	const string GUI_STRING_NOT_RECORDING = "NOT RECORDING";
 	const string GUI_STRING_RECORDING = "RECORDING";
 	const string GUI_STRING_MODE_HIBERNATE = "HIBERNATING";

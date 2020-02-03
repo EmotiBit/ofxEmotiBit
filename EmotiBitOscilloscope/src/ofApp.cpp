@@ -703,7 +703,7 @@ void ofApp::setupGui()
 
 	int guiXPos = 0;
 	int guiYPos = 25;
-	int guiWidth = 250;
+	int guiWidth = 200;
 	int guiPosInc = guiWidth + 1;
 	guiPanels.resize(6);
 
@@ -759,7 +759,7 @@ void ofApp::setupGui()
 	// Recording Status
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 219;
+	guiWidth = 269;
 	guiPanelRecord = p;
 	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
@@ -772,7 +772,7 @@ void ofApp::setupGui()
 	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setHeaderBackgroundColor(ofColor(255,255,0)); // not cear what this does
 	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBorderColor(ofColor(0,255,0)); // not clear what this does
 	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setSize(5, 10); // size of whole field
-	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
+	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("SD File", GUI_STRING_NOT_RECORDING));
 	//guiPanels.at(0).getControl(GUI_STRING_CONTROL_RECORD)->setSize(guiWidth, guiYPos * 2);
 
 	// Error Status
@@ -1061,7 +1061,7 @@ void ofApp::updateMenuButtons()
 		if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
 			guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
 			recordingStatus.setBackgroundColor(recordControlColor);
-			recordingStatus.getParameter().fromString(GUI_STRING_RECORDING);
+			recordingStatus.getParameter().fromString(_recordingFilename);
 		}
 	}
 	else
@@ -1129,6 +1129,11 @@ void ofApp::processModePacket(vector<string> &splitPacket)
 				if (filename.size() > 4 && filename.substr(filename.size() - 4, 4).compare(".csv") == 0)
 				{
 					_testingHelper.updateSdCardFilename(filename);
+					_recordingFilename = filename;
+				}
+				else
+				{
+					_recordingFilename = GUI_STRING_RECORDING;
 				}
 			}
 		}
@@ -1172,6 +1177,10 @@ void ofApp::drawConsole()
 	if (_testingHelper.testingOn)
 	{
 		_consoleString += "TESTING MODE ON -- ";
+	}
+	if (DEBUGGING)
+	{
+		_consoleString += "DEBUGGING -- ";
 	}
 	if (isPaused)
 	{
