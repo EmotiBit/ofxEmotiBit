@@ -114,6 +114,7 @@ public:
 	vector<vector<float>> samplingFreqs;
 	vector<vector<vector<string>>> plotNames;
 	vector<vector<vector<float>>> yLims;
+	vector<vector<float>> minYSpans;
 	vector<vector<vector<ofColor>>> plotColors;
 	//vector<ofColor> plotColors;
 
