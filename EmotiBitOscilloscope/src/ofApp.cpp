@@ -607,6 +607,14 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
 			dataCounts.at(w).at(s).at(p) = dataCounts.at(w).at(s).at(p) + packetHeader.dataLength;
 
+			// Sliding EDA minYspan 
+			if (!DEBUGGING && packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDA) == 0 && data.at(p).size() > 0)
+			{
+				minYSpans.at(w).at(s) = 0.2f * pow(data.at(p).at(0), 1.5f);
+				if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
+					scopeWins.at(w).scopes.at(s).autoscaleY(true, minYSpans.at(w).at(s));
+				}
+			}
 		}
 		else 
 		{
@@ -913,13 +921,13 @@ void ofApp::setupOscilloscopes()
 		}
 	};
 
-	vector<vector<float>> minYSpans = vector<vector<float>>
+	minYSpans = vector<vector<float>>
 	{
 		{ // scope panel 1
 			{  0.f },
 			{  0.f },
 			{  0.f },
-			{ 0.01f },
+			{ 0.02f },	// NOTE: EDA is changed elsewhere to be a Sliding EDA minYspan 
 			{ 1.f  }
 		},
 		{ // scope panel 2
