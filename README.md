@@ -1,5 +1,6 @@
 # ofxEmotiBit
-Software for the EmotiBit. The data visualizer and data parser can be downloaded directly in [releases](https://github.com/EmotiBit/ofxEmotiBit/releases).
+Software code for the EmotiBit. 
+If you just want to visualize and parse data from the EmotiBit, you can simply download the software directly in [releases](https://github.com/EmotiBit/ofxEmotiBit/releases).
 
 If you want to modify the code, below are the requirements to build the project.  
 
