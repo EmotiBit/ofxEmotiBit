@@ -116,7 +116,7 @@ void ofApp::keyPressed(int key) {
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key) {
-	cout << "Key Released: " << (char)key << endl;
+	//cout << "Key Released: " << (char)key << endl;
 
 	if (key == ' ') {
 		isPaused = !isPaused;
@@ -151,7 +151,7 @@ void ofApp::keyReleased(int key) {
 	}
 	if (key == 'D')
 	{
-		DEBUGGING = true;
+		DEBUGGING = !DEBUGGING;
 	}
 	if (DEBUGGING) {
 		if (key == 'l')
@@ -610,7 +610,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			// Sliding EDA minYspan 
 			if (!DEBUGGING && packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDA) == 0 && data.at(p).size() > 0)
 			{
-				minYSpans.at(w).at(s) = 0.2f * pow(data.at(p).at(0), 1.5f);
+				minYSpans.at(w).at(s) = 0.1f * pow(data.at(p).at(0), 1.5f);
 				if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
 					scopeWins.at(w).scopes.at(s).autoscaleY(true, minYSpans.at(w).at(s));
 				}
