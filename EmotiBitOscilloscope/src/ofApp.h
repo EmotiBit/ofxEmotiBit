@@ -2,15 +2,17 @@
 
 #include "ofMain.h"
 #include "ofxOscilloscope.h"
-#include "ofxNetwork.h"
-#include "ofxNetworkUtils.h"
+//#include "ofxNetwork.h"
+//#include "ofxNetworkUtils.h"
 #include "ofxThreadedLogger.h"
 #include "ofxGui.h"
 #include "ofxInputField.h"
 #include "ofxLSL.h"
 #include "DoubleBuffer.h"
 #include "EmotiBitPacket.h"
+#include "EmotiBitWiFiHost.h"
 #include "ofxEmotiBitVersion.h"
+#include "EmotiBitTestingHelper.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -29,30 +31,35 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-	void parsePacket(string dataString);
-	void parseUdp();
-	void parseSerial();
-	vector<string> getLocalIPs();
-	void sendEmotiBitPacket(string typeTag, string data = "", uint16_t dataLength = 1, uint16_t protocolVersion = 1, uint16_t dataReliability = 100);
-	void sendEmotiBitPacket(ofxUDPManager &udpManager, string typeTag, string data = "", uint16_t dataLength = 1, uint16_t protocolVersion = 1, uint16_t dataReliability = 100);
-	void parseIncomingAck(vector<string> splitPacket);
-	void parseIncomingRequestData(EmotiBitPacket::Header header, vector<string> splitPacket);
+	//void parsePacket(string dataString);
+	//void parseUdp();
+	//void parseSerial();
+	//vector<string> getLocalIPs();
+	//void sendEmotiBitPacket(string typeTag, string data = "", uint16_t dataLength = 1, uint16_t protocolVersion = 1, uint16_t dataReliability = 100);
+	//void sendEmotiBitPacket(ofxUDPManager &udpManager, string typeTag, string data = "", uint16_t dataLength = 1, uint16_t protocolVersion = 1, uint16_t dataReliability = 100);
+	//void parseIncomingAck(vector<string> splitPacket);
+	//void parseIncomingRequestData(EmotiBitPacket::Header header, vector<string> splitPacket);
 
 	void recordButtonPressed(bool & recording);
-	void hibernateButtonPressed(bool & hibernate);
 	void sendExperimenterNoteButton();
 	template <class T>
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
-	void deviceSelection(bool & selected);
+	void deviceGroupSelection(ofAbstractParameter& device);
+	void powerModeSelection(ofAbstractParameter& mode);
 	void sendDataSelection(bool & selected);
-	bool checkDeviceList(string ip);
-	void changeConnection(bool selected);
-	void sendBroadcast(string ipAddress);
+	void updateDeviceList();
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
-
+	void setupGui();
+	void setupOscilloscopes();
+	void updateLsl();
+	void clearOscilloscopes();
+	void processModePacket(vector<string> &splitPacket);
+	void updateMenuButtons();
+	void drawConsole();
+	void drawOscilloscopes();
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -83,9 +90,14 @@ public:
 	ofxUDPManager udpConnection;
 	LoggerThread dataLogger;
 	LoggerThread consoleLogger;
+	bool logData;
+	bool logConsole;
 	ofTrueTypeFont legendFont;
 	ofTrueTypeFont axesFont;
 	ofTrueTypeFont subLegendFont;
+
+	EmotiBitWiFiHost emotiBitWiFi;
+	unordered_map<string, EmotiBitStatus> emotibitIps;
 
 	//struct EmotibitPacketHeader_V1 {
 	//	uint32_t timestamp;  // milliseconds since EmotiBit bootup
@@ -102,6 +114,7 @@ public:
 	vector<vector<float>> samplingFreqs;
 	vector<vector<vector<string>>> plotNames;
 	vector<vector<vector<float>>> yLims;
+	vector<vector<float>> minYSpans;
 	vector<vector<vector<ofColor>>> plotColors;
 	//vector<ofColor> plotColors;
 
@@ -114,7 +127,8 @@ public:
 	ofxLabel recordingStatus;
 	ofParameter<bool> hibernateButton;
 	ofxLabel hibernateStatus;
-	ofxLabel batteryStatus; 
+	//ofxLabel batteryStatus; 
+	ofParameter<string> batteryStatus;
 	ofxLabel sdCardStatus;
 	//ofParameter<float> batteryStatus;
 	//ofParameter<float> sdCardStatus;
@@ -133,6 +147,12 @@ public:
 	ofParameter<string> sendOptionSelected;
 	ofParameterGroup sendDataMenuGroup;
 	ofParameterGroup sendDataGroup;
+	ofParameterGroup powerStatusMenuGroup;
+	ofParameterGroup powerModeGroup;
+	vector<string> powerModeOptions;
+	vector<ofParameter<bool>> powerModeList;
+
+	string _recordingFilename = "";
 
 	const string GUI_STRING_NOT_RECORDING = "NOT RECORDING";
 	const string GUI_STRING_RECORDING = "RECORDING";
@@ -155,16 +175,30 @@ public:
 	const string GUI_STRING_NOTE_BUTTON = "LOG NOTE";
 	const string GUI_STRING_CONTROL_RECORD = "RECORD";
 	const string GUI_STRING_CONTROL_HIBERNATE = "HIBERNATE";
+
+	const string GUI_POWER_STATUS_MENU_NAME = "RECORD";
+	const string GUI_POWER_MODE_GROUP_NAME = "Power Mode";
+	const string GUI_STRING_NORMAL_POWER =	"Normal            (data streaming)";
+	const string GUI_STRING_LOW_POWER =			"Low Power      (no streaming)";
+	const string GUI_STRING_WIRELESS_OFF = "Wireless Off";
+	const string GUI_STRING_HIBERNATE = "Hibernate";
+
 	ofColor recordControlColor = ofColor(255, 69, 78);
 	ofColor hibernateControlColor = ofColor(10, 135, 210);
 	ofColor noteControlColor = ofColor(1, 204, 115);
+	ofColor deviceAvailableColor = ofColor(255, 255, 255);
+	ofColor notAvailableColor = ofColor(128, 128, 128);
+
 	int guiPanelDevice;
 	int guiPanelRecord;
-	int guiPanelMode;
-	int guiPanelLevels;
+	//int guiPanelMode;
+	//int guiPanelLevels;
+	int guiPanelPowerStatus;
 	int guiPanelErrors;
 	int guiPanelUserNote;
 	int guiPanelSendData;
+
+	int _consoleHeight;
 
 	//ofxFloatSlider batteryStatus;
 	//ofxFloatSlider sdCardStatus;
@@ -179,6 +213,7 @@ public:
   vector<ofxPanel> guiPanels;
 
 	bool plotUdpData = true;
+	bool DEBUGGING = false;
 
 	int drawYTranslate = 0;
 	float drawYScale = 1.f;
@@ -187,14 +222,27 @@ public:
 	uint16_t MAX_BUFFER_LENGTH = 64;
 	size_t messageLen = 0;
 
-	DoubleBuffer<string> messageBuffer; 
-	ofMutex connectionLock;
-	std::thread* connectionThread;
-	bool runConnectionThread = true;
+	//DoubleBuffer<string> messageBuffer; 
+	//ofMutex connectionLock;
+	//std::thread* connectionThread;
+	//bool runConnectionThread = true;
 
-	int connectionPort;
+	//int connectionPort;
 	bool drawDataInfo = false;
 
 	int nDataClippingEvents = 0;
 	int nDataOverflowEvents = 0;
+
+	bool _recording = false;
+	EmotiBitTestingHelper _testingHelper;
+	enum class PowerMode {
+		HIBERNATE,
+		WIRELESS_OFF,					// fully shutdown wireless
+		MAX_LOW_POWER,	// data not sent, time-syncing accuracy low
+		LOW_POWER,			// data not sent, time-syncing accuracy high
+		NORMAL_POWER,				// data sending, time-syncing accuracy high
+		length
+	};
+	PowerMode _powerMode = PowerMode::LOW_POWER;
+
 };

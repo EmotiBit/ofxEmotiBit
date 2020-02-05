@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -21,31 +21,31 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>EmotiBitOscilloscope</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <RootNamespace>ofxEmotiBitWiFiTest</RootNamespace>
+    <ProjectName>ofxEmotiBitWiFiTest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
@@ -96,7 +96,8 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\addons\EmotiBit_XPlat_Utils;%(AdditionalIncludeDirectories);..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxBiquadFilter\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\EmotiBit_XPlat_Utils;C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src;
+C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -114,7 +115,8 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\addons\EmotiBit_XPlat_Utils;%(AdditionalIncludeDirectories);..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxBiquadFilter\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\EmotiBit_XPlat_Utils;C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src;
+C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -122,8 +124,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>liblsl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../ofxLSL/libs/labstreaminglayer/lib/win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -133,7 +134,8 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\addons\EmotiBit_XPlat_Utils;%(AdditionalIncludeDirectories);..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxBiquadFilter\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\EmotiBit_XPlat_Utils;C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src;
+C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -154,7 +156,8 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\..\..\addons\EmotiBit_XPlat_Utils;%(AdditionalIncludeDirectories);..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxInputField\src;..\..\..\addons\ofxLSL\libs;..\..\..\addons\ofxLSL\libs\labstreaminglayer;..\..\..\addons\ofxLSL\libs\labstreaminglayer\include;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib;..\..\..\addons\ofxLSL\libs\labstreaminglayer\lib\win64;..\..\..\addons\ofxLSL\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxBiquadFilter\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\EmotiBit_XPlat_Utils;C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxEmotiBit\src;
+C:\priv\local\LocalDev\Sean\OF\of_v0.9.8_vs_release\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -164,75 +167,36 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>liblsl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../ofxLSL/libs/labstreaminglayer/lib/win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EmotiBit_XPlat_Utils\EmotiBitPacket.cpp" />
-    <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.cpp" />
-    <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp" />
-    <ClCompile Include="..\src\EmotiBitTestingHelper.cpp" />
+    <ClCompile Include="..\..\ofxThreadedLogger\src\ofxThreadedLogger.cpp" />
     <ClCompile Include="..\src\EmotiBitWiFiHost.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxInputField\src\ofxInputField.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxLSL\src\ofxLSL.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.cpp" />
     <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.cpp" />
     <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPManager.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.cpp" />
     <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\IPAddressRange.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkInterfaceListener.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkUtils.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EmotiBit_XPlat_Utils\EmotiBitComms.h" />
     <ClInclude Include="..\..\EmotiBit_XPlat_Utils\EmotiBitPacket.h" />
-    <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.h" />
-    <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />
-    <ClInclude Include="..\src\ArduinoString.h" />
-    <ClInclude Include="..\src\EmotiBitTestingHelper.h" />
+    <ClInclude Include="..\..\ofxThreadedLogger\src\ofxThreadedLogger.h" />
+    <ClInclude Include="..\src\DoubleBuffer.h" />
     <ClInclude Include="..\src\EmotiBitWiFiHost.h" />
     <ClInclude Include="..\src\ofxEmotiBitVersion.h" />
+    <ClInclude Include="..\src\ArduinoString.h" />
     <ClInclude Include="src\ofApp.h" />
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
-    <ClInclude Include="..\..\..\addons\ofxInputField\src\ofxInputField.h" />
-    <ClInclude Include="..\..\..\addons\ofxLSL\src\ofxLSL.h" />
-    <ClInclude Include="..\..\..\addons\ofxLSL\libs\labstreaminglayer\include\lsl_c.h" />
-    <ClInclude Include="..\..\..\addons\ofxLSL\libs\labstreaminglayer\include\lsl_cpp.h" />
-    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetwork.h" />
-    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetworkUtils.h" />
-    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.h" />
     <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPManager.h" />
-    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetwork.h" />
     <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.h" />
-    <ClInclude Include="..\..\..\addons\ofxNetworkUtils\src\ofxNetworkUtils.h" />
-    <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\IPAddressRange.h" />
-    <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkInterfaceListener.h" />
-    <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkUtils.h" />
-    <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.h" />
-    <ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetworkUtils.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

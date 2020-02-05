@@ -80,4 +80,9 @@ public:
 		swap();
 		return *_outputPtr;
 	}
+
+	void get(vector<T> &output) {
+		swap();
+		output = *_outputPtr;
+	}
 };

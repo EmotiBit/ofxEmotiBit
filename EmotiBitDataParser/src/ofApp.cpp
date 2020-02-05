@@ -23,14 +23,14 @@ void ofApp::setup() {
 	guiPanels.at(0).setDefaultWidth(guiWidth);
 	guiPanels.at(0).setup("startRecording","junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(0).add(processStatus.setup("Status", GUI_STATUS_IDLE));
-	guiPanels.at(0).add(processButton.set("Process", false));
+	guiPanels.at(0).add(processButton.set("<- Click here to load EmotiBit data file", false));
 	guiXPos += guiPosInc;
 	//guiPanels.at(1).setDefaultWidth(ofGetWindowWidth() - guiXPos);
 	//guiPanels.at(1).setup("paths", "junk.xml", guiXPos, -guiYPos);
 	//guiPanels.at(1).add(inputPath.setup("Input Path:", "[Add path to EmotiBit csv file]"));
 	//guiPanels.at(1).add(outputPath.setup("Output Path:", "[Add path to output directory]"));
 
-	dataLine = "Click 'Process' to load data file";
+	dataLine = "Click above to load data file";
 
 	ofSetColor(128, 128, 128);
 
@@ -396,7 +396,7 @@ void ofApp::parseDataLine(string packet) {
 	EmotiBitPacket::Header packetHeader;
 	if (!EmotiBitPacket::getHeader(splitPacket, packetHeader)) {
 		malformedMessages++;
-		cout << "**** MALFORMED PACKET " << malformedMessages << ": " << packetHeader.length << ", " << splitPacket.size() << ": " << packet << " ****" << endl;
+		cout << "**** MALFORMED PACKET " << malformedMessages << ": " << packetHeader.dataLength << ", " << splitPacket.size() << ": " << packet << " ****" << endl;
 		cout << "**** MALFORMED PACKET DATA: " << packet << endl;
 		return;
 	}
@@ -414,7 +414,7 @@ void ofApp::parseDataLine(string packet) {
 		// ToDo: Handle 2^32 timestamp rollover (~49 days)
 
 		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::REQUEST_DATA) == 0) {
-			for (uint16_t i = EmotiBitPacket::Header::length; i < splitPacket.size(); i++) {
+			for (uint16_t i = EmotiBitPacket::headerLength; i < splitPacket.size(); i++) {
 				if (splitPacket.at(i).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0) {
 					if (allTimestampData.size() > 0 && allTimestampData.back().roundTrip == -1) {
 						// If the previous sync round trip wasn't detected, remove it
@@ -435,11 +435,11 @@ void ofApp::parseDataLine(string packet) {
 					}
 				}
 				// ToDo: handle TIMESTAMP_UTC request
-					//|| splitPacket.at(EmotiBitPacket::Header::length).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
+					//|| splitPacket.at(EmotiBitPacket::headerLength).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
 				// ToDo: handle multiple request RD messages
-				//|| (splitPacket.size() > EmotiBitPacket::Header::length + 1 &&
-				//(splitPacket.at(EmotiBitPacket::Header::length + 1).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0
-				//	|| splitPacket.at(EmotiBitPacket::Header::length + 1).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
+				//|| (splitPacket.size() > EmotiBitPacket::headerLength + 1 &&
+				//(splitPacket.at(EmotiBitPacket::headerLength + 1).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0
+				//	|| splitPacket.at(EmotiBitPacket::headerLength + 1).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
 				//	)
 			}
 
@@ -450,8 +450,8 @@ void ofApp::parseDataLine(string packet) {
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0) {
 				// ToDo: Handle TIMESTAMP_UTC
 				allTimestampData.back().TS_received = packetHeader.timestamp;
-				if (splitPacket.size() > EmotiBitPacket::Header::length) {
-					allTimestampData.back().TS_sent = splitPacket.at(EmotiBitPacket::Header::length);
+				if (splitPacket.size() > EmotiBitPacket::headerLength) {
+					allTimestampData.back().TS_sent = splitPacket.at(EmotiBitPacket::headerLength);
 					auto loggerPtr = loggers.find(timestampFilenameString);
 					if (loggerPtr != loggers.end()) {
 						loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
@@ -460,8 +460,8 @@ void ofApp::parseDataLine(string packet) {
 				}
 			}
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::ACK) == 0) {
-				if (splitPacket.size() > EmotiBitPacket::Header::length) {
-					if (lastRDPacketNumber == stoi(splitPacket.at(EmotiBitPacket::Header::length))) {
+				if (splitPacket.size() > EmotiBitPacket::headerLength) {
+					if (lastRDPacketNumber == stoi(splitPacket.at(EmotiBitPacket::headerLength))) {
 						allTimestampData.back().AK = packetHeader.timestamp;
 						allTimestampData.back().roundTrip = allTimestampData.back().TS_received - allTimestampData.back().RD;
 						lastRDPacketNumber = -1; // reset the last RD packet number to avoid overwriting from duplicate

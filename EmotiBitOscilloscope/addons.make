@@ -1,5 +1,6 @@
 ofxGui
 ofxNetwork
+ofxBiquadFilter
 ofxEmotiBit
 ofxInputField
 ofxLSL

@@ -1,7 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxNetwork.h"
+#include "EmotiBitWiFiHost.h"
+#include "ofxThreadedLogger.h"
+
 
 class ofApp : public ofBaseApp{
 
@@ -21,15 +23,15 @@ class ofApp : public ofBaseApp{
 		void mouseExited(int x, int y);
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);		
+		void gotMessage(ofMessage msg);	
+		
+		EmotiBitWiFiHost emotiBitWiFi;
+		unordered_map<string, EmotiBitStatus> emotibitIps;
 
-		ofxTCPServer TCP;
+		LoggerThread logger;
+		bool logData;
 
 		ofTrueTypeFont  mono;
 		ofTrueTypeFont  monosm;
-
-		vector <string> storeText;
-		uint64_t lastSent;
-		uint16_t cleintId;
 };
 
