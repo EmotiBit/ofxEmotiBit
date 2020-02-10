@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.645
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "EmotiBitInstaller", "EmotiBitInstaller\EmotiBitInstaller.vdproj", "{979059F4-1C37-4368-B13D-724C5B5A7029}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "EmotiBitInstaller", "EmotiBitInstaller\EmotiBitInstaller.vdproj", "{F1907B24-FB6A-4DC6-8C88-AC933DF4836E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5837595D-ACA9-485C-8E76-729040CE4B0B} = {5837595D-ACA9-485C-8E76-729040CE4B0B}
+		{6C7A0766-3EDC-45B8-B55E-A63A26FA5524} = {6C7A0766-3EDC-45B8-B55E-A63A26FA5524}
+		{7FD42DF7-442E-479A-BA76-D0022F99702A} = {7FD42DF7-442E-479A-BA76-D0022F99702A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EmotiBitDataParser", "..\EmotiBitDataParser\EmotiBitDataParser.vcxproj", "{7FD42DF7-442E-479A-BA76-D0022F99702A}"
 EndProject
@@ -19,14 +24,14 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{979059F4-1C37-4368-B13D-724C5B5A7029}.Debug|x64.ActiveCfg = Debug
-		{979059F4-1C37-4368-B13D-724C5B5A7029}.Debug|x64.Build.0 = Debug
-		{979059F4-1C37-4368-B13D-724C5B5A7029}.Debug|x86.ActiveCfg = Debug
-		{979059F4-1C37-4368-B13D-724C5B5A7029}.Debug|x86.Build.0 = Debug
-		{979059F4-1C37-4368-B13D-724C5B5A7029}.Release|x64.ActiveCfg = Release
-		{979059F4-1C37-4368-B13D-724C5B5A7029}.Release|x64.Build.0 = Release
-		{979059F4-1C37-4368-B13D-724C5B5A7029}.Release|x86.ActiveCfg = Release
-		{979059F4-1C37-4368-B13D-724C5B5A7029}.Release|x86.Build.0 = Release
+		{F1907B24-FB6A-4DC6-8C88-AC933DF4836E}.Debug|x64.ActiveCfg = Debug
+		{F1907B24-FB6A-4DC6-8C88-AC933DF4836E}.Debug|x64.Build.0 = Debug
+		{F1907B24-FB6A-4DC6-8C88-AC933DF4836E}.Debug|x86.ActiveCfg = Debug
+		{F1907B24-FB6A-4DC6-8C88-AC933DF4836E}.Debug|x86.Build.0 = Debug
+		{F1907B24-FB6A-4DC6-8C88-AC933DF4836E}.Release|x64.ActiveCfg = Release
+		{F1907B24-FB6A-4DC6-8C88-AC933DF4836E}.Release|x64.Build.0 = Release
+		{F1907B24-FB6A-4DC6-8C88-AC933DF4836E}.Release|x86.ActiveCfg = Release
+		{F1907B24-FB6A-4DC6-8C88-AC933DF4836E}.Release|x86.Build.0 = Release
 		{7FD42DF7-442E-479A-BA76-D0022F99702A}.Debug|x64.ActiveCfg = Debug|x64
 		{7FD42DF7-442E-479A-BA76-D0022F99702A}.Debug|x64.Build.0 = Debug|x64
 		{7FD42DF7-442E-479A-BA76-D0022F99702A}.Debug|x86.ActiveCfg = Debug|Win32
@@ -56,6 +61,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A3C3CAAC-5B05-49EE-AD7F-48127E54A335}
+		SolutionGuid = {C6EEBD46-1E6F-4C6C-9A63-03EDFFE29AA7}
 	EndGlobalSection
 EndGlobal
