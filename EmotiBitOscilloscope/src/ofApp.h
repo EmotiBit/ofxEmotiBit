@@ -114,6 +114,7 @@ public:
 	vector<vector<float>> samplingFreqs;
 	vector<vector<vector<string>>> plotNames;
 	vector<vector<vector<float>>> yLims;
+	vector<vector<float>> minYSpans;
 	vector<vector<vector<ofColor>>> plotColors;
 	//vector<ofColor> plotColors;
 
@@ -150,6 +151,8 @@ public:
 	ofParameterGroup powerModeGroup;
 	vector<string> powerModeOptions;
 	vector<ofParameter<bool>> powerModeList;
+
+	string _recordingFilename = "";
 
 	const string GUI_STRING_NOT_RECORDING = "NOT RECORDING";
 	const string GUI_STRING_RECORDING = "RECORDING";

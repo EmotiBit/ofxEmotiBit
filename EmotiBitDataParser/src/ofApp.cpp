@@ -23,7 +23,7 @@ void ofApp::setup() {
 	guiPanels.at(0).setDefaultWidth(guiWidth);
 	guiPanels.at(0).setup("startRecording","junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(0).add(processStatus.setup("Status", GUI_STATUS_IDLE));
-	guiPanels.at(0).add(processButton.set("<- Click here to load EmotiBit data file", false));
+	guiPanels.at(0).add(processButton.set(GUI_PANEL_LOAD_FILE, false));
 	guiXPos += guiPosInc;
 	//guiPanels.at(1).setDefaultWidth(ofGetWindowWidth() - guiXPos);
 	//guiPanels.at(1).setup("paths", "junk.xml", guiXPos, -guiYPos);
@@ -46,8 +46,8 @@ void ofApp::startProcessing(bool & processing) {
 		ofFileDialogResult fileLoadResult;
 		fileLoadResult  = ofSystemLoadDialog("Open an EmotiBit raw csv data file");
 		if (fileLoadResult.bSuccess) {
-			if (guiPanels.at(0).getControl("Process") != NULL) {
-				guiPanels.at(0).getControl("Process")->setBackgroundColor(ofColor(255, 0, 0));
+			if (guiPanels.at(0).getControl(GUI_PANEL_LOAD_FILE) != NULL) {
+				guiPanels.at(0).getControl(GUI_PANEL_LOAD_FILE)->setBackgroundColor(ofColor(255, 0, 0));
 				processStatus.setBackgroundColor(ofColor(255, 0, 0));
 				processStatus.getParameter().fromString(GUI_STATUS_PROCESSING);
 			}
@@ -110,8 +110,8 @@ void ofApp::startProcessing(bool & processing) {
 		}
 	}
 	else {
-		if (guiPanels.at(0).getControl("Process") != NULL) {
-			guiPanels.at(0).getControl("Process")->setBackgroundColor(ofColor(0, 0, 0));
+		if (guiPanels.at(0).getControl(GUI_PANEL_LOAD_FILE) != NULL) {
+			guiPanels.at(0).getControl(GUI_PANEL_LOAD_FILE)->setBackgroundColor(ofColor(0, 0, 0));
 			processStatus.setBackgroundColor(ofColor(0, 0, 0));
 			processStatus.getParameter().fromString(GUI_STATUS_IDLE);
 		}

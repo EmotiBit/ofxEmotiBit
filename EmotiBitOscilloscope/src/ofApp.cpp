@@ -116,7 +116,7 @@ void ofApp::keyPressed(int key) {
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key) {
-	cout << "Key Released: " << (char)key << endl;
+	//cout << "Key Released: " << (char)key << endl;
 
 	if (key == ' ') {
 		isPaused = !isPaused;
@@ -151,7 +151,7 @@ void ofApp::keyReleased(int key) {
 	}
 	if (key == 'D')
 	{
-		DEBUGGING = true;
+		DEBUGGING = !DEBUGGING;
 	}
 	if (DEBUGGING) {
 		if (key == 'l')
@@ -607,6 +607,14 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
 			dataCounts.at(w).at(s).at(p) = dataCounts.at(w).at(s).at(p) + packetHeader.dataLength;
 
+			// Sliding EDA minYspan 
+			if (!DEBUGGING && packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDA) == 0 && data.at(p).size() > 0)
+			{
+				minYSpans.at(w).at(s) = 0.1f * pow(data.at(p).at(0), 1.5f);
+				if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
+					scopeWins.at(w).scopes.at(s).autoscaleY(true, minYSpans.at(w).at(s));
+				}
+			}
 		}
 		else 
 		{
@@ -695,7 +703,7 @@ void ofApp::setupGui()
 
 	int guiXPos = 0;
 	int guiYPos = 25;
-	int guiWidth = 250;
+	int guiWidth = 200;
 	int guiPosInc = guiWidth + 1;
 	guiPanels.resize(6);
 
@@ -751,7 +759,7 @@ void ofApp::setupGui()
 	// Recording Status
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 219;
+	guiWidth = 269;
 	guiPanelRecord = p;
 	guiPanels.at(guiPanelRecord).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelRecord).setup("startRecording", "junk.xml", guiXPos, -guiYPos);
@@ -764,7 +772,7 @@ void ofApp::setupGui()
 	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setHeaderBackgroundColor(ofColor(255,255,0)); // not cear what this does
 	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBorderColor(ofColor(0,255,0)); // not clear what this does
 	//guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setSize(5, 10); // size of whole field
-	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("Status", GUI_STRING_NOT_RECORDING));
+	guiPanels.at(guiPanelRecord).add(recordingStatus.setup("SD File", GUI_STRING_NOT_RECORDING));
 	//guiPanels.at(0).getControl(GUI_STRING_CONTROL_RECORD)->setSize(guiWidth, guiYPos * 2);
 
 	// Error Status
@@ -913,13 +921,13 @@ void ofApp::setupOscilloscopes()
 		}
 	};
 
-	vector<vector<float>> minYSpans = vector<vector<float>>
+	minYSpans = vector<vector<float>>
 	{
 		{ // scope panel 1
 			{  0.f },
 			{  0.f },
 			{  0.f },
-			{ 0.01f },
+			{ 0.02f },	// NOTE: EDA is changed elsewhere to be a Sliding EDA minYspan 
 			{ 1.f  }
 		},
 		{ // scope panel 2
@@ -1053,7 +1061,7 @@ void ofApp::updateMenuButtons()
 		if (guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD) != NULL) {
 			guiPanels.at(guiPanelRecord).getControl(GUI_STRING_CONTROL_RECORD)->setBackgroundColor(ofColor(0, 0, 0));
 			recordingStatus.setBackgroundColor(recordControlColor);
-			recordingStatus.getParameter().fromString(GUI_STRING_RECORDING);
+			recordingStatus.getParameter().fromString(_recordingFilename);
 		}
 	}
 	else
@@ -1121,6 +1129,11 @@ void ofApp::processModePacket(vector<string> &splitPacket)
 				if (filename.size() > 4 && filename.substr(filename.size() - 4, 4).compare(".csv") == 0)
 				{
 					_testingHelper.updateSdCardFilename(filename);
+					_recordingFilename = filename;
+				}
+				else
+				{
+					_recordingFilename = GUI_STRING_RECORDING;
 				}
 			}
 		}
@@ -1164,6 +1177,10 @@ void ofApp::drawConsole()
 	if (_testingHelper.testingOn)
 	{
 		_consoleString += "TESTING MODE ON -- ";
+	}
+	if (DEBUGGING)
+	{
+		_consoleString += "DEBUGGING -- ";
 	}
 	if (isPaused)
 	{

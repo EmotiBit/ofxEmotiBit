@@ -39,6 +39,7 @@ public:
 
 	const string GUI_STATUS_IDLE = "IDLE";
 	const string GUI_STATUS_PROCESSING = "PROCESSING";
+	const string GUI_PANEL_LOAD_FILE = "<- Click here to load EmotiBit data file";
 	const string READ_TIMESTAMP_FORMAT = "%Y-%m-%d_%H-%M-%S-%i";
 	const string WRITE_TIMESTAMP_FORMAT = "%Y/%m/%d %H:%M:%S.%i";
 
