@@ -605,7 +605,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 				scopeWins.at(w).scopes.at(s).updateData(data);
 			}
 			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
-			dataCounts.at(w).at(s).at(p) = dataCounts.at(w).at(s).at(p) + packetHeader.dataLength;
+			dataCounts.at(w).at(s).at(p) += packetHeader.dataLength;
 
 			// Sliding EDA minYspan 
 			if (!DEBUGGING && packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDA) == 0 && data.at(p).size() > 0)
@@ -1235,8 +1235,28 @@ void ofApp::drawOscilloscopes()
 		ofPopStyle();
 	}
 
+
+
 	// Draw dataFreqs and bufferSizes for each stream
 	if (drawDataInfo) {
+
+		// Calculated empirical sampling freq
+		static uint64_t freqCalcTimer = ofGetElapsedTimeMillis();
+		uint32_t elapsedTime = ofGetElapsedTimeMillis() - freqCalcTimer;
+		if (elapsedTime > 2000)
+		{
+			freqCalcTimer = ofGetElapsedTimeMillis();
+			for (int w = 0; w < typeTags.size(); w++) {
+				for (int s = 0; s < typeTags.at(w).size(); s++) {
+					ofPoint bl = scopeWins.at(w).scopes.at(s).getPosition().getBottomLeft();
+					for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
+						dataFreqs.at(w).at(s).at(p) = 1000.f * dataCounts.at(w).at(s).at(p) / (elapsedTime);
+						dataCounts.at(w).at(s).at(p) = 0;
+					}
+				}
+			}
+		}
+
 		for (int w = 0; w < typeTags.size(); w++) {
 			for (int s = 0; s < typeTags.at(w).size(); s++) {
 				ofPoint bl = scopeWins.at(w).scopes.at(s).getPosition().getBottomLeft();
@@ -1257,7 +1277,7 @@ void ofApp::drawOscilloscopes()
 
 					ofTranslate(0, (-fontHeight) * (int)(typeTags.at(w).at(s).size() + 1));
 
-					subLegendFont.drawString(ofToString((int)dataFreqs.at(w).at(s).at(p)) + " (Hz)", 0, 0);
+					subLegendFont.drawString(ofToString(dataFreqs.at(w).at(s).at(p), 1) + " (Hz)", 0, 0);
 
 					ofPopStyle();
 					ofPopMatrix();
