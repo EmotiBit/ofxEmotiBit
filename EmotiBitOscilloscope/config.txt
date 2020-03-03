@@ -1,1 +1,1 @@
-{"WifiCredentials": [{"ssid": "bananas", "password" : "Str@wberries"},{"ssid": "GalaxyBot7", "password" : "daringcaution2009"},{"ssid": "TP-LINK_9BB3CE", "password" : "279BB3CE"},{"ssid": "ProduceConsume2.4GHz", "password" : "daringcaution2009"}]}
+{"WifiCredentials": [{"ssid": "bananas", "password" : "Str@wberries"},{"ssid": "ProduceConsume2.4GHz", "password" : "daringcaution2009"},{"ssid": "GalaxyBot7", "password" : "daringcaution2009"}]}
