@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0059E2448E2CB4FECB0BEF66 /* ofxOscilloscope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FF0DE1E8ABD60252EE51633 /* ofxOscilloscope.cpp */; };
 		0D70D99B49D537DA7F291EAB /* ofxLSL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F20C3E4287FD77098E04E0E /* ofxLSL.cpp */; };
 		125506CD3E5F428AAFE5CC65 /* ofxTCPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F399B91E98DC31CDA6DDACB4 /* ofxTCPManager.cpp */; };
 		1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907C5B5E104864A2D3A25745 /* ofxToggle.cpp */; };
@@ -18,10 +17,15 @@
 		69AF35586CA18EA57C5CFCD3 /* NetworkUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B557FD8519CC0900FAB1DCA2 /* NetworkUtils.cpp */; };
 		837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15F2C6477A769C03A56D1401 /* ofxSlider.cpp */; };
 		856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9604B925D32EE39065747725 /* ofxBaseGui.cpp */; };
+		940AE21623E8356E003D452F /* EmotiBitTestingHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 940AE21323E8356E003D452F /* EmotiBitTestingHelper.cpp */; };
+		940AE21723E8356E003D452F /* EmotiBitWiFiHost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 940AE21523E8356E003D452F /* EmotiBitWiFiHost.cpp */; };
+		940AE21D23E835A0003D452F /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 940AE21C23E835A0003D452F /* EmotiBitPacket.cpp */; };
+		940AE22423E836DA003D452F /* ofxBiquadFilterInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 940AE22123E836DA003D452F /* ofxBiquadFilterInstance.cpp */; };
+		940AE22523E836DA003D452F /* ofxBiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 940AE22223E836DA003D452F /* ofxBiquadFilter.cpp */; };
 		9446D6AA22DEB13B00ACAE41 /* liblslboost.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9446D6A822DEB13B00ACAE41 /* liblslboost.a */; };
 		9446D6AB22DEB13B00ACAE41 /* liblsl64-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9446D6A922DEB13B00ACAE41 /* liblsl64-static.a */; };
+		947D6EE82410109000390232 /* ofxOscilloscope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 947D6EE62410109000390232 /* ofxOscilloscope.cpp */; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
-		9B4A8C8C35A8B30285649EC1 /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A128A5E702FD9D81EE7E9D4 /* EmotiBitPacket.cpp */; };
 		9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */; };
 		B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */; };
 		B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */; };
@@ -80,23 +84,34 @@
 		30841703B7AC8487D16FB4AA /* ofxTCPServer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxTCPServer.h; path = ../../ofxNetwork/src/ofxTCPServer.h; sourceTree = SOURCE_ROOT; };
 		35846706B3B4291AFFEA045E /* ofxInputField.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxInputField.h; path = ../../ofxInputField/src/ofxInputField.h; sourceTree = SOURCE_ROOT; };
 		35BB9BB90DBABFD3B39F8DB6 /* ofxUDPManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxUDPManager.cpp; path = ../../ofxNetwork/src/ofxUDPManager.cpp; sourceTree = SOURCE_ROOT; };
-		44C108B8EFF963B3D09E6007 /* EmotiBitPacket.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = EmotiBitPacket.h; path = ../src/EmotiBitPacket.h; sourceTree = SOURCE_ROOT; };
 		44D29F961AB993B629D7C467 /* NetworkInterfaceListener.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = NetworkInterfaceListener.cpp; path = ../../ofxNetworkUtils/libs/ofxNetworkUtils/src/NetworkInterfaceListener.cpp; sourceTree = SOURCE_ROOT; };
-		4FF0DE1E8ABD60252EE51633 /* ofxOscilloscope.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscilloscope.cpp; path = ../../ofxOscilloscope/src/ofxOscilloscope.cpp; sourceTree = SOURCE_ROOT; };
 		52AFA1F08C420992CAAAE648 /* ofxSlider.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxSlider.h; path = ../../ofxGui/src/ofxSlider.h; sourceTree = SOURCE_ROOT; };
 		63124162FE6E2022C68CE6A5 /* lsl_c.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = lsl_c.h; path = ../../ofxLSL/libs/labstreaminglayer/include/lsl_c.h; sourceTree = SOURCE_ROOT; };
 		750F4A2471E0E5E0A889C455 /* IPAddressRange.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = IPAddressRange.h; path = ../../ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx/Net/IPAddressRange.h; sourceTree = SOURCE_ROOT; };
 		78D67A00EB899FAC09430597 /* ofxLabel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxLabel.cpp; path = ../../ofxGui/src/ofxLabel.cpp; sourceTree = SOURCE_ROOT; };
-		7A128A5E702FD9D81EE7E9D4 /* EmotiBitPacket.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = EmotiBitPacket.cpp; path = ../src/EmotiBitPacket.cpp; sourceTree = SOURCE_ROOT; };
 		802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxSliderGroup.cpp; path = ../../ofxGui/src/ofxSliderGroup.cpp; sourceTree = SOURCE_ROOT; };
 		87F26B4B24CBD428AD9EEBAA /* ofxBaseGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxBaseGui.h; path = ../../ofxGui/src/ofxBaseGui.h; sourceTree = SOURCE_ROOT; };
 		89449E3044D456F7DE7BEA14 /* ofxPanel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxPanel.h; path = ../../ofxGui/src/ofxPanel.h; sourceTree = SOURCE_ROOT; };
 		907C5B5E104864A2D3A25745 /* ofxToggle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxToggle.cpp; path = ../../ofxGui/src/ofxToggle.cpp; sourceTree = SOURCE_ROOT; };
+		940AE21023E8356E003D452F /* EmotiBitTestingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitTestingHelper.h; path = ../src/EmotiBitTestingHelper.h; sourceTree = "<group>"; };
+		940AE21123E8356E003D452F /* EmotiBitWiFiHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitWiFiHost.h; path = ../src/EmotiBitWiFiHost.h; sourceTree = "<group>"; };
+		940AE21223E8356E003D452F /* ofxEmotiBitVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxEmotiBitVersion.h; path = ../src/ofxEmotiBitVersion.h; sourceTree = "<group>"; };
+		940AE21323E8356E003D452F /* EmotiBitTestingHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitTestingHelper.cpp; path = ../src/EmotiBitTestingHelper.cpp; sourceTree = "<group>"; };
+		940AE21423E8356E003D452F /* ArduinoString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArduinoString.h; path = ../src/ArduinoString.h; sourceTree = "<group>"; };
+		940AE21523E8356E003D452F /* EmotiBitWiFiHost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitWiFiHost.cpp; path = ../src/EmotiBitWiFiHost.cpp; sourceTree = "<group>"; };
+		940AE21A23E835A0003D452F /* EmotiBitComms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmotiBitComms.h; sourceTree = "<group>"; };
+		940AE21B23E835A0003D452F /* EmotiBitPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmotiBitPacket.h; sourceTree = "<group>"; };
+		940AE21C23E835A0003D452F /* EmotiBitPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmotiBitPacket.cpp; sourceTree = "<group>"; };
+		940AE22023E836DA003D452F /* ofxBiquadFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBiquadFilter.h; sourceTree = "<group>"; };
+		940AE22123E836DA003D452F /* ofxBiquadFilterInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBiquadFilterInstance.cpp; sourceTree = "<group>"; };
+		940AE22223E836DA003D452F /* ofxBiquadFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBiquadFilter.cpp; sourceTree = "<group>"; };
+		940AE22323E836DA003D452F /* ofxBiquadFilterInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBiquadFilterInstance.h; sourceTree = "<group>"; };
 		9446D6A822DEB13B00ACAE41 /* liblslboost.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblslboost.a; path = ../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/liblslboost.a; sourceTree = "<group>"; };
 		9446D6A922DEB13B00ACAE41 /* liblsl64-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "liblsl64-static.a"; path = "../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/liblsl64-static.a"; sourceTree = "<group>"; };
+		947D6EE62410109000390232 /* ofxOscilloscope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscilloscope.cpp; sourceTree = "<group>"; };
+		947D6EE72410109000390232 /* ofxOscilloscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOscilloscope.h; sourceTree = "<group>"; };
 		958F068D5A2037583179BDED /* NetworkInterfaceListener.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = NetworkInterfaceListener.h; path = ../../ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx/Net/NetworkInterfaceListener.h; sourceTree = SOURCE_ROOT; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxBaseGui.cpp; path = ../../ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
-		981F60C92586ACCD9553A3D5 /* ofxOscilloscope.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxOscilloscope.h; path = ../../ofxOscilloscope/src/ofxOscilloscope.h; sourceTree = SOURCE_ROOT; };
 		B37D59256BC5BDEB408A0B4B /* DoubleBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = DoubleBuffer.h; path = ../src/DoubleBuffer.h; sourceTree = SOURCE_ROOT; };
 		B557FD8519CC0900FAB1DCA2 /* NetworkUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = NetworkUtils.cpp; path = ../../ofxNetworkUtils/libs/ofxNetworkUtils/src/NetworkUtils.cpp; sourceTree = SOURCE_ROOT; };
 		B87C60311EC1FE841C1ECD89 /* ofxLabel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxLabel.h; path = ../../ofxGui/src/ofxLabel.h; sourceTree = SOURCE_ROOT; };
@@ -151,14 +166,6 @@
 				4CD5C6EA1AEB082DFF01E7BE /* src */,
 			);
 			name = ofxEmotiBit;
-			sourceTree = "<group>";
-		};
-		0EBED2DE642FD8C8549B2E51 /* ofxOscilloscope */ = {
-			isa = PBXGroup;
-			children = (
-				971D52EB9D61379150966B5C /* src */,
-			);
-			name = ofxOscilloscope;
 			sourceTree = "<group>";
 		};
 		10D3F3F0B7A5F4F005A72281 /* libs */ = {
@@ -265,8 +272,12 @@
 		4CD5C6EA1AEB082DFF01E7BE /* src */ = {
 			isa = PBXGroup;
 			children = (
-				44C108B8EFF963B3D09E6007 /* EmotiBitPacket.h */,
-				7A128A5E702FD9D81EE7E9D4 /* EmotiBitPacket.cpp */,
+				940AE21423E8356E003D452F /* ArduinoString.h */,
+				940AE21323E8356E003D452F /* EmotiBitTestingHelper.cpp */,
+				940AE21023E8356E003D452F /* EmotiBitTestingHelper.h */,
+				940AE21523E8356E003D452F /* EmotiBitWiFiHost.cpp */,
+				940AE21123E8356E003D452F /* EmotiBitWiFiHost.h */,
+				940AE21223E8356E003D452F /* ofxEmotiBitVersion.h */,
 				B37D59256BC5BDEB408A0B4B /* DoubleBuffer.h */,
 			);
 			name = src;
@@ -295,6 +306,45 @@
 			name = ofxInputField;
 			sourceTree = "<group>";
 		};
+		940AE21823E83588003D452F /* EmotiBit_XPlat_Utils */ = {
+			isa = PBXGroup;
+			children = (
+				940AE21923E835A0003D452F /* src */,
+			);
+			name = EmotiBit_XPlat_Utils;
+			sourceTree = "<group>";
+		};
+		940AE21923E835A0003D452F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				940AE21A23E835A0003D452F /* EmotiBitComms.h */,
+				940AE21B23E835A0003D452F /* EmotiBitPacket.h */,
+				940AE21C23E835A0003D452F /* EmotiBitPacket.cpp */,
+			);
+			name = src;
+			path = ../../EmotiBit_XPlat_Utils/src;
+			sourceTree = "<group>";
+		};
+		940AE21E23E836C3003D452F /* ofxBiquadFilter */ = {
+			isa = PBXGroup;
+			children = (
+				940AE21F23E836DA003D452F /* src */,
+			);
+			name = ofxBiquadFilter;
+			sourceTree = "<group>";
+		};
+		940AE21F23E836DA003D452F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				940AE22023E836DA003D452F /* ofxBiquadFilter.h */,
+				940AE22123E836DA003D452F /* ofxBiquadFilterInstance.cpp */,
+				940AE22223E836DA003D452F /* ofxBiquadFilter.cpp */,
+				940AE22323E836DA003D452F /* ofxBiquadFilterInstance.h */,
+			);
+			name = src;
+			path = ../../ofxBiquadFilter/src;
+			sourceTree = "<group>";
+		};
 		9446D6A722DEB13B00ACAE41 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,13 +354,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		971D52EB9D61379150966B5C /* src */ = {
+		947D6EE42410107900390232 /* ofxOscilloscope */ = {
 			isa = PBXGroup;
 			children = (
-				4FF0DE1E8ABD60252EE51633 /* ofxOscilloscope.cpp */,
-				981F60C92586ACCD9553A3D5 /* ofxOscilloscope.h */,
+				947D6EE52410109000390232 /* src */,
+			);
+			name = ofxOscilloscope;
+			sourceTree = "<group>";
+		};
+		947D6EE52410109000390232 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				947D6EE62410109000390232 /* ofxOscilloscope.cpp */,
+				947D6EE72410109000390232 /* ofxOscilloscope.h */,
 			);
 			name = src;
+			path = ../../ofxOscilloscope/src;
 			sourceTree = "<group>";
 		};
 		A666F7CCB665BD61C203119D /* include */ = {
@@ -359,13 +418,15 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				947D6EE42410107900390232 /* ofxOscilloscope */,
+				940AE21E23E836C3003D452F /* ofxBiquadFilter */,
+				940AE21823E83588003D452F /* EmotiBit_XPlat_Utils */,
 				0B8ED02ED04845BC31B3E518 /* ofxEmotiBit */,
 				480A780D8D0308AE4A368801 /* ofxGui */,
 				7B9DC4DD8E561CAEF77C5860 /* ofxInputField */,
 				426273B12B02EBC8820E0D9F /* ofxLSL */,
 				18240ECCE4076FB0833A8578 /* ofxNetwork */,
 				406D7399CEFC4C539B676AFF /* ofxNetworkUtils */,
-				0EBED2DE642FD8C8549B2E51 /* ofxOscilloscope */,
 				3286A6A80FB3354E8DF1D5B8 /* ofxThreadedLogger */,
 			);
 			name = addons;
@@ -535,17 +596,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				940AE21D23E835A0003D452F /* EmotiBitPacket.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				947D6EE82410109000390232 /* ofxOscilloscope.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
-				9B4A8C8C35A8B30285649EC1 /* EmotiBitPacket.cpp in Sources */,
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
+				940AE22523E836DA003D452F /* ofxBiquadFilter.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
+				940AE22423E836DA003D452F /* ofxBiquadFilterInstance.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
+				940AE21723E8356E003D452F /* EmotiBitWiFiHost.cpp in Sources */,
 				BC0058681371B449EBCD285C /* ofxInputField.cpp in Sources */,
 				0D70D99B49D537DA7F291EAB /* ofxLSL.cpp in Sources */,
 				E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */,
@@ -555,7 +620,7 @@
 				69AF35586CA18EA57C5CFCD3 /* NetworkUtils.cpp in Sources */,
 				B65D7C8C591DF95D595E2053 /* NetworkInterfaceListener.cpp in Sources */,
 				633AFFDB4EC6674D34F0EF7D /* IPAddressRange.cpp in Sources */,
-				0059E2448E2CB4FECB0BEF66 /* ofxOscilloscope.cpp in Sources */,
+				940AE21623E8356E003D452F /* EmotiBitTestingHelper.cpp in Sources */,
 				9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -729,6 +794,8 @@
 					../../../addons/ofxOscilloscope/src,
 					../../../addons/ofxThreadedLogger/src,
 					../../../libs/openFrameworks/utils,
+					../../../addons/EmotiBit_XPlat_Utils/src,
+					../../../addons/ofxBiquadFilter/src,
 				);
 				ICON = "$(ICON_NAME_DEBUG)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
@@ -787,6 +854,8 @@
 					../../../addons/ofxOscilloscope/src,
 					../../../addons/ofxThreadedLogger/src,
 					../../../libs/openFrameworks/utils,
+					../../../addons/EmotiBit_XPlat_Utils/src,
+					../../../addons/ofxBiquadFilter/src,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
