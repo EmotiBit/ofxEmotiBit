@@ -70,7 +70,7 @@ public:
 	uint16_t availabilityTimeout = 5000;
 	uint16_t ipPurgeTimeout = 15000;
 
-	atomic_bool stopDataThread = false;
+    atomic_bool stopDataThread = {false};
 	uint16_t receivedDataPacketNumber = 60000;	// Tracks packet numbers (for multi-send). Starts at arbitrary large number.
 
 	~EmotiBitWiFiHost();

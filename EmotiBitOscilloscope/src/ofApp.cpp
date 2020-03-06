@@ -605,7 +605,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 				scopeWins.at(w).scopes.at(s).updateData(data);
 			}
 			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
-			dataCounts.at(w).at(s).at(p) = dataCounts.at(w).at(s).at(p) + packetHeader.dataLength;
+			dataCounts.at(w).at(s).at(p) += packetHeader.dataLength;
 
 			// Sliding EDA minYspan 
 			if (!DEBUGGING && packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDA) == 0 && data.at(p).size() > 0)
@@ -980,8 +980,7 @@ void ofApp::setupOscilloscopes()
 			}
 		}
 		scopeWins.at(w).setPlotLineWidth(3);
-		scopeWins.at(w).setAxesFont(axesFont);
-
+        scopeWins.at(w).setAxesFont(axesFont);
 		selectedScope = 0; // Select all scopes for increment/decrement
 
 		isPaused = false;
@@ -1214,8 +1213,15 @@ void ofApp::drawConsole()
 	ofPopStyle();
 	ofPushStyle();
 	ofSetColor(255, 255, 255);
-	axesFont.drawString(_consoleString, 10, ofGetWindowHeight() - _consoleHeight / 2 + consoleTextPadding);
-	ofPopStyle();
+    if (axesFont.isLoaded())
+    {
+        axesFont.drawString(_consoleString, 10, ofGetWindowHeight() - _consoleHeight / 2 + consoleTextPadding);
+	}
+    else
+    {
+        ofDrawBitmapString(_consoleString, 10, ofGetWindowHeight() - _consoleHeight / 2 + consoleTextPadding);
+    }
+    ofPopStyle();
 
 }
 
@@ -1235,8 +1241,28 @@ void ofApp::drawOscilloscopes()
 		ofPopStyle();
 	}
 
+
+
 	// Draw dataFreqs and bufferSizes for each stream
 	if (drawDataInfo) {
+
+		// Calculated empirical sampling freq
+		static uint64_t freqCalcTimer = ofGetElapsedTimeMillis();
+		uint32_t elapsedTime = ofGetElapsedTimeMillis() - freqCalcTimer;
+		if (elapsedTime > 2000)
+		{
+			freqCalcTimer = ofGetElapsedTimeMillis();
+			for (int w = 0; w < typeTags.size(); w++) {
+				for (int s = 0; s < typeTags.at(w).size(); s++) {
+					ofPoint bl = scopeWins.at(w).scopes.at(s).getPosition().getBottomLeft();
+					for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
+						dataFreqs.at(w).at(s).at(p) = 1000.f * dataCounts.at(w).at(s).at(p) / (elapsedTime);
+						dataCounts.at(w).at(s).at(p) = 0;
+					}
+				}
+			}
+		}
+
 		for (int w = 0; w < typeTags.size(); w++) {
 			for (int s = 0; s < typeTags.at(w).size(); s++) {
 				ofPoint bl = scopeWins.at(w).scopes.at(s).getPosition().getBottomLeft();
@@ -1252,13 +1278,23 @@ void ofApp::drawOscilloscopes()
 					ofTranslate(bl.x + padding, bl.y - fontHeight * typeTags.at(w).at(s).size());
 					//ofScale(0.75f, 0.75f);
 					ofTranslate(0, p * fontHeight);
-
-					subLegendFont.drawString(ofToString(bufferSizes.at(w).at(s).at(p)) + " (Bffr)", 0, 0);
-
+                    if (subLegendFont.isLoaded())
+                    {
+                        subLegendFont.drawString(ofToString(bufferSizes.at(w).at(s).at(p)) + " (Bffr)", 0, 0);
+                    }
+                    else
+                    {
+                        ofDrawBitmapString(ofToString(bufferSizes.at(w).at(s).at(p)) + " (Bffr)", 0, 0);
+                    }
 					ofTranslate(0, (-fontHeight) * (int)(typeTags.at(w).at(s).size() + 1));
-
-					subLegendFont.drawString(ofToString((int)dataFreqs.at(w).at(s).at(p)) + " (Hz)", 0, 0);
-
+                    if (subLegendFont.isLoaded())
+                    {
+					    subLegendFont.drawString(ofToString(dataFreqs.at(w).at(s).at(p), 1) + " (Hz)", 0, 0);
+                    }
+                    else
+                    {
+                        ofDrawBitmapString(ofToString(dataFreqs.at(w).at(s).at(p), 1) + " (Hz)", 0, 0);
+                    }
 					ofPopStyle();
 					ofPopMatrix();
 				}

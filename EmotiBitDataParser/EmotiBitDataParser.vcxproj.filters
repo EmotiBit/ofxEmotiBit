@@ -61,8 +61,8 @@
     <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp">
       <Filter>addons\ofxThreadedLogger\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\EmotiBit_XPlat_Utils\EmotiBitPacket.cpp">
-      <Filter>addons\EmotiBit_XPlat_Utils</Filter>
+    <ClCompile Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitPacket.cpp">
+      <Filter>addons\EmotiBit_XPlat_Utils\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +134,9 @@
     </Filter>
     <Filter Include="addons\EmotiBit_XPlat_Utils">
       <UniqueIdentifier>{156442b1-c84c-46c6-a02f-f75ae13130ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\EmotiBit_XPlat_Utils\src">
+      <UniqueIdentifier>{8341660e-c766-45c3-bc91-7023a1e3083a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -213,14 +216,14 @@
     <ClInclude Include="..\src\ArduinoString.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\EmotiBit_XPlat_Utils\EmotiBitComms.h">
-      <Filter>addons\EmotiBit_XPlat_Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\EmotiBit_XPlat_Utils\EmotiBitPacket.h">
-      <Filter>addons\EmotiBit_XPlat_Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ofxEmotiBitVersion.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitComms.h">
+      <Filter>addons\EmotiBit_XPlat_Utils\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitPacket.h">
+      <Filter>addons\EmotiBit_XPlat_Utils\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
