@@ -1,1 +1,0 @@
-{"WifiCredentials": [{"ssid": "bananas", "password" : "Str@wberries"},{"ssid": "ProduceConsume2.4GHz", "password" : "daringcaution2009"},{"ssid": "GalaxyBot7", "password" : "daringcaution2009"}]}
