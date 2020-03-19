@@ -25,6 +25,8 @@
 		853E0BA2F448076739446874 /* ofxColorPicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 181D363B6DD54D1FA6309C43 /* ofxColorPicker.cpp */; };
 		856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9604B925D32EE39065747725 /* ofxBaseGui.cpp */; };
 		94BB8B482424220500CDE27D /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94BB8B462424220400CDE27D /* EmotiBitPacket.cpp */; };
+		94BB8B4B24242B8300CDE27D /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94BB8B4924242B8300CDE27D /* verdana.ttf */; };
+		94BB8B4C24242B8300CDE27D /* verdanab.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94BB8B4A24242B8300CDE27D /* verdanab.ttf */; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
 		9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */; };
 		A7CF97A6E1DAE4A002CA6F82 /* ofxBiquadFilterInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F32C175B3E53B0864752B5D7 /* ofxBiquadFilterInstance.cpp */; };
@@ -44,8 +46,10 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 10;
+			dstSubfolderSpec = 7;
 			files = (
+				94BB8B4B24242B8300CDE27D /* verdana.ttf in CopyFiles */,
+				94BB8B4C24242B8300CDE27D /* verdanab.ttf in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +135,8 @@
 		94BB8B452424220400CDE27D /* EmotiBitPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitPacket.h; path = ../../../addons/EmotiBit_XPlat_Utils/src/EmotiBitPacket.h; sourceTree = "<group>"; };
 		94BB8B462424220400CDE27D /* EmotiBitPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitPacket.cpp; path = ../../../addons/EmotiBit_XPlat_Utils/src/EmotiBitPacket.cpp; sourceTree = "<group>"; };
 		94BB8B472424220500CDE27D /* EmotiBitComms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitComms.h; path = ../../../addons/EmotiBit_XPlat_Utils/src/EmotiBitComms.h; sourceTree = "<group>"; };
+		94BB8B4924242B8300CDE27D /* verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdana.ttf; path = bin/data/verdana.ttf; sourceTree = "<group>"; };
+		94BB8B4A24242B8300CDE27D /* verdanab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdanab.ttf; path = bin/data/verdanab.ttf; sourceTree = "<group>"; };
 		958F068D5A2037583179BDED /* NetworkInterfaceListener.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = NetworkInterfaceListener.h; path = ../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx/Net/NetworkInterfaceListener.h; sourceTree = SOURCE_ROOT; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
 		974B6F6CECCC45548FC1A608 /* EmotiBitTestingHelper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = EmotiBitTestingHelper.h; path = ../../../addons/ofxEmotiBit/src/EmotiBitTestingHelper.h; sourceTree = SOURCE_ROOT; };
@@ -1073,6 +1079,8 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				94BB8B4924242B8300CDE27D /* verdana.ttf */,
+				94BB8B4A24242B8300CDE27D /* verdanab.ttf */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
