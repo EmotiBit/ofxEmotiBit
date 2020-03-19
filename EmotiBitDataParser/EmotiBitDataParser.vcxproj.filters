@@ -7,13 +7,25 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.cpp">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitWiFiHost.cpp">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxColorPicker.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxInputField.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp">
@@ -31,8 +43,8 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxInputField\src\ofxInputField.cpp">
-      <Filter>addons\ofxInputField\src</Filter>
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxNetworkUtils.cpp">
+      <Filter>addons\ofxNetwork\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.cpp">
       <Filter>addons\ofxNetwork\src</Filter>
@@ -45,6 +57,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.cpp">
       <Filter>addons\ofxNetwork\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPoco\src\ofxXmlPoco.cpp">
+      <Filter>addons\ofxPoco\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\IPAddressRange.cpp">
       <Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\src</Filter>
@@ -63,6 +78,12 @@
     </ClCompile>
     <ClCompile Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitPacket.cpp">
       <Filter>addons\EmotiBit_XPlat_Utils\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.cpp">
+      <Filter>addons\ofxBiquadFilter\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp">
+      <Filter>addons\ofxBiquadFilter\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,17 +105,17 @@
     <Filter Include="addons\ofxGui\src">
       <UniqueIdentifier>{645E9533-4DCD-6179-1CDF-CB65}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxInputField">
-      <UniqueIdentifier>{D638171E-C38D-0A35-CFB3-8971}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxInputField\src">
-      <UniqueIdentifier>{A25CD3D6-9534-BE4E-B514-C157}</UniqueIdentifier>
-    </Filter>
     <Filter Include="addons\ofxNetwork">
       <UniqueIdentifier>{01A15744-29A6-108D-08E9-83A7}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxNetwork\src">
       <UniqueIdentifier>{3D1C10C7-8F35-E796-9C70-F5F3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPoco">
+      <UniqueIdentifier>{3256AE3E-9B29-EA27-C842-CE6B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPoco\src">
+      <UniqueIdentifier>{C7D4269D-D8A9-A7BB-531B-98DA}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxNetworkUtils">
       <UniqueIdentifier>{70602827-0B05-E0AB-D576-41B5}</UniqueIdentifier>
@@ -133,17 +154,35 @@
       <UniqueIdentifier>{CA068CB5-A638-66AF-AE6A-1CDD}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\EmotiBit_XPlat_Utils">
-      <UniqueIdentifier>{156442b1-c84c-46c6-a02f-f75ae13130ee}</UniqueIdentifier>
+      <UniqueIdentifier>{3628260f-08bd-4110-96b9-a9207f40505c}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\EmotiBit_XPlat_Utils\src">
-      <UniqueIdentifier>{8341660e-c766-45c3-bc91-7023a1e3083a}</UniqueIdentifier>
+      <UniqueIdentifier>{c033c6be-1fc5-4240-b3c8-f180eed658c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxBiquadFilter">
+      <UniqueIdentifier>{dd5ac3d1-1bce-43ee-8dc8-a21812dd1e8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxBiquadFilter\src">
+      <UniqueIdentifier>{7f880c11-aad5-4e34-96a0-47c33609c4dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ArduinoString.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitWiFiHost.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ofxEmotiBitVersion.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
@@ -152,10 +191,19 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h">
       <Filter>addons\ofxGui\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxColorPicker.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h">
       <Filter>addons\ofxGui\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiUtils.h">
+      <Filter>addons\ofxGui\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxInputField.h">
       <Filter>addons\ofxGui\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h">
@@ -173,9 +221,6 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
       <Filter>addons\ofxGui\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxInputField\src\ofxInputField.h">
-      <Filter>addons\ofxInputField\src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetwork.h">
       <Filter>addons\ofxNetwork\src</Filter>
     </ClInclude>
@@ -191,8 +236,17 @@
     <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.h">
       <Filter>addons\ofxNetwork\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPSettings.h">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.h">
       <Filter>addons\ofxNetwork\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxUDPSettings.h">
+      <Filter>addons\ofxNetwork\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPoco\src\ofxXmlPoco.h">
+      <Filter>addons\ofxPoco\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxNetworkUtils\src\ofxNetworkUtils.h">
       <Filter>addons\ofxNetworkUtils\src</Filter>
@@ -212,25 +266,20 @@
     <ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h">
       <Filter>addons\ofxThreadedLogger\src</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="..\src\ArduinoString.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ofxEmotiBitVersion.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitComms.h">
       <Filter>addons\EmotiBit_XPlat_Utils\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitPacket.h">
       <Filter>addons\EmotiBit_XPlat_Utils\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.h">
+      <Filter>addons\ofxBiquadFilter\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.h">
+      <Filter>addons\ofxBiquadFilter\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="icon1.ico" />
-    <Image Include="icon.ico" />
   </ItemGroup>
 </Project>
