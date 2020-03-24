@@ -6,7 +6,7 @@ If you want to modify the code, below are the requirements to build the project.
 
 ## Requirements
 - OF 11 - https://openframeworks.cc/download/
-- ofxNetworkUtils:master - https://github.com/bakercp/ofxNetworkUtils
+- ofxNetworkUtils - https://github.com/bakercp/ofxNetworkUtils
 - ofxOscilloscope - https://github.com/produceconsumerobot/ofxOscilloscope
 - ofxThreadedLogger - https://github.com/produceconsumerobot/ofxThreadedLogger
 - ofxBiquadFilter - https://github.com/mrbichel/ofxBiquadFilter
@@ -16,7 +16,7 @@ If you want to modify the code, below are the requirements to build the project.
   - liblsl64.dll should always be in the same folder as the .exe (i.e. EmotiBitOscilloscope/bin/liblsl64.dll)
   - liblsl64.lib should always be linked to in under _solution properties->linker->general->additional library directories_ and _solution properties->linker->input-> additional dependencies_
   - both of these libs are handled properly by default, but should be considered if deviating from release code
-
+- The project is built on a 64-bit architecture. Make sure you are on a machine that support `x64` build platform.
 ## macOS Issues resolution
 - **Adding paths to Library search paths**
   - Check if the directory paths for the files `liblsl64-static.a` and `liblslboost.a` are already present in the `project` > `Build Settings` > `Library Search Paths`. If they are not present, follow the below steps:  

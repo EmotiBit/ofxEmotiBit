@@ -81,7 +81,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EBB8530697E14E5BA6D962EAAE424623"
+        "MsmKey" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -304,10 +304,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EBB8530697E14E5BA6D962EAAE424623"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CC73A8F217424EA2BCAD1FEB3CC33561"
             {
-            "SourcePath" = "8:..\\EmotiBit-Application-Logo.ico"
-            "TargetName" = "8:EmotiBit-Application-Logo.ico"
+            "SourcePath" = "8:..\\..\\EmotiBitIcons\\icoFiles\\EmotiBitLogo.ico"
+            "TargetName" = "8:EmotiBitLogo.ico"
             "Tag" = "8:"
             "Folder" = "8:_55B4F1AA669E448192FFDA26BC187093"
             "Condition" = "8:"
@@ -381,7 +381,7 @@
                 {
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
                     {
-                    "Name" = "8:EmotiBit Software"
+                    "Name" = "8:EmotiBit"
                     "AlwaysCreate" = "11:FALSE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
@@ -474,9 +474,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:EmotiBitInstaller"
+        "ProductName" = "8:EmotiBit"
         "ProductCode" = "8:{1979E12F-B358-4EB1-855D-3852E4D4ADC2}"
-        "PackageCode" = "8:{AB616768-C53D-4BAF-8402-A04458FE1C0C}"
+        "PackageCode" = "8:{932CDB52-F12B-4F21-9971-3F9DB991D0D7}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -493,7 +493,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:_EBB8530697E14E5BA6D962EAAE424623"
+        "ARPPRODUCTICON" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -607,7 +607,7 @@
             "Target" = "8:_9273EB583E72424B9F20AE94BC7E1AE0"
             "Folder" = "8:_84F262CF2C8A40EFA3BC9D4164DCC4EE"
             "WorkingFolder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
-            "Icon" = "8:_EBB8530697E14E5BA6D962EAAE424623"
+            "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_82DFEE41B67C4D61A896006CA5E784F4"
@@ -621,7 +621,7 @@
             "Target" = "8:_549AE158B4E049DCA79C34437E8BB70A"
             "Folder" = "8:_84F262CF2C8A40EFA3BC9D4164DCC4EE"
             "WorkingFolder" = "8:_1BD84CAF3E114DD98E922771E8E9F9E5"
-            "Icon" = "8:_EBB8530697E14E5BA6D962EAAE424623"
+            "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_92A8F045E18B4184BD1EA9338A9AB590"
@@ -635,7 +635,7 @@
             "Target" = "8:_9273EB583E72424B9F20AE94BC7E1AE0"
             "Folder" = "8:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
             "WorkingFolder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
-            "Icon" = "8:_EBB8530697E14E5BA6D962EAAE424623"
+            "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CE21AE5EA4EE48A39E8F930723363413"
@@ -649,7 +649,7 @@
             "Target" = "8:_549AE158B4E049DCA79C34437E8BB70A"
             "Folder" = "8:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
             "WorkingFolder" = "8:_1BD84CAF3E114DD98E922771E8E9F9E5"
-            "Icon" = "8:_EBB8530697E14E5BA6D962EAAE424623"
+            "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }
         }
@@ -909,7 +909,7 @@
                 {
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_9A89EFDF2D67440AAD4FB8DCB4084FE1"
                     {
-                    "Sequence" = "3:300"
+                    "Sequence" = "3:400"
                     "DisplayName" = "8:Confirm Installation"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -1006,7 +1006,7 @@
                             "ContextData" = "8:1;True=1;False=0"
                             "Attributes" = "3:0"
                             "Setting" = "3:0"
-                            "Value" = "3:1"
+                            "Value" = "3:0"
                             "DefaultValue" = "3:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
