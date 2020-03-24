@@ -1,7 +1,8 @@
+ofxBiquadFilter
 ofxEmotiBit
 ofxGui
-ofxInputField
 ofxNetwork
+ofxPoco
 ofxNetworkUtils
 ofxOscilloscope
 ofxThreadedLogger

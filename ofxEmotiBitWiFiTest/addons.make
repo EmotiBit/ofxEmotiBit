@@ -1,3 +1,5 @@
-ofxNetwork
+ofxBiquadFilter
 ofxEmotiBit
+ofxNetwork
+ofxPoco
 ofxThreadedLogger

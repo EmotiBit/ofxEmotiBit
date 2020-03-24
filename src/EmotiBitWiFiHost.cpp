@@ -11,10 +11,25 @@ EmotiBitWiFiHost::~EmotiBitWiFiHost()
 int8_t EmotiBitWiFiHost::begin()
 {
 	advertisingPort = EmotiBitComms::WIFI_ADVERTISING_PORT;
-	vector<string> ips = getLocalIPs();
-	advertisingCxn.Create();
-	vector<string> ipSplit = ofSplitString(ips.at(0), ".");
-	advertisingIp = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2) + "." + ofToString(255);
+    vector<string> ips;
+    const int NUM_TRIES_GET_IP = 10;
+    int tries = 0;
+	while (ips.size() <= 0 && tries < NUM_TRIES_GET_IP)
+    {
+        ips = getLocalIPs();
+        ofSleepMillis(100);
+        tries++;
+    }
+    advertisingCxn.Create();
+    if (ips.size()>0)
+    {
+        vector<string> ipSplit = ofSplitString(ips.at(0), ".");
+        advertisingIp = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2) + "." + ofToString(255);
+    }
+    else
+    {
+        return FAIL;
+    }
 	ofLogNotice() << "EmotiBit host advertising IP: " << advertisingIp;
 	advertisingCxn.Connect(advertisingIp.c_str(), advertisingPort);
 	advertisingCxn.SetEnableBroadcast(true);

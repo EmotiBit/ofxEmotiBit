@@ -1,5 +1,6 @@
 #include "ofMain.h"
 #include "ofApp.h"
+#include "ofxLSL.h"
 
 const char * ofxLSL::resInletInfo = "name = 'CFL'";
 //========================================================================
