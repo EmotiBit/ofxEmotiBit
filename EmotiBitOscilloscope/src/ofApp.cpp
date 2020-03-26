@@ -719,7 +719,7 @@ void ofApp::setupGui()
 	}
 	guiPanels.at(guiPanelDevice).setup("selectDevice", "junk.xml", guiXPos, -guiYPos * 2.2);
 	deviceMenuGroup.setName(GUI_DEVICE_GROUP_MENU_NAME);
-	deviceMenuGroup.add(deviceSelected.set("EmotiBit", GUI_STRING_NO_EMOTIBIT_SELECTED));
+	deviceMenuGroup.add(deviceSelected.set(GUI_STRING_EMOTIBIT_SELECTED, GUI_STRING_NO_EMOTIBIT_SELECTED));
 	deviceGroup.setName(GUI_DEVICE_GROUP_NAME);
 	//deviceList.emplace_back("Message All Emotibits", true);
 	//deviceGroup.add(deviceList.at(deviceList.size() - 1));
@@ -737,7 +737,7 @@ void ofApp::setupGui()
 	guiPanels.at(guiPanelPowerStatus).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelPowerStatus).setup("powerStatus", "junk.xml", guiXPos, -guiYPos * 2.2);
 	powerStatusMenuGroup.setName(GUI_POWER_STATUS_MENU_NAME);
-	powerStatusMenuGroup.add(batteryStatus.set("Battery Level", "?"));
+	powerStatusMenuGroup.add(batteryStatus.set(GUI_STRING_BATTERY_LEVEL, "?"));
 	powerModeGroup.setName(GUI_POWER_MODE_GROUP_NAME);
 	powerStatusMenuGroup.add(powerModeGroup);
 	guiPanels.at(guiPanelPowerStatus).add(powerStatusMenuGroup);

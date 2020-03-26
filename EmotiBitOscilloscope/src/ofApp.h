@@ -164,7 +164,7 @@ public:
 	const string GUI_STRING_CLIPPING_EVENTS = "Clipping Events:";
 	const string GUI_STRING_OVERFLOW_EVENTS = "Overflow Events:";
 	const string GUI_SEND_DATA_MENU_NAME = "Send Data Menu";
-	const string GUI_STRING_SEND_DATA_VIA = "Send data via";
+	const string GUI_STRING_SEND_DATA_VIA = "Send data via:";
 	const string GUI_OUTPUT_GROUP_NAME = "Output List";
 	const string GUI_STRING_SEND_DATA_NONE = "None";
 	const string GUI_STRING_SEND_DATA_LSL = "LSL";
@@ -175,6 +175,8 @@ public:
 	const string GUI_STRING_NOTE_BUTTON = "LOG NOTE";
 	const string GUI_STRING_CONTROL_RECORD = "RECORD";
 	const string GUI_STRING_CONTROL_HIBERNATE = "HIBERNATE";
+	const string GUI_STRING_BATTERY_LEVEL = "Battery Level:";
+	const string GUI_STRING_EMOTIBIT_SELECTED = "EmotiBit:";
 
 	const string GUI_POWER_STATUS_MENU_NAME = "RECORD";
 	const string GUI_POWER_MODE_GROUP_NAME = "Power Mode";
