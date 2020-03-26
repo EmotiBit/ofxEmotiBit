@@ -67,6 +67,13 @@ void ofApp::exit() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
 
+	//string note = userNote.getParameter().toString();
+	//if (note.compare(GUI_STRING_EMPTY_USER_NOTE) != 0) {
+	//	// Don't process keystrokes if we're typing a note
+	//	// ToDo: come up with a better check
+	//	return;
+	//}
+
 	// Increment the timeWindow
 	if (key == OF_KEY_RIGHT) { // Right Arrow
 		for (int w = 0; w < scopeWins.size(); w++) {
@@ -118,7 +125,15 @@ void ofApp::keyPressed(int key) {
 void ofApp::keyReleased(int key) {
 	//cout << "Key Released: " << (char)key << endl;
 
+	//string note = userNote.getParameter().toString();
+	//if (note.compare(GUI_STRING_EMPTY_USER_NOTE) != 0 ) {
+	//	// Don't process keystrokes if we're typing a note
+	//	// ToDo: come up with a better check
+	//	return;
+	//}
+
 	if (key == ' ') {
+		//userNote.
 		isPaused = !isPaused;
 	}
 	if (key == 'i') {
@@ -280,12 +295,12 @@ void ofApp::recordButtonPressed(bool & recording) {
 
 void ofApp::sendExperimenterNoteButton() {
 	string note = userNote.getParameter().toString();
-	if (note.compare("[Add a note]") != 0 && emotiBitWiFi.isConnected()) {
+	if (note.compare(GUI_STRING_EMPTY_USER_NOTE) != 0 && emotiBitWiFi.isConnected()) {
 		vector<string> payload;
 		payload.push_back(ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT));
 		payload.push_back(note);
 		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::USER_NOTE, emotiBitWiFi.controlPacketCounter++, payload));
-		userNote.getParameter().fromString("[Add a note]");
+		userNote.getParameter().fromString(GUI_STRING_EMPTY_USER_NOTE);
 	}
 
 	if (_testingHelper.testingOn)
@@ -792,7 +807,7 @@ void ofApp::setupGui()
 	guiPanelUserNote = p;
 	guiPanels.at(guiPanelUserNote).setDefaultWidth(ofGetWindowWidth() - guiXPos - sendDataWidth);
 	guiPanels.at(guiPanelUserNote).setup("userNote", "junk.xml", guiXPos, -guiYPos);
-	guiPanels.at(guiPanelUserNote).add(userNote.setup("Note:", "[Add a note]"));
+	guiPanels.at(guiPanelUserNote).add(userNote.setup("Note:", GUI_STRING_EMPTY_USER_NOTE));
 	guiPanels.at(guiPanelUserNote).add(sendUserNote.setup(GUI_STRING_NOTE_BUTTON));
 	guiPanels.at(guiPanelUserNote).getControl(GUI_STRING_NOTE_BUTTON)->setTextColor(noteControlColor); // color of label and x
 	guiPanels.at(guiPanelUserNote).getControl(GUI_STRING_NOTE_BUTTON)->setFillColor(noteControlColor); // fill color of checkbox
