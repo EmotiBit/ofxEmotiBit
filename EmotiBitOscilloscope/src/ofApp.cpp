@@ -73,46 +73,49 @@ void ofApp::keyPressed(int key) {
 	//	// ToDo: come up with a better check
 	//	return;
 	//}
-
-	// Increment the timeWindow
-	if (key == OF_KEY_RIGHT) { // Right Arrow
-		for (int w = 0; w < scopeWins.size(); w++) {
-			scopeWins.at(w).incrementTimeWindow();
-		}
-	}
-
-	// Decrement the timeWindow
-	if (key == OF_KEY_LEFT) { // Left Arrow
-		for (int w = 0; w < scopeWins.size(); w++) {
-			scopeWins.at(w).decrementTimeWindow();
-		}
-	}
-	if (DEBUGGING)
+	ofMouseEventArgs temp;
+	if (!userNote.mouseReleased(temp/*something has to be passed here*/))
 	{
-		if (key == OF_KEY_UP) {
-			drawYTranslate--;
-			drawYScale = (drawYScale * 900.f + 1.f) / 900.f;
+		// Increment the timeWindow
+		if (key == OF_KEY_RIGHT) { // Right Arrow
+			for (int w = 0; w < scopeWins.size(); w++) {
+				scopeWins.at(w).incrementTimeWindow();
+			}
 		}
-		if (key == OF_KEY_DOWN) {
-			drawYTranslate++;
-			drawYScale = (drawYScale * 900.f - 1.f) / 900.f;
-		}
-	}
-	if (ofGetElapsedTimef() < 5) {
-		// Enter special modes if keys pressed in first few seconds
-		if (key == 'T')
-		{
-			if (!_testingHelper.testingOn)
-			{
-				cout << "Entering Testing Mode" << endl;
-				_testingHelper.setLogFilename("testingResults.txt");
-				_testingHelper.testingOn = true;
 
-				// Remove minYspans for testing
-				for (int w = 0; w < plotNames.size(); w++) {
-					for (int s = 0; s < plotNames.at(w).size(); s++) {
-						if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
-							scopeWins.at(w).scopes.at(s).autoscaleY(true);
+		// Decrement the timeWindow
+		if (key == OF_KEY_LEFT) { // Left Arrow
+			for (int w = 0; w < scopeWins.size(); w++) {
+				scopeWins.at(w).decrementTimeWindow();
+			}
+		}
+		if (DEBUGGING)
+		{
+			if (key == OF_KEY_UP) {
+				drawYTranslate--;
+				drawYScale = (drawYScale * 900.f + 1.f) / 900.f;
+			}
+			if (key == OF_KEY_DOWN) {
+				drawYTranslate++;
+				drawYScale = (drawYScale * 900.f - 1.f) / 900.f;
+			}
+		}
+		if (ofGetElapsedTimef() < 5) {
+			// Enter special modes if keys pressed in first few seconds
+			if (key == 'T')
+			{
+				if (!_testingHelper.testingOn)
+				{
+					cout << "Entering Testing Mode" << endl;
+					_testingHelper.setLogFilename("testingResults.txt");
+					_testingHelper.testingOn = true;
+
+					// Remove minYspans for testing
+					for (int w = 0; w < plotNames.size(); w++) {
+						for (int s = 0; s < plotNames.at(w).size(); s++) {
+							if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
+								scopeWins.at(w).scopes.at(s).autoscaleY(true);
+							}
 						}
 					}
 				}
@@ -131,117 +134,120 @@ void ofApp::keyReleased(int key) {
 	//	// ToDo: come up with a better check
 	//	return;
 	//}
-
-	if (key == ' ') {
-		//userNote.
-		isPaused = !isPaused;
-	}
-	if (key == 'i') {
-		drawDataInfo = !drawDataInfo;
-	}
-	if (key == OF_KEY_BACKSPACE || key == OF_KEY_DEL) {
-		clearOscilloscopes();
-	}
-	if (key == ':')
+	ofMouseEventArgs temp;
+	if (!userNote.mouseReleased(temp))
 	{
-		logData = !logData;
-		logConsole = !logConsole;
-		cout << "Data logging: " << logData << endl;
-		if (logData)
-		{
-			dataLogger.startThread();
+		if (key == ' ') {
+			//userNote.
+			isPaused = !isPaused;
 		}
-		else
-		{
-			dataLogger.stopThread();
+		if (key == 'i') {
+			drawDataInfo = !drawDataInfo;
 		}
-		if (logConsole)
-		{
-			consoleLogger.startThread();
+		if (key == OF_KEY_BACKSPACE || key == OF_KEY_DEL) {
+			clearOscilloscopes();
 		}
-		else
+		if (key == ':')
 		{
-			consoleLogger.stopThread();
+			logData = !logData;
+			logConsole = !logConsole;
+			cout << "Data logging: " << logData << endl;
+			if (logData)
+			{
+				dataLogger.startThread();
+			}
+			else
+			{
+				dataLogger.stopThread();
+			}
+			if (logConsole)
+			{
+				consoleLogger.startThread();
+			}
+			else
+			{
+				consoleLogger.stopThread();
+			}
 		}
-	}
-	if (key == 'D')
-	{
-		DEBUGGING = !DEBUGGING;
-	}
-	if (DEBUGGING) {
-		if (key == 'l')
+		if (key == 'D')
 		{
-			int w = 0;
-			int s = 3;
-			int p = 0;
-			vector<int> indexes{ w, s, p };
-			typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
-			typeTags.at(w).at(s).at(p) = EmotiBitPacket::TypeTag::EDL;
-			typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
-			plotNames.at(w).at(s).at(p) = "EDL";
-			scopeWins.at(w).scopes.at(s).setVariableNames(plotNames.at(w).at(s));
-			scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
+			DEBUGGING = !DEBUGGING;
 		}
-		if (key == 'r')
-		{
-			int w = 0;
-			int s = 3;
-			int p = 0;
-			vector<int> indexes{ w, s, p };
-			typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
-			typeTags.at(w).at(s).at(p) = EmotiBitPacket::TypeTag::EDR;
-			typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
-			plotNames.at(w).at(s).at(p) = "EDR";
-			scopeWins.at(w).scopes.at(s).setVariableNames(plotNames.at(w).at(s));
-			scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
+		if (DEBUGGING) {
+			if (key == 'l')
+			{
+				int w = 0;
+				int s = 3;
+				int p = 0;
+				vector<int> indexes{ w, s, p };
+				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
+				typeTags.at(w).at(s).at(p) = EmotiBitPacket::TypeTag::EDL;
+				typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
+				plotNames.at(w).at(s).at(p) = "EDL";
+				scopeWins.at(w).scopes.at(s).setVariableNames(plotNames.at(w).at(s));
+				scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
+			}
+			if (key == 'r')
+			{
+				int w = 0;
+				int s = 3;
+				int p = 0;
+				vector<int> indexes{ w, s, p };
+				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
+				typeTags.at(w).at(s).at(p) = EmotiBitPacket::TypeTag::EDR;
+				typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
+				plotNames.at(w).at(s).at(p) = "EDR";
+				scopeWins.at(w).scopes.at(s).setVariableNames(plotNames.at(w).at(s));
+				scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
+			}
+			if (key == 'a')
+			{
+				int w = 0;
+				int s = 3;
+				int p = 0;
+				vector<int> indexes{ w, s, p };
+				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
+				typeTags.at(w).at(s).at(p) = EmotiBitPacket::TypeTag::EDA;
+				typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
+				plotNames.at(w).at(s).at(p) = "EDA";
+				scopeWins.at(w).scopes.at(s).setVariableNames(plotNames.at(w).at(s));
+				scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
+			}
 		}
-		if (key == 'a')
+		if (_testingHelper.testingOn)
 		{
-			int w = 0;
-			int s = 3;
-			int p = 0;
-			vector<int> indexes{ w, s, p };
-			typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
-			typeTags.at(w).at(s).at(p) = EmotiBitPacket::TypeTag::EDA;
-			typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
-			plotNames.at(w).at(s).at(p) = "EDA";
-			scopeWins.at(w).scopes.at(s).setVariableNames(plotNames.at(w).at(s));
-			scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
-		}
-	}
-	if (_testingHelper.testingOn)
-	{
-		if (key == 'p')
-		{
-			_testingHelper.recordPpgResult();
-		}
-		if (key == 'l')
-		{
-			_testingHelper.pushEdlEdrResult();
-		}
-		if (key == 'L')
-		{
-			_testingHelper.popEdlEdrResult();
-		}
-		if (key == 'r')
-		{
-			_testingHelper.pushEdrP2pResult();
-		}
-		if (key == 'R')
-		{
-			_testingHelper.popEdrP2pResult();
-		}
-		if (key == 't')
-		{
-			_testingHelper.pushThermopileResult();
-		}
-		if (key == 'T')
-		{
-			_testingHelper.popThermopileResult();
-		}
-		if (key == 'c')
-		{
-			_testingHelper.clearAllResults();
+			if (key == 'p')
+			{
+				_testingHelper.recordPpgResult();
+			}
+			if (key == 'l')
+			{
+				_testingHelper.pushEdlEdrResult();
+			}
+			if (key == 'L')
+			{
+				_testingHelper.popEdlEdrResult();
+			}
+			if (key == 'r')
+			{
+				_testingHelper.pushEdrP2pResult();
+			}
+			if (key == 'R')
+			{
+				_testingHelper.popEdrP2pResult();
+			}
+			if (key == 't')
+			{
+				_testingHelper.pushThermopileResult();
+			}
+			if (key == 'T')
+			{
+				_testingHelper.popThermopileResult();
+			}
+			if (key == 'c')
+			{
+				_testingHelper.clearAllResults();
+			}
 		}
 	}
 }
