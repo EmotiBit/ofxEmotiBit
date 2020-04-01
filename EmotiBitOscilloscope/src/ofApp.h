@@ -125,13 +125,9 @@ public:
 	//ofxButton recordingStatus;
 	ofParameter<bool> recordingButton;
 	ofxLabel recordingStatus;
-	//ofParameter<bool> hibernateButton;
-	//ofxLabel hibernateStatus;
 	ofxLabel batteryStatus; 
 	//ofParameter<string> batteryStatus;
-	//ofxLabel sdCardStatus;
 	//ofParameter<float> batteryStatus;
-	//ofParameter<float> sdCardStatus;
 	ofxTextField userNote;
 	ofxButton sendUserNote;
 	ofParameter<int> dataClippingCount;
@@ -204,7 +200,6 @@ public:
 	int _consoleHeight;
 
 	//ofxFloatSlider batteryStatus;
-	//ofxFloatSlider sdCardStatus;
 	//ofxColorSlider color;
 	//ofxVec2Slider center;
 	//ofxIntSlider circleResolution;
