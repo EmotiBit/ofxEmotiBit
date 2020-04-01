@@ -7,7 +7,6 @@ void ofApp::setup() {
 	ofSetFrameRate(30);
 	ofBackground(255, 255, 255);
 	ofSetLogLevel(OF_LOG_NOTICE);
-
 	writeOfxEmotiBitVersionFile();
 
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
@@ -74,7 +73,7 @@ void ofApp::keyPressed(int key) {
 	//	return;
 	//}
 	ofMouseEventArgs temp;
-	if (!userNote.mouseReleased(temp/*something has to be passed here*/))
+	if (!userNote.mouseReleased(temp))
 	{
 		// Increment the timeWindow
 		if (key == OF_KEY_RIGHT) { // Right Arrow
@@ -360,7 +359,7 @@ void ofApp::updateDeviceList()
 		{
 			deviceList.emplace_back(ip, false);	// Add a new device (unchecked)
 			//deviceList.at(deviceList.size() - 1).addListener(this, &ofApp::deviceSelection);	// Attach a listener
-			guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).add(deviceList.at(deviceList.size() - 1));
+			guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_NAME).add(deviceList.at(deviceList.size() - 1));
 			if (emotibitIps.size() == 1 && deviceList.size() == 1)  // This is the first device in the list
 			{
 				// There is one device on the network and it's the first device in the list
@@ -373,11 +372,11 @@ void ofApp::updateDeviceList()
 	// Update selected device
 	if (emotiBitWiFi.isConnected())
 	{
-		deviceSelected.set(emotiBitWiFi.connectedEmotibitIp);
+		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, emotiBitWiFi.connectedEmotibitIp);
 	}
 	else
 	{
-		deviceSelected.set(GUI_STRING_NO_EMOTIBIT_SELECTED);
+		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, GUI_STRING_NO_EMOTIBIT_SELECTED);
 	}
 
 	// Update deviceList to reflect availability and connection status
@@ -397,7 +396,7 @@ void ofApp::updateDeviceList()
 		{
 			textColor = notAvailableColor;
 		}
-		guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).getControl(ip)->setTextColor(textColor);
+		guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_NAME).getControl(ip)->setTextColor(textColor);
 
 		// Update device connection status checkbox
 		bool selected = device->get();
@@ -539,8 +538,8 @@ void ofApp::sendDataSelection(bool & selected) {
 		sendDataList.at(j).set(false);
 	}
 
-	return;
-
+	return;  
+#if (0)
 	if (selected) {
 		if (sendOptionSelected.get().compare(GUI_STRING_SEND_DATA_NONE) != 0) {	// If there is currently a selected IP address
 			// Unselected it
@@ -562,6 +561,7 @@ void ofApp::sendDataSelection(bool & selected) {
 	else {
 		sendOptionSelected.set(GUI_STRING_SEND_DATA_NONE);
 	}
+#endif
 }
 
 string ofApp::ofGetTimestampString(const string& timestampFormat) {
@@ -641,12 +641,12 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 		{
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_VOLTAGE) == 0) 
 			{
-				deviceSelected.set(GUI_STRING_NO_EMOTIBIT_SELECTED);
-				batteryStatus.fromString(splitPacket.at(6) + "V");
+				deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, GUI_STRING_NO_EMOTIBIT_SELECTED);
+				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "V",279);
 			}
 			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_PERCENT) == 0) 
 			{
-				batteryStatus.fromString(splitPacket.at(6) + "%");
+				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "%",279);
 			}
 			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EMOTIBIT_MODE) == 0) 
 			{
@@ -738,14 +738,14 @@ void ofApp::setupGui()
 		// Check to see if legend font loaded before adding to gui panel to avoid blank text
 		guiPanels.at(guiPanelDevice).loadFont(ofToDataPath(legendFontFilename), 10, true, true);
 	}
-	guiPanels.at(guiPanelDevice).setup("selectDevice", "junk.xml", guiXPos, -guiYPos * 2.2);
-	deviceMenuGroup.setName(GUI_DEVICE_GROUP_MENU_NAME);
-	deviceMenuGroup.add(deviceSelected.set(GUI_STRING_EMOTIBIT_SELECTED, GUI_STRING_NO_EMOTIBIT_SELECTED));
+	guiPanels.at(guiPanelDevice).setup("selectDevice", "junk.xml", guiXPos, -guiYPos);
+	guiPanels.at(guiPanelDevice).add(deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, ":" + GUI_STRING_NO_EMOTIBIT_SELECTED));
+	//deviceMenuGroup.setName(GUI_DEVICE_GROUP_MENU_NAME);
 	deviceGroup.setName(GUI_DEVICE_GROUP_NAME);
 	//deviceList.emplace_back("Message All Emotibits", true);
 	//deviceGroup.add(deviceList.at(deviceList.size() - 1));
-	deviceMenuGroup.add(deviceGroup);
-	guiPanels.at(guiPanelDevice).add(deviceMenuGroup);
+	//deviceMenuGroup.add(deviceGroup);
+	guiPanels.at(guiPanelDevice).add(deviceGroup);
 	//guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME)
 	ofAddListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
 
@@ -756,12 +756,14 @@ void ofApp::setupGui()
 	guiWidth = 279;
 	guiPanelPowerStatus = p;
 	guiPanels.at(guiPanelPowerStatus).setDefaultWidth(guiWidth);
-	guiPanels.at(guiPanelPowerStatus).setup("powerStatus", "junk.xml", guiXPos, -guiYPos * 2.2);
-	powerStatusMenuGroup.setName(GUI_POWER_STATUS_MENU_NAME);
-	powerStatusMenuGroup.add(batteryStatus.set(GUI_STRING_BATTERY_LEVEL, "?"));
+	guiPanels.at(guiPanelPowerStatus).setup("powerStatus", "junk.xml", guiXPos, -guiYPos);
+	guiPanels.at(guiPanelPowerStatus).add(batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, ":?", guiWidth, guiYPos));
+	//powerStatusMenuGroup.setName(GUI_POWER_STATUS_MENU_NAME);
+	//powerStatusMenuGroup.add(batteryStatus.set(GUI_STRING_BATTERY_LEVEL, "?"));
 	powerModeGroup.setName(GUI_POWER_MODE_GROUP_NAME);
-	powerStatusMenuGroup.add(powerModeGroup);
-	guiPanels.at(guiPanelPowerStatus).add(powerStatusMenuGroup);
+	//powerStatusMenuGroup.add(powerModeGroup);
+	//guiPanels.at(guiPanelPowerStatus).add(powerStatusMenuGroup);
+	guiPanels.at(guiPanelPowerStatus).add(powerModeGroup);
 	powerModeOptions = {
 		GUI_STRING_NORMAL_POWER,
 		GUI_STRING_LOW_POWER,
@@ -772,9 +774,9 @@ void ofApp::setupGui()
 		powerModeList.emplace_back(powerModeOptions.at(j), false);
 		//sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
 		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
-		guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_STATUS_MENU_NAME).getGroup(GUI_POWER_MODE_GROUP_NAME).add(powerModeList.at(powerModeList.size() - 1));
+		guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_MODE_GROUP_NAME).add(powerModeList.at(powerModeList.size() - 1));
 	}
-	guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_STATUS_MENU_NAME).getGroup(GUI_POWER_MODE_GROUP_NAME).minimize();
+	guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_MODE_GROUP_NAME).minimize();
 	ofAddListener(powerModeGroup.parameterChangedE(), this, &ofApp::powerModeSelection);
 
 	// Recording Status
@@ -822,14 +824,14 @@ void ofApp::setupGui()
 	p++;
 	guiPanelSendData = p;
 	guiWidth = sendDataWidth;
-	guiXPos = ofGetWindowWidth() - guiWidth - 1;
+	guiXPos = ofGetWindowWidth() - guiWidth + 1;
 	guiPanels.at(guiPanelSendData).setDefaultWidth(guiWidth);
-	guiPanels.at(guiPanelSendData).setup("sendData", "junk.xml", guiXPos, -guiYPos * 2.2);
-	sendDataMenuGroup.setName(GUI_SEND_DATA_MENU_NAME);
-	sendDataMenuGroup.add(sendOptionSelected.set(GUI_STRING_SEND_DATA_VIA, GUI_STRING_SEND_DATA_NONE));
+	guiPanels.at(guiPanelSendData).setup("sendData", "junk.xml", guiXPos, -guiYPos);
+	//sendDataMenuGroup.setName(GUI_SEND_DATA_MENU_NAME);
+	guiPanels.at(guiPanelSendData).add(sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, GUI_STRING_SEND_DATA_NONE));
 	sendDataGroup.setName(GUI_OUTPUT_GROUP_NAME);
-	sendDataMenuGroup.add(sendDataGroup);
-	guiPanels.at(guiPanelSendData).add(sendDataMenuGroup);
+	//sendDataMenuGroup.add(sendDataGroup);
+	guiPanels.at(guiPanelSendData).add(sendDataGroup);
 	sendDataOptions = {
 		GUI_STRING_SEND_DATA_OSC,
 		GUI_STRING_SEND_DATA_LSL,
@@ -841,11 +843,11 @@ void ofApp::setupGui()
 		sendDataList.emplace_back(sendDataOptions.at(j), false);
 		sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
 		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
-		guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
+		guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
 		// All outputs disabled until supporting code written
-		guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(notAvailableColor);
+		guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(notAvailableColor);
 	}
-	guiPanels.at(guiPanelSendData).getGroup(GUI_SEND_DATA_MENU_NAME).getGroup(GUI_OUTPUT_GROUP_NAME).minimize();
+	guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).minimize();
 	//guiPanels.at(p).minimize();
 	//guiPanels.at(p).minimizeAll();
 
@@ -1060,9 +1062,9 @@ void ofApp::updateMenuButtons()
 	if (!emotiBitWiFi.isConnected())
 	{
 		_recording = false;
-		batteryStatus.fromString("");
+		batteryStatus.setup(GUI_STRING_BATTERY_LEVEL,"?",279);
 		_powerMode = PowerMode::length;
-		guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_STATUS_MENU_NAME).getGroup(GUI_POWER_MODE_GROUP_NAME).minimize();
+		guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_MODE_GROUP_NAME).minimize();
 		//if (guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).isMinimized())
 		//{
 		//	guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).maximize();

@@ -127,8 +127,8 @@ public:
 	ofxLabel recordingStatus;
 	ofParameter<bool> hibernateButton;
 	ofxLabel hibernateStatus;
-	//ofxLabel batteryStatus; 
-	ofParameter<string> batteryStatus;
+	ofxLabel batteryStatus; 
+	//ofParameter<string> batteryStatus;
 	ofxLabel sdCardStatus;
 	//ofParameter<float> batteryStatus;
 	//ofParameter<float> sdCardStatus;
@@ -137,14 +137,14 @@ public:
 	ofParameter<int> dataClippingCount;
 	ofParameter<int> dataOverflowCount;
 	ofParameterGroup deviceMenuGroup;
-	ofParameter<string> deviceSelected;
-	//ofxLabel currentDevice;
+	//ofParameter<string> deviceSelected;
+	ofxLabel deviceSelected;
 	vector<ofParameter<bool>> deviceList;
 	ofParameterGroup deviceGroup;
 	vector<string> sendDataOptions;
 	vector<ofParameter<bool>> sendDataList;
-	//ofxLabel currentSendOption;
-	ofParameter<string> sendOptionSelected;
+	ofxLabel sendOptionSelected;
+	//ofParameter<string> sendOptionSelected;
 	ofParameterGroup sendDataMenuGroup;
 	ofParameterGroup sendDataGroup;
 	ofParameterGroup powerStatusMenuGroup;
@@ -175,8 +175,8 @@ public:
 	const string GUI_STRING_NOTE_BUTTON = "LOG NOTE";
 	const string GUI_STRING_CONTROL_RECORD = "RECORD";
 	const string GUI_STRING_CONTROL_HIBERNATE = "HIBERNATE";
-	const string GUI_STRING_BATTERY_LEVEL = "Battery Level:";
-	const string GUI_STRING_EMOTIBIT_SELECTED = "EmotiBit:";
+	const string GUI_STRING_BATTERY_LEVEL = "Battery Level";
+	const string GUI_STRING_EMOTIBIT_SELECTED = "EmotiBit";
 	const string GUI_STRING_EMPTY_USER_NOTE = "[Add a note]";
 
 	const string GUI_POWER_STATUS_MENU_NAME = "RECORD";
