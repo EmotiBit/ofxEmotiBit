@@ -11,7 +11,7 @@ If you want to modify the code, below are the requirements to build the project.
 - ofxThreadedLogger - https://github.com/produceconsumerobot/ofxThreadedLogger
 - ofxBiquadFilter - https://github.com/mrbichel/ofxBiquadFilter
 - EmotiBit_XPlat_Utils - https://github.com/EmotiBit/EmotiBit_XPlat_Utils
-- ofxLSL - https://github.com/badfishblues/ofxLSL
+- ofxLSL - https://github.com/EmotiBit/ofxLSL
   - _**NOTE:**_ for lsl support, if developing with visual studio, code should be compiled for x64
   - liblsl64.dll should always be in the same folder as the .exe (i.e. EmotiBitOscilloscope/bin/liblsl64.dll)
   - liblsl64.lib should always be linked to in under _solution properties->linker->general->additional library directories_ and _solution properties->linker->input-> additional dependencies_
