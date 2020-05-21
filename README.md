@@ -1,8 +1,8 @@
 # ofxEmotiBit
 Software code for the EmotiBit. 
-If you just want to visualize and parse data from the EmotiBit, you can simply download the software directly in [releases](https://github.com/EmotiBit/ofxEmotiBit/releases).
+If you just want to visualize and parse data from the EmotiBit (for Windows/ macOS), you can simply download the software directly in [releases](https://github.com/EmotiBit/ofxEmotiBit/releases).
 
-If you want to modify the code, below are the requirements to build the project.  
+If you want to modify the code(or build the tools in Linux), below are the requirements to build the project.  
 
 ## Requirements
 - OF 11 - https://openframeworks.cc/download/
