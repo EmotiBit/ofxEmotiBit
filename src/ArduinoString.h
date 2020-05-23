@@ -1,5 +1,5 @@
 #pragma once
-#include "ofmain.h"
+#include "ofMain.h"
 
 
 // ToDo: Add functionality to convert string to Arduino String
