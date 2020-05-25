@@ -2,7 +2,8 @@ ofxBiquadFilter
 ofxEmotiBit
 ofxGui
 ofxNetwork
-ofxPoco
 ofxNetworkUtils
 ofxOscilloscope
+ofxPoco
 ofxThreadedLogger
+EmotiBit_XPlat_Utils
