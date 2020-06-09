@@ -13,6 +13,8 @@
 #include "EmotiBitWiFiHost.h"
 #include "ofxEmotiBitVersion.h"
 #include "EmotiBitTestingHelper.h"
+#include "ofxOsc.h"
+#include "patchboard.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -109,8 +111,9 @@ public:
 	//}
 
 	vector<ofxMultiScope> scopeWins;
+	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;
-	unordered_map<string, vector<int>> typeTagIndexes;
+	unordered_map<string, vector<size_t>> typeTagIndexes;
 	vector<vector<float>> samplingFreqs;
 	vector<vector<vector<string>>> plotNames;
 	vector<vector<vector<float>>> yLims;
@@ -243,4 +246,5 @@ public:
 	};
 	PowerMode _powerMode = PowerMode::LOW_POWER;
 
+	Patchboard oscPatchboard;
 };

@@ -213,7 +213,7 @@ void ofApp::keyReleased(int key) {
 				scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
 			}
 		}
-		if (_testingHelper.testingOn)
+		else if (_testingHelper.testingOn)
 		{
 			if (key == 'p')
 			{
@@ -246,6 +246,22 @@ void ofApp::keyReleased(int key) {
 			if (key == 'c')
 			{
 				_testingHelper.clearAllResults();
+			}
+		}
+		else
+		{
+			if (key == 'S')
+			{
+				ofxMultiScope::saveScopeSettings(scopeWins);
+			}
+			else if (key == 'L')
+			{
+				scopeWins = ofxMultiScope::loadScopeSettings();
+				plotIdIndexes = ofxMultiScope::getPlotIdIndexes();
+			}
+			else if (key == 'P')
+			{
+				oscPatchboard.
 			}
 		}
 	}
@@ -723,7 +739,7 @@ void ofApp::setupGui()
 	int sendDataWidth = 200;
 
 	int guiXPos = 0;
-	int guiYPos = 25;
+	int guiYPos = -25;
 	int guiWidth = 200;
 	int guiPosInc = guiWidth + 1;
 	guiPanels.resize(6);

@@ -1,0 +1,26 @@
+<patchboard>
+	<settings>
+		<input>
+			<type>EmotiBit</type>
+		</input>
+		<output>
+			<type>OSC</type>
+			<ipAddress>localhost<ipAddress>
+			<port>12345</port>
+		</output>
+	</settings>
+	<patchcords>
+		<patch>
+			<input>PI</input>
+			<output>/EmotiBit/PPG:IR</output>
+		</patch>
+		<patch>
+			<input>PR</input>
+			<output>/EmotiBit/PPG:RED</output>
+		</patch>
+		<patch>
+			<input>EA</input>
+			<output>/EmotiBit/EDA</output>
+		</patch>
+	</patchcords>
+</patchboard>	
