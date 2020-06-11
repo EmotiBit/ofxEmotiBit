@@ -5,7 +5,7 @@
 		</input>
 		<output>
 			<type>OSC</type>
-			<ipAddress>localhost<ipAddress>
+			<ipAddress>localhost</ipAddress>
 			<port>12345</port>
 		</output>
 	</settings>
