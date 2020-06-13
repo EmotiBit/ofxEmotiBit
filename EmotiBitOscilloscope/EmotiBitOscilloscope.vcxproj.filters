@@ -142,6 +142,9 @@
     <ClCompile Include="..\..\..\addons\EmotiBit_XPlat_Utils\src\EmotiBitPacket.cpp">
       <Filter>src\EmotiBit_XPlat_Utils\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ofxOscilloscope\src\patchboard.cpp">
+      <Filter>addons\ofxOscilloscope\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\EmotiBit_XPlat_Utils\src\EmotiBitPacket.h">
       <Filter>src\EmotiBit_XPlat_Utils\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOscilloscope\src\patchboard.h">
+      <Filter>addons\ofxOscilloscope\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

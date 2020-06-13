@@ -185,6 +185,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\addons\EmotiBit_XPlat_Utils\src\EmotiBitPacket.cpp" />
+    <ClCompile Include="..\..\ofxOscilloscope\src\patchboard.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.cpp" />
@@ -233,6 +234,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\addons\EmotiBit_XPlat_Utils\src\EmotiBitComms.h" />
     <ClInclude Include="..\..\..\addons\EmotiBit_XPlat_Utils\src\EmotiBitPacket.h" />
+    <ClInclude Include="..\..\ofxOscilloscope\src\patchboard.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />

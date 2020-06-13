@@ -261,7 +261,17 @@ void ofApp::keyReleased(int key) {
 			}
 			else if (key == 'P')
 			{
-				oscPatchboard.
+				string patchboardFile = "oscOutputSettings.xml";
+				oscPatchboard.loadFile(patchboardFile);
+				oscSender.clear();
+				try
+				{
+					cout << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"] 
+						<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
+					oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
+					sendOsc = true;
+				}
+				catch (exception e) {}
 			}
 		}
 	}
@@ -635,10 +645,44 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			int s = indexPtr->second.at(1); // Scope
 			int p = indexPtr->second.at(2); // Plot
 			data.resize(typeTags.at(w).at(s).size());
-			for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) {
-				data.at(p).emplace_back(ofToFloat(splitPacket.at(n))); // 
+
+			vector<string> oscAddresses;
+			vector<ofxOscMessage> oscMessages;
+			if (sendOsc) // Handle sending data to outputs
+			{
+				// ToDo: Refactor to handle data outputs in one place
+				oscAddresses = oscPatchboard.patchcords[packetHeader.typeTag];
+				for (auto a = 0; a < oscAddresses.size(); a++)
+				{
+					oscMessages.at(a).setAddress(oscAddresses.at(a));
+				}
+				oscMessages.resize(oscAddresses.size());
 			}
+
+			for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) 
+			{
+				// Data for plotting in the oscilloscope
+				data.at(p).emplace_back(ofToFloat(splitPacket.at(n))); 
+
+				if (sendOsc) // Handle sending data to outputs
+				{
+					for (auto a = 0; a < oscMessages.size(); a++)
+					{
+						oscMessages.at(a).addFloatArg(data.at(p).at(n));
+					}
+				}
+			}
+			if (sendOsc)
+			{
+				for (auto a = 0; a < oscMessages.size(); a++)
+				{
+					// ToDo: Consider using ofxOscBundle
+					oscSender.sendMessage(oscMessages.at(a));
+				}
+			}
+
 			if (!isPaused) {
+				// Add data to oscilloscope
 				scopeWins.at(w).scopes.at(s).updateData(data);
 			}
 			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
@@ -739,7 +783,7 @@ void ofApp::setupGui()
 	int sendDataWidth = 200;
 
 	int guiXPos = 0;
-	int guiYPos = -25;
+	int guiYPos = 25;
 	int guiWidth = 200;
 	int guiPosInc = guiWidth + 1;
 	guiPanels.resize(6);
