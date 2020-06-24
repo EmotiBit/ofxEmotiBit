@@ -652,11 +652,11 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			{
 				// ToDo: Refactor to handle data outputs in one place
 				oscAddresses = oscPatchboard.patchcords[packetHeader.typeTag];
+				oscMessages.resize(oscAddresses.size());
 				for (auto a = 0; a < oscAddresses.size(); a++)
 				{
 					oscMessages.at(a).setAddress(oscAddresses.at(a));
 				}
-				oscMessages.resize(oscAddresses.size());
 			}
 
 			for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) 
@@ -668,7 +668,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 				{
 					for (auto a = 0; a < oscMessages.size(); a++)
 					{
-						oscMessages.at(a).addFloatArg(data.at(p).at(n));
+						oscMessages.at(a).addFloatArg(data.at(p).back());
 					}
 				}
 			}
