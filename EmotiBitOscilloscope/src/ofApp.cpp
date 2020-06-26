@@ -557,11 +557,51 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 	}
 }
 
-void ofApp::sendDataSelection(bool & selected) {
+void ofApp::sendDataSelection(ofAbstractParameter& output) {
+	// Some outputs are disabled until code is written to support output channels
 
-	// All outputs are disabled until code is written to support output channels
+	string outputName = output.getName();
+	bool selected = output.cast<bool>().get();
+
 	for (int j = 0; j < sendDataList.size(); j++) {
-		sendDataList.at(j).set(false);
+		if (sendDataDisabled.at(j))
+		{
+			if (selected)
+			{
+				// set disabled outputs back to false
+				sendDataList.at(j).set(false);
+			}
+		}
+		else
+		{
+			if (outputName.compare(sendDataOptions.at(j)) == 0)
+			{
+				if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
+				{
+					if (selected)
+					{
+						string patchboardFile = "oscOutputSettings.xml";
+							oscPatchboard.loadFile(patchboardFile);
+							oscSender.clear();
+							try
+						{
+							cout << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"]
+								<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
+								oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
+							sendOsc = true;
+						}
+						catch (exception e)
+						{
+							cout << "OSC output setup failed " << endl;
+						}
+					}
+					else
+					{
+						sendOsc = false;
+					}
+				}
+			}
+		}
 	}
 
 	return;  
@@ -901,16 +941,23 @@ void ofApp::setupGui()
 	};
 	for (int j = 0; j < sendDataOptions.size(); j++) {
 		sendDataList.emplace_back(sendDataOptions.at(j), false);
-		sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
+		//sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
 		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
 		guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
-		// All outputs disabled until supporting code written
-		guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(notAvailableColor);
+		// Disable outputs until supporting code written
+		if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
+		{
+			sendDataDisabled.emplace_back(false);
+			guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(deviceAvailableColor);
+		}
+		else
+		{
+			sendDataDisabled.emplace_back(true);
+			guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(notAvailableColor);
+		}
 	}
 	guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).minimize();
-	//guiPanels.at(p).minimize();
-	//guiPanels.at(p).minimizeAll();
-
+	ofAddListener(sendDataGroup.parameterChangedE(), this, &ofApp::sendDataSelection);
 }
 void ofApp::setupOscilloscopes() 
 {

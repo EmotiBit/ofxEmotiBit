@@ -49,7 +49,7 @@ public:
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void deviceGroupSelection(ofAbstractParameter& device);
 	void powerModeSelection(ofAbstractParameter& mode);
-	void sendDataSelection(bool & selected);
+	void sendDataSelection(ofAbstractParameter& output);
 	void updateDeviceList();
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
@@ -140,8 +140,10 @@ public:
 	ofxLabel deviceSelected;
 	vector<ofParameter<bool>> deviceList;
 	ofParameterGroup deviceGroup;
+	// ToDo: encapsulate sendData variables to be more portable/usable
 	vector<string> sendDataOptions;
 	vector<ofParameter<bool>> sendDataList;
+	vector<bool> sendDataDisabled;
 	ofxLabel sendOptionSelected;
 	//ofParameter<string> sendOptionSelected;
 	//ofParameterGroup sendDataMenuGroup;
@@ -248,6 +250,6 @@ public:
 
 	Patchboard oscPatchboard;
 	ofxOscSender oscSender;
-	bool sendOsc = false;
+	bool sendOsc = false; // ToDo: generalize sendOsc to sendData
 	
 };
