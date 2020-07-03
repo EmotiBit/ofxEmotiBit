@@ -691,6 +691,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			if (sendOsc) // Handle sending data to outputs
 			{
 				// ToDo: Refactor to handle data outputs in one place
+				// ToDo: Make it possible to send data types that aren't being plotted (e.g. EL, ER)
 				oscAddresses = oscPatchboard.patchcords[packetHeader.typeTag];
 				oscMessages.resize(oscAddresses.size());
 				for (auto a = 0; a < oscAddresses.size(); a++)
