@@ -948,12 +948,12 @@ void ofApp::setupGui()
 		// Disable outputs until supporting code written
 		if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
 		{
-			sendDataDisabled.emplace_back(false);
+			sendDataDisabled.push_back(false);
 			guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(deviceAvailableColor);
 		}
 		else
 		{
-			sendDataDisabled.emplace_back(true);
+			sendDataDisabled.push_back(true);
 			guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(notAvailableColor);
 		}
 	}
