@@ -100,7 +100,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\EmotiBit_XPlat_Utils\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <AdditionalOptions>-DPOCO_STATIC</AdditionalOptions>
@@ -121,7 +121,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\EmotiBit_XPlat_Utils\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -142,7 +142,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\EmotiBit_XPlat_Utils\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\EmotiBit_XPlat_Utils\src;..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -166,7 +166,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\EmotiBit_XPlat_Utils\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\EmotiBit_XPlat_Utils\src;..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxNetworkUtils\libs;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net;..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src;..\..\..\addons\ofxNetworkUtils\src;..\..\..\addons\ofxOscilloscope\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <AdditionalOptions>-DPOCO_STATIC</AdditionalOptions>
@@ -185,10 +185,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitPacket.cpp" />
-    <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.cpp" />
-    <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp" />
     <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.cpp" />
     <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitWiFiHost.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
@@ -211,14 +211,19 @@
     <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkInterfaceListener.cpp" />
     <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkUtils.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\patchboard.cpp" />
     <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitComms.h" />
     <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitPacket.h" />
-    <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.h" />
-    <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h" />
+    <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ArduinoString.h" />
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h" />
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.h" />
@@ -250,7 +255,10 @@
     <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkInterfaceListener.h" />
     <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkUtils.h" />
     <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.h" />
+    <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\patchboard.h" />
     <ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h" />
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

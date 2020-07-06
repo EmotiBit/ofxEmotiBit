@@ -7,6 +7,18 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.cpp">
+      <Filter>addons\ofxBiquadFilter\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp">
+      <Filter>addons\ofxBiquadFilter\src</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.cpp">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClCompile>
@@ -73,17 +85,26 @@
     <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.cpp">
       <Filter>addons\ofxOscilloscope\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\patchboard.cpp">
+      <Filter>addons\ofxOscilloscope\src</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp">
       <Filter>addons\ofxThreadedLogger\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+      <Filter>addons\ofxXmlSettings\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitPacket.cpp">
-      <Filter>addons\EmotiBit_XPlat_Utils\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.cpp">
-      <Filter>addons\ofxBiquadFilter\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp">
-      <Filter>addons\ofxBiquadFilter\src</Filter>
+      <Filter>src\EmotiBit_XPlat_Utils\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +113,12 @@
     </Filter>
     <Filter Include="addons">
       <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxBiquadFilter">
+      <UniqueIdentifier>{722AA280-224B-6677-0333-080D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxBiquadFilter\src">
+      <UniqueIdentifier>{6A1697DC-957E-5FD0-4C2B-394F}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxEmotiBit">
       <UniqueIdentifier>{D5BAEE0B-17C8-94EC-18FD-28FF}</UniqueIdentifier>
@@ -153,22 +180,34 @@
     <Filter Include="addons\ofxThreadedLogger\src">
       <UniqueIdentifier>{CA068CB5-A638-66AF-AE6A-1CDD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\EmotiBit_XPlat_Utils">
-      <UniqueIdentifier>{3628260f-08bd-4110-96b9-a9207f40505c}</UniqueIdentifier>
+    <Filter Include="addons\ofxXmlSettings">
+      <UniqueIdentifier>{877F005D-13E6-0592-1D97-F2E3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\EmotiBit_XPlat_Utils\src">
-      <UniqueIdentifier>{c033c6be-1fc5-4240-b3c8-f180eed658c1}</UniqueIdentifier>
+    <Filter Include="addons\ofxXmlSettings\src">
+      <UniqueIdentifier>{CCB2AC63-49D2-977C-CFE8-AEAD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxBiquadFilter">
-      <UniqueIdentifier>{dd5ac3d1-1bce-43ee-8dc8-a21812dd1e8d}</UniqueIdentifier>
+    <Filter Include="addons\ofxXmlSettings\libs">
+      <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxBiquadFilter\src">
-      <UniqueIdentifier>{7f880c11-aad5-4e34-96a0-47c33609c4dc}</UniqueIdentifier>
+    <Filter Include="src\EmotiBit_XPlat_Utils">
+      <UniqueIdentifier>{65278f89-1de8-4349-b6a2-67608b3cc543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\EmotiBit_XPlat_Utils\src">
+      <UniqueIdentifier>{181c7b9b-355d-4b55-a230-db3fa86c93d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h">
+      <Filter>addons\ofxBiquadFilter\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h">
+      <Filter>addons\ofxBiquadFilter\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ArduinoString.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
@@ -263,20 +302,23 @@
     <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.h">
       <Filter>addons\ofxOscilloscope\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\patchboard.h">
+      <Filter>addons\ofxOscilloscope\src</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h">
       <Filter>addons\ofxThreadedLogger\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h">
+      <Filter>addons\ofxXmlSettings\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitComms.h">
-      <Filter>addons\EmotiBit_XPlat_Utils\src</Filter>
+      <Filter>src\EmotiBit_XPlat_Utils\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\EmotiBitPacket.h">
-      <Filter>addons\EmotiBit_XPlat_Utils\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilter.h">
-      <Filter>addons\ofxBiquadFilter\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ofxBiquadFilter\src\ofxBiquadFilterInstance.h">
-      <Filter>addons\ofxBiquadFilter\src</Filter>
+      <Filter>src\EmotiBit_XPlat_Utils\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
