@@ -213,7 +213,7 @@ void ofApp::keyReleased(int key) {
 				scopeWins.at(w).scopes.at(s).autoscaleY(true, 0.f);
 			}
 		}
-		if (_testingHelper.testingOn)
+		else if (_testingHelper.testingOn)
 		{
 			if (key == 'p')
 			{
@@ -246,6 +246,32 @@ void ofApp::keyReleased(int key) {
 			if (key == 'c')
 			{
 				_testingHelper.clearAllResults();
+			}
+		}
+		else
+		{
+			if (key == 'S')
+			{
+				ofxMultiScope::saveScopeSettings(scopeWins);
+			}
+			else if (key == 'L')
+			{
+				scopeWins = ofxMultiScope::loadScopeSettings();
+				plotIdIndexes = ofxMultiScope::getPlotIdIndexes();
+			}
+			else if (key == 'P')
+			{
+				string patchboardFile = "oscOutputSettings.xml";
+				oscPatchboard.loadFile(patchboardFile);
+				oscSender.clear();
+				try
+				{
+					cout << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"] 
+						<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
+					oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
+					sendOsc = true;
+				}
+				catch (exception e) {}
 			}
 		}
 	}
@@ -531,11 +557,51 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 	}
 }
 
-void ofApp::sendDataSelection(bool & selected) {
+void ofApp::sendDataSelection(ofAbstractParameter& output) {
+	// Some outputs are disabled until code is written to support output channels
 
-	// All outputs are disabled until code is written to support output channels
+	string outputName = output.getName();
+	bool selected = output.cast<bool>().get();
+
 	for (int j = 0; j < sendDataList.size(); j++) {
-		sendDataList.at(j).set(false);
+		if (sendDataDisabled.at(j))
+		{
+			if (selected)
+			{
+				// set disabled outputs back to false
+				sendDataList.at(j).set(false);
+			}
+		}
+		else
+		{
+			if (outputName.compare(sendDataOptions.at(j)) == 0)
+			{
+				if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
+				{
+					if (selected)
+					{
+						string patchboardFile = "oscOutputSettings.xml";
+							oscPatchboard.loadFile(patchboardFile);
+							oscSender.clear();
+							try
+						{
+							cout << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"]
+								<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
+								oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
+							sendOsc = true;
+						}
+						catch (exception e)
+						{
+							cout << "OSC output setup failed " << endl;
+						}
+					}
+					else
+					{
+						sendOsc = false;
+					}
+				}
+			}
+		}
 	}
 
 	return;  
@@ -619,10 +685,45 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			int s = indexPtr->second.at(1); // Scope
 			int p = indexPtr->second.at(2); // Plot
 			data.resize(typeTags.at(w).at(s).size());
-			for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) {
-				data.at(p).emplace_back(ofToFloat(splitPacket.at(n))); // 
+
+			vector<string> oscAddresses;
+			vector<ofxOscMessage> oscMessages;
+			if (sendOsc) // Handle sending data to outputs
+			{
+				// ToDo: Refactor to handle data outputs in one place
+				// ToDo: Make it possible to send data types that aren't being plotted (e.g. EL, ER)
+				oscAddresses = oscPatchboard.patchcords[packetHeader.typeTag];
+				oscMessages.resize(oscAddresses.size());
+				for (auto a = 0; a < oscAddresses.size(); a++)
+				{
+					oscMessages.at(a).setAddress(oscAddresses.at(a));
+				}
 			}
+
+			for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) 
+			{
+				// Data for plotting in the oscilloscope
+				data.at(p).emplace_back(ofToFloat(splitPacket.at(n))); 
+
+				if (sendOsc) // Handle sending data to outputs
+				{
+					for (auto a = 0; a < oscMessages.size(); a++)
+					{
+						oscMessages.at(a).addFloatArg(data.at(p).back());
+					}
+				}
+			}
+			if (sendOsc)
+			{
+				for (auto a = 0; a < oscMessages.size(); a++)
+				{
+					// ToDo: Consider using ofxOscBundle
+					oscSender.sendMessage(oscMessages.at(a));
+				}
+			}
+
 			if (!isPaused) {
+				// Add data to oscilloscope
 				scopeWins.at(w).scopes.at(s).updateData(data);
 			}
 			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
@@ -841,16 +942,23 @@ void ofApp::setupGui()
 	};
 	for (int j = 0; j < sendDataOptions.size(); j++) {
 		sendDataList.emplace_back(sendDataOptions.at(j), false);
-		sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
+		//sendDataList.at(sendDataList.size() - 1).addListener(this, &ofApp::sendDataSelection);
 		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
 		guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
-		// All outputs disabled until supporting code written
-		guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(notAvailableColor);
+		// Disable outputs until supporting code written
+		if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
+		{
+			sendDataDisabled.push_back(false);
+			guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(deviceAvailableColor);
+		}
+		else
+		{
+			sendDataDisabled.push_back(true);
+			guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(notAvailableColor);
+		}
 	}
 	guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).minimize();
-	//guiPanels.at(p).minimize();
-	//guiPanels.at(p).minimizeAll();
-
+	ofAddListener(sendDataGroup.parameterChangedE(), this, &ofApp::sendDataSelection);
 }
 void ofApp::setupOscilloscopes() 
 {

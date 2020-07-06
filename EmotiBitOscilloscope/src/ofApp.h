@@ -13,6 +13,8 @@
 #include "EmotiBitWiFiHost.h"
 #include "ofxEmotiBitVersion.h"
 #include "EmotiBitTestingHelper.h"
+#include "ofxOsc.h"
+#include "patchboard.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -47,7 +49,7 @@ public:
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void deviceGroupSelection(ofAbstractParameter& device);
 	void powerModeSelection(ofAbstractParameter& mode);
-	void sendDataSelection(bool & selected);
+	void sendDataSelection(ofAbstractParameter& output);
 	void updateDeviceList();
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
@@ -109,6 +111,7 @@ public:
 	//}
 
 	vector<ofxMultiScope> scopeWins;
+	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;
 	unordered_map<string, vector<int>> typeTagIndexes;
 	vector<vector<float>> samplingFreqs;
@@ -137,8 +140,10 @@ public:
 	ofxLabel deviceSelected;
 	vector<ofParameter<bool>> deviceList;
 	ofParameterGroup deviceGroup;
+	// ToDo: encapsulate sendData variables to be more portable/usable
 	vector<string> sendDataOptions;
 	vector<ofParameter<bool>> sendDataList;
+	vector<bool> sendDataDisabled;
 	ofxLabel sendOptionSelected;
 	//ofParameter<string> sendOptionSelected;
 	//ofParameterGroup sendDataMenuGroup;
@@ -243,4 +248,8 @@ public:
 	};
 	PowerMode _powerMode = PowerMode::LOW_POWER;
 
+	Patchboard oscPatchboard;
+	ofxOscSender oscSender;
+	bool sendOsc = false; // ToDo: generalize sendOsc to sendData
+	
 };

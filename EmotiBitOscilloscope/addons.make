@@ -3,8 +3,9 @@ ofxEmotiBit
 ofxGui
 ofxLSL
 ofxNetwork
-ofxNetworkUtils
-ofxOscilloscope
 ofxPoco
+ofxNetworkUtils
+ofxOsc
+ofxOscilloscope
 ofxThreadedLogger
-EmotiBit_XPlat_Utils
+ofxXmlSettings
