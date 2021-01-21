@@ -813,6 +813,7 @@ void ofApp::setupGui()
 	string legendFontFilename = "verdanab.ttf";
 #ifdef OSCILLOSCOPE_RELEASE
     ofSetDataPathRoot("../Resources/");
+    cout<<"Changed the data pathroot for Release"<<endl;
 #endif
 	legendFont.load(ofToDataPath(legendFontFilename), 11, true, true);
 	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);

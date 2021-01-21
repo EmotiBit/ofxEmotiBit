@@ -39,9 +39,9 @@
 		8F5205AEF8861EF234F0651A /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81967292BFC87A0144BD32C6 /* ofxOscSender.cpp */; };
 		933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */; };
 		940DE31524A301480024AB67 /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 940DE31224A301480024AB67 /* EmotiBitPacket.cpp */; };
-		941B2FB325B8E63C00BB7E84 /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB225B8E62400BB7E84 /* verdana.ttf */; };
-		941B2FB425B8E63C00BB7E84 /* verdanab.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB125B8E62400BB7E84 /* verdanab.ttf */; };
-		941B2FB625B8EA3C00BB7E84 /* oscOutputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB525B8EA3200BB7E84 /* oscOutputSettings.xml */; };
+		941B2FC325BA241400BB7E84 /* oscOutputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB525B8EA3200BB7E84 /* oscOutputSettings.xml */; };
+		941B2FC425BA241400BB7E84 /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB225B8E62400BB7E84 /* verdana.ttf */; };
+		941B2FC525BA241400BB7E84 /* verdanab.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB125B8E62400BB7E84 /* verdanab.ttf */; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
 		9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */; };
 		9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832BDC407620CDBA568B713D /* tinyxmlerror.cpp */; };
@@ -75,9 +75,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				941B2FB625B8EA3C00BB7E84 /* oscOutputSettings.xml in CopyFiles */,
-				941B2FB325B8E63C00BB7E84 /* verdana.ttf in CopyFiles */,
-				941B2FB425B8E63C00BB7E84 /* verdanab.ttf in CopyFiles */,
+				941B2FC325BA241400BB7E84 /* oscOutputSettings.xml in CopyFiles */,
+				941B2FC425BA241400BB7E84 /* verdana.ttf in CopyFiles */,
+				941B2FC525BA241400BB7E84 /* verdanab.ttf in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
