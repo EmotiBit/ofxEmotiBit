@@ -811,7 +811,7 @@ void ofApp::setupGui()
 	ofSetWindowTitle("EmotiBit Oscilloscope (v" + ofxEmotiBitVersion + ")");
 
 	string legendFontFilename = "verdanab.ttf";
-#ifdef MAC_OS_RELEASE
+#ifdef TARGET_MAC_OS
     ofSetDataPathRoot("../Resources/");
     cout<<"Changed the data pathroot for Release"<<endl;
 #endif
