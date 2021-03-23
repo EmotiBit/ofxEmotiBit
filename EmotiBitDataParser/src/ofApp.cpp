@@ -9,6 +9,10 @@ void ofApp::setup() {
 	writeOfxEmotiBitVersionFile();
 	ofSetWindowTitle("EmotiBit Data Parser (v" + ofxEmotiBitVersion + ")");
 
+#ifdef TARGET_MAC_OS
+    ofSetDataPathRoot("../Resources/");
+    cout<<"Changed the data pathroot for Release"<<endl;
+#endif
 	ofBackground(255, 255, 255);
 	legendFont.load(ofToDataPath("verdana.ttf"), 12, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);

@@ -262,7 +262,7 @@ void ofApp::keyReleased(int key) {
 			else if (key == 'P')
 			{
 				string patchboardFile = "oscOutputSettings.xml";
-				oscPatchboard.loadFile(patchboardFile);
+				oscPatchboard.loadFile(ofToDataPath(patchboardFile));
 				oscSender.clear();
 				try
 				{
@@ -581,7 +581,7 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 					if (selected)
 					{
 						string patchboardFile = "oscOutputSettings.xml";
-							oscPatchboard.loadFile(patchboardFile);
+							oscPatchboard.loadFile(ofToDataPath(patchboardFile));
 							oscSender.clear();
 							try
 						{
@@ -811,6 +811,10 @@ void ofApp::setupGui()
 	ofSetWindowTitle("EmotiBit Oscilloscope (v" + ofxEmotiBitVersion + ")");
 
 	string legendFontFilename = "verdanab.ttf";
+#ifdef TARGET_MAC_OS
+    ofSetDataPathRoot("../Resources/");
+    cout<<"Changed the data pathroot for Release"<<endl;
+#endif
 	legendFont.load(ofToDataPath(legendFontFilename), 11, true, true);
 	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);

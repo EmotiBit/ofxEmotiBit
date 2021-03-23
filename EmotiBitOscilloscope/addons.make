@@ -9,3 +9,4 @@ ofxOsc
 ofxOscilloscope
 ofxThreadedLogger
 ofxXmlSettings
+EmotiBit_XPlat_Utils

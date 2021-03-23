@@ -7,3 +7,4 @@ ofxNetworkUtils
 ofxOscilloscope
 ofxThreadedLogger
 ofxXmlSettings
+EmotiBit_XPlat_Utils
