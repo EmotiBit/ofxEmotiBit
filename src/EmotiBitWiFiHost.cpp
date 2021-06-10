@@ -38,15 +38,23 @@ int8_t EmotiBitWiFiHost::begin()
   if (sortedIps.size()>0)
   {
       vector<string> ipSplit = ofSplitString(sortedIps.at(0), ".");
-      advertisingIp = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2) + "." + ofToString(255);
+	  //adds all possible host id & network id combinations to a vector list 
+	  for (int host_id = 0; host_id <= 255; host_id++) { 
+		  advertisingIPs.push_back( ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2) + "." + ofToString(host_id));
+	  }
   }
   else
   {
       return FAIL;
   }
-	ofLogNotice() << "EmotiBit host advertising IP: " << advertisingIp;
-	advertisingCxn.Connect(advertisingIp.c_str(), advertisingPort);
-	advertisingCxn.SetEnableBroadcast(true);
+	/*always displays static host id and doesnt work with new changes*/
+	//ofLogNotice() << "EmotiBit host advertising IP: " << advertisingIp;
+	
+  //attempts to connect to any available emotibit device iteratively
+	for (int ip = 0; ip <= 255; ip++) {
+		advertisingCxn.Connect(advertisingIPs[ip].c_str(), advertisingPort);
+	}
+
 	advertisingCxn.SetNonBlocking(true);
 	advertisingCxn.SetReceiveBufferSize(pow(2, 10));
 
@@ -86,8 +94,9 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 	{
 		advertizingTimer = ofGetElapsedTimeMillis();
 
-		advertisingCxn.Connect(advertisingIp.c_str(), advertisingPort);
-		advertisingCxn.SetEnableBroadcast(true);
+		for (int ip = 0; ip <= 255; ip++) {
+			advertisingCxn.Connect(advertisingIPs[ip].c_str(), advertisingPort);
+		}
 
 		// Send advertising message
 		string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0);
@@ -179,7 +188,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 
 			ofLogVerbose() << "Sent: " << packet;
 			advertisingCxn.Connect(connectedEmotibitIp.c_str(), advertisingPort);
-			advertisingCxn.SetEnableBroadcast(false);
+			
 			advertisingCxn.Send(packet.c_str(), packet.length());
 		}
 	}
@@ -202,7 +211,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 			
 			ofLogVerbose() << "Sent: " << packet;
 			advertisingCxn.Connect(connectedEmotibitIp.c_str(), advertisingPort);
-			advertisingCxn.SetEnableBroadcast(false);
+			
 			advertisingCxn.Send(packet.c_str(), packet.length());
 		}
 	}
@@ -374,7 +383,6 @@ void EmotiBitWiFiHost::updateData()
 								{
 									sendDataPort = port;
 									dataCxn.Connect(ip.c_str(), port);
-									advertisingCxn.SetEnableBroadcast(false);
 								}
 								dataCxnMutex.unlock();
 							}
@@ -509,7 +517,6 @@ int8_t EmotiBitWiFiHost::_startDataCxn(uint16_t dataPort)
 		_dataPort += 2;
 		ofLogNotice() << "Trying data port: " << _dataPort;
 	}
-	//dataCxn.SetEnableBroadcast(false);
 	dataCxn.SetNonBlocking(true);
 	dataCxn.SetReceiveBufferSize(pow(2, 15));
 

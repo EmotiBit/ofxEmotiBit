@@ -52,7 +52,7 @@ public:
 	uint16_t _dataPort;
 	uint16_t sendDataPort;
 	uint16_t controlPort;
-	string advertisingIp;				// broadcast address
+	vector<string> advertisingIPs; // collection of possible broadcast addresses
 	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
 	string connectedEmotibitIp;
 	bool _isConnected;
