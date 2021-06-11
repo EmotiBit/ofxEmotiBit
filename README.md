@@ -6,6 +6,8 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 
 ## Requirements
 - OF 11 ~~https://openframeworks.cc/download/~~ NOTE: ofxEmotiBit is not yet compatible with 0.11.2. OF v0.11.0 can be downloaded here https://emotibit.com/downloads/of_v0.11.0_vs2017_release.zip
+### The following addons should be placed inside the OpenFrameworks addons folder:
+#### Note: If downloading zip instead of `git clone` be sure to remove `-master` from the folder name to avoid path discrepancies
 - ofxNetworkUtils - https://github.com/bakercp/ofxNetworkUtils
 - ofxOscilloscope - https://github.com/produceconsumerobot/ofxOscilloscope
 - ofxThreadedLogger - https://github.com/produceconsumerobot/ofxThreadedLogger
