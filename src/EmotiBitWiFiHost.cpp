@@ -20,20 +20,6 @@ int8_t EmotiBitWiFiHost::begin()
       ofSleepMillis(100);
       tries++;
   }
-	/*deque<string> sortedIps;
-	for (size_t i = 0; i < ips.size(); i++)
-	{
-		vector<string> ipSplit = ofSplitString(ips.at(i), ".");
-		if (ipSplit.at(0).compare("192") == 0)
-		{
-			sortedIps.push_front(ips.at(i));
-		}
-		else
-		{
-			sortedIps.push_back(ips.at(i));
-		}
-	}
-	*/
   advertisingCxn.Create();
   //get all available subnets
   for(int subnet = 0; subnet<ips.size(); subnet++)
@@ -47,11 +33,15 @@ int8_t EmotiBitWiFiHost::begin()
   }
 
   ipPos = determineAdvertisingIp(advertisingIps);
-  ofLogNotice() << "EmotiBit host advertising IP: " << advertisingIps.at(ipPos);
-	/*advertisingCxn.Connect(advertisingIps.at(ipPos).c_str(), advertisingPort);
-	advertisingCxn.SetEnableBroadcast(true);
-	advertisingCxn.SetNonBlocking(true);
-	advertisingCxn.SetReceiveBufferSize(pow(2, 10));*/
+  ofLogNotice() << "Initial EmotiBit host advertising IP: " << advertisingIps.at(ipPos);
+  ofLogNotice() << "Available EmotiBit host advertising IP(s): ";
+  for (int subnet = 0; subnet < emotibitSubnets.size(); subnet++) {
+	  ofLogNotice() << emotibitSubnets.at(subnet);
+  }
+  ofLogNotice() << "All Available host advertising IP(s): ";
+  for (int subnet = 0; subnet < advertisingIps.size(); subnet++) {
+	  ofLogNotice() << advertisingIps.at(subnet);
+  }
 
 	_startDataCxn(EmotiBitComms::WIFI_ADVERTISING_PORT + 1);
 
@@ -81,19 +71,19 @@ int8_t EmotiBitWiFiHost::begin()
 
 int EmotiBitWiFiHost::determineAdvertisingIp(vector<string> &advertisingIpVector) {
 	const int maxSize = 32768;
+	int autoConnectIp = 0; //which subnet emotibit autoconnects to
 	
 	//finds the first IP to ping back and uses that as the advertising IP
 	for (int advertisingPos = 0; advertisingPos < advertisingIpVector.size(); advertisingPos++) {
 		advertisingCxn.Connect(advertisingIpVector.at(advertisingPos).c_str(), advertisingPort);
 		advertisingCxn.SetEnableBroadcast(true);
 		advertisingCxn.SetNonBlocking(true);
-		advertisingCxn.SetReceiveBufferSize(pow(2, 10));
-
+		advertisingCxn.SetReceiveBufferSize(pow(2, 10)); 
 		// Send advertising message
 		string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0);
 		ofLogVerbose() << "Sent: " << packet;
 		advertisingCxn.Send(packet.c_str(), packet.length());
-		ofSleepMillis(500);
+		ofSleepMillis(200);
 
 		// Receive advertising messages
 		static char udpMessage[maxSize];
@@ -104,11 +94,12 @@ int EmotiBitWiFiHost::determineAdvertisingIp(vector<string> &advertisingIpVector
 			string message = udpMessage;
 			ofLogVerbose() << "Received: " << message;
 
-			return advertisingPos;
+			emotibitSubnets.push_back(advertisingIpVector.at(advertisingPos).c_str());
+			autoConnectIp = advertisingPos;
 		}
 	}
 
-	return 0;
+	return autoConnectIp;
 }
 
 int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)

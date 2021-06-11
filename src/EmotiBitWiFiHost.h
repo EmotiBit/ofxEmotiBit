@@ -52,7 +52,8 @@ public:
 	uint16_t _dataPort;
 	uint16_t sendDataPort;
 	uint16_t controlPort;
-	vector<string> advertisingIps;				// broadcast addresses
+	vector<string> advertisingIps; // all broadcast addresses
+	vector<string> emotibitSubnets; // Subnets that contain emotibits
 	int ipPos;
 	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
 	string connectedEmotibitIp;
