@@ -52,7 +52,8 @@ public:
 	uint16_t _dataPort;
 	uint16_t sendDataPort;
 	uint16_t controlPort;
-	string advertisingIp;				// broadcast address
+	vector<string> advertisingIps;				// broadcast addresses
+	int ipPos;
 	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
 	string connectedEmotibitIp;
 	bool _isConnected;
@@ -75,6 +76,7 @@ public:
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
+	int determineAdvertisingIp(vector<string> &advertisingIps);
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
 	int8_t connect(uint8_t i);
