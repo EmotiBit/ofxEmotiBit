@@ -5,7 +5,7 @@ If you just want to visualize and parse data from the EmotiBit (for Windows/ mac
 If you want to modify the code(or build the tools in Linux), below are the requirements to build the project.  
 
 ## Requirements
-- OF 11 - https://openframeworks.cc/download/
+- OF 11 --https://openframeworks.cc/download/-- NOTE: ofxEmotiBit is not yet compatible with 0.11.2. OF v0.11.0 can be downloaded here https://emotibit.com/downloads/of_v0.11.0_vs2017_release.zip
 - ofxNetworkUtils - https://github.com/bakercp/ofxNetworkUtils
 - ofxOscilloscope - https://github.com/produceconsumerobot/ofxOscilloscope
 - ofxThreadedLogger - https://github.com/produceconsumerobot/ofxThreadedLogger
