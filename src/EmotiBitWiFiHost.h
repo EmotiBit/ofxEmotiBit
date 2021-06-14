@@ -52,9 +52,10 @@ public:
 	uint16_t _dataPort;
 	uint16_t sendDataPort;
 	uint16_t controlPort;
-	vector<string> advertisingIps; // all broadcast addresses
+	vector<string> allSubnets; // All available subnets, with or without emotibits
 	vector<string> emotibitSubnets; // Subnets that contain emotibits
-	int ipPos;
+	vector<string> advertisingIps; // IP addresses used to connect with EmotiBits NOTE: normally just the broadcasting address (ie <subnet>.255) but in blast mode this will be each indivual EmotiBit IP
+	
 	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
 	string connectedEmotibitIp;
 	bool _isConnected;
@@ -77,7 +78,7 @@ public:
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
-	int determineAdvertisingIp(vector<string> &advertisingIps);
+	int8_t getAdvertisingIp(vector<string> &emotibitSubnetVector, vector<string> &emotibitIpVector, bool blastMode);
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
 	int8_t connect(uint8_t i);
