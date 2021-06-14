@@ -78,7 +78,7 @@ public:
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
-	int8_t getAdvertisingIp(vector<string> &emotibitSubnetVector, vector<string> &emotibitIpVector, bool blastMode);
+	int8_t getAdvertisingIp(vector<string> &emotibitSubnetVector, vector<string> &emotibitIpVector);
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
 	int8_t connect(uint8_t i);
