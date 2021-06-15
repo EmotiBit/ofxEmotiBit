@@ -398,11 +398,11 @@ void ofApp::updateDeviceList()
 	// Update selected device
 	if (emotiBitWiFi.isConnected())
 	{
-		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, emotiBitWiFi.connectedEmotibitIp);
+		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, emotiBitWiFi.connectedEmotibitIp, 220);
 	}
 	else
 	{
-		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, GUI_STRING_NO_EMOTIBIT_SELECTED);
+		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, GUI_STRING_NO_EMOTIBIT_SELECTED, 220);
 	}
 
 	// Update deviceList to reflect availability and connection status
@@ -742,12 +742,12 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 		{
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_VOLTAGE) == 0) 
 			{
-				deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, GUI_STRING_NO_EMOTIBIT_SELECTED);
-				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "V",279);
+				deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, GUI_STRING_NO_EMOTIBIT_SELECTED, 220);
+				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "V",259);
 			}
 			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_PERCENT) == 0) 
 			{
-				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "%",279);
+				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "%",259);
 			}
 			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EMOTIBIT_MODE) == 0) 
 			{
@@ -829,7 +829,7 @@ void ofApp::setupGui()
 
 	int guiXPos = 0;
 	int guiYPos = 25;
-	int guiWidth = 200;
+	int guiWidth = 220;
 	int guiPosInc = guiWidth + 1;
 	guiPanels.resize(6);
 
@@ -844,7 +844,7 @@ void ofApp::setupGui()
 		guiPanels.at(guiPanelDevice).loadFont(ofToDataPath(legendFontFilename), 10, true, true);
 	}
 	guiPanels.at(guiPanelDevice).setup("selectDevice", "junk.xml", guiXPos, -guiYPos);
-	guiPanels.at(guiPanelDevice).add(deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, ":" + GUI_STRING_NO_EMOTIBIT_SELECTED));
+	guiPanels.at(guiPanelDevice).add(deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, ":" + GUI_STRING_NO_EMOTIBIT_SELECTED, 220));
 	//deviceMenuGroup.setName(GUI_DEVICE_GROUP_MENU_NAME);
 	deviceGroup.setName(GUI_DEVICE_GROUP_NAME);
 	//deviceList.emplace_back("Message All Emotibits", true);
@@ -858,7 +858,7 @@ void ofApp::setupGui()
 	// Power Status Menu
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 279;
+	guiWidth = 259;
 	guiPanelPowerStatus = p;
 	guiPanels.at(guiPanelPowerStatus).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelPowerStatus).setup("powerStatus", "junk.xml", guiXPos, -guiYPos);
@@ -1174,7 +1174,7 @@ void ofApp::updateMenuButtons()
 	if (!emotiBitWiFi.isConnected())
 	{
 		_recording = false;
-		batteryStatus.setup(GUI_STRING_BATTERY_LEVEL,"?",279);
+		batteryStatus.setup(GUI_STRING_BATTERY_LEVEL,"?",259);
 		_powerMode = PowerMode::length;
 		guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_MODE_GROUP_NAME).minimize();
 		//if (guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).isMinimized())
