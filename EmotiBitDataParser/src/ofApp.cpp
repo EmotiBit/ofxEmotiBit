@@ -5,7 +5,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-
+	ofLogToConsole();
 	writeOfxEmotiBitVersionFile();
 	ofSetWindowTitle("EmotiBit Data Parser (v" + ofxEmotiBitVersion + ")");
 
@@ -41,22 +41,47 @@ void ofApp::setup() {
 	linesPerLoop = 1000;
 
 	fileExt = ".csv";
+
+	if (argFileName.size() > 0) {
+		ofFile argExists(argFileName);
+		if (!argExists.exists()) {
+			cout << "ERROR: " << argFileName << " does not exist, try absolute path" << endl;
+			ofExit();
+		}
+		else {
+			bool consoleArg = true;
+			startProcessing(consoleArg);
+		}
+	}
 }
 
 
 //--------------------------------------------------------------
 void ofApp::startProcessing(bool & processing) {
 	if (processing) {
-		ofFileDialogResult fileLoadResult;
-		fileLoadResult  = ofSystemLoadDialog("Open an EmotiBit raw csv data file");
-		if (fileLoadResult.bSuccess) {
+		bool fileLoadedGUI = false;
+		string filePathGUI;
+		if (argFileName.size() == 0) {
+			ofFileDialogResult fileLoadResult = ofSystemLoadDialog("Open an EmotiBit raw csv data file");
+			if (fileLoadResult.bSuccess) {
+				fileLoadedGUI = true;
+				filePathGUI = fileLoadResult.filePath;
+			}
+		}
+		if (argFileName.size() > 0 || fileLoadedGUI) {
 			if (guiPanels.at(0).getControl(GUI_PANEL_LOAD_FILE) != NULL) {
 				guiPanels.at(0).getControl(GUI_PANEL_LOAD_FILE)->setBackgroundColor(ofColor(255, 0, 0));
 				processStatus.setBackgroundColor(ofColor(255, 0, 0));
 				processStatus.getParameter().fromString(GUI_STATUS_PROCESSING);
 			}
-
-			string inFilePath = fileLoadResult.filePath;
+			
+			string inFilePath;
+			if (argFileName.size() > 0) { //gets the absolute file path of the command line argument
+				inFilePath = argFileName;
+			}
+			else {
+				inFilePath = filePathGUI;
+			}
 			inFile.open(inFilePath, ios::in);
 			string tempFilePath = inFilePath;
 			ofStringReplace(tempFilePath, fileExt + "\0", "\0"); // drop the .csv extension
@@ -110,7 +135,7 @@ void ofApp::startProcessing(bool & processing) {
 			currentState = State::PARSING_TIMESTAMPS;
 		}
 		if (!inFile.is_open()) {
-			processButton.set(false);
+			processButton.set(false);	
 		}
 	}
 	else {
