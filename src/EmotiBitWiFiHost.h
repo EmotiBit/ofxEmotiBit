@@ -36,9 +36,11 @@ public:
 	static const uint8_t FAIL = -1;
 
 	uint16_t advertisingInterval = 500;		// Milliseconds between sending advertising messages
+	uint16_t ipSearchInterval = 1000;    // Milliseconds between searching for advertising IPs
 	uint16_t startCxnInterval = 100;
 
 	ofxUDPManager advertisingCxn;
+	ofxUDPManager ipSearchCxn;
 	ofxUDPManager dataCxn;
 	ofxTCPServer controlCxn;
 
@@ -52,10 +54,15 @@ public:
 	uint16_t _dataPort;
 	uint16_t sendDataPort;
 	uint16_t controlPort;
-	vector<string> allSubnets; // All available subnets, with or without emotibits
+
+	vector<string> availableSubnets; // All available subnets, with or without emotibits
 	vector<string> emotibitSubnets; // Subnets that contain emotibits
-	vector<string> advertisingIps; // IP addresses used to connect with EmotiBits NOTE: normally just the broadcasting address (ie <subnet>.255) but in blast mode this will be each indivual EmotiBit IP
-	
+	vector<string> advertisingIps; // IP addresses used to connect with EmotiBits NOTE: blast mode/unicast is default and only configurable from backend
+	bool enableBroadcast = false; 
+	bool ipWaitReceive = false;
+	uint64_t ipSearchTimer;
+	uint64_t advertizingTimer;
+
 	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
 	string connectedEmotibitIp;
 	bool _isConnected;
@@ -78,7 +85,9 @@ public:
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
-	int8_t getAdvertisingIp(vector<string> &emotibitSubnetVector, vector<string> &emotibitIpVector);
+	void EmotiBitWiFiHost::getAvailableSubnets();
+	void getAdvertisingIpSend();
+	void getAdvertisingIpReceive();
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
 	int8_t connect(uint8_t i);
