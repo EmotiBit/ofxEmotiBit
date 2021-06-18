@@ -169,9 +169,9 @@ void EmotiBitWiFiHost::updateAdvertisingIpList() {
 			if (emotibitSubnets.size() == 0) { //assume emotibits are all on the same subnet
 				emotibitSubnets.push_back(subnetAddr);
 			}
-			string rxIp = subnetAddr + "." + ofToString(255);
-			if (ofFind(advertisingIps, rxIp) == advertisingIps.size()) {
-				advertisingIps.push_back(rxIp);
+			string tempIp = subnetAddr + "." + ofToString(255);
+			if (ofFind(advertisingIps, tempIp) == advertisingIps.size()) {
+				advertisingIps.push_back(tempIp);
 			}
 		}
 	}
