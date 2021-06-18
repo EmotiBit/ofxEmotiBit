@@ -19,9 +19,9 @@ int8_t EmotiBitWiFiHost::begin()
 	advertisingCxn.Create();
 	ipSearchCxn.Create();
 
-	getAdvertisingIpSend();
+	pingAvailableSubnets();
 	ofSleepMillis(500);
-	getAdvertisingIpReceive();
+	updateAdvertisingIpList();
 
 
 	//for future integration with status bar
@@ -99,12 +99,12 @@ void EmotiBitWiFiHost::getAvailableSubnets() {
 	}
 }
 
-void EmotiBitWiFiHost::getAdvertisingIpSend() {
+void EmotiBitWiFiHost::pingAvailableSubnets() {
 	if (enableBroadcast) { //disabled for now, implement as a future feature
 		//initially tries broadcasting
 		for (int ip = 0; ip < availableSubnets.size(); ip++) {
-			string braodcastIp = availableSubnets.at(ip) + "." + ofToString(255);
-			ipSearchCxn.Connect(braodcastIp.c_str(), advertisingPort);
+			string broadcastIp = availableSubnets.at(ip) + "." + ofToString(255);
+			ipSearchCxn.Connect(broadcastIp.c_str(), advertisingPort);
 			ipSearchCxn.SetEnableBroadcast(true);
 			ipSearchCxn.SetNonBlocking(true);
 			ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
@@ -119,8 +119,8 @@ void EmotiBitWiFiHost::getAdvertisingIpSend() {
 			getAvailableSubnets(); //if subnet appears after osciliscope is open (mobile hotspot)
 			for (int ip = 0; ip < availableSubnets.size(); ip++) {
 				for (int hostId = 0; hostId < 255; hostId++) {
-					string braodcastIp = availableSubnets.at(ip) + "." + ofToString(hostId);
-					ipSearchCxn.Connect(braodcastIp.c_str(), advertisingPort);
+					string broadcastIp = availableSubnets.at(ip) + "." + ofToString(hostId);
+					ipSearchCxn.Connect(broadcastIp.c_str(), advertisingPort);
 					ipSearchCxn.SetEnableBroadcast(true);
 					ipSearchCxn.SetNonBlocking(true);
 					ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
@@ -133,8 +133,8 @@ void EmotiBitWiFiHost::getAdvertisingIpSend() {
 		}
 		else {
 			for (int hostId = 0; hostId < 255; hostId++) {
-				string braodcastIp = emotibitSubnets.at(0) + "." + ofToString(hostId);
-				ipSearchCxn.Connect(braodcastIp.c_str(), advertisingPort);
+				string broadcastIp = emotibitSubnets.at(0) + "." + ofToString(hostId);
+				ipSearchCxn.Connect(broadcastIp.c_str(), advertisingPort);
 				ipSearchCxn.SetEnableBroadcast(true);
 				ipSearchCxn.SetNonBlocking(true);
 				ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
@@ -149,7 +149,7 @@ void EmotiBitWiFiHost::getAdvertisingIpSend() {
 
 }
 
-void EmotiBitWiFiHost::getAdvertisingIpReceive() {
+void EmotiBitWiFiHost::updateAdvertisingIpList() {
 	const int maxSize = 32768;
 	if (enableBroadcast) {
 		// Receive advertising messages
@@ -166,8 +166,13 @@ void EmotiBitWiFiHost::getAdvertisingIpReceive() {
 			vector<string> ipSplit = ofSplitString(rxIp, ".");
 			string subnetAddr = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2);
 
-			emotibitSubnets.push_back(subnetAddr);
-			advertisingIps.push_back(subnetAddr + "." + ofToString(255));
+			if (emotibitSubnets.size() == 0) { //assume emotibits are all on the same subnet
+				emotibitSubnets.push_back(subnetAddr);
+			}
+			string rxIp = subnetAddr + "." + ofToString(255);
+			if (ofFind(advertisingIps, rxIp) == advertisingIps.size()) {
+				advertisingIps.push_back(rxIp);
+			}
 		}
 	}
 	if(advertisingIps.size() == 0 || !enableBroadcast) {
@@ -190,7 +195,6 @@ void EmotiBitWiFiHost::getAdvertisingIpReceive() {
 				if (emotibitSubnets.size() == 0) { //assume emotibits are all on the same subnet
 					emotibitSubnets.push_back(subnetAddr);
 				}
-				int test = ofFind(advertisingIps, rxIp);
 				if (ofFind(advertisingIps, rxIp) == advertisingIps.size()) {
 					advertisingIps.push_back(rxIp);
 				}
@@ -204,13 +208,13 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 {
 	const int maxSize = 32768;
 	//search for emotibits periodically
-	if (ofGetElapsedTimeMillis() - ipSearchTimer > ipSearchInterval && !ipWaitReceive) {
-		getAdvertisingIpSend();
+	if (ofGetElapsedTimeMillis() - ipSearchTimer > ipSearchIntervalSend && !ipWaitReceive) {
+		pingAvailableSubnets();
 		ipWaitReceive = true;
 		ipSearchTimer = ofGetElapsedTimeMillis();
 	}
-	if (ofGetElapsedTimeMillis() - ipSearchTimer > advertisingInterval && ipWaitReceive) {
-		getAdvertisingIpReceive();
+	if (ofGetElapsedTimeMillis() - ipSearchTimer > ipSearchIntervalReceive && ipWaitReceive) {
+		updateAdvertisingIpList();
 		ipWaitReceive = false;
 		ipSearchTimer = ofGetElapsedTimeMillis();
 	}

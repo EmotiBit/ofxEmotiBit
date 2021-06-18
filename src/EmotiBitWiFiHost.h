@@ -36,7 +36,8 @@ public:
 	static const uint8_t FAIL = -1;
 
 	uint16_t advertisingInterval = 500;		// Milliseconds between sending advertising messages
-	uint16_t ipSearchInterval = 1000;    // Milliseconds between searching for advertising IPs
+	uint16_t ipSearchIntervalSend = 1000;    // Milliseconds between searching for advertising IPs
+	uint16_t ipSearchIntervalReceive = 500;  // Millisenconds between receiving messages after search
 	uint16_t startCxnInterval = 100;
 
 	ofxUDPManager advertisingCxn;
@@ -85,9 +86,9 @@ public:
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
-	void EmotiBitWiFiHost::getAvailableSubnets();
-	void getAdvertisingIpSend();
-	void getAdvertisingIpReceive();
+	void getAvailableSubnets();
+	void pingAvailableSubnets();
+	void updateAdvertisingIpList(); //NOTE: should be called after at least 500 ms from when pingAvailableSubnets() was called
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
 	int8_t connect(uint8_t i);
