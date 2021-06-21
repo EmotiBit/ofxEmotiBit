@@ -99,61 +99,65 @@ void EmotiBitWiFiHost::getAvailableSubnets() {
 }
 
 void EmotiBitWiFiHost::pingAvailableSubnets() {
-	if (enableBroadcast) { //disabled for now, implement as a future feature
-		//initially tries broadcasting
-		for (int ip = 0; ip < availableSubnets.size(); ip++) {
-			string broadcastIp = availableSubnets.at(ip) + "." + ofToString(255);
-			ipSearchCxn.Connect(broadcastIp.c_str(), advertisingPort);
-			ipSearchCxn.SetEnableBroadcast(true);
-			ipSearchCxn.SetNonBlocking(true);
-			ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
-			// Send advertising message
-			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0);
-			//ofLogVerbose() << "Sent: " << packet;
-			ipSearchCxn.Send(packet.c_str(), packet.length());
-		}
-	}
-	if(advertisingIps.size() == 0 || !enableBroadcast) { //connects through unicasting
-		if (emotibitSubnets.size() == 0) { //initial search through all subnets
-			getAvailableSubnets(); //if subnet appears after osciliscope is open (mobile hotspot)
-			for (int ip = 0; ip < availableSubnets.size(); ip++) {
+	getAvailableSubnets(); //if subnet appears after osciliscope is open (mobile hotspot)
+	string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0); 
+	string ip;
+
+	if (emotibitSubnets.size() == 0) { //initial search through all subnets
+		for (int sub = 0; sub < availableSubnets.size(); sub++) {
+			if (enableBroadcast) {
+				ip = availableSubnets.at(sub) + "." + ofToString(255);
+				ipSearchCxn.Connect(ip.c_str(), advertisingPort);
+				ipSearchCxn.SetNonBlocking(true);
+				ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
+				// Send advertising message
+				//ofLogVerbose() << "Sent: " << packet;
+				ipSearchCxn.Send(packet.c_str(), packet.length());
+			}
+			else {
 				for (int hostId = 0; hostId < 255; hostId++) {
-					string broadcastIp = availableSubnets.at(ip) + "." + ofToString(hostId);
-					ipSearchCxn.Connect(broadcastIp.c_str(), advertisingPort);
-					ipSearchCxn.SetEnableBroadcast(true);
+					ip = availableSubnets.at(sub) + "." + ofToString(hostId);
+					ipSearchCxn.Connect(ip.c_str(), advertisingPort);
 					ipSearchCxn.SetNonBlocking(true);
 					ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
 					// Send advertising message
-					string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0);
 					//ofLogVerbose() << "Sent: " << packet;
 					ipSearchCxn.Send(packet.c_str(), packet.length());
 				}
 			}
 		}
-		else {
-			for (int hostId = 0; hostId < 255; hostId++) {
-				string broadcastIp = emotibitSubnets.at(0) + "." + ofToString(hostId);
-				ipSearchCxn.Connect(broadcastIp.c_str(), advertisingPort);
-				ipSearchCxn.SetEnableBroadcast(true);
-				ipSearchCxn.SetNonBlocking(true);
-				ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
-				// Send advertising message
-				string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0);
-				//ofLogVerbose() << "Sent: " << packet;
-				ipSearchCxn.Send(packet.c_str(), packet.length());
-			}
-		}
-		
 	}
+	else {
+		for (int hostId = 0; hostId < 255; hostId++) {
+			ip = emotibitSubnets.at(0) + "." + ofToString(hostId);
+			ipSearchCxn.Connect(ip.c_str(), advertisingPort);
+			ipSearchCxn.SetNonBlocking(true);
+			ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
+			// Send advertising message
+			//ofLogVerbose() << "Sent: " << packet;
+			ipSearchCxn.Send(packet.c_str(), packet.length());
+		}
+	}
+		
+	
 
 }
 
 void EmotiBitWiFiHost::updateAdvertisingIpList() {
 	const int maxSize = 32768;
+	static char udpMessage[maxSize];
+	int maxMsgs;
 	if (enableBroadcast) {
+		maxMsgs = 1; //only need to check for message on broadcast ip
+	}
+	else {
+		maxMsgs = 100; //arbitrary, set max to number of possible messages i.e. EmotiBits
+	}
+
+	for (int msg = 0; msg < maxMsgs; msg++) {
 		// Receive advertising messages
-		static char udpMessage[maxSize];
 		int msgSize = ipSearchCxn.Receive(udpMessage, maxSize);
+
 		if (msgSize > 0)
 		{
 			string rxIp;
@@ -168,39 +172,13 @@ void EmotiBitWiFiHost::updateAdvertisingIpList() {
 			if (emotibitSubnets.size() == 0) { //assume emotibits are all on the same subnet
 				emotibitSubnets.push_back(subnetAddr);
 			}
-			string tempIp = subnetAddr + "." + ofToString(255);
-			if (ofFind(advertisingIps, tempIp) == advertisingIps.size()) {
-				advertisingIps.push_back(tempIp);
+			if (ofFind(advertisingIps, rxIp) == advertisingIps.size()) {
+				advertisingIps.push_back(rxIp);
 			}
+
 		}
 	}
-	if(advertisingIps.size() == 0 || !enableBroadcast) {
-		for (int msg = 0; msg < 100; msg++) {
-			// Receive advertising messages
-			static char udpMessage[maxSize];
-			int msgSize = ipSearchCxn.Receive(udpMessage, maxSize);
-
-			if (msgSize > 0)
-			{
-				string rxIp;
-				int rxPort;
-				ipSearchCxn.GetRemoteAddr(rxIp, rxPort);
-				string message = udpMessage;
-				ofLogVerbose() << "Received: " << message;
-
-				vector<string> ipSplit = ofSplitString(rxIp, ".");
-				string subnetAddr = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2);
-
-				if (emotibitSubnets.size() == 0) { //assume emotibits are all on the same subnet
-					emotibitSubnets.push_back(subnetAddr);
-				}
-				if (ofFind(advertisingIps, rxIp) == advertisingIps.size()) {
-					advertisingIps.push_back(rxIp);
-				}
-
-			}
-		}
-	}
+	
 }
 
 int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
