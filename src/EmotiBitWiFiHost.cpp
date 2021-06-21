@@ -17,7 +17,6 @@ int8_t EmotiBitWiFiHost::begin()
 		return FAIL;
 	}
 	advertisingCxn.Create();
-	ipSearchCxn.Create();
 
 	pingAvailableSubnets();
 	ofSleepMillis(500);
@@ -107,22 +106,22 @@ void EmotiBitWiFiHost::pingAvailableSubnets() {
 		for (int sub = 0; sub < availableSubnets.size(); sub++) {
 			if (enableBroadcast) {
 				ip = availableSubnets.at(sub) + "." + ofToString(255);
-				ipSearchCxn.Connect(ip.c_str(), advertisingPort);
-				ipSearchCxn.SetNonBlocking(true);
-				ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
+				advertisingCxn.Connect(ip.c_str(), advertisingPort);
+				advertisingCxn.SetNonBlocking(true);
+				advertisingCxn.SetReceiveBufferSize(pow(2, 10));
 				// Send advertising message
 				//ofLogVerbose() << "Sent: " << packet;
-				ipSearchCxn.Send(packet.c_str(), packet.length());
+				advertisingCxn.Send(packet.c_str(), packet.length());
 			}
 			else {
 				for (int hostId = 0; hostId < 255; hostId++) {
 					ip = availableSubnets.at(sub) + "." + ofToString(hostId);
-					ipSearchCxn.Connect(ip.c_str(), advertisingPort);
-					ipSearchCxn.SetNonBlocking(true);
-					ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
+					advertisingCxn.Connect(ip.c_str(), advertisingPort);
+					advertisingCxn.SetNonBlocking(true);
+					advertisingCxn.SetReceiveBufferSize(pow(2, 10));
 					// Send advertising message
 					//ofLogVerbose() << "Sent: " << packet;
-					ipSearchCxn.Send(packet.c_str(), packet.length());
+					advertisingCxn.Send(packet.c_str(), packet.length());
 				}
 			}
 		}
@@ -130,12 +129,12 @@ void EmotiBitWiFiHost::pingAvailableSubnets() {
 	else {
 		for (int hostId = 0; hostId < 255; hostId++) {
 			ip = emotibitSubnets.at(0) + "." + ofToString(hostId);
-			ipSearchCxn.Connect(ip.c_str(), advertisingPort);
-			ipSearchCxn.SetNonBlocking(true);
-			ipSearchCxn.SetReceiveBufferSize(pow(2, 10));
+			advertisingCxn.Connect(ip.c_str(), advertisingPort);
+			advertisingCxn.SetNonBlocking(true);
+			advertisingCxn.SetReceiveBufferSize(pow(2, 10));
 			// Send advertising message
 			//ofLogVerbose() << "Sent: " << packet;
-			ipSearchCxn.Send(packet.c_str(), packet.length());
+			advertisingCxn.Send(packet.c_str(), packet.length());
 		}
 	}
 		
@@ -156,13 +155,13 @@ void EmotiBitWiFiHost::updateAdvertisingIpList() {
 
 	for (int msg = 0; msg < maxMsgs; msg++) {
 		// Receive advertising messages
-		int msgSize = ipSearchCxn.Receive(udpMessage, maxSize);
+		int msgSize = advertisingCxn.Receive(udpMessage, maxSize);
 
 		if (msgSize > 0)
 		{
 			string rxIp;
 			int rxPort;
-			ipSearchCxn.GetRemoteAddr(rxIp, rxPort);
+			advertisingCxn.GetRemoteAddr(rxIp, rxPort);
 			string message = udpMessage;
 			ofLogVerbose() << "Received: " << message;
 

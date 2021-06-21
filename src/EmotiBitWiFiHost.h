@@ -41,7 +41,6 @@ public:
 	uint16_t startCxnInterval = 100;
 
 	ofxUDPManager advertisingCxn;
-	ofxUDPManager ipSearchCxn;
 	ofxUDPManager dataCxn;
 	ofxTCPServer controlCxn;
 
