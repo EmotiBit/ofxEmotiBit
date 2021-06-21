@@ -25,11 +25,11 @@ int8_t EmotiBitWiFiHost::begin()
 
 
 	//for future integration with status bar
-	string allAvailablesubnets;
+	string allAvailableSubnets;
 	for (int subnet = 0; subnet < availableSubnets.size(); subnet++) {
-		allAvailablesubnets += "[" + availableSubnets.at(subnet) + ".*] ";
+		allAvailableSubnets += "[" + availableSubnets.at(subnet) + ".*] ";
 	}
-	ofLogNotice() << "All Subnet(s): " << allAvailablesubnets << endl;
+	ofLogNotice() << "All Subnet(s): " << allAvailableSubnets << endl;
 
 	string allEmotibitSubnets;
 	for (int subnet = 0; subnet < emotibitSubnets.size(); subnet++) {
@@ -70,7 +70,6 @@ int8_t EmotiBitWiFiHost::begin()
 	isStartingConnection = false;
 
 	dataThread = new std::thread(&EmotiBitWiFiHost::updateDataThread, this);
-	ofResetElapsedTimeCounter(); //resets timer so nothing is off sync
 	ipSearchTimer = ofGetElapsedTimeMillis();
 	advertizingTimer = ipSearchTimer;
 	return SUCCESS;
