@@ -49,8 +49,7 @@ void ofApp::setup() {
 			ofExit();
 		}
 		else {
-			bool consoleArg = true;
-			startProcessing(consoleArg);
+			processButton.set(true);
 		}
 	}
 }
@@ -135,7 +134,7 @@ void ofApp::startProcessing(bool & processing) {
 			currentState = State::PARSING_TIMESTAMPS;
 		}
 		if (!inFile.is_open()) {
-			processButton.set(false);	
+			processButton.set(false);  // Processing halted, reset GUI display, remove files, and clear loggers
 		}
 	}
 	else {
