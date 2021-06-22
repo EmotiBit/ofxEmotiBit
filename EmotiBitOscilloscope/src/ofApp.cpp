@@ -964,11 +964,9 @@ void ofApp::setupGui()
 	guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).minimize();
 	ofAddListener(sendDataGroup.parameterChangedE(), this, &ofApp::sendDataSelection);
 
-	//Set default widths of device 
-	int devWidth = 220;
-	int batWidth = 259;
-	deviceSelected.setDefaultWidth(devWidth);
-	batteryStatus.setDefaultWidth(batWidth);
+	//Set default widths of device
+	deviceSelected.setDefaultWidth(220);
+	batteryStatus.setDefaultWidth(259);
 }
 void ofApp::setupOscilloscopes() 
 {

@@ -35,9 +35,7 @@ public:
 	static const uint8_t SUCCESS = 0;
 	static const uint8_t FAIL = -1;
 
-	uint16_t advertisingInterval = 500;		// Milliseconds between sending advertising messages
-	uint16_t ipSearchIntervalSend = 1000;    // Milliseconds between searching for advertising IPs
-	uint16_t ipSearchIntervalReceive = 500;  // Millisenconds between receiving messages after search
+	uint16_t advertisingInterval = 1500; // Milliseconds between sending advertising messages
 	uint16_t startCxnInterval = 100;
 
 	ofxUDPManager advertisingCxn;
@@ -59,8 +57,6 @@ public:
 	vector<string> emotibitSubnets; // Subnets that contain emotibits
 	vector<string> advertisingIps; // IP addresses used to connect with EmotiBits NOTE: blast mode/unicast is default and only configurable from backend
 	bool enableBroadcast = false; 
-	bool ipWaitReceive = false;
-	uint64_t ipSearchTimer;
 	uint64_t advertizingTimer;
 
 	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
@@ -87,7 +83,7 @@ public:
 	int8_t begin();
 	void getAvailableSubnets();
 	void pingAvailableSubnets();
-	void updateAdvertisingIpList(); //NOTE: should be called after at least 500 ms from when pingAvailableSubnets() was called
+	void updateAdvertisingIpList(string ip); 
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
 	int8_t connect(uint8_t i);
