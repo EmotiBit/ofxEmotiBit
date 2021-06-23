@@ -55,7 +55,6 @@ public:
 
 	vector<string> availableSubnets; // All available subnets, with or without emotibits
 	vector<string> emotibitSubnets; // Subnets that contain emotibits
-	vector<string> advertisingIps; // IP addresses used to connect with EmotiBits NOTE: blast mode/unicast is default and only configurable from backend
 	bool enableBroadcast = false; 
 	uint64_t advertizingTimer;
 

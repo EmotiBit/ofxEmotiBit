@@ -82,12 +82,12 @@ void EmotiBitWiFiHost::pingAvailableSubnets() {
 	getAvailableSubnets(); // Check if new subnet appeared after oscilloscope was open (e.g. a mobile hotspot)
 	string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0); 
 	string ip;
-	if (enableBroadcast) { 
+	if (enableBroadcast) { // ToDo: add enableBroadcast case if it's determined to be desirable
 		advertisingCxn.SetEnableBroadcast(true);
 	}
 	if (emotibitSubnets.size() == 0) { //initial search through all subnets
 		for (int sub = 0; sub < availableSubnets.size(); sub++) {
-			if (enableBroadcast) { // ToDo: add enableBroadcast case if it's determined to be desirable
+			if (enableBroadcast) { 
 				ip = availableSubnets.at(sub) + "." + ofToString(255);
 				advertisingCxn.Connect(ip.c_str(), advertisingPort);
 				advertisingCxn.Send(packet.c_str(), packet.length());
@@ -112,15 +112,11 @@ void EmotiBitWiFiHost::pingAvailableSubnets() {
 
 void EmotiBitWiFiHost::updateAdvertisingIpList(string ip) {
 	auto currentEmotibitSubnets = emotibitSubnets;
-	auto currentAdvertisingIps = advertisingIps;
 	vector<string> ipSplit = ofSplitString(ip, ".");
 	string subnetAddr = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2);
 
 	if (emotibitSubnets.size() == 0) { //assume emotibits are all on the same subnet
 		emotibitSubnets.push_back(subnetAddr);
-	}
-	if (ofFind(advertisingIps, ip) == advertisingIps.size()) {
-		advertisingIps.push_back(ip);
 	}
 
 	//print all emotibit ip adrresses and/or subnets whenever new emotibits are detected
@@ -130,13 +126,6 @@ void EmotiBitWiFiHost::updateAdvertisingIpList(string ip) {
 			allEmotibitSubnets += "[" + emotibitSubnets.at(subnet) + ".*] ";
 		}
 		ofLogNotice() << "Emotibit Subnet(s): " << allEmotibitSubnets;
-	}
-	if (advertisingIps.size() != currentAdvertisingIps.size()) {
-		string allAdvertisingIps;
-		for (int ip = 0; ip < advertisingIps.size(); ip++) {
-			allAdvertisingIps += "[" + advertisingIps.at(ip) + "] ";
-		}
-		ofLogNotice() << "Advertising IP(s): " << allAdvertisingIps;
 	}
 }
 
