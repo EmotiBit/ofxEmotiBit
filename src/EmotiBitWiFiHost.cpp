@@ -19,9 +19,6 @@ int8_t EmotiBitWiFiHost::begin()
 	advertisingCxn.Create();
 	advertisingCxn.SetNonBlocking(true);
 	advertisingCxn.SetReceiveBufferSize(pow(2, 10));
-	if (enableBroadcast) {
-		advertisingCxn.SetEnableBroadcast(true);
-	}
 
 	_startDataCxn(EmotiBitComms::WIFI_ADVERTISING_PORT + 1);
 
@@ -82,13 +79,15 @@ void EmotiBitWiFiHost::getAvailableSubnets() {
 }
 
 void EmotiBitWiFiHost::pingAvailableSubnets() {
-	getAvailableSubnets(); //if subnet appears after osciliscope is open (mobile hotspot)
+	getAvailableSubnets(); // Check if new subnet appeared after oscilloscope was open (e.g. a mobile hotspot)
 	string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0); 
 	string ip;
-
+	if (enableBroadcast) { 
+		advertisingCxn.SetEnableBroadcast(true);
+	}
 	if (emotibitSubnets.size() == 0) { //initial search through all subnets
 		for (int sub = 0; sub < availableSubnets.size(); sub++) {
-			if (enableBroadcast) {
+			if (enableBroadcast) { // ToDo: add enableBroadcast case if it's determined to be desirable
 				ip = availableSubnets.at(sub) + "." + ofToString(255);
 				advertisingCxn.Connect(ip.c_str(), advertisingPort);
 				advertisingCxn.Send(packet.c_str(), packet.length());
@@ -101,8 +100,8 @@ void EmotiBitWiFiHost::pingAvailableSubnets() {
 				}
 			}
 		}
-	}
-	else {
+	} 
+	else { // Once an EmotiBit is found, advertising is directed at that subnet to avoid network spam
 		for (int hostId = 1; hostId < 255; hostId++) {
 			ip = emotibitSubnets.at(0) + "." + ofToString(hostId);
 			advertisingCxn.Connect(ip.c_str(), advertisingPort);
