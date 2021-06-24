@@ -4,6 +4,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+	ofLogToConsole();
 	ofSetFrameRate(30);
 	ofBackground(255, 255, 255);
 	ofSetLogLevel(OF_LOG_NOTICE);
@@ -26,7 +27,6 @@ void ofApp::setup() {
 	{
 		consoleLogger.startThread();
 	}
-
 	lsl.start(); //Start up lsl connection on a seperate thread
 }
 
@@ -743,11 +743,11 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_VOLTAGE) == 0) 
 			{
 				deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, GUI_STRING_NO_EMOTIBIT_SELECTED);
-				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "V",279);
+				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "V");
 			}
 			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_PERCENT) == 0) 
 			{
-				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "%",279);
+				batteryStatus.setup(GUI_STRING_BATTERY_LEVEL, splitPacket.at(6) + "%");
 			}
 			else if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EMOTIBIT_MODE) == 0) 
 			{
@@ -807,7 +807,6 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 
 void ofApp::setupGui()
 {
-
 	ofSetWindowTitle("EmotiBit Oscilloscope (v" + ofxEmotiBitVersion + ")");
 
 	string legendFontFilename = "verdanab.ttf";
@@ -829,8 +828,9 @@ void ofApp::setupGui()
 
 	int guiXPos = 0;
 	int guiYPos = 25;
-	int guiWidth = 200;
+	int guiWidth = 220;
 	int guiPosInc = guiWidth + 1;
+	
 	guiPanels.resize(6);
 
 	// Device Menu
@@ -858,7 +858,7 @@ void ofApp::setupGui()
 	// Power Status Menu
 	p++;
 	guiXPos += guiWidth + 1;
-	guiWidth = 279;
+	guiWidth = 259;
 	guiPanelPowerStatus = p;
 	guiPanels.at(guiPanelPowerStatus).setDefaultWidth(guiWidth);
 	guiPanels.at(guiPanelPowerStatus).setup("powerStatus", "junk.xml", guiXPos, -guiYPos);
@@ -963,6 +963,10 @@ void ofApp::setupGui()
 	}
 	guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).minimize();
 	ofAddListener(sendDataGroup.parameterChangedE(), this, &ofApp::sendDataSelection);
+
+	//Set default widths of device
+	deviceSelected.setDefaultWidth(220);
+	batteryStatus.setDefaultWidth(259);
 }
 void ofApp::setupOscilloscopes() 
 {
@@ -1174,7 +1178,7 @@ void ofApp::updateMenuButtons()
 	if (!emotiBitWiFi.isConnected())
 	{
 		_recording = false;
-		batteryStatus.setup(GUI_STRING_BATTERY_LEVEL,"?",279);
+		batteryStatus.setup(GUI_STRING_BATTERY_LEVEL,"?");
 		_powerMode = PowerMode::length;
 		guiPanels.at(guiPanelPowerStatus).getGroup(GUI_POWER_MODE_GROUP_NAME).minimize();
 		//if (guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_MENU_NAME).getGroup(GUI_DEVICE_GROUP_NAME).isMinimized())

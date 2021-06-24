@@ -75,12 +75,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BFCEA40C261B4CE08A890793809FB018"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -88,6 +82,12 @@
         "Entry"
         {
         "MsmKey" = "8:_D7300AF4E153466781B9C3187BB08B1C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E4D75143A2E54AABA9FF0D3436B73393"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -501,15 +501,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EmotiBit"
-        "ProductCode" = "8:{9DD2EE1E-5E31-4FFF-892E-36A8AA0BD858}"
-        "PackageCode" = "8:{01A78BA7-279D-4102-BDF6-62C8464AA23E}"
+        "ProductCode" = "8:{289B2561-3649-4E2D-868A-E5C77FD0E206}"
+        "PackageCode" = "8:{23AA3928-9B03-47BD-B0FE-41BD083F8AEF}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.2.1"
+        "ProductVersion" = "8:1.2.2"
         "Manufacturer" = "8:EmotiBit"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1102,7 +1102,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_BFCEA40C261B4CE08A890793809FB018"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_E4D75143A2E54AABA9FF0D3436B73393"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:FALSE"

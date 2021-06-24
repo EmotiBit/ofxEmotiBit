@@ -35,7 +35,7 @@ public:
 	static const uint8_t SUCCESS = 0;
 	static const uint8_t FAIL = -1;
 
-	uint16_t advertisingInterval = 500;		// Milliseconds between sending advertising messages
+	uint16_t advertisingInterval = 500; // Milliseconds between sending advertising messages
 	uint16_t startCxnInterval = 100;
 
 	ofxUDPManager advertisingCxn;
@@ -52,7 +52,12 @@ public:
 	uint16_t _dataPort;
 	uint16_t sendDataPort;
 	uint16_t controlPort;
-	string advertisingIp;				// broadcast address
+
+	vector<string> availableSubnets; // All available subnets, with or without emotibits
+	vector<string> emotibitSubnets; // Subnets that contain emotibits
+	bool enableBroadcast = false; 
+	uint64_t advertizingTimer;
+
 	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
 	string connectedEmotibitIp;
 	bool _isConnected;
@@ -75,6 +80,9 @@ public:
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
+	void getAvailableSubnets();
+	void pingAvailableSubnets();
+	void updateAdvertisingIpList(string ip); 
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
 	int8_t connect(uint8_t i);

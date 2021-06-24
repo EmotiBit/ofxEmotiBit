@@ -182,8 +182,8 @@ public:
 
 	//const string GUI_POWER_STATUS_MENU_NAME = "RECORD";
 	const string GUI_POWER_MODE_GROUP_NAME = "Power Mode";
-	const string GUI_STRING_NORMAL_POWER =	"Normal            (data streaming)";
-	const string GUI_STRING_LOW_POWER =			"Low Power      (no streaming)";
+	const string GUI_STRING_NORMAL_POWER =	 "Normal         (data streaming)";
+	const string GUI_STRING_LOW_POWER =		 "Low Power      (no streaming)";
 	const string GUI_STRING_WIRELESS_OFF = "Wireless Off";
 	const string GUI_STRING_HIBERNATE = "Hibernate";
 
