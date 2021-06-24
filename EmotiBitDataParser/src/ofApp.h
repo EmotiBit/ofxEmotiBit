@@ -13,7 +13,7 @@
 class ofApp : public ofBaseApp {
 public:
 
-	
+	string argFileName;
 	string stringData;
 
 	ofTrueTypeFont legendFont;
