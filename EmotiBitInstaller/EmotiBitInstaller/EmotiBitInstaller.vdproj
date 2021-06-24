@@ -500,7 +500,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:EmotiBit Oscilloscope"
+        "ProductName" = "8:EmotiBit"
         "ProductCode" = "8:{289B2561-3649-4E2D-868A-E5C77FD0E206}"
         "PackageCode" = "8:{23AA3928-9B03-47BD-B0FE-41BD083F8AEF}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
