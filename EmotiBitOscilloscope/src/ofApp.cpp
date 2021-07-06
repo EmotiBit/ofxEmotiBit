@@ -28,6 +28,7 @@ void ofApp::setup() {
 		consoleLogger.startThread();
 	}
 	lsl.start(); //Start up lsl connection on a seperate thread
+	keyReleased('P');
 }
 
 //--------------------------------------------------------------
@@ -50,7 +51,7 @@ void ofApp::update() {
 	}
 
 	updateMenuButtons();
-	keyReleased('P');
+	
 }
 
 //--------------------------------------------------------------
