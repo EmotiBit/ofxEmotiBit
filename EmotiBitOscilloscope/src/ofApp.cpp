@@ -50,12 +50,13 @@ void ofApp::update() {
 	}
 
 	updateMenuButtons();
+	keyReleased('P');
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	drawOscilloscopes();
-	drawConsole();
+	//drawOscilloscopes();
+	//drawConsole();
 }
 
 //--------------------------------------------------------------
