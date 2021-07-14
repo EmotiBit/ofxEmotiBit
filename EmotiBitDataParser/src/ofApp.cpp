@@ -191,6 +191,7 @@ void ofApp::update() {
 				if (currentState == State::PARSING_TIMESTAMPS) {
 					//ofMap()
 					timeSyncMap = calculateTimeSyncMap(allTimestampData);
+					printTimesyncMetrics(allTimestampData);
 					//processButton.set(false);
 					currentState = State::PARSING_DATA;
 					nLinesInFile = lineCounter;
@@ -248,80 +249,173 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> timestampDa
 		return tsMap;
 	}
 	
-	int q1Ind = ceil(timestampData.size() / 4);
-	int q4Ind = floor(timestampData.size() * 3 / 4);
-	if (timestampData.size() < 20) {
-		// Use more points if not many points are available
-		q1Ind = floor(timestampData.size() / 2);
-		q4Ind = ceil(timestampData.size() / 2);
+	bool newtsMapMethod = true;
+
+	if (!newtsMapMethod) {
+		int q1Ind = ceil(timestampData.size() / 4);
+		int q4Ind = floor(timestampData.size() * 3 / 4);
+		if (timestampData.size() < 20) {
+			// Use more points if not many points are available
+			q1Ind = floor(timestampData.size() / 2);
+			q4Ind = ceil(timestampData.size() / 2);
+		}
+
+		// ToDo: improve algorithm finding shortest round trips
+		// -- Deal with cases where recording is stopped when emotibit is offline (i.e. no Q4 round trips)
+
+		// Sort the first 25 percent by round trip time
+		vector<pair<int, int>> q1;
+		for (int i = 0; i < q1Ind; i++) {
+			q1.push_back(make_pair(timestampData.at(i).roundTrip, i));
+		}
+		sort(q1.begin(), q1.end()); // Sort and track original indexes
+
+		// Sort the last 25 percent by round trip time
+		vector<pair<int, int>> q4;
+		for (int i = q4Ind; i < timestampData.size(); i++) {
+			q4.push_back(make_pair(timestampData.at(i).roundTrip, i));
+		}
+		sort(q4.begin(), q4.end()); // Sort and track original indexes
+
+		//vector<double> c2e;
+		//int num_c2e;
+		//// Calculate median c2e for Q1
+		//c2e.clear();
+		//num_c2e = MAX(q1.size() * 0.2f, 2); // Use at least 2 points
+		//num_c2e = MIN(num_c2e, q1.size()); // Limit to the number of available points
+		//for (int i = 0; i < num_c2e; i++) {
+		//	c2e.push_back(timestampData.at(q1.at(i).second).c2e);
+		//}
+		//float c2eQ1Med = GetMedian(&(c2e.at(0)), num_c2e);
+		//cout << c2eQ1Med << endl;
+
+		//// Calculate median c2e for Q4
+		//c2e.clear();
+		//num_c2e = MAX(q4.size() * 0.2f, 2); // Use at least 2 points
+		//num_c2e = MIN(num_c2e, q4.size());  // Limit to the number of available points
+		//for (int i = 0; i < num_c2e; i++) {
+		//	c2e.push_back(timestampData.at(q4.at(i).second).c2e);
+		//}
+		//float c2eQ4Med = GetMedian(&(c2e.at(0)), num_c2e);
+		//cout << c2eQ4Med << endl;
+
+		std::string ts;
+		std::time_t c;
+		long double m;
+		size_t lastDelim;
+		size_t lastNChar;
+
+		// Calculate Q1 timesync map
+		tsMap.e0 = timestampData.at(q1.at(0).second).TS_received;
+		ts = timestampData.at(q1.at(0).second).TS_sent;
+		lastDelim = ts.find_last_of('-'); // find subsecond decimal
+		lastNChar = ts.size() - lastDelim - 1;
+		c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+		m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar); // Convert subsecond
+		tsMap.c0 = (long double)c + m; // Append subsecond as decimal
+		tsMap.c0 += q1.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
+
+		// Calculate Q4 timesync map
+		tsMap.e1 = timestampData.at(q4.at(0).second).TS_received;
+		ts = timestampData.at(q4.at(0).second).TS_sent;
+		lastDelim = ts.find_last_of('-'); // find subsecond decimal
+		lastNChar = ts.size() - lastDelim - 1;
+		c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+		m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar);	tsMap.c1 = (long double)c + m; // Convert subsecond
+		tsMap.c1 = (long double)c + m; // Append subsecond as decimal
+		tsMap.c1 += q4.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
 	}
 
-	// ToDo: improve algorithm finding shortest round trips
-	// -- Deal with cases where recording is stopped when emotibit is offline (i.e. no Q4 round trips)
 
-	// Sort the first 25 percent by round trip time
-	vector<pair<int, int>> q1;
-	for (int i = 0; i < q1Ind; i++) {
-		q1.push_back(make_pair(timestampData.at(i).roundTrip, i));
+	else {
+		//for every two timestamp data points [(RD1, TS_sent1, TS_received1, AK1, roundTrip1), (RD2, TS_sent2, TS_received2, AK2, roundTrip2)], create two lines
+		//one line crosses points (TS_sent1, RD1) and (TS_sent2, TS_received2) the other (TS_sent1, TS_received1) and (TS_sent2, RD2)
+		//extrapolate both lines to find the emotbit times at the first and last timestamp data points
+		long double firstTsSent = convertTsSent(timestampData.front().TS_sent);
+		long double lastTsSent = convertTsSent(timestampData.back().TS_sent);
+		long double minErrorBar = pow(2,32) - 1;
+
+		for (int timestampPoint1 = 0; timestampPoint1 < timestampData.size(); timestampPoint1++) {
+			for (int timestampPoint2 = timestampPoint1 + 1; timestampPoint2 < timestampData.size(); timestampPoint2++) {
+				//have to convert TS_Send data from string to double				
+				long double tsSend1 = convertTsSent(timestampData[timestampPoint1].TS_sent);
+				long double tsSend2 = convertTsSent(timestampData[timestampPoint2].TS_sent);
+				long double rd1 = timestampData[timestampPoint1].RD;
+				long double rd2 = timestampData[timestampPoint2].RD;
+				long double tsRec1 = timestampData[timestampPoint1].TS_received;
+				long double tsRec2 = timestampData[timestampPoint2].TS_received;
+
+				//create error bars by drawing vertical lines  
+				//one from (firstTsSent, errorBar1Begin) to (firstTsSent, errorBar1End) the other from (lastTsSent, errorBar2Begin) to (lastTsSent, errorBar2End)
+				long double errorBar1Begin = linterp(firstTsSent, tsSend1, tsSend2, rd1, tsRec2); //the emotibit time of the first timestamp from first line
+				long double errorBar1End = linterp(firstTsSent, tsSend1, tsSend2, tsRec1, rd2); //the emotibit time of the first timestamp from second line
+				long double errorBar2Begin = linterp(lastTsSent, tsSend1, tsSend2, tsRec1, rd2); //the emotibit time of the second timestamp from second line
+				long double errorBar2End = linterp(lastTsSent, tsSend1, tsSend2, rd1, tsRec2); //the emotibit time of the second timestamp from first line
+				
+				long double errorBar1 = errorBar1End - errorBar1Begin;
+				long double errorBar2 = errorBar2End - errorBar2Begin;
+
+				long double currErrorBar = max(errorBar1, errorBar2);
+				
+				//use the smallest of the largest error bars to determine which timestamp data pair to use
+				if (currErrorBar < minErrorBar) {
+					minErrorBar = currErrorBar;
+					tsMap.c0 = tsSend1;
+					tsMap.c1 = tsSend2;
+					//assume emotibit time is the RD time + half the round trip time
+					tsMap.e0 = rd1 + (timestampData[timestampPoint1].roundTrip/2);
+					tsMap.e1 = rd2 + (timestampData[timestampPoint2].roundTrip/2);
+				}
+			}
+		}
 	}
-	sort(q1.begin(), q1.end()); // Sort and track original indexes
-
-	// Sort the last 25 percent by round trip time
-	vector<pair<int, int>> q4;
-	for (int i = q4Ind; i < timestampData.size(); i++) {
-		q4.push_back(make_pair(timestampData.at(i).roundTrip, i));
-	}
-	sort(q4.begin(), q4.end()); // Sort and track original indexes
-
-	//vector<double> c2e;
-	//int num_c2e;
-	//// Calculate median c2e for Q1
-	//c2e.clear();
-	//num_c2e = MAX(q1.size() * 0.2f, 2); // Use at least 2 points
-	//num_c2e = MIN(num_c2e, q1.size()); // Limit to the number of available points
-	//for (int i = 0; i < num_c2e; i++) {
-	//	c2e.push_back(timestampData.at(q1.at(i).second).c2e);
-	//}
-	//float c2eQ1Med = GetMedian(&(c2e.at(0)), num_c2e);
-	//cout << c2eQ1Med << endl;
-
-	//// Calculate median c2e for Q4
-	//c2e.clear();
-	//num_c2e = MAX(q4.size() * 0.2f, 2); // Use at least 2 points
-	//num_c2e = MIN(num_c2e, q4.size());  // Limit to the number of available points
-	//for (int i = 0; i < num_c2e; i++) {
-	//	c2e.push_back(timestampData.at(q4.at(i).second).c2e);
-	//}
-	//float c2eQ4Med = GetMedian(&(c2e.at(0)), num_c2e);
-	//cout << c2eQ4Med << endl;
-
-	std::string ts;
-	std::time_t c;
-	long double m;
+	return tsMap;
+}
+long double ofApp::convertTsSent(string tsSent) {
 	size_t lastDelim;
 	size_t lastNChar;
+	std::time_t c;
+	long double m;
 
-	// Calculate Q1 timesync map
-	tsMap.e0 = timestampData.at(q1.at(0).second).TS_received;
-	ts = timestampData.at(q1.at(0).second).TS_sent;
-	lastDelim = ts.find_last_of('-'); // find subsecond decimal
-	lastNChar = ts.size() - lastDelim - 1;
-	c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
-	m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar); // Convert subsecond
-	tsMap.c0 = (long double)c + m; // Append subsecond as decimal
-	tsMap.c0 += q1.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
+	lastDelim = tsSent.find_last_of('-'); // find subsecond decimal
+	lastNChar = tsSent.size() - lastDelim - 1;
+	c = getEpochTime(std::wstring(tsSent.begin(), tsSent.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+	m = ((float)atoi(tsSent.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar); // Convert subsecond
+	
+	return ((long double)c + m);
+}
 
-	// Calculate Q4 timesync map
-	tsMap.e1 = timestampData.at(q4.at(0).second).TS_received;
-	ts = timestampData.at(q4.at(0).second).TS_sent;
-	lastDelim = ts.find_last_of('-'); // find subsecond decimal
-	lastNChar = ts.size() - lastDelim - 1;
-	c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
-	m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar);	tsMap.c1 = (long double)c + m; // Convert subsecond
-	tsMap.c1 = (long double)c + m; // Append subsecond as decimal
-	tsMap.c1 += q4.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
-
-	return tsMap;
+void ofApp::printTimesyncMetrics(vector<TimestampData> timestampData) {
+	string filename = inFileDir + inFileBase + "_" + "timesyncsMetrics" + fileExt;
+	cout << "Creating file: " << filename << endl;
+	ofstream mFile;
+	mFile.open(filename.c_str(), ios::out);
+	long double avgRegressionError = 0;
+	mFile << setprecision(15) << "Regression Line (y=mx+b):m,b" << endl;
+	long double m = ((timeSyncMap.e1 - timeSyncMap.e0) / (timeSyncMap.c1 - timeSyncMap.c0));
+	long double b = (m * -timeSyncMap.c0) + timeSyncMap.e0;
+	mFile << m << "," << b << endl;
+	mFile << "VISUALIZATION" << endl;
+	mFile << "cnt,TS_sent,RegressionError,RoundTrip,RegressionError+roundTrip,RD,TS_received" << endl;
+	for (int timestampPoint = 0; timestampPoint < timestampData.size(); timestampPoint++) {
+		long double regressionError = linterp(convertTsSent(timestampData[timestampPoint].TS_sent), timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.e0, timeSyncMap.e1);
+		if (regressionError < timestampData[timestampPoint].RD) {
+			regressionError = regressionError - timestampData[timestampPoint].RD;
+		}
+		else if (regressionError > timestampData[timestampPoint].TS_received) {
+			regressionError = regressionError - timestampData[timestampPoint].TS_received;
+		}
+		else {
+			regressionError = 0;
+		}
+		mFile << setprecision(15) << timestampPoint << "," << convertTsSent(timestampData[timestampPoint].TS_sent) << "," << regressionError << "," << timestampData[timestampPoint].roundTrip
+				<< "," << (regressionError + timestampData[timestampPoint].roundTrip) << "," << timestampData[timestampPoint].RD << "," << timestampData[timestampPoint].TS_received << endl;
+		avgRegressionError += regressionError;
+	}
+	avgRegressionError /= timestampData.size();
+	mFile << "Avg RegressionError: " << avgRegressionError <<endl;
+	
+	mFile.close();
 }
 
 bool ofApp::timestampDataCompare(pair<int, TimestampData> i, pair<int, TimestampData> j) {
@@ -444,8 +538,8 @@ void ofApp::parseDataLine(string packet) {
 		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::REQUEST_DATA) == 0) {
 			for (uint16_t i = EmotiBitPacket::headerLength; i < splitPacket.size(); i++) {
 				if (splitPacket.at(i).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0) {
-					if (allTimestampData.size() > 0 && allTimestampData.back().roundTrip == -1) {
-						// If the previous sync round trip wasn't detected, remove it
+					if (allTimestampData.size() > 0 && allTimestampData.back().roundTrip < 0) {
+						// If the previous sync round trip wasn't detected or if the TL was lost, remove it
 						allTimestampData.pop_back();
 					}
 					allTimestampData.emplace_back();
