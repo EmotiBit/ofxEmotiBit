@@ -977,17 +977,17 @@ void ofApp::setupOscilloscopes()
 			{ EmotiBitPacket::TypeTag::PPG_RED },
 			{ EmotiBitPacket::TypeTag::PPG_INFRARED },
 			{ EmotiBitPacket::TypeTag::PPG_GREEN },
-			{ EmotiBitPacket::TypeTag::EDA },
+			{ EmotiBitPacket::TypeTag::EDA }
 			//{ EmotiBitPacket::TypeTag::EDR },
 			//{ EmotiBitPacket::TypeTag::EDL, EmotiBitPacket::TypeTag::EDR },
-			{ EmotiBitPacket::TypeTag::HUMIDITY_0}
+			//{ EmotiBitPacket::TypeTag::HUMIDITY_0}
 		},
 		{ // scope panel 2
 			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
 			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
 			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
-			{ EmotiBitPacket::TypeTag::THERMOPILE},
-			{ EmotiBitPacket::TypeTag::TEMPERATURE_0 }
+			{ EmotiBitPacket::TypeTag::THERMOPILE}
+			//{ EmotiBitPacket::TypeTag::TEMPERATURE_0 }
 		}
 	};
 	// Create an index mapping for each type tag
@@ -1010,15 +1010,15 @@ void ofApp::setupOscilloscopes()
 			{ 25.f },
 			{ 25.f },
 			{ 25.f },
-			{ 15.f },
-			{ 7.5f }
+			{ 15.f }
+			//{ 7.5f }
 		},
 		{ // scope panel 2
 			{ 25.f },
 			{ 25.f },
 			{ 25.f },
-			{ 7.5f },
 			{ 7.5f }
+			//{ 7.5f }
 		}
 	};
 
@@ -1028,17 +1028,17 @@ void ofApp::setupOscilloscopes()
 			{ "PPG:RED" },
 			{ "PPG:IR" },
 			{ "PPG:GRN" },
-			{ "EDA" },
+			{ "EDA" }
 			//{ "EDR" },
 			//{ "EDL", "EDR" },
-			{ "HUMIDITY" }
+			//{ "HUMIDITY" }
 		},
 		{ // scope panel 2
 			{ "ACC:X", "ACC:Y", "ACC:Z" },
 			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
 			{ "MAG:X", "MAG:Y", "MAG:Z" },
-			{ "THERM" },
-			{ "TEMP" }
+			{ "THERM"}
+			//{ "TEMP0" }
 		}
 	};
 	yLims = vector<vector<vector<float>>>
@@ -1047,16 +1047,16 @@ void ofApp::setupOscilloscopes()
 			{  0.f,0.f  },
 			{  0.f,0.f  },
 			{  0.f,0.f  },
-			{ 0.f,0.f },
+			{ 0.f,0.f }
 			//{ -0.01f, 3.31f },
-			{ 0.f, 0.f  }
+			//{ 0.f, 0.f  }
 		},
 		{ // scope panel 2
 			{  -8.f, 8.f  },
 			{  -1000.f, 1000.f  },
 			{  0.f,0.f  },
-			{  0.f,0.f  },
 			{  0.f,0.f  }
+			//{  0.f,0.f  }
 		}
 	};
 
@@ -1066,15 +1066,15 @@ void ofApp::setupOscilloscopes()
 			{  0.f },
 			{  0.f },
 			{  0.f },
-			{ 0.02f },	// NOTE: EDA is changed elsewhere to be a Sliding EDA minYspan 
-			{ 1.f  }
+			{ 0.02f }	// NOTE: EDA is changed elsewhere to be a Sliding EDA minYspan 
+			//{ 1.f  }
 		},
 		{ // scope panel 2
 			{ 0.f },
 			{ 0.f },
 			{ 50.f },
-			{ 2.f },
 			{ 2.f }
+			//{ 2.f }
 		}
 	};
 
@@ -1084,15 +1084,15 @@ void ofApp::setupOscilloscopes()
 			{ofColor(255, 69, 78)},
 			{ofColor(128, 75, 181)},
 			{ofColor(120, 209, 192)},
-			{ofColor(21, 73, 130)},
-			{ofColor(125, 184, 234)}
+			{ofColor(21, 73, 130)}
+			//{ofColor(125, 184, 234)}
 		},
 		{ // scope panel 2
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
-			{ofColor(239, 97, 82)},
-			{ofColor(234, 174, 68)}
+			{ofColor(239, 97, 82)}
+			//{ofColor(234, 174, 68)}
 		}
 	};
 
