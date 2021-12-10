@@ -38,6 +38,7 @@ void ofApp::update() {
 
 	updateLsl();
 
+	newData.clear();
 	vector<string> dataPackets;
 	emotiBitWiFi.readData(dataPackets);
 	for (string packet : dataPackets)
@@ -48,6 +49,8 @@ void ofApp::update() {
 			dataLogger.push(packet + '\n');
 		}
 	}
+	drawData(newData);
+	sendData(newData);
 
 	updateMenuButtons();
 }
@@ -664,6 +667,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 {
 
 	EmotiBitPacket::Header packetHeader;
+
 	if (EmotiBitPacket::getHeader(splitPacket, packetHeader)) 
 	{
 		if (packetHeader.dataLength >= MAX_BUFFER_LENGTH) 
@@ -677,68 +681,77 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			_testingHelper.update(splitPacket, packetHeader);
 		}
 
-		auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
-		if (indexPtr != typeTagIndexes.end()) 
-		{	// We're plotting this packet's typeTag!
-			vector<vector<float>> data;
-			int w = indexPtr->second.at(0); // Scope window
-			int s = indexPtr->second.at(1); // Scope
-			int p = indexPtr->second.at(2); // Plot
-			data.resize(typeTags.at(w).at(s).size());
-
-			vector<string> oscAddresses;
-			vector<ofxOscMessage> oscMessages;
-			if (sendOsc) // Handle sending data to outputs
-			{
-				// ToDo: Refactor to handle data outputs in one place
-				// ToDo: Make it possible to send data types that aren't being plotted (e.g. EL, ER)
-				oscAddresses = oscPatchboard.patchcords[packetHeader.typeTag];
-				oscMessages.resize(oscAddresses.size());
-				for (auto a = 0; a < oscAddresses.size(); a++)
-				{
-					oscMessages.at(a).setAddress(oscAddresses.at(a));
-				}
-			}
-
-			for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) 
-			{
-				// Data for plotting in the oscilloscope
-				data.at(p).emplace_back(ofToFloat(splitPacket.at(n))); 
-
-				if (sendOsc) // Handle sending data to outputs
-				{
-					for (auto a = 0; a < oscMessages.size(); a++)
-					{
-						oscMessages.at(a).addFloatArg(data.at(p).back());
-					}
-				}
-			}
-			if (sendOsc)
-			{
-				for (auto a = 0; a < oscMessages.size(); a++)
-				{
-					// ToDo: Consider using ofxOscBundle
-					oscSender.sendMessage(oscMessages.at(a));
-				}
-			}
-
-			if (!isPaused) {
-				// Add data to oscilloscope
-				scopeWins.at(w).scopes.at(s).updateData(data);
-			}
-			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
-			dataCounts.at(w).at(s).at(p) += packetHeader.dataLength;
-
-			// Sliding EDA minYspan 
-			if (!DEBUGGING && packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDA) == 0 && data.at(p).size() > 0)
-			{
-				minYSpans.at(w).at(s) = 0.1f * pow(data.at(p).at(0), 1.5f);
-				if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
-					scopeWins.at(w).scopes.at(s).autoscaleY(true, minYSpans.at(w).at(s));
-				}
-			}
+		for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++)
+		{
+			// Data for other functions to access
+			// ToDo: consider adding a filter to get rid of non-data packets
+			newData.push_back(ofToString(packetHeader.typeTag), ofToFloat(splitPacket.at(n)));
 		}
-		else 
+
+		// THIS CODE IS DEPRECATED
+		// ToDo: Delete this code
+		//auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
+		//if (indexPtr != typeTagIndexes.end()) 
+		//{	// We're plotting this packet's typeTag!
+		//	vector<vector<float>> data;
+		//	int w = indexPtr->second.at(0); // Scope window
+		//	int s = indexPtr->second.at(1); // Scope
+		//	int p = indexPtr->second.at(2); // Plot
+		//	data.resize(typeTags.at(w).at(s).size());
+
+		//	vector<string> oscAddresses;
+		//	vector<ofxOscMessage> oscMessages;
+		//	if (sendOsc) // Handle sending data to outputs
+		//	{
+		//		// ToDo: Refactor to handle data outputs in one place
+		//		// ToDo: Make it possible to send data types that aren't being plotted (e.g. EL, ER)
+		//		oscAddresses = oscPatchboard.patchcords[packetHeader.typeTag];
+		//		oscMessages.resize(oscAddresses.size());
+		//		for (auto a = 0; a < oscAddresses.size(); a++)
+		//		{
+		//			oscMessages.at(a).setAddress(oscAddresses.at(a));
+		//		}
+		//	}
+
+		//	for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) 
+		//	{
+		//		// Data for plotting in the oscilloscope
+		//		data.at(p).emplace_back(ofToFloat(splitPacket.at(n))); 
+
+		//		if (sendOsc) // Handle sending data to outputs
+		//		{
+		//			for (auto a = 0; a < oscMessages.size(); a++)
+		//			{
+		//				oscMessages.at(a).addFloatArg(data.at(p).back());
+		//			}
+		//		}
+		//	}
+		//	if (sendOsc)
+		//	{
+		//		for (auto a = 0; a < oscMessages.size(); a++)
+		//		{
+		//			// ToDo: Consider using ofxOscBundle
+		//			oscSender.sendMessage(oscMessages.at(a));
+		//		}
+		//	}
+
+		//	if (!isPaused) {
+		//		// Add data to oscilloscope
+		//		scopeWins.at(w).scopes.at(s).updateData(data);
+		//	}
+		//	bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
+		//	dataCounts.at(w).at(s).at(p) += packetHeader.dataLength;
+
+		//	// Sliding EDA minYspan 
+		//	if (!DEBUGGING && packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDA) == 0 && data.at(p).size() > 0)
+		//	{
+		//		minYSpans.at(w).at(s) = 0.1f * pow(data.at(p).at(0), 1.5f);
+		//		if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
+		//			scopeWins.at(w).scopes.at(s).autoscaleY(true, minYSpans.at(w).at(s));
+		//		}
+		//	}
+		//}
+		//else 
 		{
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::BATTERY_VOLTAGE) == 0) 
 			{
@@ -970,6 +983,20 @@ void ofApp::setupGui()
 }
 void ofApp::setupOscilloscopes() 
 {
+	string patchboardFile = "emotibitInputSettings.xml";
+
+	emotibitPatchboard.loadFile(patchboardFile);
+
+	if (emotibitPatchboard.settings.input["type"].compare("EmotiBit") != 0)
+	{
+		cout << "ERROR: Specify EmotiBit as input type in " << patchboardFile << endl;
+		while (true);
+	}
+	if (emotibitPatchboard.settings.output["type"].compare("ofxOscilloscope") != 0)
+	{
+		cout << "ERROR: Specify ofxOscilloscope as output type in " << patchboardFile << endl;
+		while (true);
+	}
 
 	typeTags = vector<vector<vector<string>>>
 	{
@@ -1442,5 +1469,34 @@ void ofApp::drawOscilloscopes()
 	}
 	ofPopMatrix();
 
+
+}
+
+void ofApp::drawData(EmotiBitData & newData)
+{
+	for (auto patch = emotibitPatchboard.patchcords.begin(); patch != emotibitPatchboard.patchcords.end(); ++patch)
+	{
+		string patchTypeTag = patch->first;
+		vector<float> data = newData.readData(patchTypeTag);
+		if (data.size() > 0)
+		{
+			for (int pcord = 0; pcord < patch->second.size(); pcord++)
+			{
+				// plot it to the specified plotId(s)
+				vector<size_t> ind = plotIdIndexes[ofToInt(patch->second.at(pcord))];
+				if (ind.size() > 0)
+				{
+					int w = ind.at(0); // ScopeWin
+					int s = ind.at(1); // Scope
+					int v = ind.at(2); // Variable/Plot
+
+					scopeWins.at(w).scopes.at(s).updateData(v, data);
+				}
+			}
+		}
+	}
+}
+
+void ofApp::sendData(EmotiBitData & newData) {
 
 }

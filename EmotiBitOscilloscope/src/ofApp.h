@@ -15,6 +15,7 @@
 #include "EmotiBitTestingHelper.h"
 #include "ofxOsc.h"
 #include "patchboard.h"
+#include "EmotiBitData.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -62,6 +63,8 @@ public:
 	void updateMenuButtons();
 	void drawConsole();
 	void drawOscilloscopes();
+	void drawData(EmotiBitData & newData);
+	void sendData(EmotiBitData & newData);
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -114,6 +117,8 @@ public:
 	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;
 	unordered_map<string, vector<int>> typeTagIndexes;
+	EmotiBitData newData; // Stores latest available data
+
 	vector<vector<float>> samplingFreqs;
 	vector<vector<vector<string>>> plotNames;
 	vector<vector<vector<float>>> yLims;
@@ -248,6 +253,7 @@ public:
 	};
 	PowerMode _powerMode = PowerMode::LOW_POWER;
 
+	Patchboard emotibitPatchboard;
 	Patchboard oscPatchboard;
 	ofxOscSender oscSender;
 	bool sendOsc = false; // ToDo: generalize sendOsc to sendData
