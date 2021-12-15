@@ -14,6 +14,7 @@
 class EmotiBitTestingHelper
 {
 public:
+	float _eda;
 	float _edl;
 	float _edr;
 	float _edrFiltP2P;
@@ -28,6 +29,7 @@ public:
 	{
 		string serialNumber;
 		string sdCardFilename;
+		vector<float> eda;
 		vector<float> edl;
 		vector<float> edr;
 		vector<float> edrP2P;
