@@ -24,6 +24,7 @@ void EmotiBitTestingHelper::update(const vector<string> &splitPacket, const Emot
 	{
 		printTimer = ofGetElapsedTimeMillis();
 		cout << "PPG Red: " << ofToString(_ppgRed, 0) << ", PPG IR: " << ofToString(_ppgIR, 0) << ", PPG Green: " << ofToString(_ppgGreen, 0);
+		cout << ", EA: " << ofToString(_eda, 6);
 		cout << ", EL: " << ofToString(_edl, 6) << ", ER: " << ofToString(_edr, 6) << ", ER P2P: " << ofToString(_edrFiltP2P, 6);
 		cout << ", Therm: " << ofToString(_thermopile, 2) << endl;
 
@@ -70,9 +71,18 @@ void EmotiBitTestingHelper::updateEda(const vector<string> &splitPacket, const E
 	static deque<float> edaRmsQueue;
 	static ofxBiquadFilter1f edaRmsFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, lpFreq / edaFs, 0.7071);
 	float elLpFreq = 0.16f;
+	static ofxBiquadFilter1f eaFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, elLpFreq / edaFs, 0.7071);
 	static ofxBiquadFilter1f elFilter = ofxBiquadFilter1f(OFX_BIQUAD_TYPE_LOWPASS, elLpFreq / edaFs, 0.7071);
 	float minEdaRms;
 	float maxEdaRms;
+
+	if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDA) == 0)
+	{
+		for (size_t i = 0; i < packetHeader.dataLength; i++)
+		{
+			_eda = eaFilter.update(ofToFloat(splitPacket.at(EmotiBitPacket::headerLength + i)));
+		}
+	}
 	if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::EDL) == 0)
 	{
 		for (size_t i = 0; i < packetHeader.dataLength; i++)
@@ -162,7 +172,11 @@ void EmotiBitTestingHelper::printResults()
 	_testingResultsLog.push("SN: " + _results.serialNumber + "\n");
 	_testingResultsLog.push("Filename: " + _results.sdCardFilename + "\n");
 	_testingResultsLog.push("PPG: " + ofToString(_results.ppgRed, 0) + ", " + ofToString(_results.ppgIR, 0) + ", " + ofToString(_results.ppgGreen, 0) + "\n");
-	_testingResultsLog.push("EDL: ");
+	_testingResultsLog.push("EDA: ");
+	for (auto result : _results.eda)
+	{
+		_testingResultsLog.push(ofToString(result, 10) + ", ");
+	}_testingResultsLog.push("\nEDL: ");
 	for (auto result : _results.edl)
 	{
 		_testingResultsLog.push(ofToString(result, 10) + ", ");
@@ -194,6 +208,11 @@ void EmotiBitTestingHelper::printResults()
 	_testingResultsLog.push(_results.serialNumber + ", ");
 	_testingResultsLog.push("(Filename)," + _results.sdCardFilename + ", ");
 	_testingResultsLog.push("(PPG), " + ofToString(_results.ppgRed, 0) + ", " + ofToString(_results.ppgIR, 0) + ", " + ofToString(_results.ppgGreen, 0) + ", ");
+	_testingResultsLog.push("(EDA), ");
+	for (auto result : _results.eda)
+	{
+		_testingResultsLog.push(ofToString(result, 10) + ", ");
+	}
 	_testingResultsLog.push("(EDL), ");
 	for (auto result : _results.edl)
 	{
@@ -221,6 +240,7 @@ void EmotiBitTestingHelper::printResults()
 
 void EmotiBitTestingHelper::pushEdlEdrResult()
 {
+	_results.eda.push_back(_eda);
 	_results.edl.push_back(_edl);
 	_results.edr.push_back(_edr);
 	printResults();
@@ -234,6 +254,7 @@ void EmotiBitTestingHelper::pushEdrP2pResult()
 
 void EmotiBitTestingHelper::clearEdaResults()
 {
+	_results.eda.clear();
 	_results.edl.clear();
 	_results.edr.clear();
 	_results.edrP2P.clear();
@@ -258,6 +279,10 @@ void EmotiBitTestingHelper::clearPpgResults()
 
 void EmotiBitTestingHelper::popEdlEdrResult()
 {
+	if (_results.eda.size() > 0)
+	{
+		_results.eda.pop_back();
+	}
 	if (_results.edl.size() > 0)
 	{
 		_results.edl.pop_back();
@@ -298,6 +323,7 @@ void EmotiBitTestingHelper::clearAllResults()
 	_results.serialNumber = "";
 	_results.sdCardFilename = "";
 	_results.testStatus = "";
+	_results.eda.clear();
 	_results.edl.clear();
 	_results.edr.clear();
 	_results.edrP2P.clear();
