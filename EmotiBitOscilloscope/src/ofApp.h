@@ -185,7 +185,7 @@ public:
 	const string GUI_STRING_NORMAL_POWER =	 "Normal         (data streaming)";
 	const string GUI_STRING_LOW_POWER =		 "Low Power      (no streaming)";
 	const string GUI_STRING_WIRELESS_OFF = "Wireless Off";
-	const string GUI_STRING_HIBERNATE = "Hibernate";
+	const string GUI_STRING_HIBERNATE = "Sleep";
 
 	ofColor recordControlColor = ofColor(255, 69, 78);
 	ofColor hibernateControlColor = ofColor(10, 135, 210);
