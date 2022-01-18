@@ -62,6 +62,7 @@ public:
 	void updateMenuButtons();
 	void drawConsole();
 	void drawOscilloscopes();
+	void updateAvailableDataStreams(std::string typetag, bool addRemoveBar);
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -114,6 +115,7 @@ public:
 	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;
 	unordered_map<string, vector<int>> typeTagIndexes;
+	unordered_map<string, vector<int>> typeTagIndexesTemplate;
 	vector<vector<float>> samplingFreqs;
 	vector<vector<vector<string>>> plotNames;
 	vector<vector<vector<float>>> yLims;

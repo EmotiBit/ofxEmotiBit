@@ -52,6 +52,28 @@ void ofApp::update() {
 	updateMenuButtons();
 }
 
+void ofApp::updateAvailableDataStreams(std::string typetag, bool addRemoveBar)
+{
+	if (typetag == EmotiBitPacket::TypeTag::TEMPERATURE_0)
+	{
+		if (addRemoveBar)
+		{
+			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::TEMPERATURE_0) == typeTagIndexes.end())
+			{
+				typeTagIndexes.emplace(EmotiBitPacket::TypeTag::TEMPERATURE_0, typeTagIndexesTemplate[EmotiBitPacket::TypeTag::TEMPERATURE_0]);
+			}
+		}
+		else
+		{
+			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::TEMPERATURE_0) != typeTagIndexes.end())
+			{
+				typeTagIndexes.erase(EmotiBitPacket::TypeTag::TEMPERATURE_0);
+				scopeWins.at(1).scopes.at(3).clearData();
+			}
+		}
+	}
+
+}
 //--------------------------------------------------------------
 void ofApp::draw() {
 	drawOscilloscopes();
@@ -167,6 +189,14 @@ void ofApp::keyReleased(int key) {
 			{
 				consoleLogger.stopThread();
 			}
+		}
+		if (key == 't')
+		{
+			updateAvailableDataStreams(EmotiBitPacket::TypeTag::TEMPERATURE_0, false);
+		}
+		if (key == 'T')
+		{
+			updateAvailableDataStreams(EmotiBitPacket::TypeTag::TEMPERATURE_0, true);
 		}
 		if (key == 'D')
 		{
@@ -986,7 +1016,7 @@ void ofApp::setupOscilloscopes()
 			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
 			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
 			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
-			{ EmotiBitPacket::TypeTag::THERMOPILE}
+			{ EmotiBitPacket::TypeTag::THERMOPILE, EmotiBitPacket::TypeTag::TEMPERATURE_0}
 			//{ EmotiBitPacket::TypeTag::TEMPERATURE_0 }
 		}
 	};
@@ -999,7 +1029,7 @@ void ofApp::setupOscilloscopes()
 			}
 		}
 	}
-
+	typeTagIndexesTemplate = typeTagIndexes;
 	bufferSizes = initBuffer(bufferSizes);
 	dataCounts = initBuffer(dataCounts);
 	dataFreqs = initBuffer(dataFreqs);
@@ -1037,7 +1067,7 @@ void ofApp::setupOscilloscopes()
 			{ "ACC:X", "ACC:Y", "ACC:Z" },
 			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
 			{ "MAG:X", "MAG:Y", "MAG:Z" },
-			{ "THERM"}
+			{ "THERM", "TEMP0"}
 			//{ "TEMP0" }
 		}
 	};
@@ -1091,7 +1121,7 @@ void ofApp::setupOscilloscopes()
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
-			{ofColor(239, 97, 82)}
+			{ofColor(239, 97, 82), ofColor(234, 174, 68)}
 			//{ofColor(234, 174, 68)}
 		}
 	};
