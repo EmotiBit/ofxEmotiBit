@@ -9,7 +9,7 @@ void ofApp::setup() {
 	ofBackground(255, 255, 255);
 	ofSetLogLevel(OF_LOG_NOTICE);
 	writeOfxEmotiBitVersionFile();
-
+	setTypeTagPlotAttributes();
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
 
 	setupGui();
@@ -28,6 +28,7 @@ void ofApp::setup() {
 		consoleLogger.startThread();
 	}
 	lsl.start(); //Start up lsl connection on a seperate thread
+
 }
 
 //--------------------------------------------------------------
@@ -52,25 +53,59 @@ void ofApp::update() {
 	updateMenuButtons();
 }
 
+void ofApp::setTypeTagPlotAttributes()
+{
+	// ToDo: Add attributes for all streams for refactor
+	// Add plot attributes for THERMOPILE data
+	typeTagPlotAttr attr;
+	attr.tapeTagName = "THERM";
+	attr.typeTagColor = ofColor(239, 97, 82);
+	typeTagPlotAttributes.emplace(EmotiBitPacket::TypeTag::THERMOPILE, attr);
+}
+
 void ofApp::updateAvailableDataStreams(std::string typetag, bool addRemoveBar)
 {
-	if (typetag == EmotiBitPacket::TypeTag::TEMPERATURE_0)
+	if (typetag == EmotiBitPacket::TypeTag::THERMOPILE)
 	{
+		auto plotIdx = typeTagIndexes[EmotiBitPacket::TypeTag::TEMPERATURE_0];
+		int w = plotIdx.at(0);
+		int s = plotIdx.at(1);
 		if (addRemoveBar)
 		{
-			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::TEMPERATURE_0) == typeTagIndexes.end())
+			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) == typeTagIndexes.end())
 			{
-				typeTagIndexes.emplace(EmotiBitPacket::TypeTag::TEMPERATURE_0, typeTagIndexesTemplate[EmotiBitPacket::TypeTag::TEMPERATURE_0]);
+				auto newPlotNames = plotNames.at(w).at(s);
+				newPlotNames.emplace_back(typeTagPlotAttributes[EmotiBitPacket::TypeTag::THERMOPILE].tapeTagName);
+				auto newPlotColors = plotColors.at(w).at(s);
+				newPlotColors.emplace_back(typeTagPlotAttributes[EmotiBitPacket::TypeTag::THERMOPILE].typeTagColor);
+				plotIdx.at(2) += 1;
+				typeTagIndexes.emplace(EmotiBitPacket::TypeTag::THERMOPILE, plotIdx);
+				typeTags.at(w).at(s).emplace_back(EmotiBitPacket::TypeTag::THERMOPILE);
+				// ToDo: create new function to re-init metadata buffers
+				bufferSizes = initBuffer(bufferSizes);
+				dataCounts = initBuffer(dataCounts);
+				dataFreqs = initBuffer(dataFreqs);
+				scopeWins.at(w).scopes.at(s).clearData();
+				scopeWins.at(w).scopes.at(s).setup(10, samplingFreqs.at(w).at(s), newPlotNames, newPlotColors,
+					0, 1);
 			}
 		}
 		else
 		{
-			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::TEMPERATURE_0) != typeTagIndexes.end())
+			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) != typeTagIndexes.end())
 			{
-				typeTagIndexes.erase(EmotiBitPacket::TypeTag::TEMPERATURE_0);
-				scopeWins.at(1).scopes.at(3).clearData();
+				typeTagIndexes.erase(EmotiBitPacket::TypeTag::THERMOPILE);
+				typeTags.at(w).at(s).pop_back();
+				// ToDo: create new function to re-init metadata buffers
+				bufferSizes = initBuffer(bufferSizes);
+				dataCounts = initBuffer(dataCounts);
+				dataFreqs = initBuffer(dataFreqs);
+				scopeWins.at(w).scopes.at(s).clearData();
+				scopeWins.at(w).scopes.at(s).setup(10, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
+					0, 1);
 			}
 		}
+		
 	}
 
 }
@@ -189,14 +224,6 @@ void ofApp::keyReleased(int key) {
 			{
 				consoleLogger.stopThread();
 			}
-		}
-		if (key == 't')
-		{
-			updateAvailableDataStreams(EmotiBitPacket::TypeTag::TEMPERATURE_0, false);
-		}
-		if (key == 'T')
-		{
-			updateAvailableDataStreams(EmotiBitPacket::TypeTag::TEMPERATURE_0, true);
 		}
 		if (key == 'D')
 		{
@@ -706,7 +733,13 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 		{
 			_testingHelper.update(splitPacket, packetHeader);
 		}
-
+		if (ofGetSystemTimeMillis() - lastOscilloscopeCleared < 1000)
+		{
+			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE))
+			{
+				updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, true);
+			}
+		}
 		auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
 		if (indexPtr != typeTagIndexes.end()) 
 		{	// We're plotting this packet's typeTag!
@@ -1016,7 +1049,7 @@ void ofApp::setupOscilloscopes()
 			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
 			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
 			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
-			{ EmotiBitPacket::TypeTag::THERMOPILE, EmotiBitPacket::TypeTag::TEMPERATURE_0}
+			{ EmotiBitPacket::TypeTag::TEMPERATURE_0}
 			//{ EmotiBitPacket::TypeTag::TEMPERATURE_0 }
 		}
 	};
@@ -1029,7 +1062,7 @@ void ofApp::setupOscilloscopes()
 			}
 		}
 	}
-	typeTagIndexesTemplate = typeTagIndexes;
+
 	bufferSizes = initBuffer(bufferSizes);
 	dataCounts = initBuffer(dataCounts);
 	dataFreqs = initBuffer(dataFreqs);
@@ -1067,7 +1100,7 @@ void ofApp::setupOscilloscopes()
 			{ "ACC:X", "ACC:Y", "ACC:Z" },
 			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
 			{ "MAG:X", "MAG:Y", "MAG:Z" },
-			{ "THERM", "TEMP0"}
+			{ "TEMP0"}
 			//{ "TEMP0" }
 		}
 	};
@@ -1121,7 +1154,7 @@ void ofApp::setupOscilloscopes()
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
 			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
-			{ofColor(239, 97, 82), ofColor(234, 174, 68)}
+			{ofColor(234, 174, 68)}
 			//{ofColor(234, 174, 68)}
 		}
 	};
@@ -1201,6 +1234,8 @@ void ofApp::clearOscilloscopes()
 	for (int w = 0; w < scopeWins.size(); w++) {
 		scopeWins.at(w).clearData();
 	}
+	updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
+	lastOscilloscopeCleared = ofGetSystemTimeMillis();
 }
 
 void ofApp::updateMenuButtons()

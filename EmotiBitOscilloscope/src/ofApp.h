@@ -63,6 +63,7 @@ public:
 	void drawConsole();
 	void drawOscilloscopes();
 	void updateAvailableDataStreams(std::string typetag, bool addRemoveBar);
+	void setTypeTagPlotAttributes();
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -101,7 +102,7 @@ public:
 
 	EmotiBitWiFiHost emotiBitWiFi;
 	unordered_map<string, EmotiBitStatus> emotibitIps;
-
+	uint64_t lastOscilloscopeCleared;
 	//struct EmotibitPacketHeader_V1 {
 	//	uint32_t timestamp;  // milliseconds since EmotiBit bootup
 	//	uint16_t packetCount;
@@ -111,17 +112,21 @@ public:
 	//	uint8_t protocolVersion
 	//}
 
+	struct typeTagPlotAttr {
+		std::string tapeTagName;
+		ofColor typeTagColor;
+	};
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;
 	unordered_map<string, vector<int>> typeTagIndexes;
-	unordered_map<string, vector<int>> typeTagIndexesTemplate;
 	vector<vector<float>> samplingFreqs;
 	vector<vector<vector<string>>> plotNames;
 	vector<vector<vector<float>>> yLims;
 	vector<vector<float>> minYSpans;
 	vector<vector<vector<ofColor>>> plotColors;
 	//vector<ofColor> plotColors;
+	unordered_map<std::string, typeTagPlotAttr>typeTagPlotAttributes;
 
 	vector<vector<vector<int>>> bufferSizes;
 	vector<vector<vector<int>>> dataCounts;
