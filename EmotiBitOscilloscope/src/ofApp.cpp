@@ -735,7 +735,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 		}
 		if (ofGetSystemTimeMillis() - lastOscilloscopeCleared < 1000)
 		{
-			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE))
+			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE) == 0)
 			{
 				updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, true);
 			}
