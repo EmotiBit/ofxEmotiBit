@@ -74,10 +74,8 @@ void ofApp::updateAvailableDataStreams(std::string typetag, bool addRemoveBar)
 		{
 			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) == typeTagIndexes.end())
 			{
-				auto newPlotNames = plotNames.at(w).at(s);
-				newPlotNames.emplace_back(typeTagPlotAttributes[EmotiBitPacket::TypeTag::THERMOPILE].tapeTagName);
-				auto newPlotColors = plotColors.at(w).at(s);
-				newPlotColors.emplace_back(typeTagPlotAttributes[EmotiBitPacket::TypeTag::THERMOPILE].typeTagColor);
+				plotNames.at(w).at(s).emplace_back(typeTagPlotAttributes[EmotiBitPacket::TypeTag::THERMOPILE].tapeTagName);
+				plotColors.at(w).at(s).emplace_back(typeTagPlotAttributes[EmotiBitPacket::TypeTag::THERMOPILE].typeTagColor);
 				plotIdx.at(2) += 1;
 				typeTagIndexes.emplace(EmotiBitPacket::TypeTag::THERMOPILE, plotIdx);
 				typeTags.at(w).at(s).emplace_back(EmotiBitPacket::TypeTag::THERMOPILE);
@@ -86,7 +84,7 @@ void ofApp::updateAvailableDataStreams(std::string typetag, bool addRemoveBar)
 				dataCounts = initBuffer(dataCounts);
 				dataFreqs = initBuffer(dataFreqs);
 				scopeWins.at(w).scopes.at(s).clearData();
-				scopeWins.at(w).scopes.at(s).setup(10, samplingFreqs.at(w).at(s), newPlotNames, newPlotColors,
+				scopeWins.at(w).scopes.at(s).setup(10, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
 					0, 1);
 			}
 		}
@@ -94,6 +92,8 @@ void ofApp::updateAvailableDataStreams(std::string typetag, bool addRemoveBar)
 		{
 			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) != typeTagIndexes.end())
 			{
+				plotNames.at(w).at(s).pop_back();
+				plotColors.at(w).at(s).pop_back();
 				typeTagIndexes.erase(EmotiBitPacket::TypeTag::THERMOPILE);
 				typeTags.at(w).at(s).pop_back();
 				// ToDo: create new function to re-init metadata buffers
@@ -733,12 +733,10 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 		{
 			_testingHelper.update(splitPacket, packetHeader);
 		}
-		if (ofGetSystemTimeMillis() - lastOscilloscopeCleared < 1000)
+		if (!oscilloscopeStreamCountUpdated && packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE) == 0)
 		{
-			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE) == 0)
-			{
-				updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, true);
-			}
+			updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, true);
+			oscilloscopeStreamCountUpdated = true;
 		}
 		auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
 		if (indexPtr != typeTagIndexes.end()) 
@@ -1235,7 +1233,7 @@ void ofApp::clearOscilloscopes()
 		scopeWins.at(w).clearData();
 	}
 	updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
-	lastOscilloscopeCleared = ofGetSystemTimeMillis();
+	oscilloscopeStreamCountUpdated = false;
 }
 
 void ofApp::updateMenuButtons()
