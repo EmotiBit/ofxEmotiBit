@@ -67,7 +67,7 @@ void ofApp::updateAvailableDataStreams(std::string typetag, bool addRemoveBar)
 {
 	if (typetag == EmotiBitPacket::TypeTag::THERMOPILE)
 	{
-		auto plotIdx = typeTagIndexes[EmotiBitPacket::TypeTag::TEMPERATURE_0];
+		auto plotIdx = typeTagIndexes[EmotiBitPacket::TypeTag::TEMPERATURE_1];
 		int w = plotIdx.at(0);
 		int s = plotIdx.at(1);
 		if (addRemoveBar)
@@ -1047,7 +1047,7 @@ void ofApp::setupOscilloscopes()
 			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
 			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
 			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
-			{ EmotiBitPacket::TypeTag::TEMPERATURE_0}
+			{ EmotiBitPacket::TypeTag::TEMPERATURE_1}
 			//{ EmotiBitPacket::TypeTag::TEMPERATURE_0 }
 		}
 	};
@@ -1098,7 +1098,7 @@ void ofApp::setupOscilloscopes()
 			{ "ACC:X", "ACC:Y", "ACC:Z" },
 			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
 			{ "MAG:X", "MAG:Y", "MAG:Z" },
-			{ "TEMP0"}
+			{ "TEMP1"}
 			//{ "TEMP0" }
 		}
 	};
