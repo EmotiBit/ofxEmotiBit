@@ -496,6 +496,7 @@ void ofApp::updateDeviceList()
 			ofRemoveListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
 			device->set(false);
 			ofAddListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
+			updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
 			clearOscilloscopes();
 		}
 	}
@@ -589,11 +590,13 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 					vector<string> dataPackets;
 					emotiBitWiFi.readData(dataPackets);
 					emotiBitWiFi.readData(dataPackets);
+					updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
 					clearOscilloscopes();
 				}
 				// ToDo: consider if we need a delay here
 				emotiBitWiFi.connect(ip);
 				_powerMode = PowerMode::LOW_POWER;
+				updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
 				clearOscilloscopes();
 			}
 		}
@@ -609,6 +612,7 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 			vector<string> dataPackets;
 			emotiBitWiFi.readData(dataPackets);
 			emotiBitWiFi.readData(dataPackets);
+			updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
 			clearOscilloscopes();
 		}
 	}
@@ -1232,7 +1236,7 @@ void ofApp::clearOscilloscopes()
 	for (int w = 0; w < scopeWins.size(); w++) {
 		scopeWins.at(w).clearData();
 	}
-	updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
+	
 	oscilloscopeStreamCountUpdated = false;
 }
 
