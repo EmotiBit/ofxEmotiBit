@@ -201,7 +201,7 @@ void ofApp::keyReleased(int key) {
 			drawDataInfo = !drawDataInfo;
 		}
 		if (key == OF_KEY_BACKSPACE || key == OF_KEY_DEL) {
-			clearOscilloscopes();
+			clearOscilloscopes(false);
 		}
 		if (key == ':')
 		{
@@ -496,8 +496,7 @@ void ofApp::updateDeviceList()
 			ofRemoveListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
 			device->set(false);
 			ofAddListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
-			updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
-			clearOscilloscopes();
+			clearOscilloscopes(true);
 		}
 	}
 }
@@ -590,14 +589,12 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 					vector<string> dataPackets;
 					emotiBitWiFi.readData(dataPackets);
 					emotiBitWiFi.readData(dataPackets);
-					updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
-					clearOscilloscopes();
+					clearOscilloscopes(true);
 				}
 				// ToDo: consider if we need a delay here
 				emotiBitWiFi.connect(ip);
 				_powerMode = PowerMode::LOW_POWER;
-				updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
-				clearOscilloscopes();
+				clearOscilloscopes(true);
 			}
 		}
 	}
@@ -612,8 +609,7 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 			vector<string> dataPackets;
 			emotiBitWiFi.readData(dataPackets);
 			emotiBitWiFi.readData(dataPackets);
-			updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
-			clearOscilloscopes();
+			clearOscilloscopes(true);
 		}
 	}
 }
@@ -1231,13 +1227,18 @@ void ofApp::updateLsl()
 	}
 }
 
-void ofApp::clearOscilloscopes()
+void ofApp::clearOscilloscopes(bool connectedDeviceUpdated)
 {
 	for (int w = 0; w < scopeWins.size(); w++) {
 		scopeWins.at(w).clearData();
 	}
-	
-	oscilloscopeStreamCountUpdated = false;
+
+	// update the Scope plots ONLY if there is update to connected device
+	if (connectedDeviceUpdated)
+	{
+		oscilloscopeStreamCountUpdated = false;
+		updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
+	}
 }
 
 void ofApp::updateMenuButtons()

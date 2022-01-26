@@ -57,7 +57,7 @@ public:
 	void setupGui();
 	void setupOscilloscopes();
 	void updateLsl();
-	void clearOscilloscopes();
+	void clearOscilloscopes(bool connectedDeviceUpdated);
 	void processModePacket(vector<string> &splitPacket);
 	void updateMenuButtons();
 	void drawConsole();
