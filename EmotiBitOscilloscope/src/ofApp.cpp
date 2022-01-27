@@ -124,7 +124,7 @@ void ofApp::addDataStream(std::string typetag)
 		plotColors.at(w).at(s).emplace_back(typeTagPlotAttributes[typetag].typeTagColor);
 		typeTags.at(w).at(s).emplace_back(typetag);
 		// new plotIdx
-		int p = plotNames.at(w).at(s).size() - 1;
+		int p = plotNames.at(w).at(s).size() - 1; //  Size - 1 to make sure there is no out of bounds access.
 		std::vector<int> plotIdx = { w, s, p };
 		// update typetag Indexing
 		typeTagIndexes.emplace(typetag, plotIdx);
@@ -792,6 +792,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 		{
 			_testingHelper.update(splitPacket, packetHeader);
 		}
+		// ToDo: the second comparison is redundant with the called func. Added it here to skip a function call. Might want to change the order later.
 		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE) == 0 && typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) == typeTagIndexes.end())
 		{
 			// Add stream to plot if data detected.

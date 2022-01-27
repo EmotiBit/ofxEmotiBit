@@ -106,7 +106,6 @@ public:
 
 	EmotiBitWiFiHost emotiBitWiFi;
 	unordered_map<string, EmotiBitStatus> emotibitIps;
-	bool oscilloscopeStreamCountUpdated = false;
 	//struct EmotibitPacketHeader_V1 {
 	//	uint32_t timestamp;  // milliseconds since EmotiBit bootup
 	//	uint16_t packetCount;
