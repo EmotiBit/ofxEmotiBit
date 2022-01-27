@@ -62,7 +62,6 @@ public:
 	void updateMenuButtons();
 	void drawConsole();
 	void drawOscilloscopes();
-	void updateAvailableDataStreams(std::string typetag, bool addRemoveBar);
 	void addDataStream(std::string typetag);
 	void removeDataStream(std::string typetag);
 	void reinitMetaDataBuffers();
