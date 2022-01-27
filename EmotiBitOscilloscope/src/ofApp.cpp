@@ -110,7 +110,7 @@ void ofApp::addDataStream(std::string typetag)
 {
 	if (typeTagIndexes.find(typetag) == typeTagIndexes.end())
 	{
-		// ToDo: Find a more elgant way to solve default plot state.
+		// ToDo: Find a more elegant way to solve default plot state.
 		// If adding THERM, remove default TEMP1. It will be added by separate add() call if Temp1 stream is found
 		if (typetag == EmotiBitPacket::TypeTag::THERMOPILE)
 		{
@@ -794,10 +794,12 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 		}
 		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE) == 0 && typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) == typeTagIndexes.end())
 		{
+			// Add stream to plot if data detected.
 			addDataStream(EmotiBitPacket::TypeTag::THERMOPILE);
 		}
 		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TEMPERATURE_1) == 0 && typeTagIndexes.find(EmotiBitPacket::TypeTag::TEMPERATURE_1) == typeTagIndexes.end())
 		{
+			// Add stream to plot if data detected.
 			addDataStream(EmotiBitPacket::TypeTag::TEMPERATURE_1);
 		}
 		auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
@@ -1299,7 +1301,7 @@ void ofApp::clearOscilloscopes(bool connectedDeviceUpdated)
 	if (connectedDeviceUpdated)
 	{
 		// ToDo: think of an elegant way to set scopes to default value
-		// remove only THERM. TEMP1 is default for this scope.
+		// remove only THERM. TEMP1 is default for temperature scope..
 		removeDataStream(EmotiBitPacket::TypeTag::THERMOPILE);
 	}
 }
