@@ -61,6 +61,7 @@ void ofApp::setTypeTagPlotAttributes()
 		typeTagPlotAttr attr;
 		attr.tapeTagName = "THERM";
 		attr.typeTagColor = ofColor(239, 97, 82);
+		// ToDo: someday, we can even consider a standard layout considering even plot number p -> {w,s,p}
 		std::vector<int> sIdx = { 1, 3 };  // {window, scope}
 		attr.scopeIdx = sIdx;
 		typeTagPlotAttributes.emplace(EmotiBitPacket::TypeTag::THERMOPILE, attr);
@@ -91,22 +92,41 @@ void ofApp::reinitMetaDataBuffers()
 	dataFreqs = initBuffer(dataFreqs);
 }
 
+void ofApp::resetIndexMapping()
+{
+	for (int w = 0; w < typeTags.size(); w++) {
+		for (int s = 0; s < typeTags.at(w).size(); s++) {
+			for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
+				vector<int> indexes{ w, s, p };
+				typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
+			}
+		}
+	}
+}
+
+
 
 void ofApp::addDataStream(std::string typetag)
 {
 	if (typeTagIndexes.find(typetag) == typeTagIndexes.end())
 	{
+		// ToDo: Find a more elgant way to solve default plot state.
+		// If adding THERM, remove default TEMP1. It will be added by separate add() call if Temp1 stream is found
+		if (typetag == EmotiBitPacket::TypeTag::THERMOPILE)
+		{
+			removeDataStream(EmotiBitPacket::TypeTag::TEMPERATURE_1);
+		}
 		auto scopeIdx = typeTagPlotAttributes[typetag].scopeIdx;
 		int w = scopeIdx.at(0);
 		int s = scopeIdx.at(1);
-		// add plot attributes
+		// add plot attributes to class vairables
 		plotNames.at(w).at(s).emplace_back(typeTagPlotAttributes[typetag].tapeTagName);
 		plotColors.at(w).at(s).emplace_back(typeTagPlotAttributes[typetag].typeTagColor);
 		typeTags.at(w).at(s).emplace_back(typetag);
 		// new plotIdx
-		int p = plotNames.at(w).at(s).size();
+		int p = plotNames.at(w).at(s).size() - 1;
 		std::vector<int> plotIdx = { w, s, p };
-		// add index
+		// update typetag Indexing
 		typeTagIndexes.emplace(typetag, plotIdx);
 		// re-init metadata buffers
 		reinitMetaDataBuffers();
@@ -114,6 +134,7 @@ void ofApp::addDataStream(std::string typetag)
 		resetScopePlot(w, s);
 	}
 }
+
 
 void ofApp::removeDataStream(std::string typetag)
 {
@@ -124,65 +145,29 @@ void ofApp::removeDataStream(std::string typetag)
 		int w = plotIdx.at(0);
 		int s = plotIdx.at(1);
 		int p = plotIdx.at(2);
-		// erase the attributes for the stream
+		// erase the attributes from class variables
 		plotNames.at(w).at(s).erase(plotNames.at(w).at(s).begin() + p);
 		plotColors.at(w).at(s).erase(plotColors.at(w).at(s).begin() + p);
 		typeTags.at(w).at(s).erase(typeTags.at(w).at(s).begin() + p);
-		// erase the index
-		typeTagIndexes.erase(typetag);
+		
+		// recreate index mapping
+		typeTagIndexes.clear();
+		resetIndexMapping();
+
 		// re-init metadata buffers
 		reinitMetaDataBuffers();
 		// reset the scope
 		resetScopePlot(w, s);
+
+		// ToDo: Find a more elegant way to handle "empty" plot buffer
+		// if removing THERM, make sure TEMP1 is still in the plot buffer
+		if (typetag == EmotiBitPacket::TypeTag::THERMOPILE)
+		{
+			addDataStream(EmotiBitPacket::TypeTag::TEMPERATURE_1);
+		}
 	}
 }
 
-void ofApp::updateAvailableDataStreams(std::string typetag, bool addRemoveBar)
-{
-	if (typetag == EmotiBitPacket::TypeTag::THERMOPILE)
-	{
-		auto plotIdx = typeTagIndexes[EmotiBitPacket::TypeTag::TEMPERATURE_1];
-		int w = plotIdx.at(0);
-		int s = plotIdx.at(1);
-		if (addRemoveBar)
-		{
-			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) == typeTagIndexes.end())
-			{
-				plotNames.at(w).at(s).emplace_back(typeTagPlotAttributes[EmotiBitPacket::TypeTag::THERMOPILE].tapeTagName);
-				plotColors.at(w).at(s).emplace_back(typeTagPlotAttributes[EmotiBitPacket::TypeTag::THERMOPILE].typeTagColor);
-				plotIdx.at(2) += 1;
-				typeTagIndexes.emplace(EmotiBitPacket::TypeTag::THERMOPILE, plotIdx);
-				typeTags.at(w).at(s).emplace_back(EmotiBitPacket::TypeTag::THERMOPILE);
-				// ToDo: create new function to re-init metadata buffers
-				bufferSizes = initBuffer(bufferSizes);
-				dataCounts = initBuffer(dataCounts);
-				dataFreqs = initBuffer(dataFreqs);
-				scopeWins.at(w).scopes.at(s).clearData();
-				scopeWins.at(w).scopes.at(s).setup(10, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
-					0, 1);
-			}
-		}
-		else
-		{
-			if (typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) != typeTagIndexes.end())
-			{
-				plotNames.at(w).at(s).pop_back();
-				plotColors.at(w).at(s).pop_back();
-				typeTagIndexes.erase(EmotiBitPacket::TypeTag::THERMOPILE);
-				typeTags.at(w).at(s).pop_back();
-				// ToDo: create new function to re-init metadata buffers
-				bufferSizes = initBuffer(bufferSizes);
-				dataCounts = initBuffer(dataCounts);
-				dataFreqs = initBuffer(dataFreqs);
-				scopeWins.at(w).scopes.at(s).clearData();
-				scopeWins.at(w).scopes.at(s).setup(10, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
-					0, 1);
-			}
-		}
-		
-	}
-
-}
 //--------------------------------------------------------------
 void ofApp::draw() {
 	drawOscilloscopes();
@@ -809,10 +794,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 		}
 		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE) == 0 && typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) == typeTagIndexes.end())
 		{
-			// add stream
 			addDataStream(EmotiBitPacket::TypeTag::THERMOPILE);
-			//updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, true);
-			//oscilloscopeStreamCountUpdated = true;
 		}
 		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TEMPERATURE_1) == 0 && typeTagIndexes.find(EmotiBitPacket::TypeTag::TEMPERATURE_1) == typeTagIndexes.end())
 		{
@@ -1316,11 +1298,9 @@ void ofApp::clearOscilloscopes(bool connectedDeviceUpdated)
 	// update the Scope plots ONLY if there is update to connected device
 	if (connectedDeviceUpdated)
 	{
-		//oscilloscopeStreamCountUpdated = false;
-		//updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
-		removeDataStream(EmotiBitPacket::TypeTag::TEMPERATURE_1);
+		// ToDo: think of an elegant way to set scopes to default value
+		// remove only THERM. TEMP1 is default for this scope.
 		removeDataStream(EmotiBitPacket::TypeTag::THERMOPILE);
-
 	}
 }
 

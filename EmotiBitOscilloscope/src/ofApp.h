@@ -68,6 +68,7 @@ public:
 	void reinitMetaDataBuffers();
 	void resetScopePlot(int w, int s);
 	void setTypeTagPlotAttributes();
+	void resetIndexMapping();
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
