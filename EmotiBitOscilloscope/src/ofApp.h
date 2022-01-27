@@ -63,6 +63,10 @@ public:
 	void drawConsole();
 	void drawOscilloscopes();
 	void updateAvailableDataStreams(std::string typetag, bool addRemoveBar);
+	void addDataStream(std::string typetag);
+	void removeDataStream(std::string typetag);
+	void reinitMetaDataBuffers();
+	void resetScopePlot(int w, int s);
 	void setTypeTagPlotAttributes();
 
 	//ofxMultiScope scopeWin;
@@ -115,6 +119,7 @@ public:
 	struct typeTagPlotAttr {
 		std::string tapeTagName;
 		ofColor typeTagColor;
+		vector<int> scopeIdx;
 	};
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;

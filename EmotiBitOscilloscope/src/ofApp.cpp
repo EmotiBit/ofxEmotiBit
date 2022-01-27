@@ -56,11 +56,85 @@ void ofApp::update() {
 void ofApp::setTypeTagPlotAttributes()
 {
 	// ToDo: Add attributes for all streams for refactor
-	// Add plot attributes for THERMOPILE data
-	typeTagPlotAttr attr;
-	attr.tapeTagName = "THERM";
-	attr.typeTagColor = ofColor(239, 97, 82);
-	typeTagPlotAttributes.emplace(EmotiBitPacket::TypeTag::THERMOPILE, attr);
+	{
+		// Add plot attributes for THERMOPILE data
+		typeTagPlotAttr attr;
+		attr.tapeTagName = "THERM";
+		attr.typeTagColor = ofColor(239, 97, 82);
+		std::vector<int> sIdx = { 1, 3 };  // {window, scope}
+		attr.scopeIdx = sIdx;
+		typeTagPlotAttributes.emplace(EmotiBitPacket::TypeTag::THERMOPILE, attr);
+	}
+
+	{
+		// Plot Attributes for TEMP1 data
+		typeTagPlotAttr attr;
+		attr.tapeTagName = "TEMP1";
+		attr.typeTagColor = ofColor(234, 174, 68);
+		std::vector<int> sIdx = { 1, 3 };  // {window, scope}
+		attr.scopeIdx = sIdx;
+		typeTagPlotAttributes.emplace(EmotiBitPacket::TypeTag::TEMPERATURE_1, attr);
+	}
+}
+
+void ofApp::resetScopePlot(int w, int s)
+{
+	scopeWins.at(w).scopes.at(s).clearData();
+	scopeWins.at(w).scopes.at(s).setup(10, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
+		0, 1);
+}
+
+void ofApp::reinitMetaDataBuffers()
+{
+	bufferSizes = initBuffer(bufferSizes);
+	dataCounts = initBuffer(dataCounts);
+	dataFreqs = initBuffer(dataFreqs);
+}
+
+
+void ofApp::addDataStream(std::string typetag)
+{
+	if (typeTagIndexes.find(typetag) == typeTagIndexes.end())
+	{
+		auto scopeIdx = typeTagPlotAttributes[typetag].scopeIdx;
+		int w = scopeIdx.at(0);
+		int s = scopeIdx.at(1);
+		// add plot attributes
+		plotNames.at(w).at(s).emplace_back(typeTagPlotAttributes[typetag].tapeTagName);
+		plotColors.at(w).at(s).emplace_back(typeTagPlotAttributes[typetag].typeTagColor);
+		typeTags.at(w).at(s).emplace_back(typetag);
+		// new plotIdx
+		int p = plotNames.at(w).at(s).size();
+		std::vector<int> plotIdx = { w, s, p };
+		// add index
+		typeTagIndexes.emplace(typetag, plotIdx);
+		// re-init metadata buffers
+		reinitMetaDataBuffers();
+		// reset the scope
+		resetScopePlot(w, s);
+	}
+}
+
+void ofApp::removeDataStream(std::string typetag)
+{
+	if (typeTagIndexes.find(typetag) != typeTagIndexes.end())
+	{
+		auto plotIdx = typeTagIndexes[typetag];
+		// find the window, scope, plot for the stream
+		int w = plotIdx.at(0);
+		int s = plotIdx.at(1);
+		int p = plotIdx.at(2);
+		// erase the attributes for the stream
+		plotNames.at(w).at(s).erase(plotNames.at(w).at(s).begin() + p);
+		plotColors.at(w).at(s).erase(plotColors.at(w).at(s).begin() + p);
+		typeTags.at(w).at(s).erase(typeTags.at(w).at(s).begin() + p);
+		// erase the index
+		typeTagIndexes.erase(typetag);
+		// re-init metadata buffers
+		reinitMetaDataBuffers();
+		// reset the scope
+		resetScopePlot(w, s);
+	}
 }
 
 void ofApp::updateAvailableDataStreams(std::string typetag, bool addRemoveBar)
@@ -733,10 +807,16 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 		{
 			_testingHelper.update(splitPacket, packetHeader);
 		}
-		if (!oscilloscopeStreamCountUpdated && packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE) == 0)
+		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::THERMOPILE) == 0 && typeTagIndexes.find(EmotiBitPacket::TypeTag::THERMOPILE) == typeTagIndexes.end())
 		{
-			updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, true);
-			oscilloscopeStreamCountUpdated = true;
+			// add stream
+			addDataStream(EmotiBitPacket::TypeTag::THERMOPILE);
+			//updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, true);
+			//oscilloscopeStreamCountUpdated = true;
+		}
+		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TEMPERATURE_1) == 0 && typeTagIndexes.find(EmotiBitPacket::TypeTag::TEMPERATURE_1) == typeTagIndexes.end())
+		{
+			addDataStream(EmotiBitPacket::TypeTag::TEMPERATURE_1);
 		}
 		auto indexPtr = typeTagIndexes.find(packetHeader.typeTag);	// Check whether we're plotting this typeTage
 		if (indexPtr != typeTagIndexes.end()) 
@@ -1236,8 +1316,11 @@ void ofApp::clearOscilloscopes(bool connectedDeviceUpdated)
 	// update the Scope plots ONLY if there is update to connected device
 	if (connectedDeviceUpdated)
 	{
-		oscilloscopeStreamCountUpdated = false;
-		updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
+		//oscilloscopeStreamCountUpdated = false;
+		//updateAvailableDataStreams(EmotiBitPacket::TypeTag::THERMOPILE, false);
+		removeDataStream(EmotiBitPacket::TypeTag::TEMPERATURE_1);
+		removeDataStream(EmotiBitPacket::TypeTag::THERMOPILE);
+
 	}
 }
 
