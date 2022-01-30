@@ -11,7 +11,7 @@ void ofApp::setup() {
 	writeOfxEmotiBitVersionFile();
 	setTypeTagPlotAttributes();
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
-
+	timeWindowOnSetup = 10;  // set timeWindow for setup (in seconds)
 	setupGui();
 	setupOscilloscopes();
 	
@@ -59,8 +59,8 @@ void ofApp::setTypeTagPlotAttributes()
 	{
 		// Add plot attributes for THERMOPILE data
 		typeTagPlotAttr attr;
-		attr.tapeTagName = "THERM";
-		attr.typeTagColor = ofColor(239, 97, 82);
+		attr.plotName = "THERM";
+		attr.plotColor = ofColor(239, 97, 82);
 		// ToDo: someday, we can even consider a standard layout considering even plot number p -> {w,s,p}
 		std::vector<int> sIdx = { 1, 3 };  // {window, scope}
 		attr.scopeIdx = sIdx;
@@ -70,8 +70,8 @@ void ofApp::setTypeTagPlotAttributes()
 	{
 		// Plot Attributes for TEMP1 data
 		typeTagPlotAttr attr;
-		attr.tapeTagName = "TEMP1";
-		attr.typeTagColor = ofColor(234, 174, 68);
+		attr.plotName = "TEMP1";
+		attr.plotColor = ofColor(234, 174, 68);
 		std::vector<int> sIdx = { 1, 3 };  // {window, scope}
 		attr.scopeIdx = sIdx;
 		typeTagPlotAttributes.emplace(EmotiBitPacket::TypeTag::TEMPERATURE_1, attr);
@@ -81,11 +81,11 @@ void ofApp::setTypeTagPlotAttributes()
 void ofApp::resetScopePlot(int w, int s)
 {
 	scopeWins.at(w).scopes.at(s).clearData();
-	scopeWins.at(w).scopes.at(s).setup(10, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
+	scopeWins.at(w).scopes.at(s).setup(timeWindowOnSetup, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
 		0, 1);
 }
 
-void ofApp::reinitMetaDataBuffers()
+void ofApp::initMetaDataBuffers()
 {
 	bufferSizes = initBuffer(bufferSizes);
 	dataCounts = initBuffer(dataCounts);
@@ -111,17 +111,20 @@ void ofApp::addDataStream(std::string typetag)
 	if (typeTagIndexes.find(typetag) == typeTagIndexes.end())
 	{
 		// ToDo: Find a more elegant way to solve default plot state.
-		// If adding THERM, remove default TEMP1. It will be added by separate add() call if Temp1 stream is found
+		// If adding THERM, remove default TEMP1. 
 		if (typetag == EmotiBitPacket::TypeTag::THERMOPILE)
 		{
+			// TEMP 1 was added at setup wihout confirmation that data is present. Therefore it is removed when
+			// another data stream on the same plot is detected(to resolve autoscaling issues)
+			// It will be added by separate add() call if Temp1 stream is found
 			removeDataStream(EmotiBitPacket::TypeTag::TEMPERATURE_1);
 		}
 		auto scopeIdx = typeTagPlotAttributes[typetag].scopeIdx;
 		int w = scopeIdx.at(0);
 		int s = scopeIdx.at(1);
 		// add plot attributes to class vairables
-		plotNames.at(w).at(s).emplace_back(typeTagPlotAttributes[typetag].tapeTagName);
-		plotColors.at(w).at(s).emplace_back(typeTagPlotAttributes[typetag].typeTagColor);
+		plotNames.at(w).at(s).emplace_back(typeTagPlotAttributes[typetag].plotName);
+		plotColors.at(w).at(s).emplace_back(typeTagPlotAttributes[typetag].plotColor);
 		typeTags.at(w).at(s).emplace_back(typetag);
 		// new plotIdx
 		int p = plotNames.at(w).at(s).size() - 1; //  Size - 1 to make sure there is no out of bounds access.
@@ -129,7 +132,7 @@ void ofApp::addDataStream(std::string typetag)
 		// update typetag Indexing
 		typeTagIndexes.emplace(typetag, plotIdx);
 		// re-init metadata buffers
-		reinitMetaDataBuffers();
+		initMetaDataBuffers();
 		// reset the scope
 		resetScopePlot(w, s);
 	}
@@ -155,7 +158,7 @@ void ofApp::removeDataStream(std::string typetag)
 		resetIndexMapping();
 
 		// re-init metadata buffers
-		reinitMetaDataBuffers();
+		initMetaDataBuffers();
 		// reset the scope
 		resetScopePlot(w, s);
 
@@ -1125,10 +1128,7 @@ void ofApp::setupOscilloscopes()
 			}
 		}
 	}
-
-	bufferSizes = initBuffer(bufferSizes);
-	dataCounts = initBuffer(dataCounts);
-	dataFreqs = initBuffer(dataFreqs);
+	initMetaDataBuffers();
 
 	samplingFreqs = vector<vector<float>>
 	{
@@ -1223,7 +1223,6 @@ void ofApp::setupOscilloscopes()
 	};
 
 	//plotColors = { ofColor(0,0,0), ofColor(255,0,0) , ofColor(0,191,0), ofColor(0,0,255) };
-	float timeWindow = 10.; // seconds
 
 	int guiHeight = guiPanels.at(guiPanels.size() - 1).getPosition().y + guiPanels.at(guiPanels.size() - 1).getHeight();
 	ofRectangle scopeArea = ofRectangle(ofPoint(0, guiHeight), ofPoint(ofGetWidth() / 2, ofGetHeight() - _consoleHeight));
@@ -1235,7 +1234,7 @@ void ofApp::setupOscilloscopes()
 
 	for (int w = 0; w < plotNames.size(); w++) {
 		for (int s = 0; s < plotNames.at(w).size(); s++) {
-			scopeWins.at(w).scopes.at(s).setup(timeWindow, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
+			scopeWins.at(w).scopes.at(s).setup(timeWindowOnSetup, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
 				0, 1); // Setup each oscilloscope panel
 			if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
 				scopeWins.at(w).scopes.at(s).autoscaleY(true, minYSpans.at(w).at(s));

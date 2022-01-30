@@ -64,7 +64,7 @@ public:
 	void drawOscilloscopes();
 	void addDataStream(std::string typetag);
 	void removeDataStream(std::string typetag);
-	void reinitMetaDataBuffers();
+	void initMetaDataBuffers();
 	void resetScopePlot(int w, int s);
 	void setTypeTagPlotAttributes();
 	void resetIndexMapping();
@@ -89,7 +89,7 @@ public:
 	ofPoint max;
 
 	int selectedScope;
-
+	float timeWindowOnSetup; // seconds
 	bool isPaused;
 	ofSerial mySerial;
 
@@ -116,8 +116,8 @@ public:
 	//}
 
 	struct typeTagPlotAttr {
-		std::string tapeTagName;
-		ofColor typeTagColor;
+		std::string plotName;
+		ofColor plotColor;
 		vector<int> scopeIdx;
 	};
 	vector<ofxMultiScope> scopeWins;
