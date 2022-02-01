@@ -57,11 +57,17 @@ public:
 	void setupGui();
 	void setupOscilloscopes();
 	void updateLsl();
-	void clearOscilloscopes();
+	void clearOscilloscopes(bool connectedDeviceUpdated);
 	void processModePacket(vector<string> &splitPacket);
 	void updateMenuButtons();
 	void drawConsole();
 	void drawOscilloscopes();
+	void addDataStream(std::string typetag);
+	void removeDataStream(std::string typetag);
+	void initMetaDataBuffers();
+	void resetScopePlot(int w, int s);
+	void setTypeTagPlotAttributes();
+	void resetIndexMapping();
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -83,7 +89,7 @@ public:
 	ofPoint max;
 
 	int selectedScope;
-
+	float timeWindowOnSetup; // seconds
 	bool isPaused;
 	ofSerial mySerial;
 
@@ -100,7 +106,6 @@ public:
 
 	EmotiBitWiFiHost emotiBitWiFi;
 	unordered_map<string, EmotiBitStatus> emotibitIps;
-
 	//struct EmotibitPacketHeader_V1 {
 	//	uint32_t timestamp;  // milliseconds since EmotiBit bootup
 	//	uint16_t packetCount;
@@ -110,6 +115,11 @@ public:
 	//	uint8_t protocolVersion
 	//}
 
+	struct typeTagPlotAttr {
+		std::string plotName;
+		ofColor plotColor;
+		vector<int> scopeIdx;
+	};
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;
@@ -120,6 +130,7 @@ public:
 	vector<vector<float>> minYSpans;
 	vector<vector<vector<ofColor>>> plotColors;
 	//vector<ofColor> plotColors;
+	unordered_map<std::string, typeTagPlotAttr>typeTagPlotAttributes;
 
 	vector<vector<vector<int>>> bufferSizes;
 	vector<vector<vector<int>>> dataCounts;
