@@ -120,6 +120,7 @@ public:
 		ofColor plotColor;
 		vector<int> scopeIdx;
 	};
+
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;
@@ -263,4 +264,19 @@ public:
 	ofxOscSender oscSender;
 	bool sendOsc = false; // ToDo: generalize sendOsc to sendData
 	
+	
+};
+
+class Periodizer {
+public:
+	std::string inputAperiodicSignal;
+	std::string inputPeriodicSignal;
+	std::string outputSignal;
+	float lastSampledValue;
+	float defaultValue;
+
+	Periodizer();
+	Periodizer(std::string inputAperiodicSignalIdentifier, std::string inputPeriodicSignalIdentifier, std::string outputSignalIdentifier, float defaultOutputValue);
+	vector<float> getCopiedDataVector(int size, float value);
+	void update(std::string identifier, vector<float> data);
 };
