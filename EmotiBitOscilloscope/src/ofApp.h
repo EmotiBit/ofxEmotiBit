@@ -16,6 +16,19 @@
 #include "ofxOsc.h"
 #include "patchboard.h"
 
+class Periodizer {
+public:
+	std::string inputAperiodicSignal;
+	std::string inputPeriodicSignal;
+	std::string outputSignal;
+	float lastSampledValue;
+	float defaultValue;
+
+	Periodizer();
+	Periodizer(std::string inputAperiodicSignalIdentifier, std::string inputPeriodicSignalIdentifier, std::string outputSignalIdentifier, float defaultOutputValue = NAN);
+	int update(std::string identifier, std::vector<float> data, std::vector<float> &periodizedData);
+};
+
 class ofApp : public ofBaseApp {
 public:
 	void setup();
@@ -267,16 +280,3 @@ public:
 	
 };
 
-class Periodizer {
-public:
-	std::string inputAperiodicSignal;
-	std::string inputPeriodicSignal;
-	std::string outputSignal;
-	float lastSampledValue;
-	float defaultValue;
-
-	Periodizer();
-	Periodizer(std::string inputAperiodicSignalIdentifier, std::string inputPeriodicSignalIdentifier, std::string outputSignalIdentifier, float defaultOutputValue);
-	vector<float> getCopiedDataVector(int size, float value);
-	void update(std::string identifier, vector<float> data);
-};

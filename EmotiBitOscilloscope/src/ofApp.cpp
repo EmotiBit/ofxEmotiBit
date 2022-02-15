@@ -184,18 +184,16 @@ Periodizer::Periodizer(std::string inputAperiodicSignalIdentifier, std::string i
 	lastSampledValue = NAN;
 }
 
-vector<float> getData(int size, float value)
+int Periodizer::update(std::string identifier, std::vector<float> data, std::vector<float> &periodizedData)
 {
-
-}
-void Periodizer::update(std::string identifier, vector<float> data)
-{
+	periodizedData.clear();
 	// if updating the aperiodic signal value
 	if (identifier.compare(inputAperiodicSignal) == 0)
 	{
 		if (data.size() > 0)
 		{
 			lastSampledValue = data.back();
+			return 0;
 		}
 	}
 	// if updating the periodic output
@@ -203,26 +201,24 @@ void Periodizer::update(std::string identifier, vector<float> data)
 	{
 		if (identifier.compare(inputPeriodicSignal) == 0)
 		{
-			auto scopeIdx = typeTagPlotAttributes[identifier].scopeIdx;
-			int w = scopeIdx.at(0);
-			int s = scopeIdx.at(1);
 			if (isnan(defaultValue)) // HR type data. update with the lastSampledValue
 			{
-				vector<float> repeatedData;
-				repeatedData.assign(data.size(), lastSampledValue);
-				scopeWins.at(w).scopes.at(s).updateData(repeatedData);
+				periodizedData.assign(data.size(), lastSampledValue);
+				return periodizedData.size();
 			}
 			else   // EDR type data
 			{
 				if (isnan(lastSampledValue))// no new EDR amplitude to plot
 				{
-					vector<float> repeatedData;
-					repeatedData.assign(data.size(), defaultValue);
-					scopeWins.at(w).scopes.at(s).updateData(repeatedData);
+					periodizedData.assign(data.size(), defaultValue);
+					return periodizedData.size();
 				}
 				else // new EDR amplitude to plot
 				{
-
+					periodizedData.assign(data.size() - 1, defaultValue);
+					periodizedData.insert(periodizedData.begin(), lastSampledValue);
+					lastSampledValue = NAN;
+					return periodizedData.size();
 				}
 			}
 		}
