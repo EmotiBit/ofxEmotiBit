@@ -66,6 +66,7 @@ public:
 	void updateDeviceList();
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
+	void processAperiodicData(std::string identifier, std::vector<float> &data);
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 	void setupGui();
 	void setupOscilloscopes();
@@ -134,6 +135,8 @@ public:
 		vector<int> scopeIdx;
 	};
 
+
+	Periodizer periodizerHeartRate{ EmotiBitPacket::TypeTag::HEART_RATE, EmotiBitPacket::TypeTag::PPG_INFRARED, EmotiBitPacket::TypeTag::HEART_RATE };
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;

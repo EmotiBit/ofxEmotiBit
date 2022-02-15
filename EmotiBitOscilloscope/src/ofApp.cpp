@@ -827,6 +827,30 @@ string ofApp::ofGetTimestampString(const string& timestampFormat) {
 	return ret;
 }
 
+void ofApp::processAperiodicData(std::string identifier, std::vector<float> &data)
+{
+	std::vector<float> periodizedData;
+	// if return > 0, add the periodized data into the correct plot
+	if (periodizerHeartRate.update(identifier, data, periodizedData))
+	{
+		if (!isPaused) 
+		{
+			auto indexPtr = typeTagIndexes.find(EmotiBitPacket::TypeTag::HEART_RATE);
+			if (indexPtr != typeTagIndexes.end())
+			{
+				int w = indexPtr->second.at(0); // Scope window
+				int s = indexPtr->second.at(1); // Scope
+				int p = indexPtr->second.at(2); // Plot
+				std::vector<std::vector<float>> plotData;
+				plotData.resize(typeTags.at(w).at(s).size());
+				plotData.at(p) = periodizedData;
+				// Add data to oscilloscope
+				scopeWins.at(w).scopes.at(s).updateData(plotData);
+			}
+		}
+	}
+}
+
 void ofApp::processSlowResponseMessage(string packet) {
 	vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
 	processSlowResponseMessage(splitPacket);
@@ -895,6 +919,8 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 					}
 				}
 			}
+			processAperiodicData(packetHeader.typeTag, data.at(p));
+
 			if (sendOsc)
 			{
 				for (auto a = 0; a < oscMessages.size(); a++)
