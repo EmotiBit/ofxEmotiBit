@@ -1176,9 +1176,101 @@ void ofApp::setupGui()
 	deviceSelected.setDefaultWidth(220);
 	batteryStatus.setDefaultWidth(259);
 }
+
+void ofApp::updatePlotAttributeLists(std::string settingsFile)
+{
+	ofxXmlSettings scopeSettings;
+	scopeSettings.loadFile(settingsFile);
+
+	int nMultiScopes = scopeSettings.getNumTags("multiScope");
+	samplingFreqs.resize(nMultiScopes);
+	minYSpans.resize(nMultiScopes);
+	plotNames.resize(nMultiScopes);
+	plotColors.resize(nMultiScopes);
+	yLims.resize(nMultiScopes);
+	for (int m = 0; m < nMultiScopes; m++)
+	{
+		scopeSettings.pushTag("multiScope", m);
+		int nScopes = scopeSettings.getNumTags("scope");
+		samplingFreqs.at(m).resize(nScopes);
+		minYSpans.at(m).resize(nScopes);
+		plotNames.at(m).resize(nScopes);
+		plotColors.at(m).resize(nScopes);
+		yLims.at(m).resize(nScopes);
+		for (int s = 0; s < nScopes; s++) 
+		{
+			scopeSettings.pushTag("scope", s);
+			//float timeWindow = scopeSettings.getValue("timeWindow", 15.f); // maybe we keep this.
+			float samplingFrequency = scopeSettings.getValue("samplingFrequency", 15.f);
+			float minYSpan = scopeSettings.getValue("minYSpan", 0.f);
+			float yMin = scopeSettings.getValue("yMin", 0.f);
+			float yMax = scopeSettings.getValue("yMax", 0.f);
+			samplingFreqs.at(m).at(s) = samplingFrequency;
+			minYSpans.at(m).at(s) = minYSpan;
+			vector<float> yLim = { yMin, yMax };
+			yLims.at(m).at(s) = yLim;
+			//samplingFreqs-2D vector
+			//minYSpans-2D vector
+			//plotNames-3D vector
+			//plotColors-3D vector
+			//yLims-3D vector
+			int nPlots = scopeSettings.getNumTags("plot");
+			for (int p = 0; p < nPlots; p++) {
+				scopeSettings.pushTag("plot", p);
+				plotNames.at(m).at(s).push_back(scopeSettings.getValue("plotName", "N/A"));
+				scopeSettings.pushTag("plotColor");
+				plotColors.at(m).at(s).push_back(ofColor(
+					scopeSettings.getValue("r", 255),
+					scopeSettings.getValue("g", 255),
+					scopeSettings.getValue("b", 255)
+				));
+				scopeSettings.popTag(); // plotColor
+				scopeSettings.popTag(); // plot p
+			}
+			scopeSettings.popTag(); // scope s
+		}
+
+		scopeSettings.popTag(); // multiScope m
+	}
+}
+
+void ofApp::updateTypeTagList()
+{
+	for (int i = 0; i < plotIds.size(); i++)// for multiscopes
+	{
+		vector<vector<std::string>> scopeTypeTagList;
+		for (int j = 0; j < plotIds.at(i).size(); j++) // for scopes
+		{
+			vector<std::string> plotTypeTagList;
+			for (int k = 0; k < plotIds.at(i).at(j).size(); k++) // for plots
+			{
+				for (auto key = patchboard.patchcords.begin(); key != patchboard.patchcords.end(); key++)
+				{
+					// ToDo: there should be a loop here to go through all map values for a key
+					if (ofToInt(key->second.back()) == plotIds.at(i).at(j).at(k))
+					{
+						plotTypeTagList.push_back(key->first);
+					}
+				}
+			}
+			scopeTypeTagList.push_back(plotTypeTagList);
+		}
+		typeTags.push_back(scopeTypeTagList);
+	}
+}
+
+
 void ofApp::setupOscilloscopes() 
 {
-
+	if (patchboard.loadFile("inputSettings.xml"))
+	{
+		ofLog(OF_LOG_NOTICE, "PatchBoard succesfully loaded");
+	}
+	scopeWins = ofxMultiScope::loadScopeSettings();
+	plotIds = ofxMultiScope::getPlotIds();
+	updatePlotAttributeLists();
+	updateTypeTagList();
+	/*
 	typeTags = vector<vector<vector<string>>>
 	{
 		{ // scope panel 1
@@ -1198,6 +1290,7 @@ void ofApp::setupOscilloscopes()
 			//{ EmotiBitPacket::TypeTag::TEMPERATURE_0 }
 		}
 	};
+	*/
 	// Create an index mapping for each type tag
 	for (int w = 0; w < typeTags.size(); w++) {
 		for (int s = 0; s < typeTags.at(w).size(); s++) {
@@ -1208,7 +1301,7 @@ void ofApp::setupOscilloscopes()
 		}
 	}
 	initMetaDataBuffers();
-
+	/*
 	samplingFreqs = vector<vector<float>>
 	{
 		{ // scope panel 1
@@ -1302,7 +1395,7 @@ void ofApp::setupOscilloscopes()
 	};
 
 	//plotColors = { ofColor(0,0,0), ofColor(255,0,0) , ofColor(0,191,0), ofColor(0,0,255) };
-
+	
 	int guiHeight = guiPanels.at(guiPanels.size() - 1).getPosition().y + guiPanels.at(guiPanels.size() - 1).getHeight();
 	ofRectangle scopeArea = ofRectangle(ofPoint(0, guiHeight), ofPoint(ofGetWidth() / 2, ofGetHeight() - _consoleHeight));
 	ofRectangle scopeArea2 = ofRectangle(ofPoint(ofGetWidth() / 2, guiHeight), ofPoint(ofGetWidth(), ofGetHeight() - _consoleHeight));
@@ -1310,7 +1403,7 @@ void ofApp::setupOscilloscopes()
 
 	scopeWins.emplace_back(plotNames.at(0).size(), scopeArea, legendFont); // Setup the multiScope panel
 	scopeWins.emplace_back(plotNames.at(1).size(), scopeArea2, legendFont); // Setup the multiScope panel
-
+	
 	for (int w = 0; w < plotNames.size(); w++) {
 		for (int s = 0; s < plotNames.at(w).size(); s++) {
 			scopeWins.at(w).scopes.at(s).setup(timeWindowOnSetup, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
@@ -1329,6 +1422,7 @@ void ofApp::setupOscilloscopes()
 		isPaused = false;
 
 	}
+	*/
 }
 
 void ofApp::updateLsl()

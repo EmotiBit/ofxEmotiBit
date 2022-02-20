@@ -82,7 +82,8 @@ public:
 	void resetScopePlot(int w, int s);
 	void setTypeTagPlotAttributes();
 	void resetIndexMapping();
-
+	void updatePlotAttributeLists(std::string settingsFile = "ofxOscilloscopeSettings.xml");
+	void updateTypeTagList();
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
 	//int newPoints;
@@ -135,7 +136,7 @@ public:
 		vector<int> scopeIdx;
 	};
 
-
+	Patchboard patchboard;
 	Periodizer periodizerHeartRate{ EmotiBitPacket::TypeTag::HEART_RATE, EmotiBitPacket::TypeTag::PPG_INFRARED, EmotiBitPacket::TypeTag::HEART_RATE };
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;
@@ -148,6 +149,7 @@ public:
 	vector<vector<vector<ofColor>>> plotColors;
 	//vector<ofColor> plotColors;
 	unordered_map<std::string, typeTagPlotAttr>typeTagPlotAttributes;
+	vector<vector<vector<int>>> plotIds;
 
 	vector<vector<vector<int>>> bufferSizes;
 	vector<vector<vector<int>>> dataCounts;
