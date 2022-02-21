@@ -347,6 +347,7 @@ void ofApp::keyReleased(int key) {
 		if (DEBUGGING) {
 			if (key == 'l')
 			{
+				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				int w = 0;
 				int s = 3;
 				int p = 0;
@@ -360,6 +361,7 @@ void ofApp::keyReleased(int key) {
 			}
 			if (key == 'r')
 			{
+				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				int w = 0;
 				int s = 3;
 				int p = 0;
@@ -373,6 +375,7 @@ void ofApp::keyReleased(int key) {
 			}
 			if (key == 'a')
 			{
+				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				int w = 0;
 				int s = 3;
 				int p = 0;
@@ -1257,6 +1260,16 @@ void ofApp::updateTypeTagList()
 		}
 		typeTags.push_back(scopeTypeTagList);
 	}
+
+	// Create an index mapping for each type tag
+	for (int w = 0; w < typeTags.size(); w++) {
+		for (int s = 0; s < typeTags.at(w).size(); s++) {
+			for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
+				vector<int> indexes{ w, s, p };
+				typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
+			}
+		}
+	}
 }
 
 
@@ -1270,15 +1283,6 @@ void ofApp::setupOscilloscopes()
 	plotIds = ofxMultiScope::getPlotIds();
 	updatePlotAttributeLists();
 	updateTypeTagList();
-	// Create an index mapping for each type tag
-	for (int w = 0; w < typeTags.size(); w++) {
-		for (int s = 0; s < typeTags.at(w).size(); s++) {
-			for (int p = 0; p < typeTags.at(w).at(s).size(); p++) {
-				vector<int> indexes{ w, s, p };
-				typeTagIndexes.emplace(typeTags.at(w).at(s).at(p), indexes);
-			}
-		}
-	}
 	initMetaDataBuffers();
 }
 
