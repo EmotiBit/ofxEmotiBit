@@ -830,6 +830,22 @@ string ofApp::ofGetTimestampString(const string& timestampFormat) {
 	return ret;
 }
 
+void ofApp::updateAperiodicData(const std::string identifier, const std::vector<float> &periodizedData)
+{
+	auto indexPtr = typeTagIndexes.find(EmotiBitPacket::TypeTag::HEART_RATE);
+	if (indexPtr != typeTagIndexes.end())
+	{
+		int w = indexPtr->second.at(0); // Scope window
+		int s = indexPtr->second.at(1); // Scope
+		int p = indexPtr->second.at(2); // Plot
+		std::vector<std::vector<float>> plotData;
+		plotData.resize(typeTags.at(w).at(s).size());
+		plotData.at(p) = periodizedData;
+		// Add data to oscilloscope
+		scopeWins.at(w).scopes.at(s).updateData(plotData);
+	}
+}
+
 void ofApp::processAperiodicData(std::string identifier, std::vector<float> &data)
 {
 	std::vector<float> periodizedData;
@@ -838,18 +854,7 @@ void ofApp::processAperiodicData(std::string identifier, std::vector<float> &dat
 	{
 		if (!isPaused) 
 		{
-			auto indexPtr = typeTagIndexes.find(EmotiBitPacket::TypeTag::HEART_RATE);
-			if (indexPtr != typeTagIndexes.end())
-			{
-				int w = indexPtr->second.at(0); // Scope window
-				int s = indexPtr->second.at(1); // Scope
-				int p = indexPtr->second.at(2); // Plot
-				std::vector<std::vector<float>> plotData;
-				plotData.resize(typeTags.at(w).at(s).size());
-				plotData.at(p) = periodizedData;
-				// Add data to oscilloscope
-				scopeWins.at(w).scopes.at(s).updateData(plotData);
-			}
+			updateAperiodicData(identifier, periodizedData);
 		}
 	}
 }
@@ -922,7 +927,6 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 					}
 				}
 			}
-			processAperiodicData(packetHeader.typeTag, data.at(p));
 
 			if (sendOsc)
 			{
@@ -934,8 +938,22 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			}
 
 			if (!isPaused) {
-				// Add data to oscilloscope
-				scopeWins.at(w).scopes.at(s).updateData(data);
+				processAperiodicData(packetHeader.typeTag, data.at(p));
+				bool isAperiodic = false;
+				for (uint8_t i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_APERIODIC; i++)
+				{
+					if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTagGroups::APERIODIC[i]) == 0)
+					{
+						// found
+						isAperiodic = true;
+						break;
+					}
+				}
+				if (!isAperiodic)
+				{
+					// Add data to oscilloscope
+					scopeWins.at(w).scopes.at(s).updateData(data);
+				}
 			}
 			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
 			dataCounts.at(w).at(s).at(p) += packetHeader.dataLength;

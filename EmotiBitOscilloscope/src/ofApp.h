@@ -67,6 +67,7 @@ public:
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
 	void processAperiodicData(std::string identifier, std::vector<float> &data);
+	void updateAperiodicData(const std::string identifier, const std::vector<float> &periodizedData);
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 	void setupGui();
 	void setupOscilloscopes();
