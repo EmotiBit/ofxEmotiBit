@@ -66,7 +66,7 @@ public:
 	void updateDeviceList();
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
-	void processAperiodicData(std::string identifier, std::vector<float> &data);
+	void processAperiodicData(std::string identifier, std::vector<float> data);
 	void updateAperiodicData(const std::string identifier, const std::vector<float> &periodizedData);
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 	void setupGui();
@@ -139,6 +139,9 @@ public:
 
 	Patchboard patchboard;
 	Periodizer periodizerHeartRate{ EmotiBitPacket::TypeTag::HEART_RATE, EmotiBitPacket::TypeTag::PPG_INFRARED, EmotiBitPacket::TypeTag::HEART_RATE };
+	Periodizer periodizerEdrAmplitude{EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, EmotiBitPacket::TypeTag::EDA, EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, 0};
+	Periodizer periodizerEdrFrequency{ EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ, EmotiBitPacket::TypeTag::EDA, EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ };
+	Periodizer periodizerEdrRiseTime{ EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, EmotiBitPacket::TypeTag::EDA, EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME };
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;

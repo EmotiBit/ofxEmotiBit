@@ -193,8 +193,8 @@ int Periodizer::update(std::string identifier, std::vector<float> data, std::vec
 		if (data.size() > 0)
 		{
 			lastSampledValue = data.back();
-			return 0;
 		}
+		return 0;
 	}
 	// if updating the periodic output
 	else
@@ -204,24 +204,24 @@ int Periodizer::update(std::string identifier, std::vector<float> data, std::vec
 			if (isnan(defaultValue)) // HR type data. update with the lastSampledValue
 			{
 				periodizedData.assign(data.size(), lastSampledValue);
-				return periodizedData.size();
+				
 			}
 			else   // EDR type data
 			{
 				if (isnan(lastSampledValue))// no new EDR amplitude to plot
 				{
 					periodizedData.assign(data.size(), defaultValue);
-					return periodizedData.size();
 				}
 				else // new EDR amplitude to plot
 				{
 					periodizedData.assign(data.size() - 1, defaultValue);
 					periodizedData.insert(periodizedData.begin(), lastSampledValue);
 					lastSampledValue = NAN;
-					return periodizedData.size();
 				}
 			}
+			return periodizedData.size();
 		}
+		return 0; // identifier is not related to the periodizer
 	}
 }
 //--------------------------------------------------------------
@@ -832,7 +832,7 @@ string ofApp::ofGetTimestampString(const string& timestampFormat) {
 
 void ofApp::updateAperiodicData(const std::string identifier, const std::vector<float> &periodizedData)
 {
-	auto indexPtr = typeTagIndexes.find(EmotiBitPacket::TypeTag::HEART_RATE);
+	auto indexPtr = typeTagIndexes.find(identifier);
 	if (indexPtr != typeTagIndexes.end())
 	{
 		int w = indexPtr->second.at(0); // Scope window
@@ -846,16 +846,25 @@ void ofApp::updateAperiodicData(const std::string identifier, const std::vector<
 	}
 }
 
-void ofApp::processAperiodicData(std::string identifier, std::vector<float> &data)
+void ofApp::processAperiodicData(std::string identifier, std::vector<float> data)
 {
-	std::vector<float> periodizedData;
-	// if return > 0, add the periodized data into the correct plot
+	std::vector<float> periodizedData; // cleared before update inside every update call
+	// .update() returns size of data which needs to be added into the plot buffers
 	if (periodizerHeartRate.update(identifier, data, periodizedData))
 	{
-		if (!isPaused) 
-		{
-			updateAperiodicData(identifier, periodizedData);
-		}
+		updateAperiodicData(EmotiBitPacket::TypeTag::HEART_RATE, periodizedData);
+	}
+	if (periodizerEdrAmplitude.update(identifier, data, periodizedData))
+	{
+		updateAperiodicData(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, periodizedData);
+	}
+	if (periodizerEdrFrequency.update(identifier, data, periodizedData))
+	{
+		updateAperiodicData(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ, periodizedData);
+	}
+	if (periodizerEdrRiseTime.update(identifier, data, periodizedData))
+	{
+		updateAperiodicData(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, periodizedData);
 	}
 }
 
