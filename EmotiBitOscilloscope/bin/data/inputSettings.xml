@@ -65,5 +65,30 @@
 			<input>T1</input>
 			<output>13</output>
 		</patch>
+		<patch>
+			<input>HR</input>
+			<output>14</output>
+		</patch>
+		<patch>
+			<input>EC</input>
+			<output>15</output>
+		</patch>
+		<patch>
+			<input>EF</input>
+			<output>16</output>
+		</patch>
+		<patch>
+			<input>ET</input>
+			<output>17</output>
+		</patch>
+		<patch>
+			<input>BL</input>
+			<output>18</output>
+		</patch>
+		<patch>
+			<input>FE</input>
+			<output>19</output>
+		</patch>
+
 	</patchcords>
 </patchboard>	

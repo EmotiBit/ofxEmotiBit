@@ -71,13 +71,31 @@
                 <b>130</b>
             </plotColor>
         </plot>
+        <plot>
+            <plotId>18</plotId>
+            <plotName>BaseLine</plotName>
+            <plotColor>
+                <r>0</r>
+                <g>0</g>
+                <b>255</b>
+            </plotColor>
+        </plot>
+        <plot>
+            <plotId>19</plotId>
+            <plotName>BandpassFilt</plotName>
+            <plotColor>
+                <r>255</r>
+                <g>0</g>
+                <b>0</b>
+            </plotColor>
+        </plot>
     </scope>
     <scope>
         <samplingFrequency>25.000000000</samplingFrequency>
         <timeWindow>10.000000000</timeWindow>
         <yMin>0.000000000</yMin>
         <yMax>0.000000000</yMax>
-        <minYSpan>0.000000000</minYSpan>
+        <minYSpan>10.000000000</minYSpan>
         <plot>
             <plotId>14</plotId>
             <plotName>HR</plotName>
@@ -88,12 +106,30 @@
             </plotColor>
         </plot>
     </scope>
+<!--
+    <scope>
+        <samplingFrequency>25.000000000</samplingFrequency>
+        <timeWindow>10.000000000</timeWindow>
+        <yMin>0.000000000</yMin>
+        <yMax>0.000000000</yMax>
+        <minYSpan>0.000000000</minYSpan>
+        <plot>
+            <plotId>15</plotId>
+            <plotName>U1</plotName>
+            <plotColor>
+                <r>0</r>
+                <g>0</g>
+                <b>0</b>
+            </plotColor>
+        </plot>
+    </scope>
+-->
     <scope>
         <samplingFrequency>15.000000000</samplingFrequency>
         <timeWindow>10.000000000</timeWindow>
         <yMin>0.000000000</yMin>
         <yMax>0.000000000</yMax>
-        <minYSpan>0.000000000</minYSpan>
+        <minYSpan>0.020000000</minYSpan>
         <plot>
             <plotId>15</plotId>
             <plotName>EDR:AMP</plotName>
@@ -237,7 +273,7 @@
         <timeWindow>10.000000000</timeWindow>
         <yMin>0.000000000</yMin>
         <yMax>0.000000000</yMax>
-        <minYSpan>0.000000000</minYSpan>
+        <minYSpan>3.000000000</minYSpan>
         <plot>
             <plotId>16</plotId>
             <plotName>EDR:FRQ</plotName>
@@ -253,7 +289,7 @@
         <timeWindow>10.000000000</timeWindow>
         <yMin>0.000000000</yMin>
         <yMax>0.000000000</yMax>
-        <minYSpan>0.000000000</minYSpan>
+        <minYSpan>1.000000000</minYSpan>
         <plot>
             <plotId>17</plotId>
             <plotName>EDR:RT</plotName>
