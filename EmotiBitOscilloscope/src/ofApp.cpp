@@ -349,7 +349,7 @@ void ofApp::keyReleased(int key) {
 			{
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				int w = 0;
-				int s = 3;
+				int s = 4;
 				int p = 0;
 				vector<int> indexes{ w, s, p };
 				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
@@ -363,7 +363,7 @@ void ofApp::keyReleased(int key) {
 			{
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				int w = 0;
-				int s = 3;
+				int s = 4;
 				int p = 0;
 				vector<int> indexes{ w, s, p };
 				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
@@ -377,7 +377,7 @@ void ofApp::keyReleased(int key) {
 			{
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				int w = 0;
-				int s = 3;
+				int s = 4;
 				int p = 0;
 				vector<int> indexes{ w, s, p };
 				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));

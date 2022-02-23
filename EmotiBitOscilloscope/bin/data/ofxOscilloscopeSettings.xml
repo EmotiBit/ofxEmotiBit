@@ -56,40 +56,6 @@
             </plotColor>
         </plot>
     </scope>
-	<scope>
-        <samplingFrequency>15.000000000</samplingFrequency>
-        <timeWindow>10.000000000</timeWindow>
-        <yMin>0.000000000</yMin>
-        <yMax>0.000000000</yMax>
-        <minYSpan>0.020000000</minYSpan>
-        <plot>
-            <plotId>3</plotId>
-            <plotName>EDA</plotName>
-            <plotColor>
-                <r>21</r>
-                <g>73</g>
-                <b>130</b>
-            </plotColor>
-        </plot>
-        <plot>
-            <plotId>18</plotId>
-            <plotName>BaseLine</plotName>
-            <plotColor>
-                <r>0</r>
-                <g>0</g>
-                <b>255</b>
-            </plotColor>
-        </plot>
-        <plot>
-            <plotId>19</plotId>
-            <plotName>BandpassFilt</plotName>
-            <plotColor>
-                <r>255</r>
-                <g>0</g>
-                <b>0</b>
-            </plotColor>
-        </plot>
-    </scope>
     <scope>
         <samplingFrequency>25.000000000</samplingFrequency>
         <timeWindow>10.000000000</timeWindow>
@@ -103,6 +69,22 @@
                 <r>255</r>
                 <g>0</g>
                 <b>0</b>
+            </plotColor>
+        </plot>
+    </scope>
+    <scope>
+        <samplingFrequency>15.000000000</samplingFrequency>
+        <timeWindow>10.000000000</timeWindow>
+        <yMin>0.000000000</yMin>
+        <yMax>0.000000000</yMax>
+        <minYSpan>0.020000000</minYSpan>
+        <plot>
+            <plotId>3</plotId>
+            <plotName>EDA</plotName>
+            <plotColor>
+                <r>21</r>
+                <g>73</g>
+                <b>130</b>
             </plotColor>
         </plot>
     </scope>
@@ -134,9 +116,9 @@
             <plotId>15</plotId>
             <plotName>EDR:AMP</plotName>
             <plotColor>
-                <r>0</r>
-                <g>0</g>
-                <b>0</b>
+                <r>21</r>
+                <g>73</g>
+                <b>130</b>
             </plotColor>
         </plot>
     </scope>
@@ -278,9 +260,9 @@
             <plotId>16</plotId>
             <plotName>EDR:FRQ</plotName>
             <plotColor>
-                <r>0</r>
-                <g>0</g>
-                <b>0</b>
+                <r>21</r>
+                <g>73</g>
+                <b>130</b>
             </plotColor>
         </plot>
     </scope>
@@ -294,9 +276,9 @@
             <plotId>17</plotId>
             <plotName>EDR:RT</plotName>
             <plotColor>
-                <r>0</r>
-                <g>0</g>
-                <b>0</b>
+                <r>21</r>
+                <g>73</g>
+                <b>130</b>
             </plotColor>
         </plot>
     </scope>					
