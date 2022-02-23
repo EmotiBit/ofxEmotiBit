@@ -1306,7 +1306,21 @@ void ofApp::setupOscilloscopes()
 	{
 		ofLog(OF_LOG_NOTICE, "PatchBoard succesfully loaded");
 	}
-	scopeWins = ofxMultiScope::loadScopeSettings();
+	else
+	{
+		ofLog(OF_LOG_NOTICE, "PatchBoard File Not Found!");
+		while (1);
+	}
+	ofFile scopeSettingsFile(ofToDataPath("ofxOscilloscopeSettings.xml"));
+	if (scopeSettingsFile.exists())
+	{
+		scopeWins = ofxMultiScope::loadScopeSettings();
+	}
+	else
+	{
+		ofLog(OF_LOG_NOTICE, "Scope Settings File Not Found!");
+		while (1);
+	}
 	plotIds = ofxMultiScope::getPlotIds();
 	updatePlotAttributeLists();
 	updateTypeTagList();
