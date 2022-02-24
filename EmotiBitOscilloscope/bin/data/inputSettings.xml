@@ -81,14 +81,5 @@
 			<input>ET</input>
 			<output>17</output>
 		</patch>
-		<patch>
-			<input>BL</input>
-			<output>18</output>
-		</patch>
-		<patch>
-			<input>FE</input>
-			<output>19</output>
-		</patch>
-
 	</patchcords>
 </patchboard>	

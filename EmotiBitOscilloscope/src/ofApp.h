@@ -16,16 +16,28 @@
 #include "ofxOsc.h"
 #include "patchboard.h"
 
+/*!
+	@brief Class to convert derivative aperiodic signals to periodic signals based source signal sampling rate.
+*/
 class Periodizer {
 public:
-	std::string inputAperiodicSignal;
-	std::string inputPeriodicSignal;
-	std::string outputSignal;
-	float lastSampledValue;
-	float defaultValue;
+	std::string inputAperiodicSignal; //!< TypeTag of input derivative aperiodic signal
+	std::string inputPeriodicSignal;  //!< Typetag of input source signal
+	std::string outputSignal;  //!< TypeTag of output periodized signal
+	float lastSampledValue;  //!< last aeriodic value received
+	float defaultValue; //!< default value to be used in the periodized output
+						//!< by default set to NAN. The generated periodic output repeats the last sampled value
+						//!< if set to a number, the generated output is filled with this value if a new sample
+						//!< of the aperiodic signal is not received
 
 	Periodizer();
 	Periodizer(std::string inputAperiodicSignalIdentifier, std::string inputPeriodicSignalIdentifier, std::string outputSignalIdentifier, float defaultOutputValue = NAN);
+	/*!
+		@brief updates the class variables or periodized output based on input
+		@param identifier typetag of input data
+		@param data the float data received from device
+		@param periodizedData output periodized data
+	*/
 	int update(std::string identifier, std::vector<float> data, std::vector<float> &periodizedData);
 };
 
@@ -67,7 +79,7 @@ public:
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
 	void processAperiodicData(std::string identifier, std::vector<float> data);
-	void updateAperiodicData(const std::string identifier, const std::vector<float> &periodizedData);
+	void updateAperiodicPlotBuffer(const std::string identifier, const std::vector<float> &periodizedData);
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 	void setupGui();
 	void setupOscilloscopes();
@@ -83,9 +95,9 @@ public:
 	void resetScopePlot(int w, int s);
 	void setTypeTagPlotAttributes();
 	void resetIndexMapping();
-	// Note: This function is marked to be removed when we complete our move to xmlFileSettings.
+	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updatePlotAttributeLists(std::string settingsFile = "ofxOscilloscopeSettings.xml");
-	// Note: This function is marked to be removed when we complete our move to xmlFileSettings.
+	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updateTypeTagList();
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -140,6 +152,7 @@ public:
 	};
 
 	Patchboard patchboard;
+	// ToDo: change the input aperiodic and ouptut periodic typeTags when we reslve typetags for aperiodic signals
 	Periodizer periodizerHeartRate{ EmotiBitPacket::TypeTag::HEART_RATE, EmotiBitPacket::TypeTag::PPG_INFRARED, EmotiBitPacket::TypeTag::HEART_RATE };
 	Periodizer periodizerEdrAmplitude{EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, EmotiBitPacket::TypeTag::EDA, EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, 0};
 	Periodizer periodizerEdrFrequency{ EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ, EmotiBitPacket::TypeTag::EDA, EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ };

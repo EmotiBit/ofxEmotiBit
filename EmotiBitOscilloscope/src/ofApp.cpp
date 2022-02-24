@@ -53,9 +53,11 @@ void ofApp::update() {
 	updateMenuButtons();
 }
 
+// ToDo: This function  should be removed once we complete our move to xmlFileSettings
 void ofApp::setTypeTagPlotAttributes()
 {
 	// ToDo: Add attributes for all streams for refactor
+	// Note:: THERM plot attributes only live in code. we should move it to the XML file some day
 	{
 		// Add plot attributes for THERMOPILE data
 		typeTagPlotAttr attr;
@@ -181,24 +183,25 @@ Periodizer::Periodizer(std::string inputAperiodicSignalIdentifier, std::string i
 	inputPeriodicSignal = inputPeriodicSignalIdentifier;
 	outputSignal = outputSignalIdentifier;
 	defaultValue = defaultOutputValue;
-	lastSampledValue = NAN;
+	lastSampledValue = NAN;  // set to NAN on initialization
 }
 
 int Periodizer::update(std::string identifier, std::vector<float> data, std::vector<float> &periodizedData)
 {
 	periodizedData.clear();
-	// if updating the aperiodic signal value
+	// update class value if aperiodic data sample received
 	if (identifier.compare(inputAperiodicSignal) == 0)
 	{
+		// ToDo: have a better solution for handling situation when a aperiodic packet has multiple data points
 		if (data.size() > 0)
 		{
 			lastSampledValue = data.back();
 		}
 		return 0;
 	}
-	// if updating the periodic output
 	else
 	{
+		// update output is base periodic saignal is received
 		if (identifier.compare(inputPeriodicSignal) == 0)
 		{
 			if (isnan(defaultValue)) // HR type data. update with the lastSampledValue
@@ -210,6 +213,7 @@ int Periodizer::update(std::string identifier, std::vector<float> data, std::vec
 			{
 				if (isnan(lastSampledValue))// no new EDR amplitude to plot
 				{
+					// create vector with samples = #samples of base periodic signal
 					periodizedData.assign(data.size(), defaultValue);
 				}
 				else // new EDR amplitude to plot
@@ -830,12 +834,14 @@ string ofApp::ofGetTimestampString(const string& timestampFormat) {
 	return ret;
 }
 
-void ofApp::updateAperiodicData(const std::string identifier, const std::vector<float> &periodizedData)
+
+// ToDo: marked to be removed when we complete our move to xmlSettings
+void ofApp::updateAperiodicPlotBuffer(const std::string identifier, const std::vector<float> &periodizedData)
 {
 	auto indexPtr = typeTagIndexes.find(identifier);
 	if (indexPtr != typeTagIndexes.end())
 	{
-		int w = indexPtr->second.at(0); // Scope window
+		int w = indexPtr->second.at(0); // Scope window(multiscope)
 		int s = indexPtr->second.at(1); // Scope
 		int p = indexPtr->second.at(2); // Plot
 		std::vector<std::vector<float>> plotData;
@@ -852,19 +858,19 @@ void ofApp::processAperiodicData(std::string identifier, std::vector<float> data
 	// .update() returns size of data which needs to be added into the plot buffers
 	if (periodizerHeartRate.update(identifier, data, periodizedData))
 	{
-		updateAperiodicData(EmotiBitPacket::TypeTag::HEART_RATE, periodizedData);
+		updateAperiodicPlotBuffer(EmotiBitPacket::TypeTag::HEART_RATE, periodizedData);
 	}
 	if (periodizerEdrAmplitude.update(identifier, data, periodizedData))
 	{
-		updateAperiodicData(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, periodizedData);
+		updateAperiodicPlotBuffer(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, periodizedData);
 	}
 	if (periodizerEdrFrequency.update(identifier, data, periodizedData))
 	{
-		updateAperiodicData(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ, periodizedData);
+		updateAperiodicPlotBuffer(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ, periodizedData);
 	}
 	if (periodizerEdrRiseTime.update(identifier, data, periodizedData))
 	{
-		updateAperiodicData(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, periodizedData);
+		updateAperiodicPlotBuffer(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, periodizedData);
 	}
 }
 
@@ -1207,7 +1213,7 @@ void ofApp::setupGui()
 	batteryStatus.setDefaultWidth(259);
 }
 
-// Note: This function is marked to be removed when we complete our move to xmlFileSettings.
+// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 void ofApp::updatePlotAttributeLists(std::string settingsFile)
 {
 	ofxXmlSettings scopeSettings;
@@ -1265,7 +1271,7 @@ void ofApp::updatePlotAttributeLists(std::string settingsFile)
 	}
 }
 
-// Note: This function is marked to be removed when we complete our move to xmlFileSettings.
+// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 void ofApp::updateTypeTagList()
 {
 	for (int i = 0; i < plotIds.size(); i++)// for multiscopes
@@ -1278,7 +1284,8 @@ void ofApp::updateTypeTagList()
 			{
 				for (auto key = patchboard.patchcords.begin(); key != patchboard.patchcords.end(); key++)
 				{
-					// ToDo: there should be a loop here to go through all map values for a key
+					// for each plot plotId, get the typeTag
+					// ToDo: there should be a loop here to go through all map values for a key. In case, the same signal is patched to multiple scopes
 					if (ofToInt(key->second.back()) == plotIds.at(i).at(j).at(k))
 					{
 						plotTypeTagList.push_back(key->first);
@@ -1304,6 +1311,7 @@ void ofApp::updateTypeTagList()
 
 void ofApp::setupOscilloscopes() 
 {
+	// read the patchboard file
 	if (patchboard.loadFile("inputSettings.xml"))
 	{
 		ofLog(OF_LOG_NOTICE, "PatchBoard succesfully loaded");
@@ -1314,6 +1322,7 @@ void ofApp::setupOscilloscopes()
 		while (1);
 	}
 	ofFile scopeSettingsFile(ofToDataPath("ofxOscilloscopeSettings.xml"));
+	// check if oscilloscope settings file exists
 	if (scopeSettingsFile.exists())
 	{
 		scopeWins = ofxMultiScope::loadScopeSettings();
