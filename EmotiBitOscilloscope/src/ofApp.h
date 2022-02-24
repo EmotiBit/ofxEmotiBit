@@ -83,7 +83,9 @@ public:
 	void resetScopePlot(int w, int s);
 	void setTypeTagPlotAttributes();
 	void resetIndexMapping();
+	// Note: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updatePlotAttributeLists(std::string settingsFile = "ofxOscilloscopeSettings.xml");
+	// Note: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updateTypeTagList();
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;

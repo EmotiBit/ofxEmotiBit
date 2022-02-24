@@ -1207,6 +1207,7 @@ void ofApp::setupGui()
 	batteryStatus.setDefaultWidth(259);
 }
 
+// Note: This function is marked to be removed when we complete our move to xmlFileSettings.
 void ofApp::updatePlotAttributeLists(std::string settingsFile)
 {
 	ofxXmlSettings scopeSettings;
@@ -1264,6 +1265,7 @@ void ofApp::updatePlotAttributeLists(std::string settingsFile)
 	}
 }
 
+// Note: This function is marked to be removed when we complete our move to xmlFileSettings.
 void ofApp::updateTypeTagList()
 {
 	for (int i = 0; i < plotIds.size(); i++)// for multiscopes
