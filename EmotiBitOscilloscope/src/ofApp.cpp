@@ -183,7 +183,7 @@ Periodizer::Periodizer(std::string inputAperiodicSignalIdentifier, std::string i
 	inputPeriodicSignal = inputPeriodicSignalIdentifier;
 	outputSignal = outputSignalIdentifier;
 	defaultValue = defaultOutputValue;
-	lastSampledValue = 0;  // set to NAN on initialization
+	lastSampledValue = 0; 
 }
 
 int Periodizer::update(std::string identifier, std::vector<float> data, std::vector<float> &periodizedData)
