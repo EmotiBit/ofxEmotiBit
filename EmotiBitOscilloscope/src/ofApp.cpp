@@ -201,22 +201,22 @@ int Periodizer::update(std::string identifier, std::vector<float> data, std::vec
 	}
 	else
 	{
-		// update output is base periodic saignal is received
+		// update output if base periodic saignal is received
 		if (identifier.compare(inputPeriodicSignal) == 0)
 		{
-			if (isnan(defaultValue)) // HR type data. update with the lastSampledValue
+			if (isnan(defaultValue)) // repeat previously received data
 			{
 				periodizedData.assign(data.size(), lastSampledValue);
 				
 			}
-			else   // EDR type data
+			else   // push in default value 
 			{
-				if (isnan(lastSampledValue))// no new EDR amplitude to plot
+				if (isnan(lastSampledValue))// no new datapoint to plot
 				{
 					// create vector with samples = #samples of base periodic signal
 					periodizedData.assign(data.size(), defaultValue);
 				}
-				else // new EDR amplitude to plot
+				else // new datapoint to plot
 				{
 					periodizedData.assign(data.size() - 1, defaultValue);
 					periodizedData.insert(periodizedData.begin(), lastSampledValue);
