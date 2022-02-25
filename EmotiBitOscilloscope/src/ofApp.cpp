@@ -299,7 +299,7 @@ void ofApp::keyReleased(int key) {
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
-				int s = 4;
+				int s = 3;
 				int p = 0;
 				vector<int> indexes{ w, s, p };
 				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
@@ -314,7 +314,7 @@ void ofApp::keyReleased(int key) {
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
-				int s = 4;
+				int s = 3;
 				int p = 0;
 				vector<int> indexes{ w, s, p };
 				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
@@ -329,7 +329,7 @@ void ofApp::keyReleased(int key) {
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
-				int s = 4;
+				int s = 3;
 				int p = 0;
 				vector<int> indexes{ w, s, p };
 				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
