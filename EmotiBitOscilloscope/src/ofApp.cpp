@@ -989,7 +989,7 @@ void ofApp::setupGui()
 	string legendFontFilename = "verdanab.ttf";
 #ifdef TARGET_MAC_OS
     ofSetDataPathRoot("../Resources/");
-    cout<<"Changed the data pathroot for Release"<<endl;
+    cout<<"Changed the data pathroot for macOS."<<endl;
 #endif
 	legendFont.load(ofToDataPath(legendFontFilename), 11, true, true);
 	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);
@@ -1245,7 +1245,7 @@ void ofApp::updateTypeTagList()
 void ofApp::setupOscilloscopes() 
 {
 	// read the patchboard file
-	if (patchboard.loadFile("inputSettings.xml"))
+	if (patchboard.loadFile(ofToDataPath("inputSettings.xml")))
 	{
 		ofLog(OF_LOG_NOTICE, "PatchBoard succesfully loaded");
 	}
