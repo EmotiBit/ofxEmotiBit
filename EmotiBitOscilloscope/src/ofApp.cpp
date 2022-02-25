@@ -172,62 +172,7 @@ void ofApp::removeDataStream(std::string typetag)
 		}
 	}
 }
-Periodizer::Periodizer()
-{
 
-}
-
-Periodizer::Periodizer(std::string inputAperiodicSignalIdentifier, std::string inputPeriodicSignalIdentifier, std::string outputSignalIdentifier, float defaultOutputValue)
-{
-	inputAperiodicSignal = inputAperiodicSignalIdentifier;
-	inputPeriodicSignal = inputPeriodicSignalIdentifier;
-	outputSignal = outputSignalIdentifier;
-	defaultValue = defaultOutputValue;
-	lastSampledValue = 0; 
-}
-
-int Periodizer::update(std::string identifier, std::vector<float> data, std::vector<float> &periodizedData)
-{
-	periodizedData.clear();
-	// update class value if aperiodic data sample received
-	if (identifier.compare(inputAperiodicSignal) == 0)
-	{
-		// ToDo: have a better solution for handling situation when a aperiodic packet has multiple data points
-		if (data.size() > 0)
-		{
-			lastSampledValue = data.back();
-		}
-		return 0;
-	}
-	else
-	{
-		// update output if base periodic saignal is received
-		if (identifier.compare(inputPeriodicSignal) == 0)
-		{
-			if (isnan(defaultValue)) // repeat previously received data
-			{
-				periodizedData.assign(data.size(), lastSampledValue);
-				
-			}
-			else   // push in default value 
-			{
-				if (isnan(lastSampledValue))// no new datapoint to plot
-				{
-					// create vector with samples = #samples of base periodic signal
-					periodizedData.assign(data.size(), defaultValue);
-				}
-				else // new datapoint to plot
-				{
-					periodizedData.assign(data.size() - 1, defaultValue);
-					periodizedData.insert(periodizedData.begin(), lastSampledValue);
-					lastSampledValue = NAN;
-				}
-			}
-			return periodizedData.size();
-		}
-		return 0; // identifier is not related to the periodizer
-	}
-}
 //--------------------------------------------------------------
 void ofApp::draw() {
 	drawOscilloscopes();
@@ -352,6 +297,7 @@ void ofApp::keyReleased(int key) {
 			if (key == 'l')
 			{
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
+				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
 				int s = 4;
 				int p = 0;
@@ -366,6 +312,7 @@ void ofApp::keyReleased(int key) {
 			if (key == 'r')
 			{
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
+				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
 				int s = 4;
 				int p = 0;
@@ -380,6 +327,7 @@ void ofApp::keyReleased(int key) {
 			if (key == 'a')
 			{
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
+				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
 				int s = 4;
 				int p = 0;
@@ -834,43 +782,27 @@ string ofApp::ofGetTimestampString(const string& timestampFormat) {
 	return ret;
 }
 
-
-// ToDo: marked to be removed when we complete our move to xmlSettings
-void ofApp::updateAperiodicPlotBuffer(const std::string identifier, const std::vector<float> &periodizedData)
-{
-	auto indexPtr = typeTagIndexes.find(identifier);
-	if (indexPtr != typeTagIndexes.end())
-	{
-		int w = indexPtr->second.at(0); // Scope window(multiscope)
-		int s = indexPtr->second.at(1); // Scope
-		int p = indexPtr->second.at(2); // Plot
-		std::vector<std::vector<float>> plotData;
-		plotData.resize(typeTags.at(w).at(s).size());
-		plotData.at(p) = periodizedData;
-		// Add data to oscilloscope
-		scopeWins.at(w).scopes.at(s).updateData(plotData);
-	}
-}
-
-void ofApp::processAperiodicData(std::string identifier, std::vector<float> data)
+void ofApp::processAperiodicData(std::string signalId, std::vector<float> data)
 {
 	std::vector<float> periodizedData; // cleared before update inside every update call
-	// .update() returns size of data which needs to be added into the plot buffers
-	if (periodizerHeartRate.update(identifier, data, periodizedData))
+	for (int i = 0; i < periodizerList.size(); i++)
 	{
-		updateAperiodicPlotBuffer(EmotiBitPacket::TypeTag::HEART_RATE, periodizedData);
-	}
-	if (periodizerEdrAmplitude.update(identifier, data, periodizedData))
-	{
-		updateAperiodicPlotBuffer(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, periodizedData);
-	}
-	if (periodizerEdrFrequency.update(identifier, data, periodizedData))
-	{
-		updateAperiodicPlotBuffer(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ, periodizedData);
-	}
-	if (periodizerEdrRiseTime.update(identifier, data, periodizedData))
-	{
-		updateAperiodicPlotBuffer(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, periodizedData);
+		// update() returns size of data which needs to be added into the plot buffers
+		if (periodizerList.at(i).update(signalId, data, periodizedData))
+		{
+			auto indexPtr = typeTagIndexes.find(periodizerList.at(i).outputSignal);
+			if (indexPtr != typeTagIndexes.end())
+			{
+				int w = indexPtr->second.at(0); // Scope window(multiscope)
+				int s = indexPtr->second.at(1); // Scope
+				int p = indexPtr->second.at(2); // Plot
+				std::vector<std::vector<float>> plotData;
+				plotData.resize(typeTags.at(w).at(s).size());
+				plotData.at(p) = periodizedData;
+				// Add data to oscilloscope
+				scopeWins.at(w).scopes.at(s).updateData(plotData);
+			}
+		}
 	}
 }
 
@@ -954,6 +886,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 
 			if (!isPaused) {
 				processAperiodicData(packetHeader.typeTag, data.at(p));
+				// check if typetag is aperiodic
 				bool isAperiodic = false;
 				for (uint8_t i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_APERIODIC; i++)
 				{

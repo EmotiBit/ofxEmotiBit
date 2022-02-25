@@ -1,11 +1,11 @@
 <patchboard>
 	<settings>
 		<input>
-			<type>UDP</type>
+			<type>EmotiBit::TypeTag</type>
 			<port>12345</port>
 		</input>
 		<output>
-			<type>EmotiBitOscilloscope</type>
+			<type>ofxOscilloscope</type>
 		</output>
 	</settings>
 	<patchcords>
@@ -64,22 +64,6 @@
 		<patch>
 			<input>T1</input>
 			<output>13</output>
-		</patch>
-		<patch>
-			<input>HR</input>
-			<output>14</output>
-		</patch>
-		<patch>
-			<input>EC</input>
-			<output>15</output>
-		</patch>
-		<patch>
-			<input>EF</input>
-			<output>16</output>
-		</patch>
-		<patch>
-			<input>ET</input>
-			<output>17</output>
 		</patch>
 	</patchcords>
 </patchboard>	
