@@ -145,6 +145,9 @@
     <ClCompile Include="..\..\ofxOscilloscope\src\patchboard.cpp">
       <Filter>addons\ofxOscilloscope\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Signal\Periodizer.cpp">
+      <Filter>addons\ofxEmotiBit\src\Signal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -272,6 +275,9 @@
     </Filter>
     <Filter Include="src\EmotiBit_XPlat_Utils\src">
       <UniqueIdentifier>{c6dba512-20b1-4da1-9017-e2bab13ba7c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxEmotiBit\src\Signal">
+      <UniqueIdentifier>{d1515230-6612-416e-ab3b-169034e462f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -466,6 +472,9 @@
     </ClInclude>
     <ClInclude Include="..\..\ofxOscilloscope\src\patchboard.h">
       <Filter>addons\ofxOscilloscope\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Signal\Periodizer.h">
+      <Filter>addons\ofxEmotiBit\src\Signal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

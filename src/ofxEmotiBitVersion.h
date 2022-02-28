@@ -1,7 +1,7 @@
 #pragma once
 //#include <string>
 #include "ofMain.h"
-const std::string ofxEmotiBitVersion = "1.2.9";
+const std::string ofxEmotiBitVersion = "1.3.0";
 
 static void writeOfxEmotiBitVersionFile() {
 	string filename = "ofxEmotiBit_Version.txt";

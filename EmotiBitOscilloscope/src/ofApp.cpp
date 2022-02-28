@@ -53,9 +53,11 @@ void ofApp::update() {
 	updateMenuButtons();
 }
 
+// ToDo: This function  should be removed once we complete our move to xmlFileSettings
 void ofApp::setTypeTagPlotAttributes()
 {
 	// ToDo: Add attributes for all streams for refactor
+	// Note:: THERM plot attributes only live in code. we should move it to the XML file some day
 	{
 		// Add plot attributes for THERMOPILE data
 		typeTagPlotAttr attr;
@@ -294,6 +296,8 @@ void ofApp::keyReleased(int key) {
 		if (DEBUGGING) {
 			if (key == 'l')
 			{
+				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
+				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
 				int s = 3;
 				int p = 0;
@@ -307,6 +311,8 @@ void ofApp::keyReleased(int key) {
 			}
 			if (key == 'r')
 			{
+				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
+				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
 				int s = 3;
 				int p = 0;
@@ -320,6 +326,8 @@ void ofApp::keyReleased(int key) {
 			}
 			if (key == 'a')
 			{
+				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
+				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
 				int s = 3;
 				int p = 0;
@@ -774,6 +782,30 @@ string ofApp::ofGetTimestampString(const string& timestampFormat) {
 	return ret;
 }
 
+void ofApp::processAperiodicData(std::string signalId, std::vector<float> data)
+{
+	std::vector<float> periodizedData; // cleared before update inside every update call
+	for (int i = 0; i < periodizerList.size(); i++)
+	{
+		// update() returns size of data which needs to be added into the plot buffers
+		if (periodizerList.at(i).update(signalId, data, periodizedData))
+		{
+			auto indexPtr = typeTagIndexes.find(periodizerList.at(i).outputSignal);
+			if (indexPtr != typeTagIndexes.end())
+			{
+				int w = indexPtr->second.at(0); // Scope window(multiscope)
+				int s = indexPtr->second.at(1); // Scope
+				int p = indexPtr->second.at(2); // Plot
+				std::vector<std::vector<float>> plotData;
+				plotData.resize(typeTags.at(w).at(s).size());
+				plotData.at(p) = periodizedData;
+				// Add data to oscilloscope
+				scopeWins.at(w).scopes.at(s).updateData(plotData);
+			}
+		}
+	}
+}
+
 void ofApp::processSlowResponseMessage(string packet) {
 	vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
 	processSlowResponseMessage(splitPacket);
@@ -842,6 +874,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 					}
 				}
 			}
+
 			if (sendOsc)
 			{
 				for (auto a = 0; a < oscMessages.size(); a++)
@@ -852,8 +885,23 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 			}
 
 			if (!isPaused) {
-				// Add data to oscilloscope
-				scopeWins.at(w).scopes.at(s).updateData(data);
+				processAperiodicData(packetHeader.typeTag, data.at(p));
+				// check if typetag is aperiodic
+				bool isAperiodic = false;
+				for (uint8_t i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_APERIODIC; i++)
+				{
+					if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTagGroups::APERIODIC[i]) == 0)
+					{
+						// found
+						isAperiodic = true;
+						break;
+					}
+				}
+				if (!isAperiodic)
+				{
+					// Add data to oscilloscope
+					scopeWins.at(w).scopes.at(s).updateData(data);
+				}
 			}
 			bufferSizes.at(w).at(s).at(p) = packetHeader.dataLength;
 			dataCounts.at(w).at(s).at(p) += packetHeader.dataLength;
@@ -941,7 +989,7 @@ void ofApp::setupGui()
 	string legendFontFilename = "verdanab.ttf";
 #ifdef TARGET_MAC_OS
     ofSetDataPathRoot("../Resources/");
-    cout<<"Changed the data pathroot for Release"<<endl;
+    cout<<"Changed the data pathroot for macOS."<<endl;
 #endif
 	legendFont.load(ofToDataPath(legendFontFilename), 11, true, true);
 	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);
@@ -1097,28 +1145,91 @@ void ofApp::setupGui()
 	deviceSelected.setDefaultWidth(220);
 	batteryStatus.setDefaultWidth(259);
 }
-void ofApp::setupOscilloscopes() 
-{
 
-	typeTags = vector<vector<vector<string>>>
+// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
+void ofApp::updatePlotAttributeLists(std::string settingsFile)
+{
+	ofxXmlSettings scopeSettings;
+	scopeSettings.loadFile(settingsFile);
+
+	int nMultiScopes = scopeSettings.getNumTags("multiScope");
+	samplingFreqs.resize(nMultiScopes);
+	minYSpans.resize(nMultiScopes);
+	plotNames.resize(nMultiScopes);
+	plotColors.resize(nMultiScopes);
+	yLims.resize(nMultiScopes);
+	for (int m = 0; m < nMultiScopes; m++)
 	{
-		{ // scope panel 1
-			{ EmotiBitPacket::TypeTag::PPG_RED },
-			{ EmotiBitPacket::TypeTag::PPG_INFRARED },
-			{ EmotiBitPacket::TypeTag::PPG_GREEN },
-			{ EmotiBitPacket::TypeTag::EDA }
-			//{ EmotiBitPacket::TypeTag::EDR },
-			//{ EmotiBitPacket::TypeTag::EDL, EmotiBitPacket::TypeTag::EDR },
-			//{ EmotiBitPacket::TypeTag::HUMIDITY_0}
-		},
-		{ // scope panel 2
-			{ EmotiBitPacket::TypeTag::ACCELEROMETER_X, EmotiBitPacket::TypeTag::ACCELEROMETER_Y, EmotiBitPacket::TypeTag::ACCELEROMETER_Z },
-			{ EmotiBitPacket::TypeTag::GYROSCOPE_X, EmotiBitPacket::TypeTag::GYROSCOPE_Y, EmotiBitPacket::TypeTag::GYROSCOPE_Z },
-			{ EmotiBitPacket::TypeTag::MAGNETOMETER_X, EmotiBitPacket::TypeTag::MAGNETOMETER_Y, EmotiBitPacket::TypeTag::MAGNETOMETER_Z },
-			{ EmotiBitPacket::TypeTag::TEMPERATURE_1}
-			//{ EmotiBitPacket::TypeTag::TEMPERATURE_0 }
+		scopeSettings.pushTag("multiScope", m);
+		int nScopes = scopeSettings.getNumTags("scope");
+		samplingFreqs.at(m).resize(nScopes);
+		minYSpans.at(m).resize(nScopes);
+		plotNames.at(m).resize(nScopes);
+		plotColors.at(m).resize(nScopes);
+		yLims.at(m).resize(nScopes);
+		for (int s = 0; s < nScopes; s++) 
+		{
+			scopeSettings.pushTag("scope", s);
+			//float timeWindow = scopeSettings.getValue("timeWindow", 15.f); // maybe we keep this.
+			float samplingFrequency = scopeSettings.getValue("samplingFrequency", 15.f);
+			float minYSpan = scopeSettings.getValue("minYSpan", 0.f);
+			float yMin = scopeSettings.getValue("yMin", 0.f);
+			float yMax = scopeSettings.getValue("yMax", 0.f);
+			samplingFreqs.at(m).at(s) = samplingFrequency;
+			minYSpans.at(m).at(s) = minYSpan;
+			vector<float> yLim = { yMin, yMax };
+			yLims.at(m).at(s) = yLim;
+			//samplingFreqs-2D vector
+			//minYSpans-2D vector
+			//plotNames-3D vector
+			//plotColors-3D vector
+			//yLims-3D vector
+			int nPlots = scopeSettings.getNumTags("plot");
+			for (int p = 0; p < nPlots; p++) {
+				scopeSettings.pushTag("plot", p);
+				plotNames.at(m).at(s).push_back(scopeSettings.getValue("plotName", "N/A"));
+				scopeSettings.pushTag("plotColor");
+				plotColors.at(m).at(s).push_back(ofColor(
+					scopeSettings.getValue("r", 255),
+					scopeSettings.getValue("g", 255),
+					scopeSettings.getValue("b", 255)
+				));
+				scopeSettings.popTag(); // plotColor
+				scopeSettings.popTag(); // plot p
+			}
+			scopeSettings.popTag(); // scope s
 		}
-	};
+
+		scopeSettings.popTag(); // multiScope m
+	}
+}
+
+// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
+void ofApp::updateTypeTagList()
+{
+	for (int i = 0; i < plotIds.size(); i++)// for multiscopes
+	{
+		vector<vector<std::string>> scopeTypeTagList;
+		for (int j = 0; j < plotIds.at(i).size(); j++) // for scopes
+		{
+			vector<std::string> plotTypeTagList;
+			for (int k = 0; k < plotIds.at(i).at(j).size(); k++) // for plots
+			{
+				for (auto key = patchboard.patchcords.begin(); key != patchboard.patchcords.end(); key++)
+				{
+					// for each plot plotId, get the typeTag
+					// ToDo: there should be a loop here to go through all map values for a key. In case, the same signal is patched to multiple scopes
+					if (ofToInt(key->second.back()) == plotIds.at(i).at(j).at(k))
+					{
+						plotTypeTagList.push_back(key->first);
+					}
+				}
+			}
+			scopeTypeTagList.push_back(plotTypeTagList);
+		}
+		typeTags.push_back(scopeTypeTagList);
+	}
+
 	// Create an index mapping for each type tag
 	for (int w = 0; w < typeTags.size(); w++) {
 		for (int s = 0; s < typeTags.at(w).size(); s++) {
@@ -1128,128 +1239,36 @@ void ofApp::setupOscilloscopes()
 			}
 		}
 	}
-	initMetaDataBuffers();
+}
 
-	samplingFreqs = vector<vector<float>>
+
+void ofApp::setupOscilloscopes() 
+{
+	// read the patchboard file
+	if (patchboard.loadFile(ofToDataPath("inputSettings.xml")))
 	{
-		{ // scope panel 1
-			{ 25.f },
-			{ 25.f },
-			{ 25.f },
-			{ 15.f }
-			//{ 7.5f }
-		},
-		{ // scope panel 2
-			{ 25.f },
-			{ 25.f },
-			{ 25.f },
-			{ 7.5f }
-			//{ 7.5f }
-		}
-	};
-
-	plotNames = vector<vector<vector<string>>>
-	{
-		{ // scope panel 1
-			{ "PPG:RED" },
-			{ "PPG:IR" },
-			{ "PPG:GRN" },
-			{ "EDA" }
-			//{ "EDR" },
-			//{ "EDL", "EDR" },
-			//{ "HUMIDITY" }
-		},
-		{ // scope panel 2
-			{ "ACC:X", "ACC:Y", "ACC:Z" },
-			{ "GYRO:X", "GYRO:Y", "GYRO:Z" },
-			{ "MAG:X", "MAG:Y", "MAG:Z" },
-			{ "TEMP1"}
-			//{ "TEMP0" }
-		}
-	};
-	yLims = vector<vector<vector<float>>>
-	{
-		{ // scope panel 1
-			{  0.f,0.f  },
-			{  0.f,0.f  },
-			{  0.f,0.f  },
-			{ 0.f,0.f }
-			//{ -0.01f, 3.31f },
-			//{ 0.f, 0.f  }
-		},
-		{ // scope panel 2
-			{  -8.f, 8.f  },
-			{  -1000.f, 1000.f  },
-			{  0.f,0.f  },
-			{  0.f,0.f  }
-			//{  0.f,0.f  }
-		}
-	};
-
-	minYSpans = vector<vector<float>>
-	{
-		{ // scope panel 1
-			{  0.f },
-			{  0.f },
-			{  0.f },
-			{ 0.02f }	// NOTE: EDA is changed elsewhere to be a Sliding EDA minYspan 
-			//{ 1.f  }
-		},
-		{ // scope panel 2
-			{ 0.f },
-			{ 0.f },
-			{ 50.f },
-			{ 2.f }
-			//{ 2.f }
-		}
-	};
-
-	plotColors = vector<vector<vector<ofColor>>>
-	{
-		{ // scope panel 1
-			{ofColor(255, 69, 78)},
-			{ofColor(128, 75, 181)},
-			{ofColor(120, 209, 192)},
-			{ofColor(21, 73, 130)}
-			//{ofColor(125, 184, 234)}
-		},
-		{ // scope panel 2
-			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
-			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
-			{ofColor(255, 115, 0), ofColor(1, 204, 115), ofColor(4, 107, 183)},
-			{ofColor(234, 174, 68)}
-			//{ofColor(234, 174, 68)}
-		}
-	};
-
-	//plotColors = { ofColor(0,0,0), ofColor(255,0,0) , ofColor(0,191,0), ofColor(0,0,255) };
-
-	int guiHeight = guiPanels.at(guiPanels.size() - 1).getPosition().y + guiPanels.at(guiPanels.size() - 1).getHeight();
-	ofRectangle scopeArea = ofRectangle(ofPoint(0, guiHeight), ofPoint(ofGetWidth() / 2, ofGetHeight() - _consoleHeight));
-	ofRectangle scopeArea2 = ofRectangle(ofPoint(ofGetWidth() / 2, guiHeight), ofPoint(ofGetWidth(), ofGetHeight() - _consoleHeight));
-
-
-	scopeWins.emplace_back(plotNames.at(0).size(), scopeArea, legendFont); // Setup the multiScope panel
-	scopeWins.emplace_back(plotNames.at(1).size(), scopeArea2, legendFont); // Setup the multiScope panel
-
-	for (int w = 0; w < plotNames.size(); w++) {
-		for (int s = 0; s < plotNames.at(w).size(); s++) {
-			scopeWins.at(w).scopes.at(s).setup(timeWindowOnSetup, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
-				0, 1); // Setup each oscilloscope panel
-			if (yLims.at(w).at(s).at(0) == yLims.at(w).at(s).at(1)) {
-				scopeWins.at(w).scopes.at(s).autoscaleY(true, minYSpans.at(w).at(s));
-			}
-			else {
-				scopeWins.at(w).scopes.at(s).setYLims(pair<float, float>(yLims.at(w).at(s).at(0), yLims.at(w).at(s).at(1)));
-			}
-		}
-		scopeWins.at(w).setPlotLineWidth(3);
-        scopeWins.at(w).setAxesFont(axesFont);
-		selectedScope = 0; // Select all scopes for increment/decrement
-
-		isPaused = false;
-
+		ofLog(OF_LOG_NOTICE, "PatchBoard succesfully loaded");
 	}
+	else
+	{
+		ofLog(OF_LOG_NOTICE, "PatchBoard File Not Found!");
+		while (1);
+	}
+	ofFile scopeSettingsFile(ofToDataPath("ofxOscilloscopeSettings.xml"));
+	// check if oscilloscope settings file exists
+	if (scopeSettingsFile.exists())
+	{
+		scopeWins = ofxMultiScope::loadScopeSettings();
+	}
+	else
+	{
+		ofLog(OF_LOG_NOTICE, "Scope Settings File Not Found!");
+		while (1);
+	}
+	plotIds = ofxMultiScope::getPlotIds();
+	updatePlotAttributeLists();
+	updateTypeTagList();
+	initMetaDataBuffers();
 }
 
 void ofApp::updateLsl()

@@ -15,6 +15,7 @@
 #include "EmotiBitTestingHelper.h"
 #include "ofxOsc.h"
 #include "patchboard.h"
+#include "Periodizer.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -53,6 +54,7 @@ public:
 	void updateDeviceList();
 	void processSlowResponseMessage(string message);
 	void processSlowResponseMessage(vector<string> splitMessage);
+	void processAperiodicData(std::string signalId, std::vector<float> data);
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 	void setupGui();
 	void setupOscilloscopes();
@@ -68,7 +70,10 @@ public:
 	void resetScopePlot(int w, int s);
 	void setTypeTagPlotAttributes();
 	void resetIndexMapping();
-
+	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
+	void updatePlotAttributeLists(std::string settingsFile = "ofxOscilloscopeSettings.xml");
+	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
+	void updateTypeTagList();
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
 	//int newPoints;
@@ -120,6 +125,28 @@ public:
 		ofColor plotColor;
 		vector<int> scopeIdx;
 	};
+
+	Patchboard patchboard;
+	// ToDo: change the input aperiodic and ouptut periodic typeTags when we resolve typetags for aperiodic signals
+	// NOTE: New periodizers have to be added to the list below
+	std::vector<Periodizer> periodizerList{ Periodizer( EmotiBitPacket::TypeTag::HEART_RATE, 
+														EmotiBitPacket::TypeTag::PPG_INFRARED,
+														EmotiBitPacket::TypeTag::HEART_RATE) ,
+
+											Periodizer( EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE,
+														EmotiBitPacket::TypeTag::EDA,
+														EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE,
+														0),
+
+											Periodizer( EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ,
+														EmotiBitPacket::TypeTag::EDA,
+														EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ),
+
+											Periodizer( EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME,
+														EmotiBitPacket::TypeTag::EDA,
+														EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, 
+														0)
+										  };
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;
@@ -131,6 +158,7 @@ public:
 	vector<vector<vector<ofColor>>> plotColors;
 	//vector<ofColor> plotColors;
 	unordered_map<std::string, typeTagPlotAttr>typeTagPlotAttributes;
+	vector<vector<vector<int>>> plotIds;
 
 	vector<vector<vector<int>>> bufferSizes;
 	vector<vector<vector<int>>> dataCounts;
@@ -263,4 +291,6 @@ public:
 	ofxOscSender oscSender;
 	bool sendOsc = false; // ToDo: generalize sendOsc to sendData
 	
+	
 };
+
