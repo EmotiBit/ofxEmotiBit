@@ -33,6 +33,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_596BD083E9064BF691E78167B6329B43"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8B56ED3DDA944E18BF078A2C36EBF868"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -70,6 +76,12 @@
         "Entry"
         {
         "MsmKey" = "8:_AFF8A3DAF9A745D485A5645151DEA2B3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C35BD8F7184C4A90B70DFA25BC15643A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -210,6 +222,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_596BD083E9064BF691E78167B6329B43"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\data\\ofxOscilloscopeSettings.xml"
+            "TargetName" = "8:ofxOscilloscopeSettings.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_F64D9B09A4D2488E87CD314A5BA25F9C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8B56ED3DDA944E18BF078A2C36EBF868"
             {
             "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\data\\verdanab.ttf"
@@ -296,6 +328,26 @@
             "TargetName" = "8:fmodex64.dll"
             "Tag" = "8:"
             "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C35BD8F7184C4A90B70DFA25BC15643A"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\data\\inputSettings.xml"
+            "TargetName" = "8:inputSettings.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_F64D9B09A4D2488E87CD314A5BA25F9C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -501,15 +553,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EmotiBit"
-        "ProductCode" = "8:{799304AF-2CCA-4239-A931-8B81D3F27E76}"
-        "PackageCode" = "8:{1BBBF57E-92CC-4152-A27D-50E592CD2B6E}"
+        "ProductCode" = "8:{61BFDAFB-E4EE-400D-91C7-5FA9C5B0B771}"
+        "PackageCode" = "8:{B14EDE67-A276-4595-8A55-E0BC554E997E}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.2.9"
+        "ProductVersion" = "8:1.3.0"
         "Manufacturer" = "8:EmotiBit"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
