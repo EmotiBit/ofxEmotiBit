@@ -131,7 +131,6 @@ public:
 	// NOTE: New periodizers have to be added to the list below
 	std::vector<Periodizer> periodizerList{ Periodizer(EmotiBitPacket::TypeTag::HEART_RATE, EmotiBitPacket::TypeTag::PPG_INFRARED, EmotiBitPacket::TypeTag::HEART_RATE) ,
 											Periodizer(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, EmotiBitPacket::TypeTag::EDA, EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE, 0),
-											Periodizer(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ, EmotiBitPacket::TypeTag::EDA, EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ),
 											Periodizer(EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, EmotiBitPacket::TypeTag::EDA, EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, 0) };
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;
