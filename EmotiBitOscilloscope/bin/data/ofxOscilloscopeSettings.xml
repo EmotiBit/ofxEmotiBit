@@ -240,7 +240,7 @@
         <minYSpan>3.000000000</minYSpan>
         <plot>
             <plotId>16</plotId>
-            <plotName>EDR:FRQ</plotName>
+            <plotName>EDR:FREQ</plotName>
             <plotColor>
                 <r>21</r>
                 <g>73</g>
@@ -256,7 +256,7 @@
         <minYSpan>1.000000000</minYSpan>
         <plot>
             <plotId>17</plotId>
-            <plotName>EDR:RT</plotName>
+            <plotName>EDR:RIS</plotName>
             <plotColor>
                 <r>21</r>
                 <g>73</g>
