@@ -138,10 +138,6 @@ public:
 														EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE,
 														0),
 
-											Periodizer( EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ,
-														EmotiBitPacket::TypeTag::EDA,
-														EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_FREQ),
-
 											Periodizer( EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME,
 														EmotiBitPacket::TypeTag::EDA,
 														EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, 
