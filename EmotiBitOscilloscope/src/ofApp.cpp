@@ -299,7 +299,7 @@ void ofApp::keyReleased(int key) {
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
-				int s = 4;
+				int s = 3;
 				int p = 0;
 				vector<int> indexes{ w, s, p };
 				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
@@ -314,7 +314,7 @@ void ofApp::keyReleased(int key) {
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
-				int s = 4;
+				int s = 3;
 				int p = 0;
 				vector<int> indexes{ w, s, p };
 				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
@@ -329,7 +329,7 @@ void ofApp::keyReleased(int key) {
 				// ToDo: remove this hardcoded index. it will become harder to track once we move to xml settings.
 				// use auto indexPtr = typeTagIndexes.find(packetHeader.typeTag); with some case structure here in the future.
 				int w = 0;
-				int s = 4;
+				int s = 3;
 				int p = 0;
 				vector<int> indexes{ w, s, p };
 				typeTagIndexes.erase(typeTags.at(w).at(s).at(p));
@@ -989,7 +989,7 @@ void ofApp::setupGui()
 	string legendFontFilename = "verdanab.ttf";
 #ifdef TARGET_MAC_OS
     ofSetDataPathRoot("../Resources/");
-    cout<<"Changed the data pathroot for Release"<<endl;
+    cout<<"Changed the data pathroot for macOS."<<endl;
 #endif
 	legendFont.load(ofToDataPath(legendFontFilename), 11, true, true);
 	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);
@@ -1245,7 +1245,7 @@ void ofApp::updateTypeTagList()
 void ofApp::setupOscilloscopes() 
 {
 	// read the patchboard file
-	if (patchboard.loadFile("inputSettings.xml"))
+	if (patchboard.loadFile(ofToDataPath("inputSettings.xml")))
 	{
 		ofLog(OF_LOG_NOTICE, "PatchBoard succesfully loaded");
 	}

@@ -2,7 +2,6 @@
 	<settings>
 		<input>
 			<type>EmotiBit::TypeTag</type>
-			<port>12345</port>
 		</input>
 		<output>
 			<type>ofxOscilloscope</type>
