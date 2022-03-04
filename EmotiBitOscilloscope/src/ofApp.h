@@ -133,14 +133,14 @@ public:
 														EmotiBitPacket::TypeTag::PPG_INFRARED,
 														EmotiBitPacket::TypeTag::HEART_RATE) ,
 
-											Periodizer( EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE,
+											Periodizer( EmotiBitPacket::TypeTag::SKIN_CONDUCTANCE_RESPONSE_AMPLITUDE,
 														EmotiBitPacket::TypeTag::EDA,
-														EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_CHANGE,
+														EmotiBitPacket::TypeTag::SKIN_CONDUCTANCE_RESPONSE_AMPLITUDE,
 														0),
 
-											Periodizer( EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME,
+											Periodizer( EmotiBitPacket::TypeTag::SKIN_CONDUCTANCE_RESPONSE_RISE_TIME,
 														EmotiBitPacket::TypeTag::EDA,
-														EmotiBitPacket::TypeTag::ELECTRODERMAL_RESPONSE_RISE_TIME, 
+														EmotiBitPacket::TypeTag::SKIN_CONDUCTANCE_RESPONSE_RISE_TIME,
 														0)
 										  };
 	vector<ofxMultiScope> scopeWins;

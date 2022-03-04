@@ -69,15 +69,15 @@
 			<output>14</output>
 		</patch>
 		<patch>
-			<input>EC</input>
+			<input>SA</input>
 			<output>15</output>
 		</patch>
 		<patch>
-			<input>EF</input>
+			<input>SF</input>
 			<output>16</output>
 		</patch>
 		<patch>
-			<input>ET</input>
+			<input>SR</input>
 			<output>17</output>
 		</patch>
 	</patchcords>
