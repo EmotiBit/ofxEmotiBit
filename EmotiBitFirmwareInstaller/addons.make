@@ -1,2 +1,3 @@
+ofxGui
 ofxThreadedLogger
 ofxXmlSettings
