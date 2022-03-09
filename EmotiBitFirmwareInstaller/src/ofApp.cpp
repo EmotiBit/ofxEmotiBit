@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofLogToConsole();
-	ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::WAIT_FOR_FEATHER;
 	setupErrorMessageList();
 	setupInstructionList();
@@ -15,7 +15,10 @@ void ofApp::setup(){
 	//old OF default is 96 - but this results in fonts looking larger than in other programs.
 	ofTrueTypeFont::setGlobalDpi(72);
 
-	instructionFont.load("verdana.ttf", 14, true, true);
+	if(instructionFont.load("verdana.ttf", 14, true, true))
+    {
+        ofLogNotice() << "Font loaded correctly";
+    }
 	instructionFont.setLineHeight(18.0f);
 	instructionFont.setLetterSpacing(1.037);
 }
@@ -223,6 +226,19 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 
 bool ofApp::initProgrammerMode(std::string &programmerPort)
 {
+#if defined(TARGET_LINUX) || defined(TARGET_OSX)
+    // set to bootloader mode
+    // sonnect to serial port
+    ofLog(OF_LOG_NOTICE, "connecting using screen");
+    std::string command = "screen -d -m " + featherPort + " 1200";
+    system(command.c_str());
+    // dicsonnect serial port
+    ofSleepMillis(1000);
+    ofLog(OF_LOG_NOTICE,"disconneting");
+    system("screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill");
+    command.clear();
+    return true;
+#else
 	ofSerial serial;
 	// get initial list of COM ports
 	std::vector<std::string> initialComPortList = getComPortList(true);
@@ -247,6 +263,7 @@ bool ofApp::initProgrammerMode(std::string &programmerPort)
 		}
 	}
 	return false;
+#endif
 }
 std::string ofApp::findNewComPort(std::vector<std::string> oldList, std::vector<std::string> newList)
 {
@@ -272,6 +289,22 @@ std::string ofApp::findNewComPort(std::vector<std::string> oldList, std::vector<
 
 bool ofApp::uploadWincUpdaterSketch()
 {
+#if defined(TARGET_LINUX) || defined(TARGET_OSX)
+    std::string dontCarePort;
+    // set feather in programmer mode
+    initProgrammerMode(dontCarePort);
+    ofLog(OF_LOG_NOTICE,"waiting to flash with bossa");
+    ofSleepMillis(5000);
+    ofLog(OF_LOG_NOTICE, "uploading firmware updater sketch");
+    // upload the firmware updater sketch
+    std::string command;
+    //system("pwd");
+    //system("ls");
+    command = "../MacOS/bossac -i -d -U true -e -w -v -R -b -p " + featherPort + " WINC/FirmwareUpdater.ino.feather_m0.bin";
+    ofLogNotice("BOSSA Command") << command;
+    system(command.c_str());
+    return true;
+#else
 	std::string programmerPort;
 	std::vector<std::string> programmerPortComList;
 	// try to set feather in programmer mode
@@ -289,10 +322,20 @@ bool ofApp::uploadWincUpdaterSketch()
 	{
 		return false;
 	}
+#endif
 }
 
 bool ofApp::runWincUpdater()
 {
+#if defined(TARGET_LINUX) || defined(TARGET_OSX)
+    // run the WINC updater
+    ofLog(OF_LOG_NOTICE, "Updating Winc FW using WiFi101 updater");
+    ofSleepMillis(3000);
+    std::string command = std::string("../MacOS/FirmwareUploader -firmware WINC/m2m_aio_3a0.bin ") + std::string("-port ") + featherPort;
+    ofLogNotice("BOSSA Command") << command;
+    system(command.c_str());
+    return true;
+#else
 	// get updated COM list. the feather returns back to feather port, after the bossa flash is completed.
 	std::vector<std::string> newComPortList = getComPortList(true);
 	// find the fether port 
@@ -311,10 +354,22 @@ bool ofApp::runWincUpdater()
 	{
 		return false;
 	}
+#endif
 }
 
 bool ofApp::uploadEmotiBitFw()
 {
+#if defined(TARGET_LINUX) || defined(TARGET_OSX)
+    std::string dontCarePort;
+    initProgrammerMode(dontCarePort);
+    ofLog(OF_LOG_NOTICE,"waiting to flash with bossa");
+    ofSleepMillis(5000);
+    // upload the firmware updater sketch
+    std::string command = "../MacOS/bossac -i -d -U true -e -w -v -R -b -p " + featherPort + " EmotiBit_stock_firmware.ino.feather_m0.bin";
+    ofLogNotice("BOSSA Command") << command;
+    system(command.c_str());
+    return true;
+#else
 	std::string programmerPort;
 	// try to set device in programmer mode
 	if (initProgrammerMode(programmerPort))
@@ -333,4 +388,5 @@ bool ofApp::uploadEmotiBitFw()
 	{
 		return false;
 	}
+#endif
 }
