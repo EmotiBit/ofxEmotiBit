@@ -74,11 +74,12 @@ class ofApp : public ofBaseApp{
 			RUN_WINC_UPDATER,
 			UPLOAD_EMOTIBIT_FW,
 			COMPLETED,
+			EXIT,
 			LENGTH
 		}_state;
 
 		ofTrueTypeFont	instructionFont;
-		const int STATE_TIMEOUT = 10;
+		const int STATE_TIMEOUT = 20;
 		bool globalTimerReset = false;
 		std::vector<std::string> comListOnStartup;
 		std::vector<std::string> comListWithProgrammingPort;

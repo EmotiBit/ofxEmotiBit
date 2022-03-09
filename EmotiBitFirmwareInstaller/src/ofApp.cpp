@@ -9,18 +9,17 @@ void ofApp::setup(){
 	setupInstructionList();
 	// get initial list of available com ports
 	comListOnStartup = getComPortList(true);
-	
-	ofBackground(54, 54, 54, 255);
+	ofBackground(10, 10, 10, 255);
 
 	//old OF default is 96 - but this results in fonts looking larger than in other programs.
 	ofTrueTypeFont::setGlobalDpi(72);
 
-	if(instructionFont.load("verdana.ttf", 14, true, true))
+	if(instructionFont.load("verdana.ttf", 20, true, true))
     {
         ofLogNotice() << "Font loaded correctly";
     }
-	instructionFont.setLineHeight(18.0f);
-	instructionFont.setLetterSpacing(1.037);
+	//instructionFont.setLineHeight(18.0f);
+	//instructionFont.setLetterSpacing(1.037);
 }
 
 //--------------------------------------------------------------
@@ -30,58 +29,67 @@ void ofApp::update(){
 	{
 		resetStateTimer();
 		ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));
+		currentInstruction = currentInstruction + "\n" + onScreenInstructionList[_state];
 	}
-	if (ofGetElapsedTimef() < STATE_TIMEOUT)
+
+	if (_state == State::WAIT_FOR_FEATHER)
 	{
-		if (_state == State::WAIT_FOR_FEATHER)
+		if (detectFeatherPlugin())
 		{
-			if (detectFeatherPlugin())
-			{
-				// progress to next state;
-				progressToNextState = true;
-			}
-		}
-		else if (_state == State::UPLOAD_WINC_FW_UPDATER_SKETCH)
-		{
-			if (uploadWincUpdaterSketch())
-			{
-				// progress to next state;
-				progressToNextState = true;
-			}
-		}
-		else if (_state == State::RUN_WINC_UPDATER)
-		{
-			if (runWincUpdater())
-			{
-				// progress to next state;
-				progressToNextState = true;
-			}
-		}
-		else if (_state == State::UPLOAD_EMOTIBIT_FW)
-		{
-			if (uploadEmotiBitFw())
-			{
-				// progress to next state;
-				progressToNextState = true;
-			}
-		}
-		else if (_state == State::TIMEOUT)
-		{
-			// print error on the console
-			ofLog(OF_LOG_ERROR, errorMessage);
-			// print the error message on GUI
-			while (1);
-		}
-		else if (_state == State::COMPLETED)
-		{
-			// print some success message
-			ofLog(OF_LOG_NOTICE, "EMOTBIT FIRMWARE SUCCESSFULLY UPDATED!");
-			while (1);
+			// progress to next state;
+			progressToNextState = true;
 		}
 	}
-	else
+	else if (_state == State::UPLOAD_WINC_FW_UPDATER_SKETCH)
+	{
+		if (uploadWincUpdaterSketch())
+		{
+			// progress to next state;
+			progressToNextState = true;
+		}
+	}
+	else if (_state == State::RUN_WINC_UPDATER)
+	{
+		if (runWincUpdater())
+		{
+			// progress to next state;
+			progressToNextState = true;
+		}
+	}
+	else if (_state == State::UPLOAD_EMOTIBIT_FW)
+	{
+		if (uploadEmotiBitFw())
+		{
+			// progress to next state;
+			progressToNextState = true;
+		}
+	}
+	else if (_state == State::TIMEOUT)
+	{
+		// print error on the console
+		ofLog(OF_LOG_ERROR, errorMessage);
+		// print the error message on GUI
+		resetStateTimer();
+		while (ofGetElapsedTimef() < 5);
+		ofExit();
+	}
+	else if (_state == State::COMPLETED)
+	{
+		// print some success message
+		ofLog(OF_LOG_NOTICE, onScreenInstructionList[State::COMPLETED]);
+		resetStateTimer();
+		progressToNextState = true;
+	}
+	else if (_state == State::EXIT)
+	{
+		while (ofGetElapsedTimef() < 5);
+		ofExit();
+	}
+
+	if (!progressToNextState && ofGetElapsedTimef() > STATE_TIMEOUT)
 	{
 		// timeout
+		currentInstruction = "[FAILED]: " + onScreenInstructionList[_state];
 		errorMessage = errorMessageList[_state];
 		_state = State::TIMEOUT;
 		globalTimerReset = false;
@@ -91,13 +99,13 @@ void ofApp::update(){
 		_state = State((int)_state + 1);
 		globalTimerReset = false;
 	}
-	currentInstruction = onScreenInstructionList[_state];
+	
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofSetColor(225);
-	instructionFont.drawString(currentInstruction + errorMessage, 30, 35);
+	instructionFont.drawString(currentInstruction + "\n" + errorMessage, 30, 35);
 }
 
 //--------------------------------------------------------------
@@ -158,7 +166,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::setupInstructionList()
 {
 	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "Plug in the feather using the provided USB cable";
-	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Step1: Uploading WINC Firmwaer updater Sketch";
+	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Step1: Uploading WINC Firmware updater Sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = "Step2: Updating WINC FW";
 	onScreenInstructionList[State::UPLOAD_EMOTIBIT_FW] = "Step3: Updating EmotiBit firmware";
 	onScreenInstructionList[State::COMPLETED] = "FIRMWARE UPDATE COMPLETED SUCCESSFULLY!";
@@ -167,10 +175,10 @@ void ofApp::setupInstructionList()
 
 void ofApp::setupErrorMessageList()
 {
-	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Check USB cable";
-	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Could not set feather into Bootloader mode. WINC FW UPDATER sketch upload failed";
-	errorMessageList[State::RUN_WINC_UPDATER] = "WINC UPDATER executable failed to run";
-	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "Could not set feather into Bootloader mode. EmotiBit FW update failed";
+	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Check USB cable.";
+	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Could not set feather into Bootloader mode. WINC FW UPDATER sketch upload failed.";
+	errorMessageList[State::RUN_WINC_UPDATER] = "WINC UPDATER executable failed to run.";
+	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "Could not set feather into Bootloader mode. EmotiBit stock FW update failed.";
 }
 
 void ofApp::resetStateTimer()
@@ -219,7 +227,7 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 			comPorts += comPortList.at(i) + DELIMITER;
 		}
 		comPorts += comPortList.back();
-		ofLog(OF_LOG_VERBOSE, "Available COM ports: " + comPorts);
+		ofLog(OF_LOG_NOTICE, "Available COM ports: " + comPorts);
 	}
 	return comPortList;
 }
@@ -243,24 +251,20 @@ bool ofApp::initProgrammerMode(std::string &programmerPort)
 	// get initial list of COM ports
 	std::vector<std::string> initialComPortList = getComPortList(true);
 	std::vector<std::string> updatedComPortList;
-	// ping every COM port to try and set it to programmer mode
-	for (int j = 0; j < MAX_NUM_TRIES_PING; j++)
+	ofLog(OF_LOG_NOTICE, "Pinging Port: " + featherPort);
+	serial.setup(featherPort, 1200);
+	ofSleepMillis(200);
+	serial.close();
+	ofSleepMillis(1000);
+	updatedComPortList = getComPortList(true);
+	// check if a new OCM port has been detected
+	std::string newPort = findNewComPort(initialComPortList, updatedComPortList);
+	if (newPort.compare(COM_PORT_NONE) != 0)
 	{
-		ofLog(OF_LOG_NOTICE, "########## Try: " + ofToString(j + 1));
-		serial.setup(featherPort, 1200);
-		ofSleepMillis(200);
-		serial.close();
-		ofSleepMillis(1000);
-		updatedComPortList = getComPortList(true);
-		// check if a new OCM port has been detected
-		std::string newPort = findNewComPort(initialComPortList, updatedComPortList);
-		if (newPort.compare(COM_PORT_NONE) != 0)
-		{
-			// return the new COM port and the list of COM ports with the feather in programmer mode
-			programmerPort = newPort;
-			comListWithProgrammingPort = updatedComPortList;
-			return true;
-		}
+		// return the new COM port and the list of COM ports with the feather in programmer mode
+		programmerPort = newPort;
+		comListWithProgrammingPort = updatedComPortList;
+		return true;
 	}
 	return false;
 #endif
@@ -306,7 +310,6 @@ bool ofApp::uploadWincUpdaterSketch()
     return true;
 #else
 	std::string programmerPort;
-	std::vector<std::string> programmerPortComList;
 	// try to set feather in programmer mode
 	if (initProgrammerMode(programmerPort))
 	{
