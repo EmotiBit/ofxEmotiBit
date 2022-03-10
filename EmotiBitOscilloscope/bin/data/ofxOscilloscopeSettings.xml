@@ -96,7 +96,7 @@
         <minYSpan>0.020000000</minYSpan>
         <plot>
             <plotId>15</plotId>
-            <plotName>EDR:AMP</plotName>
+            <plotName>SCR:AMP</plotName>
             <plotColor>
                 <r>21</r>
                 <g>73</g>
@@ -240,7 +240,7 @@
         <minYSpan>3.000000000</minYSpan>
         <plot>
             <plotId>16</plotId>
-            <plotName>EDR:FREQ</plotName>
+            <plotName>SCR:FREQ</plotName>
             <plotColor>
                 <r>21</r>
                 <g>73</g>
@@ -256,7 +256,7 @@
         <minYSpan>1.000000000</minYSpan>
         <plot>
             <plotId>17</plotId>
-            <plotName>EDR:RIS</plotName>
+            <plotName>SCR:RIS</plotName>
             <plotColor>
                 <r>21</r>
                 <g>73</g>
