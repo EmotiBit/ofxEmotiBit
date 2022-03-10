@@ -7,14 +7,20 @@ void ofApp::setup(){
 	_state = State::WAIT_FOR_FEATHER;
 	setupErrorMessageList();
 	setupInstructionList();
+	titleImage.load("EmotiBit.png");
+	titleImage.resize(300, 266);
 	// get initial list of available com ports
 	comListOnStartup = getComPortList(true);
-	ofBackground(10, 10, 10, 255);
+	ofBackground(255, 255, 255, 255);
 
 	//old OF default is 96 - but this results in fonts looking larger than in other programs.
 	ofTrueTypeFont::setGlobalDpi(72);
 
 	if(instructionFont.load("verdana.ttf", 20, true, true))
+    {
+        ofLogNotice() << "Font loaded correctly";
+    }
+	if(titleFont.load("verdanab.ttf", 40, true, true))
     {
         ofLogNotice() << "Font loaded correctly";
     }
@@ -104,8 +110,13 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofSetColor(225);
-	instructionFont.drawString(currentInstruction + "\n" + errorMessage, 30, 35);
+
+	ofSetColor(0);
+	titleFont.drawString("EmotiBit Firmware Installer", 10, 150 + titleFont.getLineHeight()/2);
+	ofSetColor(255);
+	titleImage.draw(724, 50);
+	ofSetColor(0);
+	instructionFont.drawString(currentInstruction + "\n" + errorMessage, 30, 400);
 }
 
 //--------------------------------------------------------------
@@ -161,6 +172,47 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+bool ofApp::systemCall(const char* cmd, std::string targetResponse)
+{
+	char buffer[200];
+	bool status = false;
+	std::string result = "";
+#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+	FILE* pipe = popen(cmd, "r");
+#else
+	FILE* pipe = _popen(cmd, "r");
+#endif
+	if (!pipe) throw std::runtime_error("popen() failed!");
+	try {
+		while (fgets(buffer, sizeof buffer, pipe) != NULL) {
+			result += buffer;
+			// check if the target string is a part of the output of the system command
+			if (result.find(targetResponse) != std::string::npos)
+			{
+				// found response which indicates successfull system call
+				status = true;
+			}
+			result.pop_back(); // remove the trailing carriage return
+			ofLog(OF_LOG_NOTICE, result);
+			result = "";
+		}
+	}
+	catch (...) {
+#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+		pclose(pipe);
+#else
+		_pclose(pipe);
+#endif
+		throw;
+	}
+#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+	pclose(pipe);
+#else
+	_pclose(pipe);
+#endif
+	return status;
 }
 
 void ofApp::setupInstructionList()
@@ -316,10 +368,14 @@ bool ofApp::uploadWincUpdaterSketch()
 		// run command to upload WiFi Updater sketch
 		ofLog(OF_LOG_NOTICE, "uploading WiFi updater sketch");
 		std::string command = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p " + programmerPort + " data\\WINC\\FirmwareUpdater.ino.feather_m0.bin";
-		system(command.c_str());
-		ofLog(OF_LOG_NOTICE, "DONE!");
-		ofLog(OF_LOG_NOTICE, "WiFi updater sketch uploaded");
-		return true;
+		//system(command.c_str());
+		bool status = systemCall(command.c_str(), "Verify successful"); // the target response string is captured from observed output
+		if (status)
+		{
+			// verified upload complete
+			ofLog(OF_LOG_NOTICE, "DONE! WiFi updater sketch uploaded");
+			return true;
+		}
 	}
 	else
 	{
@@ -349,9 +405,13 @@ bool ofApp::runWincUpdater()
 		ofLog(OF_LOG_NOTICE, "Feather found at: " + featherPort);
 		ofLog(OF_LOG_NOTICE, "UPDATING WINC FW");
 		std::string command = "data\\WINC\\FirmwareUploader.exe -port " + featherPort + " -firmware " + "data\\WINC\\m2m_aio_3a0.bin";
-		system(command.c_str());
-		ofLog(OF_LOG_NOTICE, "WINC FW updated!");
-		return true;
+		//system(command.c_str());
+		bool status = systemCall(command.c_str(), "Operation completed: success");
+		if (status)
+		{
+			ofLog(OF_LOG_NOTICE, "WINC FW updated!");
+			return true;
+		}
 	}
 	else
 	{
@@ -381,11 +441,13 @@ bool ofApp::uploadEmotiBitFw()
 		// run command to upload WiFi Updater sketch
 		ofLog(OF_LOG_NOTICE, "Uploading EmotiBit FW");
 		std::string command = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p " + programmerPort + " data\\EmotiBit_stock_firmware.ino.feather_m0.bin";
-		system(command.c_str());
-		ofLog(OF_LOG_NOTICE, "DONE!");
-		ofLog(OF_LOG_NOTICE, "EmotiBit FW uploaded!");
-		ofSleepMillis(2000);
-		return true;
+		//system(command.c_str());
+		bool status = systemCall(command.c_str(), "Verify successful");
+		if (status)
+		{
+			ofLog(OF_LOG_NOTICE, "DONE! EmotiBit FW uploaded!");
+			return true;
+		}
 	}
 	else
 	{

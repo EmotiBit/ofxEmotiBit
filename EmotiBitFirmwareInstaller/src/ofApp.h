@@ -3,6 +3,10 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "unordered_map"
+#include <iostream>
+#include <stdexcept>
+#include <stdio.h>
+#include <string>
 
 class ofApp : public ofBaseApp{
 
@@ -30,6 +34,9 @@ class ofApp : public ofBaseApp{
 		void resetStateTimer();
 
 		bool detectFeatherPlugin();
+		
+		bool systemCall(const char* cmd, std::string targetResponse);
+
 		/*!
 			@brief funcition to get list of COM ports available on the system
 			@param printOnconsole set true, if you want to echo the available COM ports on the console
@@ -78,7 +85,9 @@ class ofApp : public ofBaseApp{
 			LENGTH
 		}_state;
 
+		ofImage titleImage;
 		ofTrueTypeFont	instructionFont;
+		ofTrueTypeFont	titleFont;
 		const int STATE_TIMEOUT = 20;
 		bool globalTimerReset = false;
 		std::vector<std::string> comListOnStartup;
