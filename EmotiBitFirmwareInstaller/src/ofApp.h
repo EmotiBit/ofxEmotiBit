@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <stdio.h>
 #include <string>
+#include "ThreadedSystemCall.h"
 
 class ofApp : public ofBaseApp{
 
@@ -35,7 +36,6 @@ class ofApp : public ofBaseApp{
 
 		bool detectFeatherPlugin();
 		
-		bool systemCall(const char* cmd, std::string targetResponse);
 
 		/*!
 			@brief funcition to get list of COM ports available on the system
@@ -78,16 +78,20 @@ class ofApp : public ofBaseApp{
 			TIMEOUT = -1,
 			WAIT_FOR_FEATHER = 0,
 			UPLOAD_WINC_FW_UPDATER_SKETCH,
-			RUN_WINC_UPDATER,
-			UPLOAD_EMOTIBIT_FW,
 			COMPLETED,
 			EXIT,
+			RUN_WINC_UPDATER,
+			UPLOAD_EMOTIBIT_FW,
 			LENGTH
 		}_state;
 
+		bool systemCommandExecuted = false;
+		ThreadedSystemCall threadedSystemCall;
 		ofImage titleImage;
 		ofTrueTypeFont	instructionFont;
+		ofTrueTypeFont progressFont;
 		ofTrueTypeFont	titleFont;
+		std::string progressString = "";
 		const int STATE_TIMEOUT = 20;
 		bool globalTimerReset = false;
 		std::vector<std::string> comListOnStartup;

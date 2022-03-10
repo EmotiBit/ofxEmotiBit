@@ -18,11 +18,15 @@ void ofApp::setup(){
 
 	if(instructionFont.load("verdana.ttf", 20, true, true))
     {
-        ofLogNotice() << "Font loaded correctly";
+        ofLogNotice() << "Instruction Font loaded correctly";
     }
+	if (progressFont.load("verdanab.ttf", 20, true, true))
+	{
+		ofLogNotice() << "Instruction Font loaded correctly";
+	}
 	if(titleFont.load("verdanab.ttf", 40, true, true))
     {
-        ofLogNotice() << "Font loaded correctly";
+        ofLogNotice() << "Title Font loaded correctly";
     }
 	//instructionFont.setLineHeight(18.0f);
 	//instructionFont.setLetterSpacing(1.037);
@@ -31,6 +35,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 	bool progressToNextState = false;
+	static uint32_t timeSinceLastProgressUpdate = ofGetElapsedTimeMillis();
 	if (!globalTimerReset)
 	{
 		resetStateTimer();
@@ -103,9 +108,22 @@ void ofApp::update(){
 	if (progressToNextState)
 	{
 		_state = State((int)_state + 1);
+		progressString = "";
 		globalTimerReset = false;
 	}
-	
+	if (_state > State::WAIT_FOR_FEATHER && ofGetElapsedTimeMillis() - timeSinceLastProgressUpdate > 300)
+	{
+		if (progressString == "")
+		{
+			progressString = "UPDATING";
+		}
+		progressString += ".";
+		if (_state == State::TIMEOUT || _state > State::COMPLETED)
+		{
+			progressString = "";
+		}
+		timeSinceLastProgressUpdate = ofGetElapsedTimeMillis();
+	}
 }
 
 //--------------------------------------------------------------
@@ -117,6 +135,8 @@ void ofApp::draw(){
 	titleImage.draw(724, 50);
 	ofSetColor(0);
 	instructionFont.drawString(currentInstruction + "\n" + errorMessage, 30, 400);
+	ofSetColor(0, 255, 150);
+	progressFont.drawString(progressString, 30, 500);
 }
 
 //--------------------------------------------------------------
@@ -172,47 +192,6 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
-}
-
-bool ofApp::systemCall(const char* cmd, std::string targetResponse)
-{
-	char buffer[200];
-	bool status = false;
-	std::string result = "";
-#if defined (TARGET_OSX) || defined (TARGET_LINUX)
-	FILE* pipe = popen(cmd, "r");
-#else
-	FILE* pipe = _popen(cmd, "r");
-#endif
-	if (!pipe) throw std::runtime_error("popen() failed!");
-	try {
-		while (fgets(buffer, sizeof buffer, pipe) != NULL) {
-			result += buffer;
-			// check if the target string is a part of the output of the system command
-			if (result.find(targetResponse) != std::string::npos)
-			{
-				// found response which indicates successfull system call
-				status = true;
-			}
-			result.pop_back(); // remove the trailing carriage return
-			ofLog(OF_LOG_NOTICE, result);
-			result = "";
-		}
-	}
-	catch (...) {
-#if defined (TARGET_OSX) || defined (TARGET_LINUX)
-		pclose(pipe);
-#else
-		_pclose(pipe);
-#endif
-		throw;
-	}
-#if defined (TARGET_OSX) || defined (TARGET_LINUX)
-	pclose(pipe);
-#else
-	_pclose(pipe);
-#endif
-	return status;
 }
 
 void ofApp::setupInstructionList()
@@ -321,6 +300,7 @@ bool ofApp::initProgrammerMode(std::string &programmerPort)
 	return false;
 #endif
 }
+
 std::string ofApp::findNewComPort(std::vector<std::string> oldList, std::vector<std::string> newList)
 {
 	// for every COM port in the new list
@@ -363,24 +343,46 @@ bool ofApp::uploadWincUpdaterSketch()
 #else
 	std::string programmerPort;
 	// try to set feather in programmer mode
-	if (initProgrammerMode(programmerPort))
+	if (!systemCommandExecuted)
 	{
-		// run command to upload WiFi Updater sketch
-		ofLog(OF_LOG_NOTICE, "uploading WiFi updater sketch");
-		std::string command = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p " + programmerPort + " data\\WINC\\FirmwareUpdater.ino.feather_m0.bin";
-		//system(command.c_str());
-		bool status = systemCall(command.c_str(), "Verify successful"); // the target response string is captured from observed output
-		if (status)
+		if (initProgrammerMode(programmerPort))
 		{
-			// verified upload complete
-			ofLog(OF_LOG_NOTICE, "DONE! WiFi updater sketch uploaded");
-			return true;
+			systemCommandExecuted = true;
+			// run command to upload WiFi Updater sketch
+			ofLog(OF_LOG_NOTICE, "uploading WiFi updater sketch");
+			std::string command = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p " + programmerPort + " data\\WINC\\FirmwareUpdater.ino.feather_m0.bin";
+			ofLogNotice("Running") << command;
+			//system(command.c_str());
+			threadedSystemCall.setup(command, "Verify successful"); // the target response string is captured from observed output
+			threadedSystemCall.startThread();
 		}
 	}
 	else
 	{
-		return false;
+		if (threadedSystemCall.isThreadRunning())
+		{
+			// thread is still running
+			threadedSystemCall.lock();
+			std::string systemOutput = threadedSystemCall.systemOutput;
+			threadedSystemCall.systemOutput = "";
+			threadedSystemCall.unlock();
+			if (systemOutput != "")
+			{
+				ofLog(OF_LOG_NOTICE, systemOutput);
+			}
+		}
+		else
+		{
+			// print out any system outputs we did not pick up before thread stopped
+			// No need to lock as thread is stopped
+			std::string systemOutput = threadedSystemCall.systemOutput;
+			ofLog(OF_LOG_NOTICE, systemOutput);
+			// thread execution complete
+			systemCommandExecuted = false;
+			return threadedSystemCall.cmdResult;
+		}
 	}
+	return false;
 #endif
 }
 
@@ -406,7 +408,7 @@ bool ofApp::runWincUpdater()
 		ofLog(OF_LOG_NOTICE, "UPDATING WINC FW");
 		std::string command = "data\\WINC\\FirmwareUploader.exe -port " + featherPort + " -firmware " + "data\\WINC\\m2m_aio_3a0.bin";
 		//system(command.c_str());
-		bool status = systemCall(command.c_str(), "Operation completed: success");
+		bool status = false;// systemCall(command.c_str(), "Operation completed: success");
 		if (status)
 		{
 			ofLog(OF_LOG_NOTICE, "WINC FW updated!");
@@ -442,7 +444,7 @@ bool ofApp::uploadEmotiBitFw()
 		ofLog(OF_LOG_NOTICE, "Uploading EmotiBit FW");
 		std::string command = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p " + programmerPort + " data\\EmotiBit_stock_firmware.ino.feather_m0.bin";
 		//system(command.c_str());
-		bool status = systemCall(command.c_str(), "Verify successful");
+		bool status = false;// systemCall(command.c_str(), "Verify successful");
 		if (status)
 		{
 			ofLog(OF_LOG_NOTICE, "DONE! EmotiBit FW uploaded!");
