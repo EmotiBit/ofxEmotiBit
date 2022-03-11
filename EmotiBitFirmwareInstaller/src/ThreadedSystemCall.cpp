@@ -1,5 +1,5 @@
 #include "ThreadedSystemCall.h"
-
+#include <stdio.h>
 void ThreadedSystemCall::setup(std::string cmd, std::string targetResponse)
 {
 	this->cmd = cmd;
@@ -16,7 +16,7 @@ void ThreadedSystemCall::threadedFunction()
 		char buffer[200];
 		bool status = false;
 #if defined (TARGET_OSX) || defined (TARGET_LINUX)
-		FILE* pipe = popen(cmd, "r");
+		FILE* pipe = popen(cmd.c_str(), "r");
 #else
 		FILE* pipe = _popen(cmd.c_str(), "r");
 #endif

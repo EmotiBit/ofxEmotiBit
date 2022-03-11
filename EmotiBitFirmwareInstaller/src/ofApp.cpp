@@ -294,6 +294,7 @@ bool ofApp::initProgrammerMode(std::string &programmerPort)
     ofLog(OF_LOG_NOTICE,"disconneting");
     system("screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill");
     command.clear();
+    programmerPort = featherPort;
     return true;
 #else
 	ofSerial serial;
@@ -378,7 +379,15 @@ bool ofApp::updateUsingBossa(std::string filePath)
 		{
 			// run command to upload WiFi Updater sketch
 			ofLog(OF_LOG_NOTICE, "uploading WiFi updater sketch");
-			std::string command = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
+            std::string command;
+#if defined(TARGET_LINUX) || defined(TARGET_OSX)
+            ofLog(OF_LOG_NOTICE,"waiting to flash with bossa");
+            ofSleepMillis(5000);
+            command = "../MacOS/bossac";// -i -d -U true -e -w -v -R -b -p " + featherPort + " " + filePath;
+#else
+            command = "data\\bossac.exe"; // -i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
+#endif
+            command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
 			ofLogNotice("Running: ") << command;
 			//system(command.c_str());
 			threadedSystemCall.setup(command, "Verify successful"); // the target response string is captured from observed output
@@ -396,20 +405,21 @@ bool ofApp::updateUsingBossa(std::string filePath)
 bool ofApp::uploadWincUpdaterSketch()
 {
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
-    std::string dontCarePort;
+    //std::string dontCarePort;
     // set feather in programmer mode
-    initProgrammerMode(dontCarePort);
-    ofLog(OF_LOG_NOTICE,"waiting to flash with bossa");
-    ofSleepMillis(5000);
-    ofLog(OF_LOG_NOTICE, "uploading firmware updater sketch");
+    //initProgrammerMode(dontCarePort);
+    //ofLog(OF_LOG_NOTICE,"waiting to flash with bossa");
+    //ofSleepMillis(5000);
+    //ofLog(OF_LOG_NOTICE, "uploading firmware updater sketch");
     // upload the firmware updater sketch
-    std::string command;
+    //std::string command;
     //system("pwd");
     //system("ls");
-    command = "../MacOS/bossac -i -d -U true -e -w -v -R -b -p " + featherPort + " WINC/FirmwareUpdater.ino.feather_m0.bin";
-    ofLogNotice("BOSSA Command") << command;
-    system(command.c_str());
-    return true;
+    //command = "../MacOS/bossac -i -d -U true -e -w -v -R -b -p " + featherPort + " WINC/FirmwareUpdater.ino.feather_m0.bin";
+    //ofLogNotice("BOSSA Command") << command;
+    //system(command.c_str());
+    return updateUsingBossa("WINC/FirmwareUpdater.ino.feather_m0.bin");
+    //return true;
 #else
 	return updateUsingBossa("data\\WINC\\FirmwareUpdater.ino.feather_m0.bin");
 #endif
@@ -419,12 +429,41 @@ bool ofApp::runWincUpdater()
 {
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
     // run the WINC updater
-    ofLog(OF_LOG_NOTICE, "Updating Winc FW using WiFi101 updater");
-    ofSleepMillis(3000);
-    std::string command = std::string("../MacOS/FirmwareUploader -firmware WINC/m2m_aio_3a0.bin ") + std::string("-port ") + featherPort;
-    ofLogNotice("BOSSA Command") << command;
-    system(command.c_str());
-    return true;
+    //ofLog(OF_LOG_NOTICE, "Updating Winc FW using WiFi101 updater");
+    //ofSleepMillis(3000);
+    //std::string command = std::string("../MacOS/FirmwareUploader -firmware WINC/m2m_aio_3a0.bin ") + std::string("-port ") + featherPort;
+    //ofLogNotice("BOSSA Command") << command;
+    //system(command.c_str());
+    //return true;
+    if (!systemCommandExecuted)
+    {
+        ofLog(OF_LOG_NOTICE, "Updating Winc FW using WiFi101 updater");
+        ofSleepMillis(3000);
+        std::string command = std::string("../MacOS/FirmwareUploader -firmware WINC/m2m_aio_3a0.bin ") + std::string("-port ") + featherPort;
+        ofLogNotice("WINC Command") << command;
+        threadedSystemCall.setup(command);
+        threadedSystemCall.startThread();
+        systemCommandExecuted = true;
+        // get updated COM list. the feather returns back to feather port, after the bossa flash is completed.
+        //std::vector<std::string> newComPortList = getComPortList(true);
+        // find the feather port
+        //featherPort = findNewComPort(comListWithProgrammingPort, newComPortList); // old list, new list
+//
+//        if (featherPort.compare(COM_PORT_NONE) != 0)
+//        {
+//            ofLog(OF_LOG_NOTICE, "Feather found at: " + featherPort);
+//            std::string command = "data\\WINC\\FirmwareUploader.exe -port " + featherPort + " -firmware " + "data\\WINC\\m2m_aio_3a0.bin";
+//            ofLogNotice("UPDATING WINC FW: COMMAND: ") << command;
+//            threadedSystemCall.setup(command);
+//            threadedSystemCall.startThread();
+//            systemCommandExecuted = true;
+//        }
+    }
+    else
+    {
+        return checkSystemCallResponse();
+    }
+    return false;
 #else
 	if (!systemCommandExecuted)
 	{
@@ -454,15 +493,16 @@ bool ofApp::runWincUpdater()
 bool ofApp::uploadEmotiBitFw()
 {
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
-    std::string dontCarePort;
-    initProgrammerMode(dontCarePort);
-    ofLog(OF_LOG_NOTICE,"waiting to flash with bossa");
-    ofSleepMillis(5000);
+    ///std::string dontCarePort;
+    //initProgrammerMode(dontCarePort);
+    //ofLog(OF_LOG_NOTICE,"waiting to flash with bossa");
+    //ofSleepMillis(5000);
     // upload the firmware updater sketch
-    std::string command = "../MacOS/bossac -i -d -U true -e -w -v -R -b -p " + featherPort + " EmotiBit_stock_firmware.ino.feather_m0.bin";
-    ofLogNotice("BOSSA Command") << command;
-    system(command.c_str());
-    return true;
+    //std::string command = "../MacOS/bossac -i -d -U true -e -w -v -R -b -p " + featherPort + " EmotiBit_stock_firmware.ino.feather_m0.bin";
+    //ofLogNotice("BOSSA Command") << command;
+    //system(command.c_str());
+    //return true;
+    return updateUsingBossa("EmotiBit_stock_firmware.ino.feather_m0.bin");
 #else
 	return updateUsingBossa("data\\EmotiBit_stock_firmware.ino.feather_m0.bin");
 #endif

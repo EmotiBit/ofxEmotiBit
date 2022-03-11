@@ -22,6 +22,7 @@
 		9480A3ED27D91DAA0065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin in Resources */ = {isa = PBXBuildFile; fileRef = 9480A3EA27D91DAA0065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */; };
 		9480A3F027D91DBF0065570B /* bossac in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9480A3EE27D91DBF0065570B /* bossac */; };
 		9480A3F327D925AA0065570B /* FirmwareUploader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9480A3F227D925AA0065570B /* FirmwareUploader */; };
+		9480A3F627DAD3CA0065570B /* ThreadedSystemCall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A3F427DAD3CA0065570B /* ThreadedSystemCall.cpp */; };
 		9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */; };
 		9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832BDC407620CDBA568B713D /* tinyxmlerror.cpp */; };
 		B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */; };
@@ -69,6 +70,8 @@
 		9480A3EA27D91DAA0065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = EmotiBit_stock_firmware.ino.feather_m0.bin; path = bin/data/EmotiBit_stock_firmware.ino.feather_m0.bin; sourceTree = "<group>"; };
 		9480A3EE27D91DBF0065570B /* bossac */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = bossac; path = bin/data/bossac; sourceTree = "<group>"; };
 		9480A3F227D925AA0065570B /* FirmwareUploader */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = FirmwareUploader; path = bin/data/WINC/FirmwareUploader; sourceTree = "<group>"; };
+		9480A3F427DAD3CA0065570B /* ThreadedSystemCall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadedSystemCall.cpp; sourceTree = "<group>"; };
+		9480A3F527DAD3CA0065570B /* ThreadedSystemCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadedSystemCall.h; sourceTree = "<group>"; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
 		AE68B54581BE4A1DAE853180 /* ofxInputField.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxInputField.h; path = ../../../addons/ofxGui/src/ofxInputField.h; sourceTree = SOURCE_ROOT; };
 		B21E7E5F548EEA92F368040B /* tinyxml.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tinyxml.h; path = ../../../addons/ofxXmlSettings/libs/tinyxml.h; sourceTree = SOURCE_ROOT; };
@@ -678,6 +681,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				9480A3F427DAD3CA0065570B /* ThreadedSystemCall.cpp */,
+				9480A3F527DAD3CA0065570B /* ThreadedSystemCall.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
@@ -812,6 +817,7 @@
 				9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */,
 				933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */,
 				9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */,
+				9480A3F627DAD3CA0065570B /* ThreadedSystemCall.cpp in Sources */,
 				5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */,
 				63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */,
 			);
