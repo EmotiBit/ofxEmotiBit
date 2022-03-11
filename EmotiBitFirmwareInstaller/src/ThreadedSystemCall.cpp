@@ -5,6 +5,7 @@ void ThreadedSystemCall::setup(std::string cmd, std::string targetResponse)
 	this->cmd = cmd;
 	this->targetResponse = targetResponse;
 	cmdResult = false;
+	systemOutput = "";
 }
 
 void ThreadedSystemCall::threadedFunction()
@@ -24,16 +25,29 @@ void ThreadedSystemCall::threadedFunction()
 			throw std::runtime_error("popen() failed!");
 			stopThread();
 		}
-		try {
-			while (fgets(buffer, sizeof buffer, pipe) != NULL) {
+		try 
+		{
+			while (fgets(buffer, sizeof buffer, pipe) != NULL) 
+			{
 				lock();
-				systemOutput += buffer;
-				// check if the target string is a part of the output of the system command
-				if (systemOutput.find(targetResponse) != std::string::npos)
+				std::string tempStr = "";
+				tempStr += buffer;
+				if (targetResponse != "")
 				{
-					// found response which indicates successfull system call
-					cmdResult = true;
+					// check if the target string is a part of the output of the system command
+					if (tempStr.find(targetResponse) != std::string::npos)
+					{
+						// found response which indicates successfull system call
+						cmdResult = true;
+					}
 				}
+				systemOutput += tempStr;
+				unlock();
+			}
+			if (targetResponse == "")
+			{
+				lock();
+				cmdResult = true;
 				unlock();
 			}
 		}

@@ -28,14 +28,44 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
+		/*!
+			@brief Setup the locations where the GUI elements are going to be drawn
+		*/
+		void setupGuiElementPositions();
+
+		/*!
+			@brief Setup Instructions for every step
+		*/
 		void setupInstructionList();
 
+		/*!
+			@brief Setup Error messages for every state
+		*/
 		void setupErrorMessageList();
 
+		/*!
+			@brief Function to reset State timer after state machine has progressed to next state
+		*/
 		void resetStateTimer();
 
+		/*!
+			@brief Function to detect new COM port after feather is plugged in
+			@return true if new port is detected
+		*/
 		bool detectFeatherPlugin();
 		
+		/*!
+			@brief Function to run bossa to upload sketch(bin) to feather
+			@param filePath relative path of the bin file of the sketch
+			@return true if sketch was uploaded correctly
+		*/
+		bool updateUsingBossa(std::string filePath);
+
+		/*!
+			@brief Function to check progress on the separate thread executing system calls
+			@return true if system call was completed successfully, else false
+		*/
+		bool checkSystemCallResponse();
 
 		/*!
 			@brief funcition to get list of COM ports available on the system
@@ -52,14 +82,17 @@ class ofApp : public ofBaseApp{
 		*/
 		bool initProgrammerMode(std::string &programmerPort);
 		
+		/*!
+			@brief Function to call WiFi101 updater and update the WINC firmware
+			@return true if WINC FW was updated correctly
+		*/
 		bool runWincUpdater();
 
-		bool uploadWincUpdaterSketch();
-
 		/*!
-			@brief Function to update the FW on the WINC1500 on device
+			@brief Function to upload WINC firmwareUpdater sketch. required to run Winc updater
+			@return true if sketch uploaded successfully
 		*/
-		//void updateWiFiFw();
+		bool uploadWincUpdaterSketch();
 		
 		/*!
 			@brief function to update the EmotiBit FW on device
@@ -78,10 +111,10 @@ class ofApp : public ofBaseApp{
 			TIMEOUT = -1,
 			WAIT_FOR_FEATHER = 0,
 			UPLOAD_WINC_FW_UPDATER_SKETCH,
-			COMPLETED,
-			EXIT,
 			RUN_WINC_UPDATER,
 			UPLOAD_EMOTIBIT_FW,
+			COMPLETED,
+			EXIT,
 			LENGTH
 		}_state;
 
@@ -105,8 +138,11 @@ class ofApp : public ofBaseApp{
 		unordered_map<int, std::string> onScreenInstructionList;
 		std::string errorMessage;
 		std::string currentInstruction;
-		struct BossaCommand {
-			std::string windows = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p ";
-			std::string unix = "bossac -i -d -U true -e -w -v -R -b -p ";
-		}bossaCommand;
+		struct GuiElementPos {
+			int x = 0;
+			int y = 0;
+			GuiElementPos() {}
+			GuiElementPos(int x, int y) : x{ x }, y{ y } {}
+		};
+		unordered_map<std::string, GuiElementPos> guiElementPositions;
 };

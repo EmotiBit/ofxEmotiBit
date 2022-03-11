@@ -5,6 +5,7 @@ void ofApp::setup(){
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::WAIT_FOR_FEATHER;
+	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
 	titleImage.load("EmotiBit.png");
@@ -97,10 +98,12 @@ void ofApp::update(){
 		ofExit();
 	}
 
-	if (!progressToNextState && ofGetElapsedTimef() > STATE_TIMEOUT)
+	// raise timeout if no system command is running and state has not progressed in STATE_TIMEOUT
+	if (!progressToNextState  && !systemCommandExecuted && ofGetElapsedTimef() > STATE_TIMEOUT)
 	{
 		// timeout
 		currentInstruction = "[FAILED]: " + onScreenInstructionList[_state];
+		progressString = "";
 		errorMessage = errorMessageList[_state];
 		_state = State::TIMEOUT;
 		globalTimerReset = false;
@@ -108,19 +111,21 @@ void ofApp::update(){
 	if (progressToNextState)
 	{
 		_state = State((int)_state + 1);
-		progressString = "";
-		globalTimerReset = false;
-	}
-	if (_state > State::WAIT_FOR_FEATHER && ofGetElapsedTimeMillis() - timeSinceLastProgressUpdate > 300)
-	{
-		if (progressString == "")
+		if (_state <= State::COMPLETED)
 		{
 			progressString = "UPDATING";
 		}
-		progressString += ".";
-		if (_state == State::TIMEOUT || _state > State::COMPLETED)
+		else
 		{
 			progressString = "";
+		}
+		globalTimerReset = false;
+	}
+	if (ofGetElapsedTimeMillis() - timeSinceLastProgressUpdate > 500)
+	{
+		if (_state > State::WAIT_FOR_FEATHER && _state <= State::COMPLETED)
+		{
+			progressString += ".";
 		}
 		timeSinceLastProgressUpdate = ofGetElapsedTimeMillis();
 	}
@@ -130,13 +135,17 @@ void ofApp::update(){
 void ofApp::draw(){
 
 	ofSetColor(0);
-	titleFont.drawString("EmotiBit Firmware Installer", 10, 150 + titleFont.getLineHeight()/2);
+	titleFont.drawString("EmotiBit Firmware Installer", guiElementPositions["TitleString"].x, guiElementPositions["TitleString"].y);
 	ofSetColor(255);
-	titleImage.draw(724, 50);
+	titleImage.draw(guiElementPositions["TitleImage"].x, guiElementPositions["TitleImage"].y);
+	
+	// color of instructions
 	ofSetColor(0);
-	instructionFont.drawString(currentInstruction + "\n" + errorMessage, 30, 400);
+	instructionFont.drawString(currentInstruction + "\n" + errorMessage, guiElementPositions["Instructions"].x, guiElementPositions["Instructions"].y);
+	
+	// color of progress string
 	ofSetColor(0, 255, 150);
-	progressFont.drawString(progressString, 30, 500);
+	progressFont.drawString(progressString, guiElementPositions["Progress"].x, guiElementPositions["Progress"].y);
 }
 
 //--------------------------------------------------------------
@@ -194,6 +203,15 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
+
+void ofApp::setupGuiElementPositions()
+{
+	guiElementPositions["TitleString"] = GuiElementPos{ 10, 150 + int(titleFont.getLineHeight() / 2) };
+	guiElementPositions["TitleImage"] = GuiElementPos{ 724, 50 };
+	guiElementPositions["Instructions"] = GuiElementPos{ 30, 410 };
+	guiElementPositions["Progress"] = GuiElementPos{ 30, 400 }; 
+}
+
 void ofApp::setupInstructionList()
 {
 	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "Plug in the feather using the provided USB cable";
@@ -206,7 +224,7 @@ void ofApp::setupInstructionList()
 
 void ofApp::setupErrorMessageList()
 {
-	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Check USB cable.";
+	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Check USB cable. \nMake sure the Feather was not connected before installer was started!";
 	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Could not set feather into Bootloader mode. WINC FW UPDATER sketch upload failed.";
 	errorMessageList[State::RUN_WINC_UPDATER] = "WINC UPDATER executable failed to run.";
 	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "Could not set feather into Bootloader mode. EmotiBit stock FW update failed.";
@@ -323,6 +341,58 @@ std::string ofApp::findNewComPort(std::vector<std::string> oldList, std::vector<
 	return COM_PORT_NONE;
 }
 
+bool ofApp::checkSystemCallResponse()
+{
+	if (threadedSystemCall.isThreadRunning())
+	{
+		// thread is still running
+		threadedSystemCall.lock();
+		std::string systemOutput = threadedSystemCall.systemOutput;
+		threadedSystemCall.systemOutput = "";
+		threadedSystemCall.unlock();
+		if (systemOutput != "")
+		{
+			ofLog(OF_LOG_NOTICE, systemOutput);
+		}
+		return false;
+	}
+	else
+	{
+		// print out any system outputs we did not pick up before thread stopped
+		// No need to lock as thread is stopped
+		std::string systemOutput = threadedSystemCall.systemOutput;
+		ofLog(OF_LOG_NOTICE, systemOutput);
+		// thread execution complete
+		systemCommandExecuted = false;
+		return threadedSystemCall.cmdResult;
+	}
+}
+
+bool ofApp::updateUsingBossa(std::string filePath)
+{
+	std::string programmerPort;
+	// try to set feather in programmer mode
+	if (!systemCommandExecuted)
+	{
+		if (initProgrammerMode(programmerPort))
+		{
+			// run command to upload WiFi Updater sketch
+			ofLog(OF_LOG_NOTICE, "uploading WiFi updater sketch");
+			std::string command = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
+			ofLogNotice("Running: ") << command;
+			//system(command.c_str());
+			threadedSystemCall.setup(command, "Verify successful"); // the target response string is captured from observed output
+			threadedSystemCall.startThread();
+			systemCommandExecuted = true;
+		}
+		return false;
+	}
+	else
+	{
+		return checkSystemCallResponse();
+	}
+}
+
 bool ofApp::uploadWincUpdaterSketch()
 {
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
@@ -341,48 +411,7 @@ bool ofApp::uploadWincUpdaterSketch()
     system(command.c_str());
     return true;
 #else
-	std::string programmerPort;
-	// try to set feather in programmer mode
-	if (!systemCommandExecuted)
-	{
-		if (initProgrammerMode(programmerPort))
-		{
-			systemCommandExecuted = true;
-			// run command to upload WiFi Updater sketch
-			ofLog(OF_LOG_NOTICE, "uploading WiFi updater sketch");
-			std::string command = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p " + programmerPort + " data\\WINC\\FirmwareUpdater.ino.feather_m0.bin";
-			ofLogNotice("Running") << command;
-			//system(command.c_str());
-			threadedSystemCall.setup(command, "Verify successful"); // the target response string is captured from observed output
-			threadedSystemCall.startThread();
-		}
-	}
-	else
-	{
-		if (threadedSystemCall.isThreadRunning())
-		{
-			// thread is still running
-			threadedSystemCall.lock();
-			std::string systemOutput = threadedSystemCall.systemOutput;
-			threadedSystemCall.systemOutput = "";
-			threadedSystemCall.unlock();
-			if (systemOutput != "")
-			{
-				ofLog(OF_LOG_NOTICE, systemOutput);
-			}
-		}
-		else
-		{
-			// print out any system outputs we did not pick up before thread stopped
-			// No need to lock as thread is stopped
-			std::string systemOutput = threadedSystemCall.systemOutput;
-			ofLog(OF_LOG_NOTICE, systemOutput);
-			// thread execution complete
-			systemCommandExecuted = false;
-			return threadedSystemCall.cmdResult;
-		}
-	}
-	return false;
+	return updateUsingBossa("data\\WINC\\FirmwareUpdater.ino.feather_m0.bin");
 #endif
 }
 
@@ -397,28 +426,28 @@ bool ofApp::runWincUpdater()
     system(command.c_str());
     return true;
 #else
-	// get updated COM list. the feather returns back to feather port, after the bossa flash is completed.
-	std::vector<std::string> newComPortList = getComPortList(true);
-	// find the fether port 
-	featherPort = findNewComPort(comListWithProgrammingPort, newComPortList); // old list, new list
-	if (featherPort.compare(COM_PORT_NONE) != 0)
+	if (!systemCommandExecuted)
 	{
-		// found feather port
-		ofLog(OF_LOG_NOTICE, "Feather found at: " + featherPort);
-		ofLog(OF_LOG_NOTICE, "UPDATING WINC FW");
-		std::string command = "data\\WINC\\FirmwareUploader.exe -port " + featherPort + " -firmware " + "data\\WINC\\m2m_aio_3a0.bin";
-		//system(command.c_str());
-		bool status = false;// systemCall(command.c_str(), "Operation completed: success");
-		if (status)
+		// get updated COM list. the feather returns back to feather port, after the bossa flash is completed.
+		std::vector<std::string> newComPortList = getComPortList(true);
+		// find the feather port 
+		featherPort = findNewComPort(comListWithProgrammingPort, newComPortList); // old list, new list
+
+		if (featherPort.compare(COM_PORT_NONE) != 0)
 		{
-			ofLog(OF_LOG_NOTICE, "WINC FW updated!");
-			return true;
+			ofLog(OF_LOG_NOTICE, "Feather found at: " + featherPort);
+			std::string command = "data\\WINC\\FirmwareUploader.exe -port " + featherPort + " -firmware " + "data\\WINC\\m2m_aio_3a0.bin";
+			ofLogNotice("UPDATING WINC FW: COMMAND: ") << command;
+			threadedSystemCall.setup(command);
+			threadedSystemCall.startThread();
+			systemCommandExecuted = true;
 		}
 	}
 	else
 	{
-		return false;
+		return checkSystemCallResponse();
 	}
+	return false;
 #endif
 }
 
@@ -435,25 +464,6 @@ bool ofApp::uploadEmotiBitFw()
     system(command.c_str());
     return true;
 #else
-	std::string programmerPort;
-	// try to set device in programmer mode
-	if (initProgrammerMode(programmerPort))
-	{
-		// device successfully set to programmer mode!
-		// run command to upload WiFi Updater sketch
-		ofLog(OF_LOG_NOTICE, "Uploading EmotiBit FW");
-		std::string command = "data\\bossac.exe -i -d -U true -e -w -v -R -b -p " + programmerPort + " data\\EmotiBit_stock_firmware.ino.feather_m0.bin";
-		//system(command.c_str());
-		bool status = false;// systemCall(command.c_str(), "Verify successful");
-		if (status)
-		{
-			ofLog(OF_LOG_NOTICE, "DONE! EmotiBit FW uploaded!");
-			return true;
-		}
-	}
-	else
-	{
-		return false;
-	}
+	return updateUsingBossa("data\\EmotiBit_stock_firmware.ino.feather_m0.bin");
 #endif
 }
