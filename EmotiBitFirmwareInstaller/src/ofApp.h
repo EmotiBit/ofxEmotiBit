@@ -48,11 +48,13 @@ class ofApp : public ofBaseApp{
 		*/
 		void resetStateTimer();
 
+		void progressToNextState();
+
 		/*!
 			@brief Function to detect new COM port after feather is plugged in
-			@return true if new port is detected
+			@return number of new COM ports detected
 		*/
-		bool detectFeatherPlugin();
+		int detectFeatherPlugin();
 		
 		/*!
 			@brief Function to run bossa to upload sketch(bin) to feather
@@ -118,6 +120,13 @@ class ofApp : public ofBaseApp{
 			LENGTH
 		}_state;
 
+		enum class ErrorState {
+			NONE = 0,
+			FEATHER_NOT_DETECTED,
+			DETECTED_MULTIPLE_COM_PORTS,
+			BOSSAC_FAILED
+		}_errorState;
+
 		bool systemCommandExecuted = false;
 		ThreadedSystemCall threadedSystemCall;
 		ofImage titleImage;
@@ -131,7 +140,7 @@ class ofApp : public ofBaseApp{
 		std::vector<std::string> comListWithProgrammingPort;
 		std::string userInfo1;
 		std::string featherPort;
-		const int MAX_NUM_TRIES_PING = 3;
+		const int MAX_NUM_TRIES_PING_1200 = 15; // keep it under the TIMEOUT specified
 		const std::string DELIMITER = ",";
 		const std::string COM_PORT_NONE = "COMX";
 		unordered_map<int, std::string> errorMessageList;

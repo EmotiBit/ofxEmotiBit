@@ -5,6 +5,7 @@ void ofApp::setup(){
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::WAIT_FOR_FEATHER;
+	_errorState = ErrorState::NONE;
 	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
@@ -35,7 +36,6 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	bool progressToNextState = false;
 	static uint32_t timeSinceLastProgressUpdate = ofGetElapsedTimeMillis();
 	if (!globalTimerReset)
 	{
@@ -46,10 +46,10 @@ void ofApp::update(){
 
 	if (_state == State::WAIT_FOR_FEATHER)
 	{
-		if (detectFeatherPlugin())
+		if (detectFeatherPlugin() && _errorState == ErrorState::NONE)
 		{
 			// progress to next state;
-			progressToNextState = true;
+			progressToNextState();
 		}
 	}
 	else if (_state == State::UPLOAD_WINC_FW_UPDATER_SKETCH)
@@ -57,7 +57,7 @@ void ofApp::update(){
 		if (uploadWincUpdaterSketch())
 		{
 			// progress to next state;
-			progressToNextState = true;
+			progressToNextState();
 		}
 	}
 	else if (_state == State::RUN_WINC_UPDATER)
@@ -65,7 +65,7 @@ void ofApp::update(){
 		if (runWincUpdater())
 		{
 			// progress to next state;
-			progressToNextState = true;
+			progressToNextState();
 		}
 	}
 	else if (_state == State::UPLOAD_EMOTIBIT_FW)
@@ -73,7 +73,7 @@ void ofApp::update(){
 		if (uploadEmotiBitFw())
 		{
 			// progress to next state;
-			progressToNextState = true;
+			progressToNextState();
 		}
 	}
 	else if (_state == State::TIMEOUT)
@@ -90,7 +90,7 @@ void ofApp::update(){
 		// print some success message
 		ofLog(OF_LOG_NOTICE, onScreenInstructionList[State::COMPLETED]);
 		resetStateTimer();
-		progressToNextState = true;
+		progressToNextState();
 	}
 	else if (_state == State::EXIT)
 	{
@@ -99,26 +99,13 @@ void ofApp::update(){
 	}
 
 	// raise timeout if no system command is running and state has not progressed in STATE_TIMEOUT
-	if (!progressToNextState  && !systemCommandExecuted && ofGetElapsedTimef() > STATE_TIMEOUT)
+	if (!systemCommandExecuted && ofGetElapsedTimef() > STATE_TIMEOUT)
 	{
 		// timeout
 		currentInstruction = "[FAILED]: " + onScreenInstructionList[_state];
 		progressString = "";
 		errorMessage = errorMessageList[_state];
 		_state = State::TIMEOUT;
-		globalTimerReset = false;
-	}
-	if (progressToNextState)
-	{
-		_state = State((int)_state + 1);
-		if (_state <= State::COMPLETED)
-		{
-			progressString = "UPDATING";
-		}
-		else
-		{
-			progressString = "";
-		}
 		globalTimerReset = false;
 	}
 	if (ofGetElapsedTimeMillis() - timeSinceLastProgressUpdate > 500)
@@ -129,6 +116,21 @@ void ofApp::update(){
 		}
 		timeSinceLastProgressUpdate = ofGetElapsedTimeMillis();
 	}
+}
+
+void ofApp::progressToNextState()
+{
+	// ToDo: verify behavior if states dont have a continuous emnumeration
+	_state = State((int)_state + 1);
+	if (_state <= State::COMPLETED)
+	{
+		progressString = "UPDATING";
+	}
+	else
+	{
+		progressString = "";
+	}
+	globalTimerReset = false;
 }
 
 //--------------------------------------------------------------
@@ -224,8 +226,10 @@ void ofApp::setupInstructionList()
 
 void ofApp::setupErrorMessageList()
 {
-	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Check USB cable. \nMake sure the Feather was not connected before installer was started!";
-	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Could not set feather into Bootloader mode. WINC FW UPDATER sketch upload failed.";
+	errorMessageList[(int)ErrorState::NONE] = "";
+	errorMessageList[(int)ErrorState::FEATHER_NOT_DETECTED] = "Feather not detected. Check USB cable. \nMake sure the Feather was not connected before installer was started!";
+	errorMessageList[(int)ErrorState::DETECTED_MULTIPLE_COM_PORTS] = "Multiple devices detected. Please ensure only 1 device is trying to connect to system";
+	errorMessageList[(int)ErrorState::BOSSAC_FAILED] = "Failed to Run BOSSAC";
 	errorMessageList[State::RUN_WINC_UPDATER] = "WINC UPDATER executable failed to run.";
 	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "Could not set feather into Bootloader mode. EmotiBit stock FW update failed.";
 }
@@ -236,21 +240,37 @@ void ofApp::resetStateTimer()
 	globalTimerReset = true;
 }
 
-bool ofApp::detectFeatherPlugin()
+int ofApp::detectFeatherPlugin()
 {
 	std::vector<std::string> currentComList = getComPortList(true);
-	std::string newComPort = findNewComPort(comListOnStartup, currentComList);
-	if (newComPort.compare(COM_PORT_NONE) != 0)
+	if (currentComList.size() < comListOnStartup.size())
 	{
-		// found new COM port
-		featherPort = newComPort;
-		return true;
+		comListOnStartup = currentComList;
+		ofLogNotice("COM LIST SIZE REDUCED") << "Reset pressed or feather unplugged";
 	}
-	else
+	else if (currentComList.size() > comListOnStartup.size())
 	{
-		ofLog(OF_LOG_NOTICE, "No new COM port detected");
-		return false;
+		if (currentComList.size() - comListOnStartup.size() > 1)
+		{
+			// found multiple new com ports
+			ofLog(OF_LOG_NOTICE, "More than one Port ");
+			_errorState = ErrorState::DETECTED_MULTIPLE_COM_PORTS;
+		}
+		else
+		{
+			// found 1 new COM port
+			std::string newComPort = findNewComPort(comListOnStartup, currentComList);
+
+			if (newComPort.compare(COM_PORT_NONE) != 0)
+			{
+				featherPort = newComPort;
+				_errorState = ErrorState::NONE;
+				return currentComList.size() - comListOnStartup.size();
+			}
+		}
 	}
+	_errorState = ErrorState::FEATHER_NOT_DETECTED;
+	return currentComList.size() - comListOnStartup.size();
 }
 
 std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
@@ -271,11 +291,10 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 	if (printOnConsole)
 	{
 		std::string comPorts;
-		for (int i = 0; i < comPortList.size() - 1; i++)
+		for (int i = 0; i < comPortList.size(); i++)
 		{
 			comPorts += comPortList.at(i) + DELIMITER;
 		}
-		comPorts += comPortList.back();
 		ofLog(OF_LOG_NOTICE, "Available COM ports: " + comPorts);
 	}
 	return comPortList;
@@ -283,37 +302,53 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 
 bool ofApp::initProgrammerMode(std::string &programmerPort)
 {
-#if defined(TARGET_LINUX) || defined(TARGET_OSX)
-    // set to bootloader mode
-    // sonnect to serial port
-    ofLog(OF_LOG_NOTICE, "connecting using screen");
-    std::string command = "screen -d -m " + featherPort + " 1200";
-    system(command.c_str());
-    // dicsonnect serial port
-    ofSleepMillis(1000);
-    ofLog(OF_LOG_NOTICE,"disconneting");
-    system("screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill");
-    command.clear();
-    programmerPort = featherPort;
-    return true;
-#else
-	ofSerial serial;
-	// get initial list of COM ports
-	std::vector<std::string> initialComPortList = getComPortList(true);
-	std::vector<std::string> updatedComPortList;
-	ofLog(OF_LOG_NOTICE, "Pinging Port: " + featherPort);
-	serial.setup(featherPort, 1200);
-	ofSleepMillis(200);
-	serial.close();
-	ofSleepMillis(1000);
-	updatedComPortList = getComPortList(true);
-	// check if a new OCM port has been detected
-	std::string newPort = findNewComPort(initialComPortList, updatedComPortList);
-	if (newPort.compare(COM_PORT_NONE) != 0)
+	static int numTries = 0;
+	if (numTries < MAX_NUM_TRIES_PING_1200)
 	{
-		// return the new COM port and the list of COM ports with the feather in programmer mode
-		programmerPort = newPort;
-		comListWithProgrammingPort = updatedComPortList;
+		numTries++;
+		ofLog(OF_LOG_NOTICE, "Ping try: " + ofToString(numTries));
+#if defined(TARGET_LINUX) || defined(TARGET_OSX)
+		// set to bootloader mode
+		// sonnect to serial port
+		// ToDo: create a screen session with a specific name using -S. This way we can kill that specific session
+		ofLog(OF_LOG_NOTICE, "connecting using screen");
+		std::string command = "screen -d -m " + featherPort + " 1200";
+		system(command.c_str());
+		// dicsonnect serial port
+		ofSleepMillis(1000);
+		ofLog(OF_LOG_NOTICE, "disconneting");
+		system("screen -ls | grep Detached | cut -d. -f1 | awk '{print $1}' | xargs kill");
+		command.clear();
+		programmerPort = featherPort;
+		return true;
+#else
+		ofSerial serial;
+		// get initial list of COM ports
+		std::vector<std::string> initialComPortList = getComPortList(true);
+		std::vector<std::string> updatedComPortList;
+		ofLog(OF_LOG_NOTICE, "Pinging Port: " + featherPort);
+		serial.setup(featherPort, 1200);
+		ofSleepMillis(200);
+		serial.close();
+		ofSleepMillis(1000);
+		updatedComPortList = getComPortList(true);
+		// check if a new COM port has been detected
+		std::string newPort = findNewComPort(initialComPortList, updatedComPortList);
+		if (newPort.compare(COM_PORT_NONE) != 0)
+		{
+			// return the new COM port and the list of COM ports with the feather in programmer mode
+			programmerPort = newPort;
+			comListWithProgrammingPort = updatedComPortList;
+			return true;
+		}
+	}
+	else
+	{
+		// Did not enter programmer mode after MAX_TRIES.
+		// return feather port
+		ofLog(OF_LOG_NOTICE, "Unable to enter programmer mode. returning feather port.");
+		programmerPort = featherPort;
+		comListWithProgrammingPort = getComPortList();
 		return true;
 	}
 	return false;
@@ -371,6 +406,8 @@ bool ofApp::checkSystemCallResponse()
 
 bool ofApp::updateUsingBossa(std::string filePath)
 {
+	// Set error state. It is set to None when Bossac is completed successfully
+	_errorState = ErrorState::BOSSAC_FAILED;
 	std::string programmerPort;
 	// try to set feather in programmer mode
 	if (!systemCommandExecuted)
@@ -398,7 +435,12 @@ bool ofApp::updateUsingBossa(std::string filePath)
 	}
 	else
 	{
-		return checkSystemCallResponse();
+		bool status = checkSystemCallResponse();
+		if (status)
+		{
+			_errorState = ErrorState::NONE;
+		}
+		return status;
 	}
 }
 
