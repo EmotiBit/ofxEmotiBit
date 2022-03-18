@@ -13,19 +13,21 @@ void ofApp::setup(){
 	// get initial list of available com ports
 	comListOnStartup = getComPortList(true);
 	ofBackground(255, 255, 255, 255);
-
+#ifdef TARGET_OSX
+    ofSetDataPathRoot("../Resources/");
+#endif
 	//old OF default is 96 - but this results in fonts looking larger than in other programs.
 	ofTrueTypeFont::setGlobalDpi(72);
 
-	if(instructionFont.load("verdana.ttf", 20, true, true))
+	if(instructionFont.load(ofToDataPath("verdana.ttf"), 20, true, true))
     {
         ofLogNotice() << "Instruction Font loaded correctly";
     }
-	if (progressFont.load("verdanab.ttf", 20, true, true))
+	if (progressFont.load(ofToDataPath("verdanab.ttf"), 20, true, true))
 	{
 		ofLogNotice() << "Instruction Font loaded correctly";
 	}
-	if(titleFont.load("verdanab.ttf", 40, true, true))
+	if(titleFont.load(ofToDataPath("verdanab.ttf"), 40, true, true))
     {
         ofLogNotice() << "Title Font loaded correctly";
     }
@@ -467,47 +469,34 @@ bool ofApp::updateUsingBossa(std::string filePath)
 bool ofApp::uploadWincUpdaterSketch()
 {
 	std::string filepath = ofFilePath::join("WINC", "FirmwareUpdater.ino.feather_m0.bin");
-#if defined(TARGET_LINUX) || defined(TARGET_OSX)
-    return updateUsingBossa("WINC/FirmwareUpdater.ino.feather_m0.bin");
-#else
-	return updateUsingBossa(ofToDataPath(filepath));
-#endif
+    return updateUsingBossa(ofToDataPath(filepath));
 }
 
 bool ofApp::runWincUpdater()
 {
-#if defined(TARGET_LINUX) || defined(TARGET_OSX)
-    if (!systemCommandExecuted)
-    {
-        ofLog(OF_LOG_NOTICE, "Updating Winc FW using WiFi101 updater");
-        ofSleepMillis(3000);
-        std::string command = std::string("../MacOS/FirmwareUploader -firmware WINC/m2m_aio_3a0.bin ") + std::string("-port ") + featherPort;
-        ofLogNotice("WINC Command") << command;
-        threadedSystemCall.setup(command);
-        threadedSystemCall.startThread();
-        systemCommandExecuted = true;
-    }
-    else
-    {
-        return checkSystemCallResponse();
-    }
-    return false;
-#else
 	if (!systemCommandExecuted)
 	{
+#ifdef WINDOWS
 		// get updated COM list. the feather returns back to feather port, after the bossa flash is completed.
 		std::vector<std::string> newComPortList = getComPortList(true);
 		// find the feather port 
 		featherPort = findNewComPort(comListWithProgrammingPort, newComPortList); // old list, new list
-
+#endif
 		if (featherPort.compare(COM_PORT_NONE) != 0)
 		{
 			ofLog(OF_LOG_NOTICE, "Feather found at: " + featherPort);
+#ifdef WINDOWS
 			std::string applicationName = "FirmwareUploader.exe";
-			std::string applicationPath = ofFilePath::join("WINC", applicationName);
-			std::string command = ofToDataPath(applicationPath) + " -port "  + featherPort + " -firmware " + "data\\WINC\\m2m_aio_3a0.bin";
+#else
+            std::string applicationName = "FirmwareUploader";
+#endif
+            std::string applicationPath = ofFilePath::join("WINC", applicationName);
+            std::string filename = "m2m_aio_3a0.bin";
+            std::string filepath = ofFilePath::join("WINC", filename);
+            std::string command = ofToDataPath(applicationPath) + " -port "  + featherPort + " -firmware " + ofToDataPath(filepath);
 			ofLogNotice("UPDATING WINC FW: COMMAND: ") << command;
-			threadedSystemCall.setup(command);
+			
+            threadedSystemCall.setup(command);
 			threadedSystemCall.startThread();
 			systemCommandExecuted = true;
 		}
@@ -517,14 +506,9 @@ bool ofApp::runWincUpdater()
 		return checkSystemCallResponse();
 	}
 	return false;
-#endif
 }
 
 bool ofApp::uploadEmotiBitFw()
 {
-#if defined(TARGET_LINUX) || defined(TARGET_OSX)
-    return updateUsingBossa("EmotiBit_stock_firmware.ino.feather_m0.bin");
-#else
-	return updateUsingBossa(ofToDataPath("EmotiBit_stock_firmware.ino.feather_m0.bin"));
-#endif
+    return updateUsingBossa(ofToDataPath("EmotiBit_stock_firmware.ino.feather_m0.bin"));
 }
