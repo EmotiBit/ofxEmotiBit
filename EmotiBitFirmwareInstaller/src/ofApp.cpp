@@ -260,13 +260,6 @@ void ofApp::setupErrorMessageList()
 	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit stock FW update failed.";
 }
 
-/*
-void ofApp::resetStateTimer()
-{
-	ofResetElapsedTimeCounter();
-	globalTimerReset = true;
-}
-*/
 int ofApp::detectFeatherPlugin()
 {
 	std::vector<std::string> currentComList = getComPortList(true);
@@ -451,10 +444,11 @@ bool ofApp::updateUsingBossa(std::string filePath)
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
             ofLog(OF_LOG_NOTICE,"waiting to flash with bossa");
             ofSleepMillis(5000);
-            command = "../MacOS/bossac";// -i -d -U true -e -w -v -R -b -p " + featherPort + " " + filePath;
+			command = "bossac";
 #else
-            command = "data\\bossac.exe"; // -i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
+			command = "bossac.exe";
 #endif
+			command = ofToDataPath(command);
             command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
 			ofLogNotice("Running: ") << command;
 			//system(command.c_str());
@@ -472,10 +466,11 @@ bool ofApp::updateUsingBossa(std::string filePath)
 
 bool ofApp::uploadWincUpdaterSketch()
 {
+	std::string filepath = ofFilePath::join("WINC", "FirmwareUpdater.ino.feather_m0.bin");
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
     return updateUsingBossa("WINC/FirmwareUpdater.ino.feather_m0.bin");
 #else
-	return updateUsingBossa("data\\WINC\\FirmwareUpdater.ino.feather_m0.bin");
+	return updateUsingBossa(ofToDataPath(filepath));
 #endif
 }
 
@@ -508,7 +503,9 @@ bool ofApp::runWincUpdater()
 		if (featherPort.compare(COM_PORT_NONE) != 0)
 		{
 			ofLog(OF_LOG_NOTICE, "Feather found at: " + featherPort);
-			std::string command = "data\\WINC\\FirmwareUploader.exe -port " + featherPort + " -firmware " + "data\\WINC\\m2m_aio_3a0.bin";
+			std::string applicationName = "FirmwareUploader.exe";
+			std::string applicationPath = ofFilePath::join("WINC", applicationName);
+			std::string command = ofToDataPath(applicationPath) + " -port "  + featherPort + " -firmware " + "data\\WINC\\m2m_aio_3a0.bin";
 			ofLogNotice("UPDATING WINC FW: COMMAND: ") << command;
 			threadedSystemCall.setup(command);
 			threadedSystemCall.startThread();
@@ -528,6 +525,6 @@ bool ofApp::uploadEmotiBitFw()
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
     return updateUsingBossa("EmotiBit_stock_firmware.ino.feather_m0.bin");
 #else
-	return updateUsingBossa("data\\EmotiBit_stock_firmware.ino.feather_m0.bin");
+	return updateUsingBossa(ofToDataPath("EmotiBit_stock_firmware.ino.feather_m0.bin"));
 #endif
 }
