@@ -17,12 +17,12 @@
 		853E0BA2F448076739446874 /* ofxColorPicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 181D363B6DD54D1FA6309C43 /* ofxColorPicker.cpp */; };
 		856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9604B925D32EE39065747725 /* ofxBaseGui.cpp */; };
 		933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */; };
-		9480A3EB27D91DAA0065570B /* verdana.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9480A3E827D91DAA0065570B /* verdana.ttf */; };
-		9480A3EC27D91DAA0065570B /* WINC in Resources */ = {isa = PBXBuildFile; fileRef = 9480A3E927D91DAA0065570B /* WINC */; };
-		9480A3ED27D91DAA0065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin in Resources */ = {isa = PBXBuildFile; fileRef = 9480A3EA27D91DAA0065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */; };
-		9480A3F027D91DBF0065570B /* bossac in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9480A3EE27D91DBF0065570B /* bossac */; };
-		9480A3F327D925AA0065570B /* FirmwareUploader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9480A3F227D925AA0065570B /* FirmwareUploader */; };
 		9480A3F627DAD3CA0065570B /* ThreadedSystemCall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A3F427DAD3CA0065570B /* ThreadedSystemCall.cpp */; };
+		9480A3FB27E522A90065570B /* verdanab.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9480A3F727E522A80065570B /* verdanab.ttf */; };
+		9480A3FC27E522A90065570B /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9480A3F827E522A80065570B /* verdana.ttf */; };
+		9480A3FD27E522A90065570B /* bossac in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9480A3F927E522A90065570B /* bossac */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		9480A3FE27E522A90065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9480A3FA27E522A90065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */; };
+		9480A40027E522E10065570B /* WINC in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9480A3FF27E522E00065570B /* WINC */; };
 		9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */; };
 		9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832BDC407620CDBA568B713D /* tinyxmlerror.cpp */; };
 		B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */; };
@@ -37,10 +37,13 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 6;
+			dstSubfolderSpec = 7;
 			files = (
-				9480A3F327D925AA0065570B /* FirmwareUploader in CopyFiles */,
-				9480A3F027D91DBF0065570B /* bossac in CopyFiles */,
+				9480A40027E522E10065570B /* WINC in CopyFiles */,
+				9480A3FB27E522A90065570B /* verdanab.ttf in CopyFiles */,
+				9480A3FC27E522A90065570B /* verdana.ttf in CopyFiles */,
+				9480A3FD27E522A90065570B /* bossac in CopyFiles */,
+				9480A3FE27E522A90065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,13 +68,13 @@
 		87F26B4B24CBD428AD9EEBAA /* ofxBaseGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxBaseGui.h; path = ../../../addons/ofxGui/src/ofxBaseGui.h; sourceTree = SOURCE_ROOT; };
 		89449E3044D456F7DE7BEA14 /* ofxPanel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxPanel.h; path = ../../../addons/ofxGui/src/ofxPanel.h; sourceTree = SOURCE_ROOT; };
 		907C5B5E104864A2D3A25745 /* ofxToggle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxToggle.cpp; path = ../../../addons/ofxGui/src/ofxToggle.cpp; sourceTree = SOURCE_ROOT; };
-		9480A3E827D91DAA0065570B /* verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdana.ttf; path = bin/data/verdana.ttf; sourceTree = "<group>"; };
-		9480A3E927D91DAA0065570B /* WINC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WINC; path = bin/data/WINC; sourceTree = "<group>"; };
-		9480A3EA27D91DAA0065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = EmotiBit_stock_firmware.ino.feather_m0.bin; path = bin/data/EmotiBit_stock_firmware.ino.feather_m0.bin; sourceTree = "<group>"; };
-		9480A3EE27D91DBF0065570B /* bossac */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = bossac; path = bin/data/bossac; sourceTree = "<group>"; };
-		9480A3F227D925AA0065570B /* FirmwareUploader */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = FirmwareUploader; path = bin/data/WINC/FirmwareUploader; sourceTree = "<group>"; };
 		9480A3F427DAD3CA0065570B /* ThreadedSystemCall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadedSystemCall.cpp; sourceTree = "<group>"; };
 		9480A3F527DAD3CA0065570B /* ThreadedSystemCall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadedSystemCall.h; sourceTree = "<group>"; };
+		9480A3F727E522A80065570B /* verdanab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdanab.ttf; path = bin/data/verdanab.ttf; sourceTree = "<group>"; };
+		9480A3F827E522A80065570B /* verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdana.ttf; path = bin/data/verdana.ttf; sourceTree = "<group>"; };
+		9480A3F927E522A90065570B /* bossac */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = bossac; path = bin/data/bossac; sourceTree = "<group>"; };
+		9480A3FA27E522A90065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = EmotiBit_stock_firmware.ino.feather_m0.bin; path = bin/data/EmotiBit_stock_firmware.ino.feather_m0.bin; sourceTree = "<group>"; };
+		9480A3FF27E522E00065570B /* WINC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WINC; path = bin/data/WINC; sourceTree = "<group>"; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
 		AE68B54581BE4A1DAE853180 /* ofxInputField.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxInputField.h; path = ../../../addons/ofxGui/src/ofxInputField.h; sourceTree = SOURCE_ROOT; };
 		B21E7E5F548EEA92F368040B /* tinyxml.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tinyxml.h; path = ../../../addons/ofxXmlSettings/libs/tinyxml.h; sourceTree = SOURCE_ROOT; };
@@ -663,11 +666,11 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
-				9480A3F227D925AA0065570B /* FirmwareUploader */,
-				9480A3EE27D91DBF0065570B /* bossac */,
-				9480A3EA27D91DAA0065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */,
-				9480A3E827D91DAA0065570B /* verdana.ttf */,
-				9480A3E927D91DAA0065570B /* WINC */,
+				9480A3FF27E522E00065570B /* WINC */,
+				9480A3F927E522A90065570B /* bossac */,
+				9480A3FA27E522A90065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */,
+				9480A3F827E522A80065570B /* verdana.ttf */,
+				9480A3F727E522A80065570B /* verdanab.ttf */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
@@ -702,7 +705,6 @@
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
 				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
 				E4C2427710CC5ABF004149E2 /* CopyFiles */,
-				9480A3E127D917060065570B /* Resources */,
 				8466F1851C04CA0E00918B1C /* ShellScript */,
 			);
 			buildRules = (
@@ -741,19 +743,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		9480A3E127D917060065570B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9480A3EB27D91DAA0065570B /* verdana.ttf in Resources */,
-				9480A3EC27D91DAA0065570B /* WINC in Resources */,
-				9480A3ED27D91DAA0065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		8466F1851C04CA0E00918B1C /* ShellScript */ = {
