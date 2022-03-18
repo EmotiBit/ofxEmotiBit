@@ -43,11 +43,6 @@ class ofApp : public ofBaseApp{
 		*/
 		void setupErrorMessageList();
 
-		/*!
-			@brief Function to reset State timer after state machine has progressed to next state
-		*/
-		void resetStateTimer();
-
 		void progressToNextState();
 
 		/*!
@@ -109,23 +104,20 @@ class ofApp : public ofBaseApp{
 		*/
 		std::string findNewComPort(std::vector<std::string> oldList, std::vector<std::string> newList);
 		
+		void raiseError(std::string additionalMessage = "");
+
 		enum State {
-			TIMEOUT = -1,
-			WAIT_FOR_FEATHER = 0,
+			START = 0,
+			WAIT_FOR_FEATHER,
 			UPLOAD_WINC_FW_UPDATER_SKETCH,
 			RUN_WINC_UPDATER,
 			UPLOAD_EMOTIBIT_FW,
 			COMPLETED,
 			EXIT,
+			INSTALLER_ERROR,
 			LENGTH
 		}_state;
 
-		enum class ErrorState {
-			NONE = 0,
-			FEATHER_NOT_DETECTED,
-			DETECTED_MULTIPLE_COM_PORTS,
-			BOSSAC_FAILED
-		}_errorState;
 
 		bool systemCommandExecuted = false;
 		ThreadedSystemCall threadedSystemCall;
@@ -134,7 +126,7 @@ class ofApp : public ofBaseApp{
 		ofTrueTypeFont progressFont;
 		ofTrueTypeFont	titleFont;
 		std::string progressString = "";
-		const int STATE_TIMEOUT = 20;
+		const int STATE_TIMEOUT = 10;
 		bool globalTimerReset = false;
 		std::vector<std::string> comListOnStartup;
 		std::vector<std::string> comListWithProgrammingPort;
@@ -145,8 +137,9 @@ class ofApp : public ofBaseApp{
 		const std::string COM_PORT_NONE = "COMX";
 		unordered_map<int, std::string> errorMessageList;
 		unordered_map<int, std::string> onScreenInstructionList;
-		std::string errorMessage;
-		std::string currentInstruction;
+		std::string displayedErrorMessage;
+		std::string onScreenInstruction;
+		int tryCount = 0;
 		struct GuiElementPos {
 			int x = 0;
 			int y = 0;

@@ -4,8 +4,7 @@
 void ofApp::setup(){
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_NOTICE);
-	_state = State::WAIT_FOR_FEATHER;
-	_errorState = ErrorState::NONE;
+	_state = State::START;
 	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
@@ -36,93 +35,125 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	static uint32_t timeSinceLastProgressUpdate = ofGetElapsedTimeMillis();
-	if (!globalTimerReset)
-	{
-		resetStateTimer();
-		ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));
-		currentInstruction = currentInstruction + "\n" + onScreenInstructionList[_state];
-	}
+	// Used for updating "progress string" in the GUI
+	static uint32_t timeSinceLastProgressIndicatorUpdate = ofGetElapsedTimeMillis();
 
-	if (_state == State::WAIT_FOR_FEATHER)
+	if (_state == State::START)
 	{
-		if (detectFeatherPlugin() && _errorState == ErrorState::NONE)
+		// starting state machine
+		progressToNextState();
+	}
+	else if (_state == State::WAIT_FOR_FEATHER)
+	{
+		if (ofGetElapsedTimef() > STATE_TIMEOUT)
 		{
-			// progress to next state;
-			progressToNextState();
+			// Feather not detected before TIMEOUT
+			raiseError();
+		}
+		else
+		{
+			int numDevicesDetected = detectFeatherPlugin();
+			if (numDevicesDetected == 1)
+			{
+				// progress to next state;
+				progressToNextState();
+			}
+			else if (numDevicesDetected > 1)
+			{
+				// multiple devices detected
+				raiseError("Multiple Devices Detected");
+			}
 		}
 	}
 	else if (_state == State::UPLOAD_WINC_FW_UPDATER_SKETCH)
 	{
-		if (uploadWincUpdaterSketch())
+		if (tryCount <= MAX_NUM_TRIES_PING_1200)
 		{
-			// progress to next state;
-			progressToNextState();
+			// check if the upload was completed successfully
+			if (uploadWincUpdaterSketch())
+			{
+				// progress to next state;
+				progressToNextState();
+			}
+		}
+		else
+		{
+			raiseError();
 		}
 	}
 	else if (_state == State::RUN_WINC_UPDATER)
 	{
-		if (runWincUpdater())
+		if (tryCount < MAX_NUM_TRIES_PING_1200)
 		{
-			// progress to next state;
-			progressToNextState();
+			if (runWincUpdater())
+			{
+				// progress to next state;
+				progressToNextState();
+			}
+		}
+		else
+		{
+			raiseError();
 		}
 	}
 	else if (_state == State::UPLOAD_EMOTIBIT_FW)
 	{
-		if (uploadEmotiBitFw())
+		if (tryCount <= MAX_NUM_TRIES_PING_1200)
 		{
-			// progress to next state;
-			progressToNextState();
+			if (uploadEmotiBitFw())
+			{
+				// progress to next state;
+				progressToNextState();
+			}
 		}
-	}
-	else if (_state == State::TIMEOUT)
-	{
-		// print error on the console
-		ofLog(OF_LOG_ERROR, errorMessage);
-		// print the error message on GUI
-		resetStateTimer();
-		while (ofGetElapsedTimef() < 5);
-		ofExit();
+		else
+		{
+			raiseError();
+		}
 	}
 	else if (_state == State::COMPLETED)
 	{
 		// print some success message
 		ofLog(OF_LOG_NOTICE, onScreenInstructionList[State::COMPLETED]);
-		resetStateTimer();
+		//resetStateTimer();
 		progressToNextState();
 	}
 	else if (_state == State::EXIT)
 	{
-		while (ofGetElapsedTimef() < 5);
-		ofExit();
+		// do nothing
+	}
+	else if (_state == State::INSTALLER_ERROR)
+	{
+		// do nothing
 	}
 
-	// raise timeout if no system command is running and state has not progressed in STATE_TIMEOUT
-	if (!systemCommandExecuted && ofGetElapsedTimef() > STATE_TIMEOUT)
-	{
-		// timeout
-		currentInstruction = "[FAILED]: " + onScreenInstructionList[_state];
-		progressString = "";
-		errorMessage = errorMessageList[_state];
-		_state = State::TIMEOUT;
-		globalTimerReset = false;
-	}
-	if (ofGetElapsedTimeMillis() - timeSinceLastProgressUpdate > 500)
+	// update progressIndicatorString
+	if (ofGetElapsedTimeMillis() - timeSinceLastProgressIndicatorUpdate > 500)
 	{
 		if (_state > State::WAIT_FOR_FEATHER && _state <= State::COMPLETED)
 		{
 			progressString += ".";
 		}
-		timeSinceLastProgressUpdate = ofGetElapsedTimeMillis();
+		timeSinceLastProgressIndicatorUpdate = ofGetElapsedTimeMillis();
 	}
+}
+
+void ofApp::raiseError(std::string additionalMessage)
+{
+	onScreenInstruction = onScreenInstructionList[State::INSTALLER_ERROR];
+	// set the Error string according to the current state
+	displayedErrorMessage = errorMessageList[_state] + additionalMessage;
+	_state = State::INSTALLER_ERROR;
+	tryCount = 0;
 }
 
 void ofApp::progressToNextState()
 {
 	// ToDo: verify behavior if states dont have a continuous emnumeration
 	_state = State((int)_state + 1);
-	if (_state <= State::COMPLETED)
+	ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));
+	onScreenInstruction = onScreenInstruction + "\n" + onScreenInstructionList[_state];
+	if (_state > State::WAIT_FOR_FEATHER && _state < State::COMPLETED)
 	{
 		progressString = "UPDATING";
 	}
@@ -130,7 +161,7 @@ void ofApp::progressToNextState()
 	{
 		progressString = "";
 	}
-	globalTimerReset = false;
+	tryCount = 0;
 }
 
 //--------------------------------------------------------------
@@ -143,7 +174,7 @@ void ofApp::draw(){
 	
 	// color of instructions
 	ofSetColor(0);
-	instructionFont.drawString(currentInstruction + "\n" + errorMessage, guiElementPositions["Instructions"].x, guiElementPositions["Instructions"].y);
+	instructionFont.drawString(onScreenInstruction + "\n" + displayedErrorMessage, guiElementPositions["Instructions"].x, guiElementPositions["Instructions"].y);
 	
 	// color of progress string
 	ofSetColor(0, 255, 150);
@@ -216,30 +247,30 @@ void ofApp::setupGuiElementPositions()
 
 void ofApp::setupInstructionList()
 {
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "Plug in the feather using the provided USB cable";
+	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "Plug in the feather using the provided USB cable. If already plugged in, press Reset";
 	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Step1: Uploading WINC Firmware updater Sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = "Step2: Updating WINC FW";
 	onScreenInstructionList[State::UPLOAD_EMOTIBIT_FW] = "Step3: Updating EmotiBit firmware";
 	onScreenInstructionList[State::COMPLETED] = "FIRMWARE UPDATE COMPLETED SUCCESSFULLY!";
-	onScreenInstructionList[State::TIMEOUT] = "";
+	onScreenInstructionList[State::INSTALLER_ERROR] = "FAILED";
 }
 
 void ofApp::setupErrorMessageList()
 {
-	errorMessageList[(int)ErrorState::NONE] = "";
-	errorMessageList[(int)ErrorState::FEATHER_NOT_DETECTED] = "Feather not detected. Check USB cable. \nMake sure the Feather was not connected before installer was started!";
-	errorMessageList[(int)ErrorState::DETECTED_MULTIPLE_COM_PORTS] = "Multiple devices detected. Please ensure only 1 device is trying to connect to system";
-	errorMessageList[(int)ErrorState::BOSSAC_FAILED] = "Failed to Run BOSSAC";
-	errorMessageList[State::RUN_WINC_UPDATER] = "WINC UPDATER executable failed to run.";
-	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "Could not set feather into Bootloader mode. EmotiBit stock FW update failed.";
+	errorMessageList[State::START] = "";
+	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Things to check: \n1. Check USB cable.\n2. Make sure EmotiBit Hibernate switch is not on HIB";
+	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch.";
+	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run.";
+	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit stock FW update failed.";
 }
 
+/*
 void ofApp::resetStateTimer()
 {
 	ofResetElapsedTimeCounter();
 	globalTimerReset = true;
 }
-
+*/
 int ofApp::detectFeatherPlugin()
 {
 	std::vector<std::string> currentComList = getComPortList(true);
@@ -254,7 +285,6 @@ int ofApp::detectFeatherPlugin()
 		{
 			// found multiple new com ports
 			ofLog(OF_LOG_NOTICE, "More than one Port ");
-			_errorState = ErrorState::DETECTED_MULTIPLE_COM_PORTS;
 		}
 		else
 		{
@@ -264,12 +294,10 @@ int ofApp::detectFeatherPlugin()
 			if (newComPort.compare(COM_PORT_NONE) != 0)
 			{
 				featherPort = newComPort;
-				_errorState = ErrorState::NONE;
 				return currentComList.size() - comListOnStartup.size();
 			}
 		}
 	}
-	_errorState = ErrorState::FEATHER_NOT_DETECTED;
 	return currentComList.size() - comListOnStartup.size();
 }
 
@@ -302,11 +330,10 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 
 bool ofApp::initProgrammerMode(std::string &programmerPort)
 {
-	static int numTries = 0;
-	if (numTries < MAX_NUM_TRIES_PING_1200)
+	if (tryCount < MAX_NUM_TRIES_PING_1200)
 	{
-		numTries++;
-		ofLog(OF_LOG_NOTICE, "Ping try: " + ofToString(numTries));
+		tryCount++;
+		ofLog(OF_LOG_NOTICE, "Ping try: " + ofToString(tryCount));
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
 		// set to bootloader mode
 		// sonnect to serial port
@@ -407,7 +434,6 @@ bool ofApp::checkSystemCallResponse()
 bool ofApp::updateUsingBossa(std::string filePath)
 {
 	// Set error state. It is set to None when Bossac is completed successfully
-	_errorState = ErrorState::BOSSAC_FAILED;
 	std::string programmerPort;
 	// try to set feather in programmer mode
 	if (!systemCommandExecuted)
@@ -435,12 +461,7 @@ bool ofApp::updateUsingBossa(std::string filePath)
 	}
 	else
 	{
-		bool status = checkSystemCallResponse();
-		if (status)
-		{
-			_errorState = ErrorState::NONE;
-		}
-		return status;
+		return checkSystemCallResponse();
 	}
 }
 
