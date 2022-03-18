@@ -116,7 +116,7 @@ void ofApp::update(){
 		//resetStateTimer();
 		progressToNextState();
 	}
-	else if (_state == State::EXIT)
+	else if (_state == State::DONE)
 	{
 		// do nothing
 	}
@@ -171,7 +171,18 @@ void ofApp::draw(){
 	titleImage.draw(guiElementPositions["TitleImage"].x, guiElementPositions["TitleImage"].y);
 	
 	// color of instructions
-	ofSetColor(0);
+	if (_state == State::DONE)
+	{
+		ofSetColor(37, 190, 80);
+	}
+	else if (_state == State::INSTALLER_ERROR)
+	{
+		ofSetColor(234, 42, 11);
+	}
+	else
+	{
+		ofSetColor(0);
+	}
 	instructionFont.drawString(onScreenInstruction + "\n" + displayedErrorMessage, guiElementPositions["Instructions"].x, guiElementPositions["Instructions"].y);
 	
 	// color of progress string
@@ -476,7 +487,7 @@ bool ofApp::runWincUpdater()
 {
 	if (!systemCommandExecuted)
 	{
-#ifdef WINDOWS
+#ifdef TARGET_WIN32
 		// get updated COM list. the feather returns back to feather port, after the bossa flash is completed.
 		std::vector<std::string> newComPortList = getComPortList(true);
 		// find the feather port 
@@ -485,7 +496,7 @@ bool ofApp::runWincUpdater()
 		if (featherPort.compare(COM_PORT_NONE) != 0)
 		{
 			ofLog(OF_LOG_NOTICE, "Feather found at: " + featherPort);
-#ifdef WINDOWS
+#ifdef TARGET_WIN32
 			std::string applicationName = "FirmwareUploader.exe";
 #else
             std::string applicationName = "FirmwareUploader";

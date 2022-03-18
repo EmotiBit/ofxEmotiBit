@@ -113,7 +113,7 @@ class ofApp : public ofBaseApp{
 			RUN_WINC_UPDATER,
 			UPLOAD_EMOTIBIT_FW,
 			COMPLETED,
-			EXIT,
+			DONE,
 			INSTALLER_ERROR,
 			LENGTH
 		}_state;
