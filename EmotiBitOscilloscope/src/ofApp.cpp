@@ -92,41 +92,43 @@ void ofApp::verifySoftwareVersion()
 #else
 	_pclose(pipe);
 #endif
-	
-	// parse redirect string to get latest available version
-	int redirectedUrlStartLoc = response.find("\"");
-	std::string redirectedUrl = response.substr(redirectedUrlStartLoc + 1);
-	int redirectedUrlEndLoc = redirectedUrl.find("\"");
-	redirectedUrl = redirectedUrl.substr(0, redirectedUrlEndLoc);
-	ofLog(OF_LOG_NOTICE, redirectedUrl);
-	std::vector<std::string> splitUrl = ofSplitString(redirectedUrl, "/");
-	std::string latestAvailableVersion = splitUrl.back().substr(1,string::npos);
-	
-	// compare with ofxEmotiBitVersion
-	std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
-	std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
-	int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
-	for (int i = 0; i < versionLength; i++)
+	if (response != "")
 	{
-		if (latestVersionSplit.at(i) > currentVersionSplit.at(i))
-		{
-			newVersionAvailable = true;
-			break;
-		}
-	}
+		// parse redirect string to get latest available version
+		int redirectedUrlStartLoc = response.find("\"");
+		std::string redirectedUrl = response.substr(redirectedUrlStartLoc + 1);
+		int redirectedUrlEndLoc = redirectedUrl.find("\"");
+		redirectedUrl = redirectedUrl.substr(0, redirectedUrlEndLoc);
+		ofLog(OF_LOG_NOTICE, redirectedUrl);
+		std::vector<std::string> splitUrl = ofSplitString(redirectedUrl, "/");
+		std::string latestAvailableVersion = splitUrl.back().substr(1, string::npos);
 
-	// If newer version available, display alert message
-	if (newVersionAvailable)
-	{
-		ofSystemAlertDialog("A new version of EmotiBit Software is available!");
-		// open browser to latest version
+		// compare with ofxEmotiBitVersion
+		std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
+		std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
+		int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
+		for (int i = 0; i < versionLength; i++)
+		{
+			if (ofToInt(latestVersionSplit.at(i)) > ofToInt(currentVersionSplit.at(i)))
+			{
+				newVersionAvailable = true;
+				break;
+			}
+		}
+
+		// If newer version available, display alert message
+		if (newVersionAvailable)
+		{
+			ofSystemAlertDialog("A new version of EmotiBit Software is available!");
+			// open browser to latest version
 #ifdef TARGET_WIN32
-		std::string command = "start " + latestReleaseUrl;
-		system(command.c_str());
+			std::string command = "start " + latestReleaseUrl;
+			system(command.c_str());
 #else
-		std::string command = "open " + latestReleaseUrl;
-		system(command.c_str());
+			std::string command = "open " + latestReleaseUrl;
+			system(command.c_str());
 #endif
+		}
 	}
 }
 
