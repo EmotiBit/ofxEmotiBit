@@ -74,6 +74,7 @@ public:
 	void updatePlotAttributeLists(std::string settingsFile = "ofxOscilloscopeSettings.xml");
 	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updateTypeTagList();
+	void verifySoftwareVersion();
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
 	//int newPoints;

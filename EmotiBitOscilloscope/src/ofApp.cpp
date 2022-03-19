@@ -7,6 +7,7 @@ void ofApp::setup() {
 	ofLogToConsole();
 	ofSetFrameRate(30);
 	ofBackground(255, 255, 255);
+	verifySoftwareVersion();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	writeOfxEmotiBitVersionFile();
 	setTypeTagPlotAttributes();
@@ -51,6 +52,82 @@ void ofApp::update() {
 	}
 
 	updateMenuButtons();
+}
+
+void ofApp::verifySoftwareVersion()
+{
+	bool newVersionAvailable = false;
+	// system call to curl
+	std::string latestReleaseUrl = "https://github.com/EmotiBit/ofxEmotiBit/releases/latest";
+	std::string command = "curl " + latestReleaseUrl;
+	std::string response = "";
+	char buffer[200];
+	bool status = false;
+#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+	FILE* pipe = popen(cmd.c_str(), "r");
+#else
+	FILE* pipe = _popen(command.c_str(), "r");
+#endif
+	if (!pipe)
+	{
+		throw std::runtime_error("popen() failed!");
+	}
+	try
+	{
+		while (fgets(buffer, sizeof buffer, pipe) != NULL)
+		{
+			response += buffer;
+		}
+	}
+	catch (...) {
+#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+		pclose(pipe);
+#else
+		_pclose(pipe);
+#endif
+		throw;
+	}
+#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+	pclose(pipe);
+#else
+	_pclose(pipe);
+#endif
+	
+	// parse redirect string to get latest available version
+	int redirectedUrlStartLoc = response.find("\"");
+	std::string redirectedUrl = response.substr(redirectedUrlStartLoc + 1);
+	int redirectedUrlEndLoc = redirectedUrl.find("\"");
+	redirectedUrl = redirectedUrl.substr(0, redirectedUrlEndLoc);
+	ofLog(OF_LOG_NOTICE, redirectedUrl);
+	std::vector<std::string> splitUrl = ofSplitString(redirectedUrl, "/");
+	std::string latestAvailableVersion = splitUrl.back().substr(1,string::npos);
+	
+	// compare with ofxEmotiBitVersion
+	std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
+	std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
+	int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
+	for (int i = 0; i < versionLength; i++)
+	{
+		if (latestVersionSplit.at(i) > currentVersionSplit.at(i))
+		{
+			newVersionAvailable = true;
+			break;
+		}
+	}
+
+	// If newer version available, display alert message
+	if (newVersionAvailable)
+	{
+		ofSystemAlertDialog("A new version of EmotiBit Software is available!");
+		// open browser to latest version
+#ifdef TARGET_WIN32
+		std::string command = "start " + latestReleaseUrl;
+		system(command.c_str());
+#else
+		std::string command = "open " + latestReleaseUrl;
+		system(command.c_str());
+#endif
+	}
 }
 
 // ToDo: This function  should be removed once we complete our move to xmlFileSettings
