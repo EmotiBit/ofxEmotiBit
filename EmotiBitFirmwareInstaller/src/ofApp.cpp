@@ -132,6 +132,7 @@ void ofApp::update(){
 
 void ofApp::raiseError(std::string additionalMessage)
 {
+	progressString = "";
 	onScreenInstruction = onScreenInstructionList[State::INSTALLER_ERROR];
 	// set the Error string according to the current state
 	displayedErrorMessage = additionalMessage + errorMessageList[_state];
