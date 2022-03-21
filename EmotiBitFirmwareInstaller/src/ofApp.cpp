@@ -76,35 +76,29 @@ void ofApp::update(){
             // progress to next state;
             progressToNextState();
         }
-		if (tryCount > MAX_NUM_TRIES_PING_1200)
+		if (!systemCommandExecuted && tryCount == MAX_NUM_TRIES_PING_1200)
 		{
 			raiseError();
 		}
 	}
 	else if (_state == State::RUN_WINC_UPDATER)
 	{
-		
+		// ToDo: How to catch a fail for the Winc Updater? 
         if (runWincUpdater())
         {
             // progress to next state;
             progressToNextState();
         }
-
-		if (tryCount > MAX_NUM_TRIES_PING_1200)
-		{
-			raiseError();
-		}
 	}
 	else if (_state == State::UPLOAD_EMOTIBIT_FW)
 	{
-
         if (uploadEmotiBitFw())
         {
             // progress to next state;
             progressToNextState();
         }
 
-        if (tryCount > MAX_NUM_TRIES_PING_1200)
+        if (!systemCommandExecuted && tryCount == MAX_NUM_TRIES_PING_1200)
 		{
 			raiseError();
 		}
@@ -339,7 +333,7 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 
 bool ofApp::initProgrammerMode(std::string &programmerPort)
 {
-    tryCount++;
+	tryCount++;
 	if (tryCount < MAX_NUM_TRIES_PING_1200)
 	{
 		ofLog(OF_LOG_NOTICE, "Ping try: " + ofToString(tryCount));
