@@ -7,7 +7,7 @@ void ofApp::setup() {
 	ofLogToConsole();
 	ofSetFrameRate(30);
 	ofBackground(255, 255, 255);
-	verifySoftwareVersion();
+	checkLatestSwVersion();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	writeOfxEmotiBitVersionFile();
 	setTypeTagPlotAttributes();
@@ -54,7 +54,7 @@ void ofApp::update() {
 	updateMenuButtons();
 }
 
-void ofApp::verifySoftwareVersion()
+void ofApp::checkLatestSwVersion()
 {
 	bool newVersionAvailable = false;
 	// system call to curl
