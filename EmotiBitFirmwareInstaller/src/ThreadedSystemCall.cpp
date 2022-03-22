@@ -15,6 +15,8 @@ void ThreadedSystemCall::threadedFunction()
 		// system call
 		char buffer[200];
 		bool status = false;
+		// Open pipe to link system command output to ofApp
+		// ToDo: should opening a pipe be in try/catch block?
 #if defined (TARGET_OSX) || defined (TARGET_LINUX)
 		FILE* pipe = popen(cmd.c_str(), "r");
 #else
@@ -29,8 +31,10 @@ void ThreadedSystemCall::threadedFunction()
 		{
 			while (fgets(buffer, sizeof buffer, pipe) != NULL) 
 			{
+				// lock thread before updating class variables
 				lock();
 				std::string tempStr = "";
+				// copy system command output to string
 				tempStr += buffer;
 				if (targetResponse != "")
 				{

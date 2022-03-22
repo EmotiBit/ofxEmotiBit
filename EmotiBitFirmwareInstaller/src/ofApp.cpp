@@ -1,3 +1,41 @@
+/**************************************************************************/
+/*!
+	@file     ofApp.cpp
+	@author   Nitin Nair (EmotiBit)
+
+	@mainpage Firmware Installer for EmotiBit.
+
+	@section intro_sec Introduction
+
+	This is an application designed to update the WINC firmware for the Adafruit feather M0 WiFi and program it with EmotiBit FW.
+	The Firmware can be found at https://github.com/EmotiBit/EmotiBit_FeatherWing
+
+		EmotiBit invests time and resources providing this open source code,
+	please support EmotiBit and open-source hardware by purchasing
+	products from EmotiBit!
+ 
+
+	@section author Author
+
+	Written by Nitin Nair for EmotiBit.
+
+	@section license License
+
+	BSD license, all text here must be included in any redistribution
+*/
+/**************************************************************************/
+
+/*
+Additional Notes:
+1. The FirmwareUpdater.ino.feather_m0.bin was created using Arduino by modifying the arduino Example as directed here: https://learn.adafruit.com/adafruit-atwinc1500-wifi-module-breakout/updating-firmware
+2. The WINC FW m2m_aio_3a0.bin was obtained by following the guide here: http://ww1.microchip.com/downloads/en/DeviceDoc/ATWINC15x0%20Software%20Release%20Notes_9%20Aug%202018.pdf
+  1. The firmware binary was extracted from the ASF package using atme studio 7.
+3. The EmotiBit FW EmotiBit_stock_firmware.ino.feather_m0.bin was generated using arduino IDE by compiling the example here: https://github.com/EmotiBit/EmotiBit_FeatherWing/tree/master/EmotiBit_stock_firmware
+4. Details about BOSSA can be found here: http://manpages.ubuntu.com/manpages/bionic/man1/bossac.1.html
+  1. The executables were obtained from the release page
+5. The WINC uploader can be found here: https://github.com/arduino/FirmwareUploader/releases
+*/
+
 #include "ofApp.h"
 
 //--------------------------------------------------------------
@@ -31,8 +69,6 @@ void ofApp::setup(){
     {
         ofLogNotice() << "Title Font loaded correctly";
     }
-	//instructionFont.setLineHeight(18.0f);
-	//instructionFont.setLetterSpacing(1.037);
 }
 
 //--------------------------------------------------------------
@@ -47,6 +83,7 @@ void ofApp::update(){
 	}
 	else if (_state == State::WAIT_FOR_FEATHER)
 	{
+		// If no feather detected within timeout, raise Error
 		if (ofGetElapsedTimef() > STATE_TIMEOUT)
 		{
 			// Feather not detected before TIMEOUT
@@ -57,6 +94,7 @@ void ofApp::update(){
 			int numDevicesDetected = detectFeatherPlugin();
 			if (numDevicesDetected == 1)
 			{
+				// Feather Detected!
 				// progress to next state;
 				progressToNextState();
 			}
@@ -76,8 +114,10 @@ void ofApp::update(){
             // progress to next state;
             progressToNextState();
         }
+
 		if (!systemCommandExecuted && tryCount == MAX_NUM_TRIES_PING_1200)
 		{
+			// If BOSSA was unsuccesfull and we tried max times
 			raiseError();
 		}
 	}
@@ -100,12 +140,13 @@ void ofApp::update(){
 
         if (!systemCommandExecuted && tryCount == MAX_NUM_TRIES_PING_1200)
 		{
+			// If BOSSA was unsuccesfull and we tried max times
 			raiseError();
 		}
 	}
 	else if (_state == State::COMPLETED)
 	{
-		// print some success message
+		// Update message on the GUI
 		ofLog(OF_LOG_NOTICE, onScreenInstructionList[State::COMPLETED]);
 		//resetStateTimer();
 		progressToNextState();
@@ -116,7 +157,7 @@ void ofApp::update(){
 	}
 	else if (_state == State::INSTALLER_ERROR)
 	{
-		// do nothing
+		// do nothing. The GUI Messages have already been updated in raiseError()
 	}
 
 	// update progressIndicatorString
@@ -168,10 +209,12 @@ void ofApp::draw(){
 	// color of instructions
 	if (_state == State::DONE)
 	{
+		// Make text green if Installer was successful
 		ofSetColor(37, 190, 80);
 	}
 	else if (_state == State::INSTALLER_ERROR)
 	{
+		// Make text red if installer Failed
 		ofSetColor(234, 42, 11);
 	}
 	else
@@ -243,6 +286,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::setupGuiElementPositions()
 {
+	// The Gui element locations were chosen based on subjective aesthetics.
 	guiElementPositions["TitleString"] = GuiElementPos{ 10, 150 + int(titleFont.getLineHeight() / 2) };
 	guiElementPositions["TitleImage"] = GuiElementPos{ 724, 50 };
 	guiElementPositions["Instructions"] = GuiElementPos{ 30, 410 };
@@ -251,6 +295,7 @@ void ofApp::setupGuiElementPositions()
 
 void ofApp::setupInstructionList()
 {
+	// Step based user instructions
 	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "Plug in the feather using the provided USB cable. If already plugged in, press Reset";
 	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Step1: Uploading WINC Firmware updater Sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = "Step2: Updating WINC FW";
@@ -261,11 +306,12 @@ void ofApp::setupInstructionList()
 
 void ofApp::setupErrorMessageList()
 {
+	// Step based error list
 	errorMessageList[State::START] = "";
 	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Things to check: \n1. Check USB cable.\n2. Make sure EmotiBit Hibernate switch is not on HIB";
-	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch.";
+	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch.\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
 	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run.";
-	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit stock FW update failed.";
+	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit stock FW update failed.\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
 }
 
 int ofApp::detectFeatherPlugin()
@@ -273,6 +319,8 @@ int ofApp::detectFeatherPlugin()
 	std::vector<std::string> currentComList = getComPortList(true);
 	if (currentComList.size() < comListOnStartup.size())
 	{
+		// On reset, the COM list reduces and grows back
+		// Update the startup COM list if reset was detected.
 		comListOnStartup = currentComList;
 		ofLogNotice("COM LIST SIZE REDUCED") << "Reset pressed or feather unplugged";
 	}
@@ -285,7 +333,7 @@ int ofApp::detectFeatherPlugin()
 		}
 		else
 		{
-			// found 1 new COM port
+			// found 1 new COM port. The new COM port is taken as the Feather Port
 			std::string newComPort = findNewComPort(comListOnStartup, currentComList);
 
 			if (newComPort.compare(COM_PORT_NONE) != 0)
@@ -334,6 +382,7 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 
 bool ofApp::initProgrammerMode(std::string &programmerPort)
 {
+	// increment try count
 	tryCount++;
 	if (tryCount < MAX_NUM_TRIES_PING_1200)
 	{
@@ -360,12 +409,14 @@ bool ofApp::initProgrammerMode(std::string &programmerPort)
 		std::vector<std::string> initialComPortList = getComPortList(true);
 		std::vector<std::string> updatedComPortList;
 		ofLog(OF_LOG_NOTICE, "Pinging Port: " + featherPort);
+		// Connect and disconnect at 1200 to try and set the Feather in bootloader mode
 		serial.setup(featherPort, 1200);
 		ofSleepMillis(200);
 		serial.close();
 		ofSleepMillis(1000);
+
 		updatedComPortList = getComPortList(true);
-		// check if a new COM port has been detected
+		// check if a new COM port has been detected. Programmer mode appears as new COM port on windows
 		std::string newPort = findNewComPort(initialComPortList, updatedComPortList);
 		if (newPort.compare(COM_PORT_NONE) != 0)
 		{
@@ -433,6 +484,7 @@ bool ofApp::checkSystemCallResponse()
 		ofLog(OF_LOG_NOTICE, systemOutput);
 		// thread execution complete
 		systemCommandExecuted = false;
+		// return the result of execution
 		return threadedSystemCall.cmdResult;
 	}
 }
@@ -474,6 +526,7 @@ bool ofApp::updateUsingBossa(std::string filePath)
 
 bool ofApp::uploadWincUpdaterSketch()
 {
+	// get the path to the wifi updater sketch binary
 	std::string filepath = ofFilePath::join("WINC", "FirmwareUpdater.ino.feather_m0.bin");
     return updateUsingBossa(ofToDataPath(filepath));
 }
@@ -483,7 +536,7 @@ bool ofApp::runWincUpdater()
 	if (!systemCommandExecuted)
 	{
 #ifdef TARGET_WIN32
-		// get updated COM list. the feather returns back to feather port, after the bossa flash is completed.
+		// get updated COM list. The feather returns back to feather port, after the bossa flash is completed.
 		std::vector<std::string> newComPortList = getComPortList(true);
 		// find the feather port 
 		featherPort = findNewComPort(comListWithProgrammingPort, newComPortList); // old list, new list

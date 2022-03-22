@@ -1,3 +1,18 @@
+/**************************************************************************/
+/*!
+	@file     ofApp.h
+
+	This is an application to handle flashing Adafruit Feather M0 Wifi with the EmotiBit FW.
+
+	EmotiBit invests time and resources providing this open source code,
+	please support EmotiBit and open-source hardware by purchasing
+	products from EmotiBit!
+
+	Written by Nitin Nair for EmotiBit.
+
+	BSD license, all text here must be included in any redistribution
+*/
+/**************************************************************************/
 #pragma once
 
 #include "ofMain.h"
@@ -43,6 +58,9 @@ class ofApp : public ofBaseApp{
 		*/
 		void setupErrorMessageList();
 
+		/*!
+			@brief Function that progress state of the state machine
+		*/
 		void progressToNextState();
 
 		/*!
