@@ -346,12 +346,14 @@ void ofApp::setupInstructionList()
 	onScreenInstructionList[State::INSTALLER_ERROR] = "FAILED";
 
 	// Images to be displayed for each instruction
+	// If you want to add any image to be displayed, just add the image name to the list
+	//ToDo: There is currently no bounds on images goinging outside the window, if too many images have been added to the list
 	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{"plugInEmotiBit.jpg", "pressResetButton.jpg"};
-	instructionImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];// = std::vector<std::string>{ "" };
-	instructionImages[State::RUN_WINC_UPDATER];// = std::vector<std::string>{ "" };
-	instructionImages[State::UPLOAD_EMOTIBIT_FW];// = std::vector<std::string>{ "" };
-	instructionImages[State::COMPLETED];// = std::vector<std::string>{ "" };
-	instructionImages[State::INSTALLER_ERROR];// = std::vector<std::string>{ "" };
+	instructionImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];
+	instructionImages[State::RUN_WINC_UPDATER];
+	instructionImages[State::UPLOAD_EMOTIBIT_FW];
+	instructionImages[State::COMPLETED];
+	instructionImages[State::INSTALLER_ERROR];
 }
 
 void ofApp::setupErrorMessageList()
@@ -368,10 +370,12 @@ void ofApp::setupErrorMessageList()
                                                   "\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
 	
 	// Error Image
+	// If you want to add any image to be displayed, just add the image name to the list
+	// ToDo: There is currently no bounds on images goinging outside the window, if too many images have been added to the list
 	errorImages[State::WAIT_FOR_FEATHER] = std::vector < std::string>{"correctHibernateSwitch.jpg"};
-	errorImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];
-	errorImages[State::RUN_WINC_UPDATER];
-	errorImages[State::UPLOAD_EMOTIBIT_FW];
+	errorImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = std::vector < std::string>{ "pressResetButton.jpg" };
+	errorImages[State::RUN_WINC_UPDATER] = std::vector < std::string>{ "pressResetButton.jpg" };
+	errorImages[State::UPLOAD_EMOTIBIT_FW] = std::vector < std::string>{ "pressResetButton.jpg" };
 }
 
 int ofApp::detectFeatherPlugin()
