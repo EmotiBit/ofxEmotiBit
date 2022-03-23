@@ -47,7 +47,7 @@ void ofApp::setup(){
 	setupErrorMessageList();
 	setupInstructionList();
 	titleImage.load("EmotiBit.png");
-	titleImage.resize(300, 266);
+	titleImage.resize(300, 266); // width, height
 	// get initial list of available com ports
 	comListOnStartup = getComPortList(true);
 	ofBackground(255, 255, 255, 255);
@@ -115,7 +115,7 @@ void ofApp::update(){
             progressToNextState();
         }
 
-		if (!systemCommandExecuted && tryCount == MAX_NUM_TRIES_PING_1200)
+		if (!systemCommandExecuted && pingProgTryCount == MAX_NUM_TRIES_PING_1200)
 		{
 			// If BOSSA was unsuccesfull and we tried max times
 			raiseError();
@@ -138,7 +138,7 @@ void ofApp::update(){
             progressToNextState();
         }
 
-        if (!systemCommandExecuted && tryCount == MAX_NUM_TRIES_PING_1200)
+        if (!systemCommandExecuted && pingProgTryCount == MAX_NUM_TRIES_PING_1200)
 		{
 			// If BOSSA was unsuccesfull and we tried max times
 			raiseError();
@@ -175,10 +175,19 @@ void ofApp::raiseError(std::string additionalMessage)
 {
 	progressString = "";
 	onScreenInstruction = onScreenInstructionList[State::INSTALLER_ERROR];
+	onScreenInstructionImage.clear();
 	// set the Error string according to the current state
 	displayedErrorMessage = additionalMessage + errorMessageList[_state];
+	std::vector<std::string> disaplyedErrorImageList = errorImages[_state];
+	for (int i = 0; i < disaplyedErrorImageList.size(); i++)
+	{
+		ofImage temp;
+		temp.load(ofToDataPath(ofFilePath::join("instructions", disaplyedErrorImageList.at(i))));
+		temp.resize(resizedImgDim, resizedImgDim);
+		disaplyedErrorImage.push_back(temp);
+	}
 	_state = State::INSTALLER_ERROR;
-	tryCount = 0;
+	pingProgTryCount = 0;
 }
 
 void ofApp::progressToNextState()
@@ -187,6 +196,15 @@ void ofApp::progressToNextState()
 	_state = State((int)_state + 1);
 	ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));
 	onScreenInstruction = onScreenInstruction + "\n" + onScreenInstructionList[_state];
+	onScreenInstructionImage.clear();
+	std::vector<std::string> onScreenInstructionImageList = instructionImages[_state];
+	for (int i = 0; i < onScreenInstructionImageList.size(); i++)
+	{
+		ofImage temp;
+		temp.load(ofToDataPath(ofFilePath::join("instructions", onScreenInstructionImageList.at(i))));
+		temp.resize(resizedImgDim, resizedImgDim);
+		onScreenInstructionImage.push_back(temp);
+	}
 	if (_state > State::WAIT_FOR_FEATHER && _state < State::COMPLETED)
 	{
 		progressString = "UPDATING";
@@ -195,18 +213,19 @@ void ofApp::progressToNextState()
 	{
 		progressString = "";
 	}
-	tryCount = 0;
+	pingProgTryCount = 0;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+	// draw Title
 	ofSetColor(0);
 	titleFont.drawString("EmotiBit Firmware Installer", guiElementPositions["TitleString"].x, guiElementPositions["TitleString"].y);
+	// draw title image
 	ofSetColor(255);
 	titleImage.draw(guiElementPositions["TitleImage"].x, guiElementPositions["TitleImage"].y);
 	
-	// color of instructions
+	// set color of instruction
 	if (_state == State::DONE)
 	{
 		// Make text green if Installer was successful
@@ -226,6 +245,26 @@ void ofApp::draw(){
 	// color of progress string
 	ofSetColor(0, 255, 150);
 	progressFont.drawString(progressString, guiElementPositions["Progress"].x, guiElementPositions["Progress"].y);
+
+	// draw instruction image
+	ofSetColor(255);
+	if (onScreenInstructionImage.size() > 0)
+	{
+		for (int i = 0, offset_x = 0; i < onScreenInstructionImage.size(); i++)
+		{
+			onScreenInstructionImage.at(i).draw(guiElementPositions["InstructionImage"].x + offset_x, guiElementPositions["InstructionImage"].y);
+			offset_x = offset_x + 20 + resizedImgDim;
+		}
+	}
+	// draw error image
+	if (disaplyedErrorImage.size() > 0)
+	{
+		for (int i = 0, offset_x = 0; i < disaplyedErrorImage.size(); i++)
+		{
+			disaplyedErrorImage.at(i).draw(guiElementPositions["ErrorImage"].x + offset_x, guiElementPositions["ErrorImage"].y);
+			offset_x = offset_x + 20 + resizedImgDim;
+		}
+	}
 }
 
 //--------------------------------------------------------------
@@ -289,19 +328,30 @@ void ofApp::setupGuiElementPositions()
 	// The Gui element locations were chosen based on subjective aesthetics.
 	guiElementPositions["TitleString"] = GuiElementPos{ 10, 150 + int(titleFont.getLineHeight() / 2) };
 	guiElementPositions["TitleImage"] = GuiElementPos{ 724, 50 };
-	guiElementPositions["Instructions"] = GuiElementPos{ 30, 410 };
-	guiElementPositions["Progress"] = GuiElementPos{ 30, 400 }; 
+	guiElementPositions["Instructions"] = GuiElementPos{ 30, 300 };
+	guiElementPositions["Progress"] = GuiElementPos{ 30, 290 };
+	//guiElementPositions["InstructionImage"] = GuiElementPos{ 724, 316 };
+	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 450 };
+	guiElementPositions["ErrorImage"] = GuiElementPos{ 30, 450 };
 }
 
 void ofApp::setupInstructionList()
 {
 	// Step based user instructions
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "Plug in the feather using the provided USB cable. If already plugged in, press Reset";
+	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "Plug in the feather using the provided USB cable.\nIf already plugged in, press Reset";
 	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Step1: Uploading WINC Firmware updater Sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = "Step2: Updating WINC FW";
 	onScreenInstructionList[State::UPLOAD_EMOTIBIT_FW] = "Step3: Updating EmotiBit firmware";
 	onScreenInstructionList[State::COMPLETED] = "FIRMWARE UPDATE COMPLETED SUCCESSFULLY!";
 	onScreenInstructionList[State::INSTALLER_ERROR] = "FAILED";
+
+	// Images to be displayed for each instruction
+	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{"plugInEmotiBit.jpg", "pressResetButton.jpg"};
+	instructionImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];// = std::vector<std::string>{ "" };
+	instructionImages[State::RUN_WINC_UPDATER];// = std::vector<std::string>{ "" };
+	instructionImages[State::UPLOAD_EMOTIBIT_FW];// = std::vector<std::string>{ "" };
+	instructionImages[State::COMPLETED];// = std::vector<std::string>{ "" };
+	instructionImages[State::INSTALLER_ERROR];// = std::vector<std::string>{ "" };
 }
 
 void ofApp::setupErrorMessageList()
@@ -316,6 +366,12 @@ void ofApp::setupErrorMessageList()
 	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run.";
 	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit stock FW update failed."
                                                   "\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
+	
+	// Error Image
+	errorImages[State::WAIT_FOR_FEATHER] = std::vector < std::string>{"correctHibernateSwitch.jpg"};
+	errorImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];
+	errorImages[State::RUN_WINC_UPDATER];
+	errorImages[State::UPLOAD_EMOTIBIT_FW];
 }
 
 int ofApp::detectFeatherPlugin()
@@ -387,10 +443,10 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 bool ofApp::initProgrammerMode(std::string &programmerPort)
 {
 	// increment try count
-	tryCount++;
-	if (tryCount < MAX_NUM_TRIES_PING_1200)
+	pingProgTryCount++;
+	if (pingProgTryCount < MAX_NUM_TRIES_PING_1200)
 	{
-		ofLog(OF_LOG_NOTICE, "Ping try: " + ofToString(tryCount));
+		ofLog(OF_LOG_NOTICE, "Ping try: " + ofToString(pingProgTryCount));
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
 		// set to bootloader mode
 		// connect to serial port
@@ -524,7 +580,20 @@ bool ofApp::updateUsingBossa(std::string filePath)
 	}
 	else
 	{
-		return checkSystemCallResponse();
+		// check for system response
+		bool status = checkSystemCallResponse();
+		// if command exe is complete but bossac failed
+		if (!status && !systemCommandExecuted)
+		{
+			// try for MAX_NUM times
+			bossacTryCount++;
+			if (bossacTryCount < MAX_NUM_TRIES_BOSSAC)
+			{
+				// reset trying to enter prog mode
+				pingProgTryCount = 0;
+			}
+		}
+		return status;
 	}
 }
 

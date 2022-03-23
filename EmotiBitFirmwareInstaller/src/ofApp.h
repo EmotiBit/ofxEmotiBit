@@ -151,13 +151,20 @@ class ofApp : public ofBaseApp{
 		std::string userInfo1;
 		std::string featherPort;
 		const int MAX_NUM_TRIES_PING_1200 = 15; // keep it under the TIMEOUT specified
+		const int MAX_NUM_TRIES_BOSSAC = 3; // keep it under the TIMEOUT specified
 		const std::string DELIMITER = ",";
 		const std::string COM_PORT_NONE = "COMX";
 		unordered_map<int, std::string> errorMessageList;
 		unordered_map<int, std::string> onScreenInstructionList;
+		unordered_map<int, std::vector<std::string>> instructionImages;
+		unordered_map<int, std::vector<std::string>> errorImages;
+		const int resizedImgDim = 250; // w = h
 		std::string displayedErrorMessage;
 		std::string onScreenInstruction;
-		int tryCount = 0;
+		std::vector<ofImage>onScreenInstructionImage;
+		std::vector<ofImage> disaplyedErrorImage;
+		int pingProgTryCount = 0;
+		int bossacTryCount = 0;
 		struct GuiElementPos {
 			int x = 0;
 			int y = 0;
