@@ -308,10 +308,14 @@ void ofApp::setupErrorMessageList()
 {
 	// Step based error list
 	errorMessageList[State::START] = "";
-	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Things to check: \n1. Check USB cable.\n2. Make sure EmotiBit Hibernate switch is not on HIB";
-	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch.\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
+	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Things to check:"
+                                                "\n1. Make sure Feather is conencted to system using USB cable."
+                                                "\n2. Make sure EmotiBit Hibernate switch is not on HIB";
+	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch."
+                                                             "\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
 	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run.";
-	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit stock FW update failed.\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
+	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit stock FW update failed."
+                                                  "\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
 }
 
 int ofApp::detectFeatherPlugin()
