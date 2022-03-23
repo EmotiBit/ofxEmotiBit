@@ -124,6 +124,8 @@ class ofApp : public ofBaseApp{
 		
 		void raiseError(std::string additionalMessage = "");
 
+		// This order shold not be changed. The Feather port is updated in WAIT_FOR_FEATHER and RUN_WINC_UPDATER
+		// that feather port is then used in the next sequential step
 		enum State {
 			START = 0,
 			WAIT_FOR_FEATHER,
