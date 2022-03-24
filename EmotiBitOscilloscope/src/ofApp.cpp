@@ -64,7 +64,7 @@ void ofApp::checkLatestSwVersion()
 	char buffer[200];
 	bool status = false;
 #if defined (TARGET_OSX) || defined (TARGET_LINUX)
-	FILE* pipe = popen(cmd.c_str(), "r");
+	FILE* pipe = popen(command.c_str(), "r");
 #else
 	FILE* pipe = _popen(command.c_str(), "r");
 #endif
