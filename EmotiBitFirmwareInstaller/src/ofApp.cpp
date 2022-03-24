@@ -360,9 +360,10 @@ void ofApp::setupInstructionList()
 {
 	// Step based user instructions
 	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "1. Make sure EmotiBit is stacked with Feather. Battery and SD-Card should be inserted"
+													   "\n2. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
 													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
-														"\n2. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)"
-														"\n3. Press Reset button on the Feather (as shown below)";
+														"\n3. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)"
+														"\n4. Press Reset button on the Feather (as shown below)";
 	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Step1: Uploading WINC firmware updater sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = "Step2: Updating WINC FW";
 	onScreenInstructionList[State::UPLOAD_EMOTIBIT_FW] = "Step3: Updating EmotiBit firmware";
