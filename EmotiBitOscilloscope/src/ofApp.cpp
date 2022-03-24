@@ -92,15 +92,19 @@ void ofApp::checkLatestSwVersion()
 #else
 	_pclose(pipe);
 #endif
+	// The response is an empty string is threre is no internet access
 	if (response != "")
 	{
-		// parse redirect string to get latest available version
+		// extract redirected URL from the curl response. Example URL: https://github.com/EmotiBit/ofxEmotiBit/releases/tag/v1.3.0
 		int redirectedUrlStartLoc = response.find("\"");
 		std::string redirectedUrl = response.substr(redirectedUrlStartLoc + 1);
 		int redirectedUrlEndLoc = redirectedUrl.find("\"");
 		redirectedUrl = redirectedUrl.substr(0, redirectedUrlEndLoc);
+		// print the redirecte URL
 		ofLog(OF_LOG_NOTICE, redirectedUrl);
+		// parse url based on "/"
 		std::vector<std::string> splitUrl = ofSplitString(redirectedUrl, "/");
+		// extract the version. version = vx.y.z
 		std::string latestAvailableVersion = splitUrl.back().substr(1, string::npos);
 
 		// compare with ofxEmotiBitVersion
@@ -119,6 +123,7 @@ void ofApp::checkLatestSwVersion()
 		// If newer version available, display alert message
 		if (newVersionAvailable)
 		{
+			// create alert dialog box
 			ofSystemAlertDialog("A new version of EmotiBit Software is available!");
 			// open browser to latest version
 #ifdef TARGET_WIN32
