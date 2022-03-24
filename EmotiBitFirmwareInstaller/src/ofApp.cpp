@@ -120,6 +120,12 @@ void ofApp::update(){
 			// If BOSSA was unsuccesfull and we tried max times
 			raiseError();
 		}
+
+		// if bossac has been executed and it has been 90 secs(way longer than any expected delay)
+		if (systemCommandExecuted && ofGetElapsedTimeMillis() - stateStartTime > 90000)
+		{
+			raiseError();
+		}
 	}
 	else if (_state == State::RUN_WINC_UPDATER)
 	{
@@ -141,6 +147,12 @@ void ofApp::update(){
         if (!systemCommandExecuted && pingProgTryCount == MAX_NUM_TRIES_PING_1200)
 		{
 			// If BOSSA was unsuccesfull and we tried max times
+			raiseError();
+		}
+
+		// if bossac has been executed and it has been 90 secs(way longer than any expected delay)
+		if (systemCommandExecuted && ofGetElapsedTimeMillis() - stateStartTime > 90000)
+		{
 			raiseError();
 		}
 	}
@@ -165,7 +177,15 @@ void ofApp::update(){
 	{
 		if (_state > State::WAIT_FOR_FEATHER && _state <= State::COMPLETED)
 		{
-			progressString += ".";
+			// stop the progress string from going out of bounds
+			if (progressString.size() > 40)
+			{
+				progressString = "UPDATING";
+			}
+			else
+			{
+				progressString += ".";
+			}
 		}
 		timeSinceLastProgressIndicatorUpdate = ofGetElapsedTimeMillis();
 	}
@@ -192,6 +212,7 @@ void ofApp::raiseError(std::string additionalMessage)
 
 void ofApp::progressToNextState()
 {
+	stateStartTime = ofGetElapsedTimeMillis();
 	// ToDo: verify behavior if states dont have a continuous emnumeration
 	_state = State((int)_state + 1);
 	ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));

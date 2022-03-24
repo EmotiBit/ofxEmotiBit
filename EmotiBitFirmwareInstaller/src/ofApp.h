@@ -146,7 +146,7 @@ class ofApp : public ofBaseApp{
 		ofTrueTypeFont progressFont;
 		ofTrueTypeFont	titleFont;
 		std::string progressString = "";
-		const int STATE_TIMEOUT = 10;
+		const int STATE_TIMEOUT = 15;
 		bool globalTimerReset = false;
 		std::vector<std::string> comListOnStartup;
 		std::vector<std::string> comListWithProgrammingPort;
@@ -167,6 +167,7 @@ class ofApp : public ofBaseApp{
 		std::vector<ofImage> disaplyedErrorImage;
 		int pingProgTryCount = 0;
 		int bossacTryCount = 0;
+		uint32_t stateStartTime;
 		struct GuiElementPos {
 			int x = 0;
 			int y = 0;
