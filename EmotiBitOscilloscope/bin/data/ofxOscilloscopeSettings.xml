@@ -57,6 +57,22 @@
         </plot>
     </scope>
     <scope>
+        <samplingFrequency>25.000000000</samplingFrequency>
+        <timeWindow>10.000000000</timeWindow>
+        <yMin>0.000000000</yMin>
+        <yMax>0.000000000</yMax>
+        <minYSpan>10.000000000</minYSpan>
+        <plot>
+            <plotId>14</plotId>
+            <plotName>HR</plotName>
+            <plotColor>
+                <r>255</r>
+                <g>0</g>
+                <b>0</b>
+            </plotColor>
+        </plot>
+    </scope>
+    <scope>
         <samplingFrequency>15.000000000</samplingFrequency>
         <timeWindow>10.000000000</timeWindow>
         <yMin>0.000000000</yMin>
@@ -65,6 +81,22 @@
         <plot>
             <plotId>3</plotId>
             <plotName>EDA</plotName>
+            <plotColor>
+                <r>21</r>
+                <g>73</g>
+                <b>130</b>
+            </plotColor>
+        </plot>
+    </scope>
+    <scope>
+        <samplingFrequency>15.000000000</samplingFrequency>
+        <timeWindow>10.000000000</timeWindow>
+        <yMin>0.000000000</yMin>
+        <yMax>0.000000000</yMax>
+        <minYSpan>0.020000000</minYSpan>
+        <plot>
+            <plotId>15</plotId>
+            <plotName>SCR:AMP</plotName>
             <plotColor>
                 <r>21</r>
                 <g>73</g>
@@ -197,6 +229,38 @@
                 <r>234</r>
                 <g>174</g>
                 <b>68</b>
+            </plotColor>
+        </plot>
+    </scope>
+    <scope>
+        <samplingFrequency>3.000000000</samplingFrequency>
+        <timeWindow>10.000000000</timeWindow>
+        <yMin>0.000000000</yMin>
+        <yMax>0.000000000</yMax>
+        <minYSpan>3.000000000</minYSpan>
+        <plot>
+            <plotId>16</plotId>
+            <plotName>SCR:FREQ</plotName>
+            <plotColor>
+                <r>21</r>
+                <g>73</g>
+                <b>130</b>
+            </plotColor>
+        </plot>
+    </scope>
+    <scope>
+        <samplingFrequency>15.000000000</samplingFrequency>
+        <timeWindow>10.000000000</timeWindow>
+        <yMin>0.000000000</yMin>
+        <yMax>0.000000000</yMax>
+        <minYSpan>1.000000000</minYSpan>
+        <plot>
+            <plotId>17</plotId>
+            <plotName>SCR:RIS</plotName>
+            <plotColor>
+                <r>21</r>
+                <g>73</g>
+                <b>130</b>
             </plotColor>
         </plot>
     </scope>					

@@ -64,5 +64,21 @@
 			<input>T1</input>
 			<output>13</output>
 		</patch>
+		<patch>
+			<input>HR</input>
+			<output>14</output>
+		</patch>
+		<patch>
+			<input>SA</input>
+			<output>15</output>
+		</patch>
+		<patch>
+			<input>SF</input>
+			<output>16</output>
+		</patch>
+		<patch>
+			<input>SR</input>
+			<output>17</output>
+		</patch>
 	</patchcords>
 </patchboard>	
