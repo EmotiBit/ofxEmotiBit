@@ -61,7 +61,7 @@ void ofApp::setup(){
     {
         ofLogNotice() << "Instruction Font loaded correctly";
     }
-	if (progressFont.load(ofToDataPath("verdanab.ttf"), 20, true, true))
+	if (progressFont.load(ofToDataPath("verdanab.ttf"), 18, true, true))
 	{
 		ofLogNotice() << "Instruction Font loaded correctly";
 	}
@@ -327,7 +327,7 @@ void ofApp::setupGuiElementPositions()
 {
 	// The Gui element locations were chosen based on subjective aesthetics.
 	guiElementPositions["TitleString"] = GuiElementPos{ 10, 150 + int(titleFont.getLineHeight() / 2) };
-	guiElementPositions["TitleImage"] = GuiElementPos{ 724, 50 };
+	guiElementPositions["TitleImage"] = GuiElementPos{ 724, 30 };
 	guiElementPositions["Instructions"] = GuiElementPos{ 30, 300 };
 	guiElementPositions["Progress"] = GuiElementPos{ 30, 290 };
 	//guiElementPositions["InstructionImage"] = GuiElementPos{ 724, 316 };
@@ -338,8 +338,11 @@ void ofApp::setupGuiElementPositions()
 void ofApp::setupInstructionList()
 {
 	// Step based user instructions
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "Plug in the feather using the provided USB cable.\nIf already plugged in, press Reset";
-	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Step1: Uploading WINC Firmware updater Sketch";
+	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "1. Make sure EmotiBit is stacked with Feather. Battery and SD-Card should be inserted"
+													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
+														"\n2. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)"
+														"\n3. Press Reset button on the Feather (as shown below)";
+	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Step1: Uploading WINC firmware updater sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = "Step2: Updating WINC FW";
 	onScreenInstructionList[State::UPLOAD_EMOTIBIT_FW] = "Step3: Updating EmotiBit firmware";
 	onScreenInstructionList[State::COMPLETED] = "FIRMWARE UPDATE COMPLETED SUCCESSFULLY!";
@@ -361,13 +364,13 @@ void ofApp::setupErrorMessageList()
 	// Step based error list
 	errorMessageList[State::START] = "";
 	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Things to check:"
-                                                "\n1. Make sure Feather is conencted to system using USB cable."
-                                                "\n2. Make sure EmotiBit Hibernate switch is not on HIB";
-	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch."
-                                                             "\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
-	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run.";
-	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit stock FW update failed."
-                                                  "\nPress Reset. Unplug EmotiBit.\nRerun EmotiBit Installer";
+                                                "\n1. Make sure the  Feather is connected to your computer using a data-capable USB cable"
+                                                "\n2. Make sure the EmotiBit Hibernate switch is not set to HIB";
+	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch"
+                                                             "\nPress Reset. Unplug EmotiBit\nRe-run EmotiBit Installer";
+	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run";
+	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit FW update failed"
+                                                  "\nPress Reset. Unplug EmotiBit\nRe-run EmotiBit Installer";
 	
 	// Error Image
 	// If you want to add any image to be displayed, just add the image name to the list
@@ -480,6 +483,12 @@ bool ofApp::initProgrammerMode(std::string &programmerPort)
 		ofSleepMillis(1000);
 
 		updatedComPortList = getComPortList(true);
+		// if feather was put in programmer mode, BUT we grabbed available COM port list before it showed up as a COM port
+		while (updatedComPortList.size() < initialComPortList.size())
+		{
+			updatedComPortList = getComPortList(true);
+			ofSleepMillis(500);
+		}
 		// check if a new COM port has been detected. Programmer mode appears as new COM port on windows
 		std::string newPort = findNewComPort(initialComPortList, updatedComPortList);
 		if (newPort.compare(COM_PORT_NONE) != 0)
