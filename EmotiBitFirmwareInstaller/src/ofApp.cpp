@@ -48,8 +48,6 @@ void ofApp::setup(){
 	setupInstructionList();
 	titleImage.load("EmotiBit.png");
 	titleImage.resize(300, 266); // width, height
-	// get initial list of available com ports
-	comListOnStartup = getComPortList(true);
 	ofBackground(255, 255, 255, 255);
 #ifdef TARGET_OSX
     ofSetDataPathRoot("../Resources/");
@@ -78,8 +76,13 @@ void ofApp::update(){
 
 	if (_state == State::START)
 	{
-		// starting state machine
 		progressToNextState();
+	}
+	else if (_state == State::DISPLAY_INSTRUCTION)
+	{
+		// wait for sapce-bar key press
+		// progress to next state by pressing space-bar
+
 	}
 	else if (_state == State::WAIT_FOR_FEATHER)
 	{
@@ -290,7 +293,16 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	// if pressed spacebar
+	if (key == ' ')
+	{
+		if (_state == State::DISPLAY_INSTRUCTION)
+		{
+			// start timer to detect feather
+			ofResetElapsedTimeCounter();
+			progressToNextState();
+		}
+	}
 }
 
 //--------------------------------------------------------------
@@ -352,28 +364,34 @@ void ofApp::setupGuiElementPositions()
 	guiElementPositions["Instructions"] = GuiElementPos{ 30, 300 };
 	guiElementPositions["Progress"] = GuiElementPos{ 30, 290 };
 	//guiElementPositions["InstructionImage"] = GuiElementPos{ 724, 316 };
-	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 450 };
-	guiElementPositions["ErrorImage"] = GuiElementPos{ 30, 450 };
+	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 460 };
+	guiElementPositions["ErrorImage"] = GuiElementPos{ 30, 460 };
 }
 
 void ofApp::setupInstructionList()
 {
 	// Step based user instructions
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "1. Make sure EmotiBit is stacked with Feather. Battery and SD-Card should be inserted"
+	onScreenInstructionList[State::START] = "";
+	onScreenInstructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
 													   "\n2. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
 													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
 														"\n3. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)"
-														"\n4. Press Reset button on the Feather (as shown below)";
-	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Step1: Uploading WINC firmware updater sketch";
-	onScreenInstructionList[State::RUN_WINC_UPDATER] = "Step2: Updating WINC FW";
-	onScreenInstructionList[State::UPLOAD_EMOTIBIT_FW] = "Step3: Updating EmotiBit firmware";
+														"\n4. Press space-bar to continue";
+	
+	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "5.Press Reset button on the Feather (as shown below)";
+	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "\nDO NOT UNPLUG OR RESET EMOTIBIT\n"
+																	"\n>>> Uploading WINC firmware updater sketch";
+	onScreenInstructionList[State::RUN_WINC_UPDATER] = ">>> Updating WINC FW";
+	onScreenInstructionList[State::UPLOAD_EMOTIBIT_FW] = ">>> Updating EmotiBit firmware";
 	onScreenInstructionList[State::COMPLETED] = "FIRMWARE UPDATE COMPLETED SUCCESSFULLY!";
 	onScreenInstructionList[State::INSTALLER_ERROR] = "FAILED";
 
 	// Images to be displayed for each instruction
 	// If you want to add any image to be displayed, just add the image name to the list
 	//ToDo: There is currently no bounds on images goinging outside the window, if too many images have been added to the list
-	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{"plugInEmotiBit.jpg", "pressResetButton.jpg"};
+	instructionImages[State::START];
+	instructionImages[State::DISPLAY_INSTRUCTION] = std::vector<std::string>{ "plugInEmotiBit.jpg" };
+	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{ "pressResetButton.jpg" };
 	instructionImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];
 	instructionImages[State::RUN_WINC_UPDATER];
 	instructionImages[State::UPLOAD_EMOTIBIT_FW];
@@ -385,14 +403,12 @@ void ofApp::setupErrorMessageList()
 {
 	// Step based error list
 	errorMessageList[State::START] = "";
-	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected. Things to check:"
+	errorMessageList[State::WAIT_FOR_FEATHER] = "Feather not detected\nThings to check:"
                                                 "\n1. Make sure the  Feather is connected to your computer using a data-capable USB cable"
                                                 "\n2. Make sure the EmotiBit Hibernate switch is not set to HIB";
-	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch"
-                                                             "\nPress Reset. Unplug EmotiBit\nRe-run EmotiBit Installer";
+	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch\nRe-run EmotiBit Installer";
 	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run";
-	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit FW update failed"
-                                                  "\nPress Reset. Unplug EmotiBit\nRe-run EmotiBit Installer";
+	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit FW update failed\nRe-run EmotiBit Installer";
 	
 	// Error Image
 	// If you want to add any image to be displayed, just add the image name to the list
@@ -405,6 +421,12 @@ void ofApp::setupErrorMessageList()
 
 int ofApp::detectFeatherPlugin()
 {
+	if (!captureComListOnStartup)
+	{
+		// get initial list of available com ports
+		comListOnStartup = getComPortList();
+		captureComListOnStartup = true;
+	}
 	std::vector<std::string> currentComList = getComPortList(true);
 	if (currentComList.size() < comListOnStartup.size())
 	{

@@ -128,6 +128,7 @@ class ofApp : public ofBaseApp{
 		// that feather port is then used in the next sequential step
 		enum State {
 			START = 0,
+			DISPLAY_INSTRUCTION,
 			WAIT_FOR_FEATHER,
 			UPLOAD_WINC_FW_UPDATER_SKETCH,
 			RUN_WINC_UPDATER,
@@ -146,8 +147,8 @@ class ofApp : public ofBaseApp{
 		ofTrueTypeFont progressFont;
 		ofTrueTypeFont	titleFont;
 		std::string progressString = "";
-		const int STATE_TIMEOUT = 25;
-		bool globalTimerReset = false;
+		const int STATE_TIMEOUT = 10;
+		bool captureComListOnStartup = false;
 		std::vector<std::string> comListOnStartup;
 		std::vector<std::string> comListWithProgrammingPort;
 		std::string userInfo1;
