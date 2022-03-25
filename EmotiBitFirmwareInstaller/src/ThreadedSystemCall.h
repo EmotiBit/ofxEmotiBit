@@ -10,7 +10,7 @@ public:
 	std::string targetResponse; //!< The response string we are detecting in the system output
 	bool cmdResult; //!< true is command was successully executed, else false
 	std::string systemOutput;  //!< The system output
-
+	std::string PIPE_OPEN_FAILED = "Failed to open pipe";
 	/*!
 		@brief Function to set the system command and response string
 		@param cmd The system command to run

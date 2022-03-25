@@ -24,52 +24,56 @@ void ThreadedSystemCall::threadedFunction()
 #endif
 		if (!pipe)
 		{
-			throw std::runtime_error("popen() failed!");
+			ofLog(OF_LOG_FATAL_ERROR, PIPE_OPEN_FAILED);
+			systemOutput = PIPE_OPEN_FAILED;
 			stopThread();
 		}
-		try 
+		else
 		{
-			while (fgets(buffer, sizeof buffer, pipe) != NULL) 
+			try
 			{
-				// lock thread before updating class variables
-				lock();
-				std::string tempStr = "";
-				// copy system command output to string
-				tempStr += buffer;
-				if (targetResponse != "")
+				while (fgets(buffer, sizeof buffer, pipe) != NULL)
 				{
-					// check if the target string is a part of the output of the system command
-					if (tempStr.find(targetResponse) != std::string::npos)
+					// lock thread before updating class variables
+					lock();
+					std::string tempStr = "";
+					// copy system command output to string
+					tempStr += buffer;
+					if (targetResponse != "")
 					{
-						// found response which indicates successfull system call
-						cmdResult = true;
+						// check if the target string is a part of the output of the system command
+						if (tempStr.find(targetResponse) != std::string::npos)
+						{
+							// found response which indicates successfull system call
+							cmdResult = true;
+						}
 					}
+					systemOutput += tempStr;
+					unlock();
 				}
-				systemOutput += tempStr;
-				unlock();
+				if (targetResponse == "")
+				{
+					lock();
+					cmdResult = true;
+					unlock();
+				}
 			}
-			if (targetResponse == "")
-			{
-				lock();
-				cmdResult = true;
-				unlock();
+			catch (...) {
+#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+				pclose(pipe);
+#else
+				_pclose(pipe);
+#endif
+				stopThread();
+				throw;
 			}
-		}
-		catch (...) {
 #if defined (TARGET_OSX) || defined (TARGET_LINUX)
 			pclose(pipe);
 #else
 			_pclose(pipe);
 #endif
-			stopThread();
-			throw;
-		}
-#if defined (TARGET_OSX) || defined (TARGET_LINUX)
-		pclose(pipe);
-#else
-		_pclose(pipe);
-#endif
 
-		stopThread();
+			stopThread();
+		}
 	}
 }

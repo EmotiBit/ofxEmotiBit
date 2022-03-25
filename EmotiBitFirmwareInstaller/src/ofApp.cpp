@@ -414,9 +414,9 @@ void ofApp::setupErrorMessageList()
 	// If you want to add any image to be displayed, just add the image name to the list
 	// ToDo: There is currently no bounds on images goinging outside the window, if too many images have been added to the list
 	errorImages[State::WAIT_FOR_FEATHER] = std::vector < std::string>{"correctHibernateSwitch.jpg"};
-	errorImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = std::vector < std::string>{ "pressResetButton.jpg" };
-	errorImages[State::RUN_WINC_UPDATER] = std::vector < std::string>{ "pressResetButton.jpg" };
-	errorImages[State::UPLOAD_EMOTIBIT_FW] = std::vector < std::string>{ "pressResetButton.jpg" };
+	errorImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];
+	errorImages[State::RUN_WINC_UPDATER];
+	errorImages[State::UPLOAD_EMOTIBIT_FW];
 }
 
 int ofApp::detectFeatherPlugin()
@@ -599,6 +599,10 @@ bool ofApp::checkSystemCallResponse()
 		// No need to lock as thread is stopped
 		std::string systemOutput = threadedSystemCall.systemOutput;
 		ofLog(OF_LOG_NOTICE, systemOutput);
+		if (systemOutput.compare(threadedSystemCall.PIPE_OPEN_FAILED) == 0)
+		{
+			raiseError(threadedSystemCall.PIPE_OPEN_FAILED + "\n");
+		}
 		// thread execution complete
 		systemCommandExecuted = false;
 		// return the result of execution
