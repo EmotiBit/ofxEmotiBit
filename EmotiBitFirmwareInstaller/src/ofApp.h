@@ -148,7 +148,7 @@ class ofApp : public ofBaseApp{
 		ofTrueTypeFont progressFont;
 		ofTrueTypeFont	titleFont;
 		std::string progressString = "";
-		const int STATE_TIMEOUT = 10;
+		const int STATE_TIMEOUT = 120; // in secs
 		bool captureComListOnStartup = false;
 		std::vector<std::string> comListOnStartup;
 		std::vector<std::string> comListWithProgrammingPort;
