@@ -29,6 +29,13 @@
 		9480A41227F23D5F0065570B /* EmotiBitFactoryTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A40927F23D5F0065570B /* EmotiBitFactoryTest.cpp */; };
 		9480A41327F23D5F0065570B /* EmotiBitVariants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A40D27F23D5F0065570B /* EmotiBitVariants.cpp */; };
 		9480A41427F23D5F0065570B /* DigitalFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A40F27F23D5F0065570B /* DigitalFilter.cpp */; };
+		9480A41627F23EE50065570B /* instructions in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41527F23EE50065570B /* instructions */; };
+		9480A41D27F23F030065570B /* bossac in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41727F23F030065570B /* bossac */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		9480A41E27F23F030065570B /* verdana.ttf in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41827F23F030065570B /* verdana.ttf */; };
+		9480A41F27F23F030065570B /* verdanab.ttf in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41927F23F030065570B /* verdanab.ttf */; };
+		9480A42027F23F030065570B /* EmotiBit.png in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41A27F23F030065570B /* EmotiBit.png */; };
+		9480A42127F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41B27F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */; };
+		9480A42227F23F030065570B /* WINC in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41C27F23F030065570B /* WINC */; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
 		9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */; };
 		9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832BDC407620CDBA568B713D /* tinyxmlerror.cpp */; };
@@ -44,13 +51,21 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
+		E4C2427710CC5ABF004149E2 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 10;
+			dstSubfolderSpec = 7;
 			files = (
+				9480A41D27F23F030065570B /* bossac in Copy Files */,
+				9480A41E27F23F030065570B /* verdana.ttf in Copy Files */,
+				9480A41F27F23F030065570B /* verdanab.ttf in Copy Files */,
+				9480A42027F23F030065570B /* EmotiBit.png in Copy Files */,
+				9480A42127F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin in Copy Files */,
+				9480A42227F23F030065570B /* WINC in Copy Files */,
+				9480A41627F23EE50065570B /* instructions in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -141,6 +156,13 @@
 		9480A40D27F23D5F0065570B /* EmotiBitVariants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitVariants.cpp; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitVariants.cpp; sourceTree = "<group>"; };
 		9480A40E27F23D5F0065570B /* EmotiBitVariants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitVariants.h; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitVariants.h; sourceTree = "<group>"; };
 		9480A40F27F23D5F0065570B /* DigitalFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DigitalFilter.cpp; path = ../../../../../EmotiBit_XPlat_Utils/src/DigitalFilter.cpp; sourceTree = "<group>"; };
+		9480A41527F23EE50065570B /* instructions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = instructions; path = bin/data/instructions; sourceTree = "<group>"; };
+		9480A41727F23F030065570B /* bossac */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = bossac; path = bin/data/bossac; sourceTree = "<group>"; };
+		9480A41827F23F030065570B /* verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdana.ttf; path = bin/data/verdana.ttf; sourceTree = "<group>"; };
+		9480A41927F23F030065570B /* verdanab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdanab.ttf; path = bin/data/verdanab.ttf; sourceTree = "<group>"; };
+		9480A41A27F23F030065570B /* EmotiBit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmotiBit.png; path = bin/data/EmotiBit.png; sourceTree = "<group>"; };
+		9480A41B27F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = EmotiBit_stock_firmware.ino.feather_m0.bin; path = bin/data/EmotiBit_stock_firmware.ino.feather_m0.bin; sourceTree = "<group>"; };
+		9480A41C27F23F030065570B /* WINC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WINC; path = bin/data/WINC; sourceTree = "<group>"; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
 		974B6F6CECCC45548FC1A608 /* EmotiBitTestingHelper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = EmotiBitTestingHelper.h; path = ../../../addons/ofxEmotiBit/src/EmotiBitTestingHelper.h; sourceTree = SOURCE_ROOT; };
 		98B916CABFC10AC9836EB352 /* cast.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cast.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/cast.h; sourceTree = SOURCE_ROOT; };
@@ -1012,6 +1034,13 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				9480A41727F23F030065570B /* bossac */,
+				9480A41B27F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */,
+				9480A41A27F23F030065570B /* EmotiBit.png */,
+				9480A41827F23F030065570B /* verdana.ttf */,
+				9480A41927F23F030065570B /* verdanab.ttf */,
+				9480A41C27F23F030065570B /* WINC */,
+				9480A41527F23EE50065570B /* instructions */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
@@ -1046,7 +1075,7 @@
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
 				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
-				E4C2427710CC5ABF004149E2 /* CopyFiles */,
+				E4C2427710CC5ABF004149E2 /* Copy Files */,
 				8466F1851C04CA0E00918B1C /* ShellScript */,
 			);
 			buildRules = (
