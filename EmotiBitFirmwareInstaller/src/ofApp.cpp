@@ -40,6 +40,7 @@ Additional Notes:
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	ofSetWindowTitle("EmotiBit Oscilloscope (v" + ofxEmotiBitVersion + ")");
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::START;
@@ -372,8 +373,8 @@ void ofApp::setupInstructionList()
 {
 	// Step based user instructions
 	onScreenInstructionList[State::START] = "";
-	onScreenInstructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
-													   "\n2. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
+	onScreenInstructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
+													   "\n2. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
 													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
 														"\n3. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)"
 														"\n4. Press space-bar to continue";
@@ -390,7 +391,7 @@ void ofApp::setupInstructionList()
 	// If you want to add any image to be displayed, just add the image name to the list
 	//ToDo: There is currently no bounds on images goinging outside the window, if too many images have been added to the list
 	instructionImages[State::START];
-	instructionImages[State::DISPLAY_INSTRUCTION] = std::vector<std::string>{ "plugInEmotiBit.jpg" };
+	instructionImages[State::DISPLAY_INSTRUCTION] = std::vector<std::string>{ "correctHibernateSwitch.jpg", "plugInEmotiBit.jpg" };
 	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{ "pressResetButton.jpg" };
 	instructionImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];
 	instructionImages[State::RUN_WINC_UPDATER];
@@ -630,7 +631,7 @@ bool ofApp::updateUsingBossa(std::string filePath)
 			command = "bossac.exe";
 #endif
 			command = ofToDataPath(command);
-            command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
+            command = command + " " + "-i -d " + "--port=" + programmerPort + " -U true -i -e -w -v" + " " + filePath + " -R";
 			ofLogNotice("Running: ") << command;
 			//system(command.c_str());
 			threadedSystemCall.setup(command, "Verify successful"); // the target response string is captured from observed output

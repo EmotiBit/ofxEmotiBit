@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <string>
 #include "ThreadedSystemCall.h"
+#include "ofxEmotiBitVersion.h"
 
 class ofApp : public ofBaseApp{
 

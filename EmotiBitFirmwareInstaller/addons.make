@@ -1,3 +1,7 @@
+ofxBiquadFilter
+ofxEmotiBit
 ofxGui
+ofxNetwork
+ofxPoco
 ofxThreadedLogger
 ofxXmlSettings
