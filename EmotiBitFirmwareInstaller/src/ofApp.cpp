@@ -40,7 +40,7 @@ Additional Notes:
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	ofSetWindowTitle("EmotiBit Oscilloscope (v" + ofxEmotiBitVersion + ")");
+	ofSetWindowTitle("EmotiBit Firmware Installer (v" + ofxEmotiBitVersion + ")");
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::START;

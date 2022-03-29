@@ -121,7 +121,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxEmotiBit\src\Signal;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\EmotiBit_XPlat_Utils\src;..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxEmotiBit\src\Signal;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -166,7 +166,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxEmotiBit\src\Signal;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\EmotiBit_XPlat_Utils\src;..\..\..\addons\ofxBiquadFilter\src;..\..\..\addons\ofxEmotiBit\src;..\..\..\addons\ofxEmotiBit\src\Signal;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxThreadedLogger\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <AdditionalOptions>-DPOCO_STATIC</AdditionalOptions>
