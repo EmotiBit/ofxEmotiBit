@@ -380,7 +380,7 @@ void ofApp::setupInstructionList()
 														"\n4. Press space-bar to continue";
 	
 	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "5. Press Reset button on the Feather (as shown below)";
-	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "\nDO NOT UNPLUG OR RESET EMOTIBIT\n"
+	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "\nDO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS\n"
 																	"\n>>> Uploading WINC firmware updater sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = ">>> Updating WINC FW";
 	onScreenInstructionList[State::UPLOAD_EMOTIBIT_FW] = ">>> Updating EmotiBit firmware";
