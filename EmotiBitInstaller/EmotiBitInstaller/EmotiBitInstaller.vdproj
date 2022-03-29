@@ -968,7 +968,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EmotiBit"
         "ProductCode" = "8:{A307B4B9-5EF5-48EA-B730-AA45A97CB8DF}"
-        "PackageCode" = "8:{B03FAA4F-BD1F-4A0A-B347-B1EB5C9FE531}"
+        "PackageCode" = "8:{F88ACD3C-14FC-49BB-852A-94895C0B92F3}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -1155,7 +1155,7 @@
             "Target" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
             "Folder" = "8:_84F262CF2C8A40EFA3BC9D4164DCC4EE"
             "WorkingFolder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
-            "Icon" = "8:"
+            "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F55EFC24351F435DA2920D4FDD191074"
@@ -1169,7 +1169,7 @@
             "Target" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
             "Folder" = "8:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
             "WorkingFolder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
-            "Icon" = "8:"
+            "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }
         }
