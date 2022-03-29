@@ -47,12 +47,12 @@ void ofApp::setup(){
 	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
+    #ifdef TARGET_OSX
+        ofSetDataPathRoot("../Resources/");
+    #endif
 	titleImage.load("EmotiBit.png");
 	titleImage.resize(300, 266); // width, height
 	ofBackground(255, 255, 255, 255);
-#ifdef TARGET_OSX
-    ofSetDataPathRoot("../Resources/");
-#endif
 	//old OF default is 96 - but this results in fonts looking larger than in other programs.
 	ofTrueTypeFont::setGlobalDpi(72);
 
