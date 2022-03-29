@@ -39,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4DF3059B520845ABAE777FC860C062EC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_549AE158B4E049DCA79C34437E8BB70A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -46,6 +52,12 @@
         "Entry"
         {
         "MsmKey" = "8:_596BD083E9064BF691E78167B6329B43"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -100,6 +112,12 @@
         "Entry"
         {
         "MsmKey" = "8:_AFF8A3DAF9A745D485A5645151DEA2B3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B9C232756DB145AC85845A5F569075E5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -165,6 +183,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E374BE29CA334E0A8ADEA80FAF993F5D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E4D75143A2E54AABA9FF0D3436B73393"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -178,12 +202,6 @@
         "Entry"
         {
         "MsmKey" = "8:_FA42CE2E369C43AC8AC60FB4457C851B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FC97D648740C43B5BEA98789011A429F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -320,6 +338,26 @@
             "TargetName" = "8:fmodex64.dll"
             "Tag" = "8:"
             "Folder" = "8:_1BD84CAF3E114DD98E922771E8E9F9E5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4DF3059B520845ABAE777FC860C062EC"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\instructions\\plugInEmotiBit.jpg"
+            "TargetName" = "8:plugInEmotiBit.jpg"
+            "Tag" = "8:"
+            "Folder" = "8:_3648DB9DA1E646C19C15A08FAC0D91D3"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -480,6 +518,26 @@
             "TargetName" = "8:fmodex64.dll"
             "Tag" = "8:"
             "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B9C232756DB145AC85845A5F569075E5"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\instructions\\correctHibernateSwitch.jpg"
+            "TargetName" = "8:correctHibernateSwitch.jpg"
+            "Tag" = "8:"
+            "Folder" = "8:_3648DB9DA1E646C19C15A08FAC0D91D3"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -694,6 +752,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E374BE29CA334E0A8ADEA80FAF993F5D"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\instructions\\pressResetButton.jpg"
+            "TargetName" = "8:pressResetButton.jpg"
+            "Tag" = "8:"
+            "Folder" = "8:_3648DB9DA1E646C19C15A08FAC0D91D3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F664A0E538A84F24921DBAC017572CC1"
             {
             "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\data\\verdana.ttf"
@@ -845,6 +923,17 @@
                                         {
                                         }
                                     }
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_3648DB9DA1E646C19C15A08FAC0D91D3"
+                                    {
+                                    "Name" = "8:instructions"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_AF0F083357A94585BE5A3FD91DF242D2"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -878,15 +967,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EmotiBit"
-        "ProductCode" = "8:{417A9D37-5DAF-4C98-AF59-B09689B5697A}"
-        "PackageCode" = "8:{8E89EEC7-A973-4D07-BB09-BD971718F018}"
+        "ProductCode" = "8:{A307B4B9-5EF5-48EA-B730-AA45A97CB8DF}"
+        "PackageCode" = "8:{B03FAA4F-BD1F-4A0A-B347-B1EB5C9FE531}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.3.1"
+        "ProductVersion" = "8:1.4.0"
         "Manufacturer" = "8:EmotiBit"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1053,6 +1142,34 @@
             "Folder" = "8:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
             "WorkingFolder" = "8:_1BD84CAF3E114DD98E922771E8E9F9E5"
             "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D7C1125FE6A244D2AEAE09D0E0E4686F"
+            {
+            "Name" = "8:EmotiBit FirmwareInstaller"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+            "Folder" = "8:_84F262CF2C8A40EFA3BC9D4164DCC4EE"
+            "WorkingFolder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F55EFC24351F435DA2920D4FDD191074"
+            {
+            "Name" = "8:EmotiBit FirmwareInstaller"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+            "Folder" = "8:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
+            "WorkingFolder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }
@@ -1524,6 +1641,34 @@
                 {
                 }
             }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_5FE98E46229E4D54A0EF81F6FAE66E64"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\EmotiBitFirmwareInstaller.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:Release|x64"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9273EB583E72424B9F20AE94BC7E1AE0"
             {
             "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\EmotiBitOscilloscope.exe"
@@ -1547,34 +1692,6 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{7FD42DF7-442E-479A-BA76-D0022F99702A}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FC97D648740C43B5BEA98789011A429F"
-            {
-            "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\EmotiBitFirmwareInstaller.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{AD2A3674-9BD1-4773-9253-9221B52BD7A1}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
