@@ -7,6 +7,7 @@ void ofApp::setup() {
 	ofLogToConsole();
 	ofSetFrameRate(30);
 	ofBackground(255, 255, 255);
+	checkLatestSwVersion();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	writeOfxEmotiBitVersionFile();
 	setTypeTagPlotAttributes();
@@ -28,7 +29,8 @@ void ofApp::setup() {
 		consoleLogger.startThread();
 	}
 	lsl.start(); //Start up lsl connection on a seperate thread
-
+	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
+	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
 
 //--------------------------------------------------------------
@@ -51,6 +53,161 @@ void ofApp::update() {
 	}
 
 	updateMenuButtons();
+}
+
+void ofApp::checkLatestSwVersion()
+{
+	bool newVersionAvailable = false;
+	// system call to curl
+	std::string latestReleaseUrl = "https://github.com/EmotiBit/ofxEmotiBit/releases/latest";
+	std::string command = "curl " + latestReleaseUrl;
+	std::string response = "";
+	char buffer[200];
+	bool exceptionOccured = false;
+	try
+	{
+#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+		FILE* pipe = popen(command.c_str(), "r"); // returns NULL on fail. refer: https://man7.org/linux/man-pages/man3/popen.3.html#RETURN_VALUE
+#else
+		FILE* pipe = _popen(command.c_str(), "r"); // returns NULL on fail. refer: https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/popen-wpopen?view=msvc-170#return-value
+#endif
+		if (pipe != NULL)
+		{
+			try
+			{
+				while (fgets(buffer, sizeof buffer, pipe) != NULL)
+				{
+					response += buffer;
+				}
+			}
+			catch (...) {
+				try
+				{
+	#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+					pclose(pipe);
+	#else
+					_pclose(pipe);
+	#endif
+				}
+				catch (...)
+				{
+					ofLogError("Failed to close pipe");
+				}
+				ofLog(OF_LOG_ERROR, "An exception occured while executing curl");
+				exceptionOccured = true;
+			}
+			try
+			{
+	#if defined (TARGET_OSX) || defined (TARGET_LINUX)
+				pclose(pipe);
+	#else
+				_pclose(pipe);
+	#endif
+			}
+			catch (...)
+			{
+				ofLogError("Failed to close pipe");
+			}
+		}
+		else
+		{
+			ofLog(OF_LOG_ERROR, "Failed to check for latest version. Failed to open pipe");
+			exceptionOccured = true;
+		}
+	}
+	catch (...)
+	{
+		ofLogError("Failed to open pipe");
+		exceptionOccured = true;
+	}
+	// The response is an empty string is threre is no internet access
+	if (!exceptionOccured & response != "")
+	{
+		// Sample curl response: <html><body>You are being <a href="https://github.com/EmotiBit/ofxEmotiBit/releases/tag/v1.3.0">redirected</a>.</body></html>
+		// extract redirected URL from the curl response.
+		int redirectedUrlStartLoc = response.find("\"");
+		if (redirectedUrlStartLoc != std::string::npos)
+		{
+			std::string redirectedUrl = response.substr(redirectedUrlStartLoc + 1);
+			int redirectedUrlEndLoc = redirectedUrl.find("\"");
+			if (redirectedUrlEndLoc != std::string::npos)
+			{
+				redirectedUrl = redirectedUrl.substr(0, redirectedUrlEndLoc);
+				// print the redirecte URL
+				ofLog(OF_LOG_NOTICE, "Redirected URL: " + redirectedUrl);
+				// parse url based on "/"
+				std::vector<std::string> splitUrl = ofSplitString(redirectedUrl, "/");
+				if (splitUrl.size() > 0)
+				{
+					if (splitUrl.back().size() > 1)
+					{
+						// extract the version. version = vx.y.z
+						std::string latestAvailableVersion = splitUrl.back().substr(1, string::npos); // removing the "v" from the version
+					    // compare with ofxEmotiBitVersion
+						std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
+						std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
+						int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
+						if (versionLength)
+						{
+							for (int i = 0; i < versionLength; i++)
+							{
+								if (ofToInt(latestVersionSplit.at(i)) > ofToInt(currentVersionSplit.at(i)))
+								{
+									newVersionAvailable = true;
+									break;
+								}
+							}
+						}
+						else
+						{
+							ofLogError("Failed to parse version string");
+						}
+					}
+					else
+					{
+						ofLog(OF_LOG_ERROR, "failed to parse version string");
+					}
+				}
+				else
+				{
+					ofLog(OF_LOG_ERROR, "failed to parse latest version url");
+				}
+			}
+			else
+			{
+				ofLog(OF_LOG_ERROR, "unexpected curl response");
+			}
+		}
+		else
+		{
+			ofLog(OF_LOG_ERROR, "unexpected curl response");
+		}
+		// If newer version available, display alert message
+		if (newVersionAvailable)
+		{
+			// create alert dialog box
+			ofSystemAlertDialog("A new version of EmotiBit Software is available!");
+			// open browser to latest version
+			try
+			{
+#ifdef TARGET_WIN32
+				std::string command = "start " + latestReleaseUrl;
+				system(command.c_str());
+#else
+				std::string command = "open " + latestReleaseUrl;
+				system(command.c_str());
+#endif
+			}
+			catch(...)
+			{
+				ofLogError("Failed to open browser");
+			}
+		}
+	}
+	else
+	{
+		ofLogError("An exception occured while checking latest version of installer.");
+	}
 }
 
 // ToDo: This function  should be removed once we complete our move to xmlFileSettings

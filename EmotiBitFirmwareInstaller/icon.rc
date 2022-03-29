@@ -1,0 +1,5 @@
+// Icon Resource Definition
+#define MAIN_ICON                       102
+
+MAIN_ICON               ICON                    "..\EmotiBitIcons\icoFiles\EmotiBitLogo.ico"
+
