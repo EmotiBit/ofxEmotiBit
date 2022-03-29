@@ -1,3 +1,4 @@
+EmotiBit_XPlat_Utils
 ofxBiquadFilter
 ofxEmotiBit
 ofxGui
