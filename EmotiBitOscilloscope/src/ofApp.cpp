@@ -29,7 +29,8 @@ void ofApp::setup() {
 		consoleLogger.startThread();
 	}
 	lsl.start(); //Start up lsl connection on a seperate thread
-
+	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
+	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
 
 //--------------------------------------------------------------
