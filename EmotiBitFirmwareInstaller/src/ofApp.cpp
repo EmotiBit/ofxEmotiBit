@@ -627,11 +627,13 @@ bool ofApp::updateUsingBossa(std::string filePath)
             ofLog(OF_LOG_NOTICE,"waiting to flash with bossa");
             ofSleepMillis(5000);
 			command = "bossac";
+            command = ofToDataPath(command);
+            command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
 #else
 			command = "bossac.exe";
-#endif
-			command = ofToDataPath(command);
+            command = ofToDataPath(command);
             command = command + " " + "-i -d " + "--port=" + programmerPort + " -U true -i -e -w -v" + " " + filePath + " -R";
+#endif
 			ofLogNotice("Running: ") << command;
 			//system(command.c_str());
 			threadedSystemCall.setup(command, "Verify successful"); // the target response string is captured from observed output
