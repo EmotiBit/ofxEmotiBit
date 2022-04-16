@@ -34,7 +34,7 @@ echo "pwd: $currDir"
 
 for file in $(eval "ls *.csv")
 do
-	#cd "$dataDir"
+	echo -e ""
 	echo -e "processing: $file"
 	subDirName=$(basename $file .csv)
 	echo "mkdir: $subDirName"
