@@ -4,12 +4,16 @@ exePath=$(pwd)
 dataDir=$(pwd)
 getHelp=false
 
-while getopts x:d:h: flag
+echo -e "";
+echo -e "** EmotiBitDataParser.sh ** ";
+echo -e "Runs EmotiBitDataParser on *.csv in passed data directory\n";
+echo -e 'Example input:\n./EmotiBitDataParser.sh -x "C:\\Program Files\\EmotiBit\\EmotiBit DataParser\\EmotiBitDataParser.exe" -d "C:\\priv\\local\\EmotiBitData\\"\n'
+
+while getopts x:d: flag
 do
     case "${flag}" in
         x) exePath=${OPTARG};;
         d) dataDir=${OPTARG};;
-				h) getHelp=${OPTARG};;
     esac
 done
 
@@ -19,23 +23,13 @@ dataDir="${dataDir//\\//}"
 
 echo "[-x] exePath: $exePath";
 echo "[-d] dataDir: $dataDir";
-echo "[-h] Print help: $getHelp";
-
-if "$getHelp"; then
-	echo -e "";
-	echo -e "** EmotiBitDataParser.sh ** ";
-	echo -e "Runs EmotiBitDataParser on *.csv in passed data directory\n";
-	echo -e 'Example input:\n./EmotiBitDataParser.sh -x "C:\\Program Files\\EmotiBit\\EmotiBit DataParser\\EmotiBitDataParser.exe" -d "C:\\priv\\local\\EmotiBitData\\"\n'
-	exit 0
-fi
 
 currDir=$(pwd);
-echo "pwd: $currDir"
+echo -e "\npwd: $currDir"
 
 for file in $(eval "ls *.csv")
 do
-	echo -e ""
-	echo -e "processing: $file"
+	echo -e "\nprocessing: $file"
 	subDirName=$(basename $file .csv)
 	echo "mkdir: $subDirName"
 	mkdir $subDirName
