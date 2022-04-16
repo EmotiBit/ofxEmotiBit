@@ -30,19 +30,19 @@ if "$getHelp"; then
 fi
 
 currDir=$(pwd);
-echo "pwd=$currDir"
+echo "pwd: $currDir"
 
 for file in $(eval "ls *.csv")
 do
 	#cd "$dataDir"
-	echo "$file";
+	echo -e "processing: $file"
 	subDirName=$(basename $file .csv)
-	echo "$subDirName"
+	echo "mkdir: $subDirName"
 	mkdir $subDirName
   mv $file $subDirName
 	mv "$subDirName"_info.json $subDirName
 	cmd="\"$exePath\" \"$dataDir/$subDirName/$subDirName.csv\""
-	echo "cmd=$cmd"
+	echo "cmd: $cmd"
 	eval $cmd
 done
 
