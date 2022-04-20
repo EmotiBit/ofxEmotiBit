@@ -477,14 +477,10 @@ void ofApp::parseDataLine(string packet) {
 		if (lastRDPacketNumber > -1) { // Only look for timestamps after REQUEST_DATA
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0) {
 				// ToDo: Handle TIMESTAMP_UTC
+				// update allTimestampData
 				allTimestampData.back().TS_received = packetHeader.timestamp;
 				if (splitPacket.size() > EmotiBitPacket::headerLength) {
 					allTimestampData.back().TS_sent = splitPacket.at(EmotiBitPacket::headerLength);
-					auto loggerPtr = loggers.find(timestampFilenameString);
-					if (loggerPtr != loggers.end()) {
-						loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
-						loggerPtr->second->push(allTimestampData.back().TS_sent + ",");
-					}
 				}
 			}
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::ACK) == 0) {
@@ -495,6 +491,10 @@ void ofApp::parseDataLine(string packet) {
 						lastRDPacketNumber = -1; // reset the last RD packet number to avoid overwriting from duplicate
 						auto loggerPtr = loggers.find(timestampFilenameString);
 						if (loggerPtr != loggers.end()) {
+							// write TL information into tiemsync file
+							loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
+							loggerPtr->second->push(allTimestampData.back().TS_sent + ",");
+							// write AK information into timesync file
 							loggerPtr->second->push(ofToString(allTimestampData.back().AK) + ",");
 							loggerPtr->second->push(ofToString(allTimestampData.back().roundTrip) + ",");
 						}
