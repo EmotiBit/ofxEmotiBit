@@ -75,6 +75,7 @@ public:
 	float drawYScale = 1.f;
 
 	enum class State {
+		ERROR_INSUFFICIENT_TIMESYNCS = -1,
 		IDLE = 0,
 		PARSING_TIMESTAMPS = 1,
 		PARSING_DATA = 2,

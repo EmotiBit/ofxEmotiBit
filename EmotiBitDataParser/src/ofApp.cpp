@@ -157,7 +157,7 @@ void ofApp::startProcessing(bool & processing) {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	if (inFile.is_open()) {
+	if (currentState != State::ERROR_INSUFFICIENT_TIMESYNCS &&inFile.is_open()) {
 		int lines = 0;
 		while (lines < linesPerLoop) {
 			lines++;
@@ -191,20 +191,28 @@ void ofApp::update() {
 				if (currentState == State::PARSING_TIMESTAMPS) {
 					//ofMap()
 					timeSyncMap = calculateTimeSyncMap(allTimestampData);
-					//processButton.set(false);
-					currentState = State::PARSING_DATA;
-					nLinesInFile = lineCounter;
-					lineCounter = 0;
-					inFile.clear(); // clear the eof status
-					inFile.seekg(0, ios::beg); // go back to beginning of file
+					if (timeSyncMap.e0 == 0 || timeSyncMap.e1 == 0)
+					{
+						ofLogError() << "Not enough timesyncs found to parse file";
+						currentState = State::ERROR_INSUFFICIENT_TIMESYNCS;
+					}
+					else
+					{
+						//processButton.set(false);
+						currentState = State::PARSING_DATA;
+						nLinesInFile = lineCounter;
+						lineCounter = 0;
+						inFile.clear(); // clear the eof status
+						inFile.seekg(0, ios::beg); // go back to beginning of file
 
-					string filename = inFileDir + inFileBase + "_" + "timeSyncMap" + fileExt;
-					cout << "Creating file: " << filename << endl;
-					ofstream mFile;
-					mFile.open(filename.c_str(), ios::out);
-					mFile << "e0,e1,c0,c1" << endl;
-					mFile << ofToString(timeSyncMap.e0, 6) << "," << ofToString(timeSyncMap.e1, 6) << "," << ofToString(timeSyncMap.c0, 6) << "," << ofToString(timeSyncMap.c1, 6);
-					mFile.close();
+						string filename = inFileDir + inFileBase + "_" + "timeSyncMap" + fileExt;
+						cout << "Creating file: " << filename << endl;
+						ofstream mFile;
+						mFile.open(filename.c_str(), ios::out);
+						mFile << "e0,e1,c0,c1" << endl;
+						mFile << ofToString(timeSyncMap.e0, 6) << "," << ofToString(timeSyncMap.e1, 6) << "," << ofToString(timeSyncMap.c0, 6) << "," << ofToString(timeSyncMap.c1, 6);
+						mFile.close();
+					}
 				}
 				else if (currentState == State::PARSING_DATA) {
 					ofExit();
@@ -396,9 +404,15 @@ void ofApp::draw() {
 	else if (currentState == State::PARSING_DATA) {
 		legendFont.drawString("PARSING_DATA: " + ofToString(lineCounter * 100.f / nLinesInFile, 0) + "% complete", 10, 100);
 	}
-
-	legendFont.drawString(dataLine, 10, 200);
-
+	else if (currentState == State::ERROR_INSUFFICIENT_TIMESYNCS)
+	{
+		ofSetColor(255, 0, 0);
+		legendFont.drawString("Cannot parse file\nERROR:INSUFFICIENT TIMESYNCS", 10, 100);
+	}
+	if (currentState != State::ERROR_INSUFFICIENT_TIMESYNCS)
+	{
+		legendFont.drawString(dataLine, 10, 200);
+	}
 
 	//legendFont.drawString("Frame rate: " + ofToString(ofGetFrameRate()), 10, 300);
 
