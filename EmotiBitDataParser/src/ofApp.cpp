@@ -229,19 +229,19 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> timestampDa
 	//for (size_t i = 0; i < timestampData.size(); ) {
 	//	timestampData.
 	//}
-
+	int totalRttFound = 0;
 	// erase any blank lines
 	for (auto it = timestampData.begin(); it != timestampData.end(); ) {
-		if (it->roundTrip == -1) {
+		if (it->roundTrip < 0) {
+			ofLog(OF_LOG_NOTICE, "Removing -ve RTT: " + ofToString(it->roundTrip));
 			it = timestampData.erase(it);
-			cout << "erasing blank\n";
 		}
 		else {
 			it++;
-			cout << "++\n";
+			totalRttFound++;
 		}
 	}
-
+	ofLog(OF_LOG_NOTICE, "Total RTT's found: " + ofToString(totalRttFound));
 	TimeSyncMap tsMap;
 	if (timestampData.size() < 2) {
 		ofLogError() << "calculateTimeSyncMap: Less than 2 timestamps found. Unable to map timestamps to Epoch time." << endl;
@@ -485,6 +485,7 @@ void ofApp::parseDataLine(string packet) {
 			}
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::ACK) == 0) {
 				if (splitPacket.size() > EmotiBitPacket::headerLength) {
+					// verify if AK is for the correct RD
 					if (lastRDPacketNumber == stoi(splitPacket.at(EmotiBitPacket::headerLength))) {
 						allTimestampData.back().AK = packetHeader.timestamp;
 						allTimestampData.back().roundTrip = allTimestampData.back().TS_received - allTimestampData.back().RD;
@@ -498,6 +499,18 @@ void ofApp::parseDataLine(string packet) {
 							loggerPtr->second->push(ofToString(allTimestampData.back().AK) + ",");
 							loggerPtr->second->push(ofToString(allTimestampData.back().roundTrip) + ",");
 						}
+					}
+					// AK for a previous RD
+					else
+					{
+						// reset the TS_received and TS_sent values
+						// If not reset, there could be problems if we encounter the pattern
+						// TL (old RD)
+						// AK (old RD)
+						// missed TK (current RD)
+						// AK (current RD)
+						allTimestampData.back().TS_received = 0;
+						allTimestampData.back().TS_sent = "";
 					}
 				}
 			}
