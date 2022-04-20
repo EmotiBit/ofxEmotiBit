@@ -431,7 +431,7 @@ void ofApp::exit() {
 
 //--------------------------------------------------------------
 void ofApp::parseDataLine(string packet) {
-	static uint16_t packetNumber;
+	static uint16_t packetNumber = -1;
 
 	vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
 
@@ -444,7 +444,7 @@ void ofApp::parseDataLine(string packet) {
 	}
 
 	uint16_t tempPacketNumber = packetHeader.packetNumber;
-	if (tempPacketNumber - packetNumber > 1) {
+	if (packetNumber != -1 && tempPacketNumber - packetNumber > 1) {
 		cout << "Missed packet: " << packetNumber << "," << tempPacketNumber << endl;
 	}
 	// ToDo: Figure out a way to deal with multiple packets of each number (e.g. UDPx3)
@@ -539,7 +539,7 @@ void ofApp::parseDataLine(string packet) {
 		if (splitData.size() > 5) {
 			uint32_t timestamp;
 			uint32_t prevtimestamp;
-			static uint16_t packetNumber;
+			static uint16_t packetNumber = -1;
 			uint16_t dataLength;
 			string typeTag;
 			uint16_t protocolVersion;
@@ -550,7 +550,7 @@ void ofApp::parseDataLine(string packet) {
 			}
 			if (splitData.at(1) != "") {
 				uint16_t tempPacketNumber = ofToInt(splitData.at(1));
-				if (tempPacketNumber - packetNumber > 1) {
+				if (packetNumber != -1 && tempPacketNumber - packetNumber > 1) {
 					cout << "Missed packet: " << packetNumber << "," << tempPacketNumber << endl;
 				}
 				// ToDo: Figure out a way to deal with multiple packets of each number
