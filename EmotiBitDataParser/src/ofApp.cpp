@@ -597,8 +597,16 @@ void ofApp::parseDataLine(string packet) {
 					loggerPtr->second->startThread();
 					loggerPtr->second->push("EpochTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
 				}
+				bool isAperiodicType = false;
+				for (int i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_APERIODIC; i++)
+				{
+					if (typeTag.compare(EmotiBitPacket::TypeTagGroups::APERIODIC[i]) == 0)
+					{
+						isAperiodicType = true;
+					}
+				}
 
-				if (typeTag == EmotiBitPacket::TypeTagGroups::APERIODIC[0] || typeTag == EmotiBitPacket::TypeTagGroups::APERIODIC[1]) { //for aperiodic
+				if (isAperiodicType) { //for aperiodic
 					for (int i = 0; i < dataLength; i++) {
 						if (i + 6 >= splitData.size()) {
 							cout << "Error: dataLength > size, " << packet << endl;
