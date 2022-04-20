@@ -165,10 +165,12 @@ void ofApp::update() {
 
 			bool keepGoing = true;
 			if (inFile.eof()) {
-				cout << "End of file" << endl;
 				eofCounter++;
+				// the eofCounter was put in place to correct for false EOF detections.
+				// ToDo: figure out a test to detect if this is still required
 				if (eofCounter > 10) {
 					keepGoing = false;
+					ofLogNotice() << "End of file: " + ofToString(eofCounter);
 				}
 				else {
 					inFile.clear(); // Dirty hack to deal with mangled data reading
@@ -432,242 +434,244 @@ void ofApp::exit() {
 //--------------------------------------------------------------
 void ofApp::parseDataLine(string packet) {
 	static uint16_t packetNumber = -1;
+	if (packet.compare("") != 0)
+	{
+		vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
 
-	vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
-
-	EmotiBitPacket::Header packetHeader;
-	if (!EmotiBitPacket::getHeader(splitPacket, packetHeader)) {
-		malformedMessages++;
-		cout << "**** MALFORMED PACKET " << malformedMessages << ": " << packetHeader.dataLength << ", " << splitPacket.size() << ": " << packet << " ****" << endl;
-		cout << "**** MALFORMED PACKET DATA: " << packet << endl;
-		return;
-	}
-
-	uint16_t tempPacketNumber = packetHeader.packetNumber;
-	if (packetNumber != -1 && tempPacketNumber - packetNumber > 1) {
-		cout << "Missed packet: " << packetNumber << "," << tempPacketNumber << endl;
-	}
-	// ToDo: Figure out a way to deal with multiple packets of each number (e.g. UDPx3)
-	packetNumber = tempPacketNumber;
-
-	if (currentState == State::PARSING_TIMESTAMPS) {
-		static int lastRDPacketNumber = -1;
-
-		// ToDo: Handle 2^32 timestamp rollover (~49 days)
-
-		if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::REQUEST_DATA) == 0) {
-			for (uint16_t i = EmotiBitPacket::headerLength; i < splitPacket.size(); i++) {
-				if (splitPacket.at(i).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0) {
-					if (allTimestampData.size() > 0 && allTimestampData.back().roundTrip == -1) {
-						// If the previous sync round trip wasn't detected, remove it
-						allTimestampData.pop_back();
-					}
-					allTimestampData.emplace_back();
-					allTimestampData.back().RD = packetHeader.timestamp;
-					//allTimestampData.TS_sent.push_back("");
-					//allTimestampData.TS_received.push_back(0);
-					//allTimestampData.AK.push_back(0);
-					//allTimestampData.roundTrip.push_back(-1);
-					//allTimestampData.c2e.push_back(-1);
-					lastRDPacketNumber = packetHeader.packetNumber;
-
-					auto loggerPtr = loggers.find(timestampFilenameString);
-					if (loggerPtr != loggers.end()) {
-						loggerPtr->second->push("\n" + ofToString(allTimestampData.back().RD) + ",");
-					}
-				}
-				// ToDo: handle TIMESTAMP_UTC request
-					//|| splitPacket.at(EmotiBitPacket::headerLength).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
-				// ToDo: handle multiple request RD messages
-				//|| (splitPacket.size() > EmotiBitPacket::headerLength + 1 &&
-				//(splitPacket.at(EmotiBitPacket::headerLength + 1).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0
-				//	|| splitPacket.at(EmotiBitPacket::headerLength + 1).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
-				//	)
-			}
-
-			//double now = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		EmotiBitPacket::Header packetHeader;
+		if (!EmotiBitPacket::getHeader(splitPacket, packetHeader)) {
+			malformedMessages++;
+			cout << "**** MALFORMED PACKET " << malformedMessages << ": " << packetHeader.dataLength << ", " << splitPacket.size() << ": " << packet << " ****" << endl;
+			cout << "**** MALFORMED PACKET DATA: " << packet << endl;
+			return;
 		}
 
-		if (lastRDPacketNumber > -1) { // Only look for timestamps after REQUEST_DATA
-			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0) {
-				// ToDo: Handle TIMESTAMP_UTC
-				// update allTimestampData
-				allTimestampData.back().TS_received = packetHeader.timestamp;
-				if (splitPacket.size() > EmotiBitPacket::headerLength) {
-					allTimestampData.back().TS_sent = splitPacket.at(EmotiBitPacket::headerLength);
-				}
-			}
-			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::ACK) == 0) {
-				if (splitPacket.size() > EmotiBitPacket::headerLength) {
-					// verify if AK is for the correct RD
-					if (lastRDPacketNumber == stoi(splitPacket.at(EmotiBitPacket::headerLength))) {
-						allTimestampData.back().AK = packetHeader.timestamp;
-						allTimestampData.back().roundTrip = allTimestampData.back().TS_received - allTimestampData.back().RD;
-						lastRDPacketNumber = -1; // reset the last RD packet number to avoid overwriting from duplicate
+		uint16_t tempPacketNumber = packetHeader.packetNumber;
+		if (packetNumber != -1 && tempPacketNumber - packetNumber > 1) {
+			cout << "Missed packet: " << packetNumber << "," << tempPacketNumber << endl;
+		}
+		// ToDo: Figure out a way to deal with multiple packets of each number (e.g. UDPx3)
+		packetNumber = tempPacketNumber;
+
+		if (currentState == State::PARSING_TIMESTAMPS) {
+			static int lastRDPacketNumber = -1;
+
+			// ToDo: Handle 2^32 timestamp rollover (~49 days)
+
+			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::REQUEST_DATA) == 0) {
+				for (uint16_t i = EmotiBitPacket::headerLength; i < splitPacket.size(); i++) {
+					if (splitPacket.at(i).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0) {
+						if (allTimestampData.size() > 0 && allTimestampData.back().roundTrip == -1) {
+							// If the previous sync round trip wasn't detected, remove it
+							allTimestampData.pop_back();
+						}
+						allTimestampData.emplace_back();
+						allTimestampData.back().RD = packetHeader.timestamp;
+						//allTimestampData.TS_sent.push_back("");
+						//allTimestampData.TS_received.push_back(0);
+						//allTimestampData.AK.push_back(0);
+						//allTimestampData.roundTrip.push_back(-1);
+						//allTimestampData.c2e.push_back(-1);
+						lastRDPacketNumber = packetHeader.packetNumber;
+
 						auto loggerPtr = loggers.find(timestampFilenameString);
 						if (loggerPtr != loggers.end()) {
-							// write TL information into tiemsync file
-							loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
-							loggerPtr->second->push(allTimestampData.back().TS_sent + ",");
-							// write AK information into timesync file
-							loggerPtr->second->push(ofToString(allTimestampData.back().AK) + ",");
-							loggerPtr->second->push(ofToString(allTimestampData.back().roundTrip) + ",");
+							loggerPtr->second->push("\n" + ofToString(allTimestampData.back().RD) + ",");
 						}
 					}
-					// AK for a previous RD
-					else
-					{
-						// reset the TS_received and TS_sent values
-						// If not reset, there could be problems if we encounter the pattern
-						// TL (old RD)
-						// AK (old RD)
-						// missed TK (current RD)
-						// AK (current RD)
-						allTimestampData.back().TS_received = 0;
-						allTimestampData.back().TS_sent = "";
+					// ToDo: handle TIMESTAMP_UTC request
+						//|| splitPacket.at(EmotiBitPacket::headerLength).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
+					// ToDo: handle multiple request RD messages
+					//|| (splitPacket.size() > EmotiBitPacket::headerLength + 1 &&
+					//(splitPacket.at(EmotiBitPacket::headerLength + 1).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0
+					//	|| splitPacket.at(EmotiBitPacket::headerLength + 1).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
+					//	)
+				}
+
+				//double now = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+			}
+
+			if (lastRDPacketNumber > -1) { // Only look for timestamps after REQUEST_DATA
+				if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0) {
+					// ToDo: Handle TIMESTAMP_UTC
+					// update allTimestampData
+					allTimestampData.back().TS_received = packetHeader.timestamp;
+					if (splitPacket.size() > EmotiBitPacket::headerLength) {
+						allTimestampData.back().TS_sent = splitPacket.at(EmotiBitPacket::headerLength);
 					}
 				}
+				if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::ACK) == 0) {
+					if (splitPacket.size() > EmotiBitPacket::headerLength) {
+						// verify if AK is for the correct RD
+						if (lastRDPacketNumber == stoi(splitPacket.at(EmotiBitPacket::headerLength))) {
+							allTimestampData.back().AK = packetHeader.timestamp;
+							allTimestampData.back().roundTrip = allTimestampData.back().TS_received - allTimestampData.back().RD;
+							lastRDPacketNumber = -1; // reset the last RD packet number to avoid overwriting from duplicate
+							auto loggerPtr = loggers.find(timestampFilenameString);
+							if (loggerPtr != loggers.end()) {
+								// write TL information into tiemsync file
+								loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
+								loggerPtr->second->push(allTimestampData.back().TS_sent + ",");
+								// write AK information into timesync file
+								loggerPtr->second->push(ofToString(allTimestampData.back().AK) + ",");
+								loggerPtr->second->push(ofToString(allTimestampData.back().roundTrip) + ",");
+							}
+						}
+						// AK for a previous RD
+						else
+						{
+							// reset the TS_received and TS_sent values
+							// If not reset, there could be problems if we encounter the pattern
+							// TL (old RD)
+							// AK (old RD)
+							// missed TK (current RD)
+							// AK (current RD)
+							allTimestampData.back().TS_received = 0;
+							allTimestampData.back().TS_sent = "";
+						}
+					}
+				}
+				// ToDo: Add TIMESTAMP_UTC processing
 			}
-			// ToDo: Add TIMESTAMP_UTC processing
+
 		}
 
-	}
+		else if (currentState == State::PARSING_DATA) {
+			// ToDo: Update with EmotiBitPacket::Header usage
+			vector<string> splitData = ofSplitString(packet, ",");	// split data into separate value pairs
+			if (splitData.size() > 5) {
+				uint32_t timestamp;
+				uint32_t prevtimestamp;
+				static uint16_t packetNumber = -1;
+				uint16_t dataLength;
+				string typeTag;
+				uint16_t protocolVersion;
+				uint16_t dataReliability;
 
-	else if (currentState == State::PARSING_DATA) {
-		// ToDo: Update with EmotiBitPacket::Header usage
-		vector<string> splitData = ofSplitString(packet, ",");	// split data into separate value pairs
-		if (splitData.size() > 5) {
-			uint32_t timestamp;
-			uint32_t prevtimestamp;
-			static uint16_t packetNumber = -1;
-			uint16_t dataLength;
-			string typeTag;
-			uint16_t protocolVersion;
-			uint16_t dataReliability;
-
-			if (splitData.at(0) != "") {
-				timestamp = ofToInt(splitData.at(0));
-			}
-			if (splitData.at(1) != "") {
-				uint16_t tempPacketNumber = ofToInt(splitData.at(1));
-				if (packetNumber != -1 && tempPacketNumber - packetNumber > 1) {
-					cout << "Missed packet: " << packetNumber << "," << tempPacketNumber << endl;
+				if (splitData.at(0) != "") {
+					timestamp = ofToInt(splitData.at(0));
 				}
-				// ToDo: Figure out a way to deal with multiple packets of each number
-				packetNumber = tempPacketNumber;
-			}
-			if (splitData.at(2) != "") {
-				dataLength = ofToInt(splitData.at(2));
-			}
-			if (splitData.at(3) != "") {
-				typeTag = splitData.at(3);
-			}
-			if (splitData.at(4) != "") {
-				protocolVersion = ofToInt(splitData.at(4));
-			}
-			if (splitData.at(5) != "") {
-				dataReliability = ofToInt(splitData.at(5));
-			}
-			//string outFilePath = inFilePath + "_" + typeTag + ".csv";
-			//string outFilePath = inFilePath + "_";
-			
-			//outFile.open(outFilePath.c_str(), ios::out | ios::app);
-			//if (outFile.is_open()) {
-            
-            
-            auto indexPtr = timestamps.find(typeTag);
-            if (indexPtr != timestamps.end()) {	// we have a previous timestamp!
-                prevtimestamp = indexPtr->second;
-                indexPtr->second = timestamp;
-            }
-            else {
-                timestamps.emplace(typeTag, timestamp);
-                prevtimestamp = timestamp;
-            }
+				if (splitData.at(1) != "") {
+					uint16_t tempPacketNumber = ofToInt(splitData.at(1));
+					if (packetNumber != -1 && tempPacketNumber - packetNumber > 1) {
+						cout << "Missed packet: " << packetNumber << "," << tempPacketNumber << endl;
+					}
+					// ToDo: Figure out a way to deal with multiple packets of each number
+					packetNumber = tempPacketNumber;
+				}
+				if (splitData.at(2) != "") {
+					dataLength = ofToInt(splitData.at(2));
+				}
+				if (splitData.at(3) != "") {
+					typeTag = splitData.at(3);
+				}
+				if (splitData.at(4) != "") {
+					protocolVersion = ofToInt(splitData.at(4));
+				}
+				if (splitData.at(5) != "") {
+					dataReliability = ofToInt(splitData.at(5));
+				}
+				//string outFilePath = inFilePath + "_" + typeTag + ".csv";
+				//string outFilePath = inFilePath + "_";
 
-            auto loggerPtr = loggers.find(typeTag);
-            if (loggerPtr == loggers.end()) {	// we don't have a logger already
-                string outFilePath = inFileDir + inFileBase + "_" + typeTag + fileExt;
-                cout << "Creating file: " << outFilePath << endl;
-                loggers.emplace(typeTag, new LoggerThread("", outFilePath));
-                loggerPtr = loggers.find(typeTag);
-                loggerPtr->second->startThread();
-                loggerPtr->second->push("EpochTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
-            }
-            
-            if (typeTag == EmotiBitPacket::TypeTagGroups::APERIODIC[0] || typeTag == EmotiBitPacket::TypeTagGroups::APERIODIC[1] ) { //for aperiodic
-                for (int i = 0; i < dataLength; i++) {
-                    if (i + 6 >= splitData.size()) {
-                        cout << "Error: dataLength > size, " << packet << endl;
-                    }
-                    else {
-                        long double epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
-                        loggerPtr->second->push(
-                                                
-                            ofToString(epochTimestamp, 6) + "," +
-                            ofToString(timestamp, 3) + "," +
-                            splitData.at(1) + "," +
-                            splitData.at(2) + "," +
-                            splitData.at(3) + "," +
-                            splitData.at(4) + "," +
-                            splitData.at(5) + "," +
-                            splitData.at(i+6) +
-                            '\n'
-                        );
-                    }
-                }
-            }
-            else if (typeTag == EmotiBitPacket::TypeTagGroups::USER_MESSAGES[0]){ // for push messages
-                if (splitData.size()!= 8) {
-                    cout << "Error: userNote package error " << packet << endl;
-                }
-                else {
-//                        long double epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
-                    std::string computerTime = splitData.at(6);
-                    size_t lastDelim = computerTime.find_last_of('-'); // find subsecond decimal
-                    size_t lastNChar = computerTime.size() - lastDelim - 1;
-                    std::time_t c = getEpochTime(std::wstring(computerTime.begin(), computerTime.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
-                    loggerPtr->second->push(
-                        ofToString((long double)c, 6) + "," +
-                        ofToString(timestamp, 3) + "," +
-                        splitData.at(1) + "," +
-                        splitData.at(2) + "," +
-                        splitData.at(3) + "," +
-                        splitData.at(4) + "," +
-                        splitData.at(5) + "," +
-                        splitData.at(7) +
-                        '\n'
-                        );
-                }
-                
-            }
-            else { // if typetag is periodic
-                for (int i = 0; i < dataLength; i++) {
-                    if (i + 6 >= splitData.size()) {
-                        cout << "Error: dataLength > size, " << packet << endl;
-                    }
-                    else {
-                        //uint32_t interpTimestamp = ofMap(i + 1, 0, dataLength, prevtimestamp, timestamp);
-                        long double interpTimestamp = linterp(i + 1, 0, dataLength, prevtimestamp, timestamp);
-                        long double epochTimestamp = linterp(interpTimestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
-                        loggerPtr->second->push(
-                            ofToString(epochTimestamp, 6) + "," +
-                            ofToString(interpTimestamp, 3) + "," +
-                            splitData.at(1) + "," +
-                            splitData.at(2) + "," +
-                            splitData.at(3) + "," +
-                            splitData.at(4) + "," +
-                            splitData.at(5) + "," +
-                            splitData.at(i + 6) +
-                            '\n'
-                        );
-                        //outFile << interpTimestamp << "," << packetNumber << "," << dataLength << "," << typeTag << "," << protocolVersion << "," << dataReliability << "," << splitData.at(i + 6) << endl;
-                    }
-                }
-            }
-            
-			//outFile.close();
-		//}
+				//outFile.open(outFilePath.c_str(), ios::out | ios::app);
+				//if (outFile.is_open()) {
+
+
+				auto indexPtr = timestamps.find(typeTag);
+				if (indexPtr != timestamps.end()) {	// we have a previous timestamp!
+					prevtimestamp = indexPtr->second;
+					indexPtr->second = timestamp;
+				}
+				else {
+					timestamps.emplace(typeTag, timestamp);
+					prevtimestamp = timestamp;
+				}
+
+				auto loggerPtr = loggers.find(typeTag);
+				if (loggerPtr == loggers.end()) {	// we don't have a logger already
+					string outFilePath = inFileDir + inFileBase + "_" + typeTag + fileExt;
+					cout << "Creating file: " << outFilePath << endl;
+					loggers.emplace(typeTag, new LoggerThread("", outFilePath));
+					loggerPtr = loggers.find(typeTag);
+					loggerPtr->second->startThread();
+					loggerPtr->second->push("EpochTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
+				}
+
+				if (typeTag == EmotiBitPacket::TypeTagGroups::APERIODIC[0] || typeTag == EmotiBitPacket::TypeTagGroups::APERIODIC[1]) { //for aperiodic
+					for (int i = 0; i < dataLength; i++) {
+						if (i + 6 >= splitData.size()) {
+							cout << "Error: dataLength > size, " << packet << endl;
+						}
+						else {
+							long double epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+							loggerPtr->second->push(
+
+								ofToString(epochTimestamp, 6) + "," +
+								ofToString(timestamp, 3) + "," +
+								splitData.at(1) + "," +
+								splitData.at(2) + "," +
+								splitData.at(3) + "," +
+								splitData.at(4) + "," +
+								splitData.at(5) + "," +
+								splitData.at(i + 6) +
+								'\n'
+							);
+						}
+					}
+				}
+				else if (typeTag == EmotiBitPacket::TypeTagGroups::USER_MESSAGES[0]) { // for push messages
+					if (splitData.size() != 8) {
+						cout << "Error: userNote package error " << packet << endl;
+					}
+					else {
+						//                        long double epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+						std::string computerTime = splitData.at(6);
+						size_t lastDelim = computerTime.find_last_of('-'); // find subsecond decimal
+						size_t lastNChar = computerTime.size() - lastDelim - 1;
+						std::time_t c = getEpochTime(std::wstring(computerTime.begin(), computerTime.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+						loggerPtr->second->push(
+							ofToString((long double)c, 6) + "," +
+							ofToString(timestamp, 3) + "," +
+							splitData.at(1) + "," +
+							splitData.at(2) + "," +
+							splitData.at(3) + "," +
+							splitData.at(4) + "," +
+							splitData.at(5) + "," +
+							splitData.at(7) +
+							'\n'
+						);
+					}
+
+				}
+				else { // if typetag is periodic
+					for (int i = 0; i < dataLength; i++) {
+						if (i + 6 >= splitData.size()) {
+							cout << "Error: dataLength > size, " << packet << endl;
+						}
+						else {
+							//uint32_t interpTimestamp = ofMap(i + 1, 0, dataLength, prevtimestamp, timestamp);
+							long double interpTimestamp = linterp(i + 1, 0, dataLength, prevtimestamp, timestamp);
+							long double epochTimestamp = linterp(interpTimestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+							loggerPtr->second->push(
+								ofToString(epochTimestamp, 6) + "," +
+								ofToString(interpTimestamp, 3) + "," +
+								splitData.at(1) + "," +
+								splitData.at(2) + "," +
+								splitData.at(3) + "," +
+								splitData.at(4) + "," +
+								splitData.at(5) + "," +
+								splitData.at(i + 6) +
+								'\n'
+							);
+							//outFile << interpTimestamp << "," << packetNumber << "," << dataLength << "," << typeTag << "," << protocolVersion << "," << dataReliability << "," << splitData.at(i + 6) << endl;
+						}
+					}
+				}
+
+				//outFile.close();
+			//}
+			}
 		}
 	}
 }
