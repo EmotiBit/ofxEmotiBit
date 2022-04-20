@@ -103,8 +103,8 @@ public:
 	struct TimeSyncMap {
 		long double e0 = 0;
 		long double e1 = 0;
-		long double c0 = 2^31;
-		long double c1 = 2^32;
+		long double c0 = 0;
+		long double c1 = 1;
 	} timeSyncMap;
 
 	int eofCounter = 0;
