@@ -193,6 +193,7 @@ void ofApp::update() {
 				if (currentState == State::PARSING_TIMESTAMPS) {
 					//ofMap()
 					timeSyncMap = calculateTimeSyncMap(allTimestampData);
+					// check if enough time syncs were found to create a map.
 					if (timeSyncMap.e0 == 0 || timeSyncMap.e1 == 0)
 					{
 						ofLogError() << "Not enough timesyncs found to parse file";
@@ -434,6 +435,7 @@ void ofApp::exit() {
 //--------------------------------------------------------------
 void ofApp::parseDataLine(string packet) {
 	static uint16_t packetNumber = -1;
+	// only parse if not a blank line
 	if (packet.compare("") != 0)
 	{
 		vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
@@ -447,6 +449,7 @@ void ofApp::parseDataLine(string packet) {
 		}
 
 		uint16_t tempPacketNumber = packetHeader.packetNumber;
+		// only check for a missed packet if not processing the first packet
 		if (packetNumber != -1 && tempPacketNumber - packetNumber > 1) {
 			cout << "Missed packet: " << packetNumber << "," << tempPacketNumber << endl;
 		}
@@ -524,7 +527,7 @@ void ofApp::parseDataLine(string packet) {
 							// If not reset, there could be problems if we encounter the pattern
 							// TL (old RD)
 							// AK (old RD)
-							// missed TK (current RD)
+							// missed TL (current RD)
 							// AK (current RD)
 							allTimestampData.back().TS_received = 0;
 							allTimestampData.back().TS_sent = "";
