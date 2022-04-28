@@ -157,7 +157,7 @@ void ofApp::startProcessing(bool & processing) {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	if (currentState != State::ERROR_INSUFFICIENT_TIMESYNCS &&inFile.is_open()) {
+	if (currentState != State::WARNING_INSUFFICIENT_TIMESYNCS &&inFile.is_open()) {
 		int lines = 0;
 		while (lines < linesPerLoop) {
 			lines++;
@@ -194,31 +194,39 @@ void ofApp::update() {
 					//ofMap()
 					timeSyncMap = calculateTimeSyncMap(allTimestampData);
 					// check if enough time syncs were found to create a map.
-					if (timeSyncMap.e0 == 0 || timeSyncMap.e1 == 0)
+					//processButton.set(false);
+					currentState = State::PARSING_DATA;
+					nLinesInFile = lineCounter;
+					lineCounter = 0;
+					inFile.clear(); // clear the eof status
+					inFile.seekg(0, ios::beg); // go back to beginning of file
+
+					string filename = inFileDir + inFileBase + "_" + "timeSyncMap" + fileExt;
+					cout << "Creating file: " << filename << endl;
+					ofstream mFile;
+					mFile.open(filename.c_str(), ios::out);
+					mFile << "e0,e1,c0,c1,TimeSyncsReceived,emotiBitStartTime, emotiBitEndTime" << endl;
+					mFile << ofToString(timeSyncMap.e0, 6) << "," 
+						<< ofToString(timeSyncMap.e1, 6) << "," 
+						<< ofToString(timeSyncMap.c0, 6) << "," 
+						<< ofToString(timeSyncMap.c1, 6) << "," 
+						<<ofToString(allTimestampData.size()) << ","
+						<<ofToString(recordedDataTimeRange.emotibitStartTime) << ","
+						<<ofToString(recordedDataTimeRange.emotibitEndTime);
+					mFile.close();
+
+				}
+				else if (currentState == State::PARSING_DATA) {
+					if (allTimestampData.size() < 2)
 					{
-						ofLogError() << "Not enough timesyncs found to parse file";
-						currentState = State::ERROR_INSUFFICIENT_TIMESYNCS;
+						ofLogNotice() << ofToString(allTimestampData.size()) + " Timesyncs Found";
+						ofLog(OF_LOG_NOTICE, "Follow instructions on screen to improve data recording processes");
+						currentState = State::WARNING_INSUFFICIENT_TIMESYNCS;
 					}
 					else
 					{
-						//processButton.set(false);
-						currentState = State::PARSING_DATA;
-						nLinesInFile = lineCounter;
-						lineCounter = 0;
-						inFile.clear(); // clear the eof status
-						inFile.seekg(0, ios::beg); // go back to beginning of file
-
-						string filename = inFileDir + inFileBase + "_" + "timeSyncMap" + fileExt;
-						cout << "Creating file: " << filename << endl;
-						ofstream mFile;
-						mFile.open(filename.c_str(), ios::out);
-						mFile << "e0,e1,c0,c1" << endl;
-						mFile << ofToString(timeSyncMap.e0, 6) << "," << ofToString(timeSyncMap.e1, 6) << "," << ofToString(timeSyncMap.c0, 6) << "," << ofToString(timeSyncMap.c1, 6);
-						mFile.close();
+						ofExit();
 					}
-				}
-				else if (currentState == State::PARSING_DATA) {
-					ofExit();
 					//processButton.set(false);
 				}
 				break;
@@ -229,9 +237,16 @@ void ofApp::update() {
 			}
 		}
 	}
+	// reset the GUI panel text and BG color
+	if (currentState == State::WARNING_INSUFFICIENT_TIMESYNCS)
+	{
+		guiPanels.at(0).getControl(GUI_PANEL_LOAD_FILE)->setBackgroundColor(ofColor(0, 0, 0));
+		processStatus.setBackgroundColor(ofColor(0, 0, 0));
+		processStatus.getParameter().fromString(GUI_STATUS_IDLE);
+	}
 }
 
-ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> timestampData) {
+ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampData) {
 	// Plan: Create a mapping from EmotiBit timestamps to computer POSIX timestamps
 	// Use the fastest round trip from first and last quartile of timestamp data to get good esimation over whole dataset
 	// Calculate the computer-to-EmotiBit travel time to adjust for lag
@@ -254,84 +269,133 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> timestampDa
 	}
 	ofLog(OF_LOG_NOTICE, "Total RTT's found: " + ofToString(totalRttFound));
 	TimeSyncMap tsMap;
-	if (timestampData.size() < 2) {
-		ofLogError() << "calculateTimeSyncMap: Less than 2 timestamps found. Unable to map timestamps to Epoch time." << endl;
-		return tsMap;
+	if (timestampData.size() == 0)
+	{
+		ofLogNotice() << "calculateTimeSyncMap: 0 timesyncs found" << endl;
+		// update e0 and e1 to be min and max timestamp recorded.
+		// c0 = 0 and c1 = 1. Whole data will be mapped to 1970, jan 1st
+		tsMap.e0 = recordedDataTimeRange.emotibitStartTime;
+		tsMap.e1 = recordedDataTimeRange.emotibitEndTime;
+		tsMap.c1 = tsMap.c0 + (tsMap.e1 - tsMap.e0) / 1000.f;
 	}
-	
-	int q1Ind = ceil(timestampData.size() / 4);
-	int q4Ind = floor(timestampData.size() * 3 / 4);
-	if (timestampData.size() < 20) {
-		// Use more points if not many points are available
-		q1Ind = floor(timestampData.size() / 2);
-		q4Ind = ceil(timestampData.size() / 2);
+	else if (timestampData.size() == 1)
+	{
+		ofLogNotice() << "calculateTimeSyncMap: 1 timesync found" << endl;
+		long double e_x, c_x;
+		std::string ts;
+		std::time_t c;
+		long double m;
+		size_t lastDelim;
+		size_t lastNChar;
+		// calculate the epoch time from the single Computer time received
+		e_x = timestampData.back().TS_received;
+		ts = timestampData.back().TS_sent;
+		lastDelim = ts.find_last_of('-'); // find subsecond decimal
+		lastNChar = ts.size() - lastDelim - 1;
+		c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+		m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar); // Convert subsecond
+		c_x = (long double)c + m; // Append subsecond as decimal;
+		c_x += timestampData.back().roundTrip / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
+
+		uint32_t emotibitTime = timestampData.back().TS_received;
+		if (emotibitTime - recordedDataTimeRange.emotibitStartTime >= recordedDataTimeRange.emotibitEndTime - emotibitTime)
+		{
+			// timestamp received is closer to the end
+			// consider the single RTT to be e1/c1 pair
+			tsMap.e1 = e_x;
+			tsMap.c1 = c_x;
+			// calculate e0/c0
+			tsMap.e0 = recordedDataTimeRange.emotibitStartTime;
+			tsMap.c0 = tsMap.c1 - (tsMap.e1 - tsMap.e0)/1000.f;
+		}
+		else
+		{
+			// timestamp received is closer to the beginning
+			// consider the single RTT to be e0/c0 pair
+			tsMap.e0 = e_x;
+			tsMap.c0 = c_x;
+
+			// calculate e1/c1 pair
+			tsMap.e1 = recordedDataTimeRange.emotibitEndTime;
+			tsMap.c1 = tsMap.c0 + (tsMap.e1 - tsMap.e0)/1000.f;
+		}
 	}
+	else
+	{
 
-	// ToDo: improve algorithm finding shortest round trips
-	// -- Deal with cases where recording is stopped when emotibit is offline (i.e. no Q4 round trips)
+		int q1Ind = ceil(timestampData.size() / 4);
+		int q4Ind = floor(timestampData.size() * 3 / 4);
+		if (timestampData.size() < 20) {
+			// Use more points if not many points are available
+			q1Ind = floor(timestampData.size() / 2);
+			q4Ind = ceil(timestampData.size() / 2);
+		}
 
-	// Sort the first 25 percent by round trip time
-	vector<pair<int, int>> q1;
-	for (int i = 0; i < q1Ind; i++) {
-		q1.push_back(make_pair(timestampData.at(i).roundTrip, i));
+		// ToDo: improve algorithm finding shortest round trips
+		// -- Deal with cases where recording is stopped when emotibit is offline (i.e. no Q4 round trips)
+
+		// Sort the first 25 percent by round trip time
+		vector<pair<int, int>> q1;
+		for (int i = 0; i < q1Ind; i++) {
+			q1.push_back(make_pair(timestampData.at(i).roundTrip, i));
+		}
+		sort(q1.begin(), q1.end()); // Sort and track original indexes
+
+		// Sort the last 25 percent by round trip time
+		vector<pair<int, int>> q4;
+		for (int i = q4Ind; i < timestampData.size(); i++) {
+			q4.push_back(make_pair(timestampData.at(i).roundTrip, i));
+		}
+		sort(q4.begin(), q4.end()); // Sort and track original indexes
+
+		//vector<double> c2e;
+		//int num_c2e;
+		//// Calculate median c2e for Q1
+		//c2e.clear();
+		//num_c2e = MAX(q1.size() * 0.2f, 2); // Use at least 2 points
+		//num_c2e = MIN(num_c2e, q1.size()); // Limit to the number of available points
+		//for (int i = 0; i < num_c2e; i++) {
+		//	c2e.push_back(timestampData.at(q1.at(i).second).c2e);
+		//}
+		//float c2eQ1Med = GetMedian(&(c2e.at(0)), num_c2e);
+		//cout << c2eQ1Med << endl;
+
+		//// Calculate median c2e for Q4
+		//c2e.clear();
+		//num_c2e = MAX(q4.size() * 0.2f, 2); // Use at least 2 points
+		//num_c2e = MIN(num_c2e, q4.size());  // Limit to the number of available points
+		//for (int i = 0; i < num_c2e; i++) {
+		//	c2e.push_back(timestampData.at(q4.at(i).second).c2e);
+		//}
+		//float c2eQ4Med = GetMedian(&(c2e.at(0)), num_c2e);
+		//cout << c2eQ4Med << endl;
+
+		std::string ts;
+		std::time_t c;
+		long double m;
+		size_t lastDelim;
+		size_t lastNChar;
+
+		// Calculate Q1 timesync map
+		tsMap.e0 = timestampData.at(q1.at(0).second).TS_received;
+		ts = timestampData.at(q1.at(0).second).TS_sent;
+		lastDelim = ts.find_last_of('-'); // find subsecond decimal
+		lastNChar = ts.size() - lastDelim - 1;
+		c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+		m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar); // Convert subsecond
+		tsMap.c0 = (long double)c + m; // Append subsecond as decimal
+		tsMap.c0 += q1.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
+
+		// Calculate Q4 timesync map
+		tsMap.e1 = timestampData.at(q4.at(0).second).TS_received;
+		ts = timestampData.at(q4.at(0).second).TS_sent;
+		lastDelim = ts.find_last_of('-'); // find subsecond decimal
+		lastNChar = ts.size() - lastDelim - 1;
+		c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+		m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar);	tsMap.c1 = (long double)c + m; // Convert subsecond
+		tsMap.c1 = (long double)c + m; // Append subsecond as decimal
+		tsMap.c1 += q4.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
 	}
-	sort(q1.begin(), q1.end()); // Sort and track original indexes
-
-	// Sort the last 25 percent by round trip time
-	vector<pair<int, int>> q4;
-	for (int i = q4Ind; i < timestampData.size(); i++) {
-		q4.push_back(make_pair(timestampData.at(i).roundTrip, i));
-	}
-	sort(q4.begin(), q4.end()); // Sort and track original indexes
-
-	//vector<double> c2e;
-	//int num_c2e;
-	//// Calculate median c2e for Q1
-	//c2e.clear();
-	//num_c2e = MAX(q1.size() * 0.2f, 2); // Use at least 2 points
-	//num_c2e = MIN(num_c2e, q1.size()); // Limit to the number of available points
-	//for (int i = 0; i < num_c2e; i++) {
-	//	c2e.push_back(timestampData.at(q1.at(i).second).c2e);
-	//}
-	//float c2eQ1Med = GetMedian(&(c2e.at(0)), num_c2e);
-	//cout << c2eQ1Med << endl;
-
-	//// Calculate median c2e for Q4
-	//c2e.clear();
-	//num_c2e = MAX(q4.size() * 0.2f, 2); // Use at least 2 points
-	//num_c2e = MIN(num_c2e, q4.size());  // Limit to the number of available points
-	//for (int i = 0; i < num_c2e; i++) {
-	//	c2e.push_back(timestampData.at(q4.at(i).second).c2e);
-	//}
-	//float c2eQ4Med = GetMedian(&(c2e.at(0)), num_c2e);
-	//cout << c2eQ4Med << endl;
-
-	std::string ts;
-	std::time_t c;
-	long double m;
-	size_t lastDelim;
-	size_t lastNChar;
-
-	// Calculate Q1 timesync map
-	tsMap.e0 = timestampData.at(q1.at(0).second).TS_received;
-	ts = timestampData.at(q1.at(0).second).TS_sent;
-	lastDelim = ts.find_last_of('-'); // find subsecond decimal
-	lastNChar = ts.size() - lastDelim - 1;
-	c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
-	m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar); // Convert subsecond
-	tsMap.c0 = (long double)c + m; // Append subsecond as decimal
-	tsMap.c0 += q1.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
-
-	// Calculate Q4 timesync map
-	tsMap.e1 = timestampData.at(q4.at(0).second).TS_received;
-	ts = timestampData.at(q4.at(0).second).TS_sent;
-	lastDelim = ts.find_last_of('-'); // find subsecond decimal
-	lastNChar = ts.size() - lastDelim - 1;
-	c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
-	m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar);	tsMap.c1 = (long double)c + m; // Convert subsecond
-	tsMap.c1 = (long double)c + m; // Append subsecond as decimal
-	tsMap.c1 += q4.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
-
 	return tsMap;
 }
 
@@ -407,12 +471,15 @@ void ofApp::draw() {
 	else if (currentState == State::PARSING_DATA) {
 		legendFont.drawString("PARSING_DATA: " + ofToString(lineCounter * 100.f / nLinesInFile, 0) + "% complete", 10, 100);
 	}
-	else if (currentState == State::ERROR_INSUFFICIENT_TIMESYNCS)
+	else if (currentState == State::WARNING_INSUFFICIENT_TIMESYNCS)
 	{
-		ofSetColor(255, 0, 0);
-		legendFont.drawString("Cannot parse file\nERROR:INSUFFICIENT TIMESYNCS", 10, 100);
+		ofSetColor(255, 128, 0);
+		std::string instructions = "Data Parsed with less than 2 timesyncs. More timesyncs improve timestamp accuracy of the parsed data. \nSome insights to generate more timesyncs:\n";
+		instructions += "\t1. Allow EmotiBit to be connected to EmotiBit Oscilloscope for as long as possible\n";
+		instructions += "\t\ta. Being connected to the Oscillosocpe for at least 1 min at the beginning and the end of record session is recommended\n";
+		legendFont.drawString(instructions, 10, 100);
 	}
-	if (currentState != State::ERROR_INSUFFICIENT_TIMESYNCS)
+	if (currentState != State::WARNING_INSUFFICIENT_TIMESYNCS)
 	{
 		legendFont.drawString(dataLine, 10, 200);
 	}
@@ -434,7 +501,7 @@ void ofApp::exit() {
 
 //--------------------------------------------------------------
 void ofApp::parseDataLine(string packet) {
-	static uint16_t packetNumber = -1;
+	static int packetNumber = -1;
 	// only parse if not a blank line
 	if (packet.compare("") != 0)
 	{
@@ -449,10 +516,21 @@ void ofApp::parseDataLine(string packet) {
 		}
 
 		uint16_t tempPacketNumber = packetHeader.packetNumber;
+		if (packetHeader.timestamp < recordedDataTimeRange.emotibitStartTime)
+		{
+			// first packet. note the first timestamp in the recorded data
+			recordedDataTimeRange.emotibitStartTime = packetHeader.timestamp;
+		}
+		if (packetHeader.timestamp > recordedDataTimeRange.emotibitEndTime)
+		{
+			// update the recorded end time at every packet parse. 
+			// ultimately, emotibitEndTime = last packet timestamp
+			recordedDataTimeRange.emotibitEndTime = packetHeader.timestamp;
+		}
 		// only check for a missed packet if not processing the first packet
 		if (packetNumber != -1 && tempPacketNumber - packetNumber > 1) {
 			cout << "Missed packet: " << packetNumber << "," << tempPacketNumber << endl;
-		}
+		} 
 		// ToDo: Figure out a way to deal with multiple packets of each number (e.g. UDPx3)
 		packetNumber = tempPacketNumber;
 
@@ -545,7 +623,7 @@ void ofApp::parseDataLine(string packet) {
 			if (splitData.size() > 5) {
 				uint32_t timestamp;
 				uint32_t prevtimestamp;
-				static uint16_t packetNumber = -1;
+				static int packetNumber = -1;
 				uint16_t dataLength;
 				string typeTag;
 				uint16_t protocolVersion;
