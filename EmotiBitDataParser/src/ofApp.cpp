@@ -259,7 +259,7 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 	// erase any blank lines
 	for (auto it = timestampData.begin(); it != timestampData.end(); ) {
 		if (it->roundTrip < 0) {
-			ofLog(OF_LOG_NOTICE, "Removing -ve RTT: " + ofToString(it->roundTrip));
+			ofLog(OF_LOG_NOTICE, "Removing erroneous RTT: " + ofToString(it->roundTrip));
 			it = timestampData.erase(it);
 		}
 		else {
@@ -474,9 +474,13 @@ void ofApp::draw() {
 	else if (currentState == State::WARNING_INSUFFICIENT_TIMESYNCS)
 	{
 		ofSetColor(255, 128, 0);
-		std::string instructions = "Data Parsed with less than 2 timesyncs. More timesyncs improve timestamp accuracy of the parsed data. \nSome insights to generate more timesyncs:\n";
-		instructions += "\t1. Allow EmotiBit to be connected to EmotiBit Oscilloscope for as long as possible\n";
-		instructions += "\t\ta. Being connected to the Oscillosocpe for at least 1 min at the beginning and the end of record session is recommended\n";
+		std::string instructions = "WARNING: Data file was parsed with less than 2 time-sync events, which can reduce the timestamp accuracy.\n"
+		"\nEmotiBit periodically generates time-sync events while a connection is established with the EmotiBit Oscilloscope software.\n"
+		"At a minimum, it's recommended to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
+		"for at least one minute after starting data recording AND re-establish connection with EmotiBit Oscilloscope\n"
+		"software (using the same computer on which recording was started) for at least one minute before stopping data recording.\n"
+		"\nTo further improve timestamp accuracy, it's optimal to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
+		"throughout recording to generate many time-sync events in the data file.\n";
 		legendFont.drawString(instructions, 10, 100);
 	}
 	if (currentState != State::WARNING_INSUFFICIENT_TIMESYNCS)
