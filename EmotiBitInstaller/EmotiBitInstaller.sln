@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openframeworksLib", "..\..\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EmotiBitDataParser", "..\EmotiBitDataParser\EmotiBitDataParser.vcxproj", "{D0A38CD4-E8D1-49BC-9426-B9CE6CD16698}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EmotiBitFirmwareInstaller", "..\EmotiBitFirmwareInstaller\EmotiBitFirmwareInstaller.vcxproj", "{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{D0A38CD4-E8D1-49BC-9426-B9CE6CD16698}.Release|x64.Build.0 = Release|x64
 		{D0A38CD4-E8D1-49BC-9426-B9CE6CD16698}.Release|x86.ActiveCfg = Release|Win32
 		{D0A38CD4-E8D1-49BC-9426-B9CE6CD16698}.Release|x86.Build.0 = Release|Win32
+		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Debug|x64.ActiveCfg = Debug|x64
+		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Debug|x64.Build.0 = Debug|x64
+		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Debug|x86.ActiveCfg = Debug|Win32
+		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Debug|x86.Build.0 = Debug|Win32
+		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Release|x64.ActiveCfg = Release|x64
+		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Release|x64.Build.0 = Release|x64
+		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Release|x86.ActiveCfg = Release|Win32
+		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
