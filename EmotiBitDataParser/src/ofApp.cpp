@@ -205,7 +205,7 @@ void ofApp::update() {
 					cout << "Creating file: " << filename << endl;
 					ofstream mFile;
 					mFile.open(filename.c_str(), ios::out);
-					mFile << "e0,e1,c0,c1,TimeSyncsReceived,emotiBitStartTime, emotiBitEndTime" << endl;
+					mFile << "e0,e1,c0,c1,TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime" << endl;
 					mFile << ofToString(timeSyncMap.e0, 6) << "," 
 						<< ofToString(timeSyncMap.e1, 6) << "," 
 						<< ofToString(timeSyncMap.c0, 6) << "," 
