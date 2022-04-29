@@ -75,6 +75,7 @@ public:
 	float drawYScale = 1.f;
 
 	enum class State {
+		WARNING_INSUFFICIENT_TIMESYNCS = -1,
 		IDLE = 0,
 		PARSING_TIMESTAMPS = 1,
 		PARSING_DATA = 2,
@@ -103,9 +104,14 @@ public:
 	struct TimeSyncMap {
 		long double e0 = 0;
 		long double e1 = 0;
-		long double c0 = 2^31;
-		long double c1 = 2^32;
+		long double c0 = 0;
+		long double c1 = 1;
 	} timeSyncMap;
+
+	struct RecordedDataTimeRange {
+		long double emotibitStartTime = INT_MAX;
+		long double emotibitEndTime = 0;
+	}recordedDataTimeRange;
 
 	int eofCounter = 0;
 
@@ -135,7 +141,7 @@ public:
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void startProcessing(bool & processing);
-	TimeSyncMap calculateTimeSyncMap(vector<TimestampData> timestampData);
+	TimeSyncMap calculateTimeSyncMap(vector<TimestampData> &timestampData);
 	std::time_t getEpochTime(const std::wstring& dateTime);
 	double GetMedian(double daArray[], int iSize);
 	bool timestampDataCompare(pair<int, TimestampData> i, pair<int, TimestampData> j);
