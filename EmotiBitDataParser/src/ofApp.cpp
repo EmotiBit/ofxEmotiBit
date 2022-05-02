@@ -680,7 +680,7 @@ void ofApp::parseDataLine(string packet) {
 					loggers.emplace(typeTag, new LoggerThread("", outFilePath));
 					loggerPtr = loggers.find(typeTag);
 					loggerPtr->second->startThread();
-					loggerPtr->second->push("EpochTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
+					loggerPtr->second->push("LocalTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
 				}
 				bool isAperiodicType = false;
 				for (int i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_APERIODIC; i++)
