@@ -87,15 +87,15 @@ void EmotiBitWiFiHost::pingAvailableNetworks() {
 		advertisingCxn.SetEnableBroadcast(true);
 	}
 	if (emotibitNetworks.size() == 0) { //initial search through all Networks
-		for (int sub = 0; sub < availableNetworks.size(); sub++) {
+		for (int network = 0; network < availableNetworks.size(); network++) {
 			if (enableBroadcast) { 
-				ip = availableNetworks.at(sub) + "." + ofToString(255);
+				ip = availableNetworks.at(network) + "." + ofToString(255);
 				advertisingCxn.Connect(ip.c_str(), advertisingPort);
 				advertisingCxn.Send(packet.c_str(), packet.length());
 			}
 			else {
 				for (int hostId = 1; hostId < 255; hostId++) {
-					ip = availableNetworks.at(sub) + "." + ofToString(hostId);
+					ip = availableNetworks.at(network) + "." + ofToString(hostId);
 					advertisingCxn.Connect(ip.c_str(), advertisingPort);
 					advertisingCxn.Send(packet.c_str(), packet.length());
 				}
@@ -103,10 +103,17 @@ void EmotiBitWiFiHost::pingAvailableNetworks() {
 		}
 	} 
 	else { // Once an EmotiBit is found, advertising is directed at that network to avoid network spam
-		for (int hostId = 1; hostId < 255; hostId++) {
-			ip = emotibitNetworks.at(0) + "." + ofToString(hostId);
+		if (enableBroadcast) {
+			ip = emotibitNetworks.at(0) + "." + ofToString(255);
 			advertisingCxn.Connect(ip.c_str(), advertisingPort);
 			advertisingCxn.Send(packet.c_str(), packet.length());
+		}
+		else {
+			for (int hostId = 1; hostId < 255; hostId++) {
+				ip = emotibitNetworks.at(0) + "." + ofToString(hostId);
+				advertisingCxn.Connect(ip.c_str(), advertisingPort);
+				advertisingCxn.Send(packet.c_str(), packet.length());
+			}
 		}
 	}
 }
