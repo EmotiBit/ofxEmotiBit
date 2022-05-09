@@ -40,6 +40,7 @@ int8_t EmotiBitWiFiHost::begin()
 	connectedEmotibitIp = "";
 	_isConnected = false;
 	isStartingConnection = false;
+	
 
 	dataThread = new std::thread(&EmotiBitWiFiHost::updateDataThread, this); 
 	advertizingTimer = ofGetElapsedTimeMillis();
@@ -252,6 +253,13 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 			advertisingCxn.Send(packet.c_str(), packet.length());
 			
 			
+		}
+
+		// Timeout starting connection if no response is received
+		if (ofGetElapsedTimeMillis() - startCxnAbortTimer > startCxnTimeout)
+		{
+			isStartingConnection = false;
+			connectedEmotibitIp = "";
 		}
 	}
 
@@ -593,6 +601,7 @@ int8_t EmotiBitWiFiHost::connect(string ip)
 			{
 				connectedEmotibitIp = ip;
 				isStartingConnection = true;
+				startCxnAbortTimer = ofGetElapsedTimeMillis();
 			}
 		}
 		catch (const std::out_of_range& oor) {

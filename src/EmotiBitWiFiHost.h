@@ -62,6 +62,8 @@ public:
 	string connectedEmotibitIp;
 	bool _isConnected;
 	bool isStartingConnection;
+	uint16_t startCxnTimeout = 5000;
+	uint64_t startCxnAbortTimer;
 
 	uint16_t advertisingPacketCounter = 0;
 	uint16_t controlPacketCounter = 0;
