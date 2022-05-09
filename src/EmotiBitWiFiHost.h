@@ -53,8 +53,8 @@ public:
 	uint16_t sendDataPort;
 	uint16_t controlPort;
 
-	vector<string> availableSubnets; // All available subnets, with or without emotibits
-	vector<string> emotibitSubnets; // Subnets that contain emotibits
+	vector<string> availableNetworks; // All available networks, with or without emotibits
+	vector<string> emotibitNetworks; // Networks that contain emotibits
 	bool enableBroadcast = false; 
 	uint64_t advertizingTimer;
 
@@ -82,8 +82,8 @@ public:
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
-	void getAvailableSubnets();
-	void pingAvailableSubnets();
+	void getAvailableNetworks();
+	void pingAvailableNetworks();
 	void updateAdvertisingIpList(string ip); 
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
