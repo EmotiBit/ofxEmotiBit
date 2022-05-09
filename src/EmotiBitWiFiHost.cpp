@@ -47,6 +47,39 @@ int8_t EmotiBitWiFiHost::begin()
 	return SUCCESS;
 }
 
+bool EmotiBitWiFiHost::isOnNetworkList(string ipAddress, vector<string> networkList) {
+	bool out = false;
+	vector<string> ipSplit = ofSplitString(ipAddress, ".");
+	for (string inclIp : networkList) {
+		vector<string> inclIpSplit = ofSplitString(inclIp, ".");
+		bool partMatch = true;
+		for (uint8_t n = 0; n < size(ipSplit) && n < size(inclIpSplit); n++) {
+			if (inclIpSplit.at(n).compare("*") == 0 || inclIpSplit.at(n).compare(ipSplit.at(n)) == 0) {
+				// partial match
+			}
+			else {
+				partMatch = false;
+				break;
+			}
+		}
+		if (partMatch == true) {
+			// found a match!
+			out = true;
+			break;
+		}
+	}
+
+	return out;
+}
+
+bool EmotiBitWiFiHost::isOnNetworkExcludeList(string ipAddress) {
+	return isOnNetworkList(ipAddress, _hostAdvSettings.networkExcludeList);
+}
+
+bool EmotiBitWiFiHost::isOnNetworkIncludeList(string ipAddress) {
+	return isOnNetworkList(ipAddress, _hostAdvSettings.networkIncludeList);
+}
+
 void EmotiBitWiFiHost::getAvailableNetworks() {
 	vector<string> ips;
 	auto currentavailableNetworks = availableNetworks;
@@ -65,9 +98,11 @@ void EmotiBitWiFiHost::getAvailableNetworks() {
 		{
 			vector<string> ipSplit = ofSplitString(ips.at(network), ".");
 			string tempNetwork = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2);
-				if (ofFind(availableNetworks, tempNetwork) == availableNetworks.size()) {
+			if (ofFind(availableNetworks, tempNetwork) == availableNetworks.size()
+				&& isOnNetworkIncludeList(tempNetwork) 
+				&& !isOnNetworkExcludeList(tempNetwork)) {
 					availableNetworks.push_back(tempNetwork);
-				}
+			}
 		}
 	}
 	if (availableNetworks.size() != currentavailableNetworks.size()) { //print all Networks whenever new Networks are detected
@@ -83,18 +118,18 @@ void EmotiBitWiFiHost::pingAvailableNetworks() {
 	getAvailableNetworks(); // Check if new network appeared after oscilloscope was open (e.g. a mobile hotspot)
 	string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0); 
 	string ip;
-	if (enableBroadcast) { // ToDo: add enableBroadcast case if it's determined to be desirable
-		advertisingCxn.SetEnableBroadcast(true);
-	}
+
 	if (emotibitNetworks.size() == 0) { //initial search through all Networks
 		for (int network = 0; network < availableNetworks.size(); network++) {
-			if (enableBroadcast) { 
+			if (_hostAdvSettings.enableBroadcast) {
+				advertisingCxn.SetEnableBroadcast(true);
 				ip = availableNetworks.at(network) + "." + ofToString(255);
 				advertisingCxn.Connect(ip.c_str(), advertisingPort);
 				advertisingCxn.Send(packet.c_str(), packet.length());
 			}
 			else {
-				for (int hostId = 1; hostId < 255; hostId++) {
+				advertisingCxn.SetEnableBroadcast(false);
+				for (int hostId = _hostAdvSettings.unicastIpRange.first; hostId < _hostAdvSettings.unicastIpRange.second; hostId++) {
 					ip = availableNetworks.at(network) + "." + ofToString(hostId);
 					advertisingCxn.Connect(ip.c_str(), advertisingPort);
 					advertisingCxn.Send(packet.c_str(), packet.length());
@@ -103,13 +138,15 @@ void EmotiBitWiFiHost::pingAvailableNetworks() {
 		}
 	} 
 	else { // Once an EmotiBit is found, advertising is directed at that network to avoid network spam
-		if (enableBroadcast) {
+		if (_hostAdvSettings.enableBroadcast) {
+			advertisingCxn.SetEnableBroadcast(true);
 			ip = emotibitNetworks.at(0) + "." + ofToString(255);
 			advertisingCxn.Connect(ip.c_str(), advertisingPort);
 			advertisingCxn.Send(packet.c_str(), packet.length());
 		}
 		else {
-			for (int hostId = 1; hostId < 255; hostId++) {
+			advertisingCxn.SetEnableBroadcast(false);
+			for (int hostId = _hostAdvSettings.unicastIpRange.first; hostId < _hostAdvSettings.unicastIpRange.second; hostId++) {
 				ip = emotibitNetworks.at(0) + "." + ofToString(hostId);
 				advertisingCxn.Connect(ip.c_str(), advertisingPort);
 				advertisingCxn.Send(packet.c_str(), packet.length());

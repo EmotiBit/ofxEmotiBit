@@ -32,6 +32,16 @@ class EmotiBitWiFiHost
 {
 public:
 
+	struct HostAdvertisingSettings {
+		bool enableBroadcast = true;
+		bool enableBroadcast = false;
+
+		pair<int, int> unicastIpRange = { 0, 255 };
+
+		vector<string> networkIncludeList = { "*.*.*.*" };
+		vector<string> networkExcludeList;
+	} _hostAdvSettings;
+
 	static const uint8_t SUCCESS = 0;
 	static const uint8_t FAIL = -1;
 
@@ -105,6 +115,9 @@ public:
 	//string createPacket(string typeTag, vector<string> data, uint8_t protocolVersion = 1, uint8_t dataReliability = 100);
 	bool isConnected();
 	int8_t _startDataCxn(uint16_t dataPort);
+	bool isOnNetworkIncludeList(string ipAddress);
+	bool isOnNetworkExcludeList(string ipAddress);
+	bool isOnNetworkList(string ipAddress, vector<string> networkList);
 
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 };
