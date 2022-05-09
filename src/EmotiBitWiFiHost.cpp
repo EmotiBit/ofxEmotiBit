@@ -50,11 +50,11 @@ int8_t EmotiBitWiFiHost::begin()
 bool EmotiBitWiFiHost::isOnNetworkList(string ipAddress, vector<string> networkList) {
 	bool out = false;
 	vector<string> ipSplit = ofSplitString(ipAddress, ".");
-	for (string inclIp : networkList) {
-		vector<string> inclIpSplit = ofSplitString(inclIp, ".");
+	for (string listIp : networkList) {
+		vector<string> listIpSplit = ofSplitString(listIp, ".");
 		bool partMatch = true;
-		for (uint8_t n = 0; n < size(ipSplit) && n < size(inclIpSplit); n++) {
-			if (inclIpSplit.at(n).compare("*") == 0 || inclIpSplit.at(n).compare(ipSplit.at(n)) == 0) {
+		for (uint8_t n = 0; n < size(ipSplit) && n < size(listIpSplit); n++) {
+			if (listIpSplit.at(n).compare("*") == 0 || listIpSplit.at(n).compare(ipSplit.at(n)) == 0) {
 				// partial match
 			}
 			else {
@@ -68,7 +68,6 @@ bool EmotiBitWiFiHost::isOnNetworkList(string ipAddress, vector<string> networkL
 			break;
 		}
 	}
-
 	return out;
 }
 
@@ -99,8 +98,8 @@ void EmotiBitWiFiHost::getAvailableNetworks() {
 			vector<string> ipSplit = ofSplitString(ips.at(network), ".");
 			string tempNetwork = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2);
 			if (ofFind(availableNetworks, tempNetwork) == availableNetworks.size()
-				&& isOnNetworkIncludeList(tempNetwork) 
-				&& !isOnNetworkExcludeList(tempNetwork)) {
+				&& isOnNetworkIncludeList(tempNetwork + ".*") 
+				&& !isOnNetworkExcludeList(tempNetwork + ".*")) {
 					availableNetworks.push_back(tempNetwork);
 			}
 		}
