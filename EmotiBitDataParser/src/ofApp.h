@@ -141,6 +141,20 @@ public:
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void startProcessing(bool & processing);
+
+	/*!
+			@brief returns the index of the shortest roundtrip
+			@param rtIndexes vector<pair<roundtripTime, index>>
+			@return index of shortest roundtrip
+	*/
+	int ofApp::getShortestRtIndex(vector<pair<int, int>> rtIndexes);
+
+	/*!
+		@brief returns the best 2 available TimestampData points for timesync map
+		@param vector of all TimestampData
+		@return pair<earlier, later> TimestampData points
+	*/
+	pair<ofApp::TimestampData, ofApp::TimestampData> getBestTimestampIndexes(const vector<TimestampData> &timestampData);
 	TimeSyncMap calculateTimeSyncMap(vector<TimestampData> &timestampData);
 	std::time_t getEpochTime(const std::wstring& dateTime);
 	double GetMedian(double daArray[], int iSize);
