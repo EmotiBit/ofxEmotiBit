@@ -1773,13 +1773,13 @@ void ofApp::saveEmotiBitCommSettings(string settingsFilePath, bool absolute, boo
 		int numIncludes = settings.networkIncludeList.size();
 		for (int i = 0; i < numIncludes; i++)
 		{
-			jsonSettings["network"]["includeList"][i] = settings.networkIncludeList.at(i);
+			jsonSettings["wifi"]["network"]["includeList"][i] = settings.networkIncludeList.at(i);
 		}
 
 		int numExcludes = settings.networkExcludeList.size();
 		for (int i = 0; i < numExcludes; i++)
 		{
-			jsonSettings["network"]["excludeList"][i] = settings.networkExcludeList.at(i);
+			jsonSettings["wifi"]["network"]["excludeList"][i] = settings.networkExcludeList.at(i);
 		}
 
 		jsonSettings.save(ofToDataPath(settingsFilePath, absolute), pretty);
@@ -1808,18 +1808,18 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 			jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMax"].asInt()
 		);
 
-		int numIncludes = jsonSettings["network"]["includeList"].size();
+		int numIncludes = jsonSettings["wifi"]["network"]["includeList"].size();
 		settings.networkIncludeList.clear();
 		for (int i = 0; i < numIncludes; i++)
 		{
-			settings.networkIncludeList.push_back(jsonSettings["network"]["includeList"][i].asString());
+			settings.networkIncludeList.push_back(jsonSettings["wifi"]["network"]["includeList"][i].asString());
 		}
 
-		int numExcludes = jsonSettings["network"]["excludeList"].size();
+		int numExcludes = jsonSettings["wifi"]["network"]["excludeList"].size();
 		settings.networkExcludeList.clear();
 		for (int i = 0; i < numIncludes; i++)
 		{
-			settings.networkExcludeList.push_back(jsonSettings["network"]["excludeList"][i].asString());
+			settings.networkExcludeList.push_back(jsonSettings["wifi"]["network"]["excludeList"][i].asString());
 		}
 
 		emotiBitWiFi.setHostAdvertisingSettings(settings);
