@@ -1765,10 +1765,10 @@ void ofApp::saveEmotiBitCommSettings(string settingsFilePath, bool absolute, boo
 		EmotiBitWiFiHost::HostAdvertisingSettings settings = emotiBitWiFi.getHostAdvertisingSettings();
 		ofxJSONElement jsonSettings;
 
-		jsonSettings["advertising"]["transmission"]["broadcast"]["enabled"] = settings.enableBroadcast;
-		jsonSettings["advertising"]["transmission"]["unicast"]["enabled"] = settings.enableUnicast;
-		jsonSettings["advertising"]["transmission"]["unicast"]["ipMin"] = settings.unicastIpRange.first;
-		jsonSettings["advertising"]["transmission"]["unicast"]["ipMax"] = settings.unicastIpRange.second;
+		jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"] = settings.enableBroadcast;
+		jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["enabled"] = settings.enableUnicast;
+		jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMin"] = settings.unicastIpRange.first;
+		jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMax"] = settings.unicastIpRange.second;
 
 		int numIncludes = settings.networkIncludeList.size();
 		for (int i = 0; i < numIncludes; i++)
@@ -1801,11 +1801,11 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 		EmotiBitWiFiHost::HostAdvertisingSettings settings;
 		jsonSettings.open(ofToDataPath(settingsFilePath, absolute));
 
-		settings.enableBroadcast = jsonSettings["advertising"]["transmission"]["broadcast"]["enabled"].asBool();
-		settings.enableUnicast = jsonSettings["advertising"]["transmission"]["unicast"]["enabled"].asBool();
+		settings.enableBroadcast = jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"].asBool();
+		settings.enableUnicast = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["enabled"].asBool();
 		settings.unicastIpRange = make_pair(
-			jsonSettings["advertising"]["transmission"]["unicast"]["ipMin"].asInt(),
-			jsonSettings["advertising"]["transmission"]["unicast"]["ipMax"].asInt()
+			jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMin"].asInt(),
+			jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMax"].asInt()
 		);
 
 		int numIncludes = jsonSettings["network"]["includeList"].size();
@@ -1830,40 +1830,4 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 	{
 		ofLog(OF_LOG_ERROR, "ERROR: Failed to load " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
 	}
-	
-	//ofxXmlSettings xmlSettings;
-	//// ToDo: if !exists return
-	//xmlSettings.load(ofToDataPath(settingsFilePath));
-
-	//EmotiBitWiFiHost::HostAdvertisingSettings settings;
-
-	//xmlSettings.pushTag("transmissionOptions");
-	//xmlSettings.pushTag("broadcast");
-	//settings.enableBroadcast = xmlSettings.getValue("enabled", false);
-	//xmlSettings.popTag();
-
-	//xmlSettings.pushTag("unicast");
-	//settings.enableUnicast = xmlSettings.getValue("enabled", true);
-	//settings.unicastIpRange = make_pair(xmlSettings.getValue("ipMin", 1), xmlSettings.getValue("ipMax", 254));
-	//xmlSettings.popTag();
-
-	//xmlSettings.pushTag("network");
-	//xmlSettings.pushTag("includeList");
-	//int numIncludes = xmlSettings.getNumTags("item");
-	//for (int i = 0; i < numIncludes; i++)
-	//{
-	//	settings.networkIncludeList.push_back(xmlSettings.getValue("item", ""));
-	//}
-	//xmlSettings.popTag();
-
-	//xmlSettings.pushTag("network");
-	//xmlSettings.pushTag("includeList");
-	//int numIncludes = xmlSettings.getNumTags("item");
-	//for (int i = 0; i < numIncludes; i++)
-	//{
-	//	settings.networkIncludeList.push_back(xmlSettings.getValue("item", ""));
-	//}
-	//xmlSettings.popTag();
-	//xmlSettings.popTag();
-
 }
