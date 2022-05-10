@@ -45,9 +45,10 @@
 */*/Release
 *.aps
 
-# EmotiBit SPecific
+# EmotiBit Specific
 *version.txt
 *dataLog.txt
 *Results.txt
 */bin
+*/emotibitCommSettings.json
 EmotiBitIcons/otherFormats
