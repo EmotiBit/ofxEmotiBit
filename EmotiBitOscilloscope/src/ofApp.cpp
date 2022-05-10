@@ -1753,3 +1753,27 @@ void ofApp::drawOscilloscopes()
 
 
 }
+
+void loadEmotiBitCommSettings(string settingsFilePath)
+{
+	
+	ofxXmlSettings xmlSettings;
+	// ToDo: if !exists return
+	xmlSettings.load(ofToDataPath(settingsFilePath));
+
+	xmlSettings.pushTag("transmissionOptions");
+	xmlSettings.pushTag("broadcast");
+	bool broadcast = xmlSettings.getValue("enabled", false);
+	xmlSettings.popTag();
+	xmlSettings.pushTag("unicast");
+	bool unicast = xmlSettings.getValue("enabled", true);
+	int unicastIpMin = xmlSettings.getValue("ipMin", 1);
+	int unicastIpMax = xmlSettings.getValue("ipMax", 254);
+	xmlSettings.popTag();
+
+	xmlSettings.pushTag("network");
+	xmlSettings.pushTag("includeList");
+	int numIncludes = xmlSettings.getNumTags("item");
+
+
+}

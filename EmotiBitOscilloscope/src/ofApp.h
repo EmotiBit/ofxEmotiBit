@@ -75,6 +75,8 @@ public:
 	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updateTypeTagList();
 	void checkLatestSwVersion();
+	void loadEmotiBitCommSettings(string settingsFilePath = "EmotiBitCommSettings.xml", bool absolutePath = false);
+
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
 	//int newPoints;

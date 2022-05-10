@@ -47,7 +47,7 @@ int8_t EmotiBitWiFiHost::begin()
 	return SUCCESS;
 }
 
-bool EmotiBitWiFiHost::isOnNetworkList(string ipAddress, vector<string> networkList) {
+bool EmotiBitWiFiHost::isInNetworkList(string ipAddress, vector<string> networkList) {
 	bool out = false;
 	vector<string> ipSplit = ofSplitString(ipAddress, ".");
 	for (string listIp : networkList) {
@@ -71,12 +71,12 @@ bool EmotiBitWiFiHost::isOnNetworkList(string ipAddress, vector<string> networkL
 	return out;
 }
 
-bool EmotiBitWiFiHost::isOnNetworkExcludeList(string ipAddress) {
-	return isOnNetworkList(ipAddress, _hostAdvSettings.networkExcludeList);
+bool EmotiBitWiFiHost::isInNetworkExcludeList(string ipAddress) {
+	return isInNetworkList(ipAddress, _hostAdvSettings.networkExcludeList);
 }
 
-bool EmotiBitWiFiHost::isOnNetworkIncludeList(string ipAddress) {
-	return isOnNetworkList(ipAddress, _hostAdvSettings.networkIncludeList);
+bool EmotiBitWiFiHost::isInNetworkIncludeList(string ipAddress) {
+	return isInNetworkList(ipAddress, _hostAdvSettings.networkIncludeList);
 }
 
 void EmotiBitWiFiHost::getAvailableNetworks() {
@@ -98,8 +98,8 @@ void EmotiBitWiFiHost::getAvailableNetworks() {
 			vector<string> ipSplit = ofSplitString(ips.at(network), ".");
 			string tempNetwork = ipSplit.at(0) + "." + ipSplit.at(1) + "." + ipSplit.at(2);
 			if (ofFind(availableNetworks, tempNetwork) == availableNetworks.size()
-				&& isOnNetworkIncludeList(tempNetwork + ".*") 
-				&& !isOnNetworkExcludeList(tempNetwork + ".*")) {
+				&& isInNetworkIncludeList(tempNetwork) 
+				&& !isInNetworkExcludeList(tempNetwork)) {
 					availableNetworks.push_back(tempNetwork);
 			}
 		}
@@ -769,4 +769,17 @@ vector<string> EmotiBitWiFiHost::getLocalIPs()
 bool EmotiBitWiFiHost::isConnected()
 {
 	return _isConnected;
+}
+
+
+void EmotiBitWiFiHost::setAdvertTransOptions(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange) {
+	_hostAdvSettings.enableBroadcast = enableBroadcast;
+	_hostAdvSettings.enableUnicast = enableUnicast;
+	_hostAdvSettings.unicastIpRange = unicastIpRange;
+}
+void EmotiBitWiFiHost::setNetworkIncludeList(vector<string> networkIncludeList) {
+	_hostAdvSettings.networkIncludeList = networkIncludeList;
+}
+void EmotiBitWiFiHost::setNetworkIncludeList(vector<string> networkExcludeList) {
+	_hostAdvSettings.networkExcludeList = networkExcludeList;
 }

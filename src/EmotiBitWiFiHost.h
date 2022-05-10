@@ -34,9 +34,9 @@ public:
 
 	struct HostAdvertisingSettings {
 		bool enableBroadcast = true;
-		bool enableBroadcast = false;
+		bool enableUnicast = false;
 
-		pair<int, int> unicastIpRange = { 0, 255 };
+		pair<int, int> unicastIpRange = { 2, 254 };
 
 		vector<string> networkIncludeList = { "*.*.*.*" };
 		vector<string> networkExcludeList;
@@ -115,9 +115,13 @@ public:
 	//string createPacket(string typeTag, vector<string> data, uint8_t protocolVersion = 1, uint8_t dataReliability = 100);
 	bool isConnected();
 	int8_t _startDataCxn(uint16_t dataPort);
-	bool isOnNetworkIncludeList(string ipAddress);
-	bool isOnNetworkExcludeList(string ipAddress);
-	bool isOnNetworkList(string ipAddress, vector<string> networkList);
+	bool isInNetworkIncludeList(string ipAddress);
+	bool isInNetworkExcludeList(string ipAddress);
+	bool isInNetworkList(string ipAddress, vector<string> networkList);
+
+	void setAdvertTransOptions(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange);
+	void setNetworkIncludeList(vector<string> networkIncludeList);
+	void setNetworkIncludeList(vector<string> networkExcludeList);
 
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 };
