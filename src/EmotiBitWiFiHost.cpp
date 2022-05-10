@@ -56,6 +56,7 @@ bool EmotiBitWiFiHost::isInNetworkList(string ipAddress, vector<string> networkL
 		for (uint8_t n = 0; n < size(ipSplit) && n < size(listIpSplit); n++) {
 			if (listIpSplit.at(n).compare("*") == 0 || listIpSplit.at(n).compare(ipSplit.at(n)) == 0) {
 				// partial match
+				bool breakpoint = true;
 			}
 			else {
 				partMatch = false;
@@ -72,12 +73,17 @@ bool EmotiBitWiFiHost::isInNetworkList(string ipAddress, vector<string> networkL
 }
 
 bool EmotiBitWiFiHost::isInNetworkExcludeList(string ipAddress) {
-	return isInNetworkList(ipAddress, _hostAdvSettings.networkExcludeList);
+	bool out = isInNetworkList(ipAddress, _hostAdvSettings.networkExcludeList);
+	//cout << "Exclude " << ipAddress << ".* : " << out << endl;
+	return out;
 }
 
 bool EmotiBitWiFiHost::isInNetworkIncludeList(string ipAddress) {
-	return isInNetworkList(ipAddress, _hostAdvSettings.networkIncludeList);
+	bool out =  isInNetworkList(ipAddress, _hostAdvSettings.networkIncludeList);
+	//cout << "Include " << ipAddress << ".* : " << out << endl;
+	return out;
 }
+
 
 void EmotiBitWiFiHost::getAvailableNetworks() {
 	vector<string> ips;
@@ -772,14 +778,26 @@ bool EmotiBitWiFiHost::isConnected()
 }
 
 
-void EmotiBitWiFiHost::setAdvertTransOptions(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange) {
+void EmotiBitWiFiHost::setAdvertTransSettings(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange) {
 	_hostAdvSettings.enableBroadcast = enableBroadcast;
 	_hostAdvSettings.enableUnicast = enableUnicast;
 	_hostAdvSettings.unicastIpRange = unicastIpRange;
 }
+
 void EmotiBitWiFiHost::setNetworkIncludeList(vector<string> networkIncludeList) {
 	_hostAdvSettings.networkIncludeList = networkIncludeList;
 }
-void EmotiBitWiFiHost::setNetworkIncludeList(vector<string> networkExcludeList) {
+
+void EmotiBitWiFiHost::setNetworkExcludeList(vector<string> networkExcludeList) {
 	_hostAdvSettings.networkExcludeList = networkExcludeList;
+}
+
+void EmotiBitWiFiHost::setHostAdvertisingSettings(HostAdvertisingSettings settings)
+{
+	_hostAdvSettings = settings;
+}
+
+EmotiBitWiFiHost::HostAdvertisingSettings EmotiBitWiFiHost::getHostAdvertisingSettings()
+{
+	return _hostAdvSettings;
 }

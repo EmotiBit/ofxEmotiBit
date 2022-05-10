@@ -16,6 +16,7 @@
 #include "ofxOsc.h"
 #include "patchboard.h"
 #include "Periodizer.h"
+#include "ofxJSON.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -75,7 +76,8 @@ public:
 	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updateTypeTagList();
 	void checkLatestSwVersion();
-	void loadEmotiBitCommSettings(string settingsFilePath = "EmotiBitCommSettings.xml", bool absolutePath = false);
+	void loadEmotiBitCommSettings(string settingsFilePath = "EmotiBitCommSettings.json", bool absolutePath = false);
+	void saveEmotiBitCommSettings(string settingsFilePath = "EmotiBitCommSettings.json", bool absolutePath = false, bool pretty = true);
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;

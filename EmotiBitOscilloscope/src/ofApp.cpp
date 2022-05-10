@@ -11,6 +11,8 @@ void ofApp::setup() {
 	ofSetLogLevel(OF_LOG_NOTICE);
 	writeOfxEmotiBitVersionFile();
 	setTypeTagPlotAttributes();
+	//saveEmotiBitCommSettings();
+	loadEmotiBitCommSettings();
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
 	timeWindowOnSetup = 10;  // set timeWindow for setup (in seconds)
 	setupGui();
@@ -1754,26 +1756,114 @@ void ofApp::drawOscilloscopes()
 
 }
 
-void loadEmotiBitCommSettings(string settingsFilePath)
+void ofApp::saveEmotiBitCommSettings(string settingsFilePath, bool absolute, bool pretty)
 {
+	// ToDo: find a nice home like EmotiBitFileIO.h/cpp
+
+	try
+	{
+		EmotiBitWiFiHost::HostAdvertisingSettings settings = emotiBitWiFi.getHostAdvertisingSettings();
+		ofxJSONElement jsonSettings;
+
+		jsonSettings["advertising"]["transmission"]["broadcast"]["enabled"] = settings.enableBroadcast;
+		jsonSettings["advertising"]["transmission"]["unicast"]["enabled"] = settings.enableUnicast;
+		jsonSettings["advertising"]["transmission"]["unicast"]["ipMin"] = settings.unicastIpRange.first;
+		jsonSettings["advertising"]["transmission"]["unicast"]["ipMax"] = settings.unicastIpRange.second;
+
+		int numIncludes = settings.networkIncludeList.size();
+		for (int i = 0; i < numIncludes; i++)
+		{
+			jsonSettings["network"]["includeList"][i] = settings.networkIncludeList.at(i);
+		}
+
+		int numExcludes = settings.networkExcludeList.size();
+		for (int i = 0; i < numExcludes; i++)
+		{
+			jsonSettings["network"]["excludeList"][i] = settings.networkExcludeList.at(i);
+		}
+
+		jsonSettings.save(ofToDataPath(settingsFilePath, absolute), pretty);
+		ofLog(OF_LOG_NOTICE, "Saving " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
+	}
+	catch (exception e)
+	{
+		ofLog(OF_LOG_ERROR, "ERROR: Failed to save " + settingsFilePath);
+	}
+}
+
+
+void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
+{
+	ofxJSONElement jsonSettings;
+	try
+	{
+		// ToDo find a nice home like EmotiBitFileIO.h/cpp
+		EmotiBitWiFiHost::HostAdvertisingSettings settings;
+		jsonSettings.open(ofToDataPath(settingsFilePath, absolute));
+
+		settings.enableBroadcast = jsonSettings["advertising"]["transmission"]["broadcast"]["enabled"].asBool();
+		settings.enableUnicast = jsonSettings["advertising"]["transmission"]["unicast"]["enabled"].asBool();
+		settings.unicastIpRange = make_pair(
+			jsonSettings["advertising"]["transmission"]["unicast"]["ipMin"].asInt(),
+			jsonSettings["advertising"]["transmission"]["unicast"]["ipMax"].asInt()
+		);
+
+		int numIncludes = jsonSettings["network"]["includeList"].size();
+		settings.networkIncludeList.clear();
+		for (int i = 0; i < numIncludes; i++)
+		{
+			settings.networkIncludeList.push_back(jsonSettings["network"]["includeList"][i].asString());
+		}
+
+		int numExcludes = jsonSettings["network"]["excludeList"].size();
+		settings.networkExcludeList.clear();
+		for (int i = 0; i < numIncludes; i++)
+		{
+			settings.networkExcludeList.push_back(jsonSettings["network"]["excludeList"][i].asString());
+		}
+
+		emotiBitWiFi.setHostAdvertisingSettings(settings);
+
+		ofLog(OF_LOG_NOTICE, "Loaded " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
+	}
+	catch (exception e)
+	{
+		ofLog(OF_LOG_ERROR, "ERROR: Failed to load " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
+	}
 	
-	ofxXmlSettings xmlSettings;
-	// ToDo: if !exists return
-	xmlSettings.load(ofToDataPath(settingsFilePath));
+	//ofxXmlSettings xmlSettings;
+	//// ToDo: if !exists return
+	//xmlSettings.load(ofToDataPath(settingsFilePath));
 
-	xmlSettings.pushTag("transmissionOptions");
-	xmlSettings.pushTag("broadcast");
-	bool broadcast = xmlSettings.getValue("enabled", false);
-	xmlSettings.popTag();
-	xmlSettings.pushTag("unicast");
-	bool unicast = xmlSettings.getValue("enabled", true);
-	int unicastIpMin = xmlSettings.getValue("ipMin", 1);
-	int unicastIpMax = xmlSettings.getValue("ipMax", 254);
-	xmlSettings.popTag();
+	//EmotiBitWiFiHost::HostAdvertisingSettings settings;
 
-	xmlSettings.pushTag("network");
-	xmlSettings.pushTag("includeList");
-	int numIncludes = xmlSettings.getNumTags("item");
+	//xmlSettings.pushTag("transmissionOptions");
+	//xmlSettings.pushTag("broadcast");
+	//settings.enableBroadcast = xmlSettings.getValue("enabled", false);
+	//xmlSettings.popTag();
 
+	//xmlSettings.pushTag("unicast");
+	//settings.enableUnicast = xmlSettings.getValue("enabled", true);
+	//settings.unicastIpRange = make_pair(xmlSettings.getValue("ipMin", 1), xmlSettings.getValue("ipMax", 254));
+	//xmlSettings.popTag();
+
+	//xmlSettings.pushTag("network");
+	//xmlSettings.pushTag("includeList");
+	//int numIncludes = xmlSettings.getNumTags("item");
+	//for (int i = 0; i < numIncludes; i++)
+	//{
+	//	settings.networkIncludeList.push_back(xmlSettings.getValue("item", ""));
+	//}
+	//xmlSettings.popTag();
+
+	//xmlSettings.pushTag("network");
+	//xmlSettings.pushTag("includeList");
+	//int numIncludes = xmlSettings.getNumTags("item");
+	//for (int i = 0; i < numIncludes; i++)
+	//{
+	//	settings.networkIncludeList.push_back(xmlSettings.getValue("item", ""));
+	//}
+	//xmlSettings.popTag();
+	//xmlSettings.popTag();
 
 }

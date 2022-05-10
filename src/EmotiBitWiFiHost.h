@@ -39,7 +39,7 @@ public:
 		pair<int, int> unicastIpRange = { 2, 254 };
 
 		vector<string> networkIncludeList = { "*.*.*.*" };
-		vector<string> networkExcludeList;
+		vector<string> networkExcludeList = { "" };
 	} _hostAdvSettings;
 
 	static const uint8_t SUCCESS = 0;
@@ -119,9 +119,11 @@ public:
 	bool isInNetworkExcludeList(string ipAddress);
 	bool isInNetworkList(string ipAddress, vector<string> networkList);
 
-	void setAdvertTransOptions(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange);
+	void setAdvertTransSettings(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange);
 	void setNetworkIncludeList(vector<string> networkIncludeList);
-	void setNetworkIncludeList(vector<string> networkExcludeList);
+	void setNetworkExcludeList(vector<string> networkExcludeList);
+	void setHostAdvertisingSettings(HostAdvertisingSettings settings);
+	HostAdvertisingSettings getHostAdvertisingSettings();
 
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 };
