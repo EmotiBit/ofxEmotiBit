@@ -13,6 +13,7 @@ int main(int argc, char *argv[]){
 	ofApp *app = new ofApp();
 	if (argc != 1) {
 		app->argFileName = argv[1];
+		app->cmdLineStart = true;
 	}
 	ofRunApp(app);
 

@@ -15,6 +15,7 @@ public:
 
 	string argFileName;
 	string stringData;
+	bool cmdLineStart = false;
 
 	ofTrueTypeFont legendFont;
 	ofTrueTypeFont subLegendFont;
@@ -107,6 +108,14 @@ public:
 		long double c0 = 0;
 		long double c1 = 1;
 	} timeSyncMap;
+
+	std::string timesyncsWarning = "WARNING: Data file was parsed with less than 2 time-sync events, which can reduce the timestamp accuracy.\n"
+		"\nEmotiBit periodically generates time-sync events while a connection is established with the EmotiBit Oscilloscope software.\n"
+		"At a minimum, it's recommended to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
+		"for at least one minute after starting data recording AND re-establish connection with EmotiBit Oscilloscope\n"
+		"software (using the same computer on which recording was started) for at least one minute before stopping data recording.\n"
+		"\nTo further improve timestamp accuracy, it's optimal to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
+		"throughout recording to generate many time-sync events in the data file.\n";
 
 	struct RecordedDataTimeRange {
 		long double emotibitStartTime = INT_MAX;

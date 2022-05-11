@@ -220,7 +220,7 @@ void ofApp::update() {
 					if (allTimestampData.size() < 2)
 					{
 						ofLogNotice() << ofToString(allTimestampData.size()) + " Timesyncs Found";
-						ofLog(OF_LOG_NOTICE, "Follow instructions on screen to improve data recording processes");
+						ofLog(OF_LOG_NOTICE, timesyncsWarning);
 						currentState = State::WARNING_INSUFFICIENT_TIMESYNCS;
 					}
 					else
@@ -242,7 +242,14 @@ void ofApp::update() {
 	{
 		guiPanels.at(0).getControl(GUI_PANEL_LOAD_FILE)->setBackgroundColor(ofColor(0, 0, 0));
 		processStatus.setBackgroundColor(ofColor(0, 0, 0));
-		processStatus.getParameter().fromString(GUI_STATUS_IDLE);
+		if (cmdLineStart)
+		{
+			ofExit();
+		}
+		else
+		{
+			processStatus.getParameter().fromString(GUI_STATUS_IDLE);
+		}
 	}
 }
 
@@ -558,14 +565,8 @@ void ofApp::draw() {
 	else if (currentState == State::WARNING_INSUFFICIENT_TIMESYNCS)
 	{
 		ofSetColor(255, 128, 0);
-		std::string instructions = "WARNING: Data file was parsed with less than 2 time-sync events, which can reduce the timestamp accuracy.\n"
-		"\nEmotiBit periodically generates time-sync events while a connection is established with the EmotiBit Oscilloscope software.\n"
-		"At a minimum, it's recommended to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
-		"for at least one minute after starting data recording AND re-establish connection with EmotiBit Oscilloscope\n"
-		"software (using the same computer on which recording was started) for at least one minute before stopping data recording.\n"
-		"\nTo further improve timestamp accuracy, it's optimal to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
-		"throughout recording to generate many time-sync events in the data file.\n";
-		legendFont.drawString(instructions, 10, 100);
+		
+		legendFont.drawString(timesyncsWarning, 10, 100);
 	}
 	if (currentState != State::WARNING_INSUFFICIENT_TIMESYNCS)
 	{
