@@ -132,9 +132,9 @@ void EmotiBitWiFiHost::pingAvailableNetworks() {
 				advertisingCxn.Connect(ip.c_str(), advertisingPort);
 				advertisingCxn.Send(packet.c_str(), packet.length());
 			}
-			else {
+			if (_hostAdvSettings.enableUnicast) {
 				advertisingCxn.SetEnableBroadcast(false);
-				for (int hostId = _hostAdvSettings.unicastIpRange.first; hostId < _hostAdvSettings.unicastIpRange.second; hostId++) {
+				for (int hostId = _hostAdvSettings.unicastIpRange.first; hostId <= _hostAdvSettings.unicastIpRange.second; hostId++) {
 					ip = availableNetworks.at(network) + "." + ofToString(hostId);
 					advertisingCxn.Connect(ip.c_str(), advertisingPort);
 					advertisingCxn.Send(packet.c_str(), packet.length());
@@ -149,9 +149,9 @@ void EmotiBitWiFiHost::pingAvailableNetworks() {
 			advertisingCxn.Connect(ip.c_str(), advertisingPort);
 			advertisingCxn.Send(packet.c_str(), packet.length());
 		}
-		else {
+		if (_hostAdvSettings.enableUnicast) {
 			advertisingCxn.SetEnableBroadcast(false);
-			for (int hostId = _hostAdvSettings.unicastIpRange.first; hostId < _hostAdvSettings.unicastIpRange.second; hostId++) {
+			for (int hostId = _hostAdvSettings.unicastIpRange.first; hostId <= _hostAdvSettings.unicastIpRange.second; hostId++) {
 				ip = emotibitNetworks.at(0) + "." + ofToString(hostId);
 				advertisingCxn.Connect(ip.c_str(), advertisingPort);
 				advertisingCxn.Send(packet.c_str(), packet.length());
