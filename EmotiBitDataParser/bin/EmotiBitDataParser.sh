@@ -27,7 +27,7 @@ echo "[-d] dataDir: $dataDir";
 currDir=$(pwd);
 echo -e "\npwd: $currDir"
 
-for file in $(eval "ls *.csv")
+for file in $(eval "ls $dataDir/*.csv")
 do
 	echo -e "\nprocessing: $file"
 	subDirName=$(basename $file .csv)
