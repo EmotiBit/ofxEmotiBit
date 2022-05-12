@@ -27,7 +27,9 @@ echo "[-d] dataDir: $dataDir";
 currDir=$(pwd);
 echo -e "\npwd: $currDir"
 
-for file in $(eval "ls $dataDir/*.csv")
+cd "$dataDir"
+
+for file in $(eval "ls *.csv")
 do
 	echo -e "\nprocessing: $file"
 	subDirName=$(basename $file .csv)
@@ -35,9 +37,11 @@ do
 	mkdir $subDirName
   mv $file $subDirName
 	mv "$subDirName"_info.json $subDirName
+	cd "$currDir" #cd to currDir before cmd Prevents ofDirectory errors
 	cmd="\"$exePath\" \"$dataDir/$subDirName/$subDirName.csv\""
 	echo "cmd: $cmd"
 	eval $cmd
+	cd "$dataDir"
 done
 
 cd "$currDir"
