@@ -129,7 +129,7 @@ void ofApp::checkLatestSwVersion()
 			ofxJSONElement jsonResponse;
 			if (jsonResponse.parse(response))
 			{
-				ofLog(OF_LOG_NOTICE, jsonResponse.getRawString(true));
+				//ofLog(OF_LOG_NOTICE, jsonResponse.getRawString(true));  // uncomment to print curl output
 				std::string latestAvailableVersion = jsonResponse["tag_name"].asString();
 				ofLogNotice("Latest version") << latestAvailableVersion;
 				int swVerPrefixLoc = latestAvailableVersion.find(SOFTWARE_VERSION_PREFIX);
