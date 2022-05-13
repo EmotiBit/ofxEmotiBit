@@ -61,8 +61,9 @@ void ofApp::checkLatestSwVersion()
 {
 	bool newVersionAvailable = false;
 	// system call to curl
-	std::string latestReleaseUrl = "https://api.github.com/repos/EmotiBit/ofxEmotiBit/releases/latest";
-	std::string command = "curl " + latestReleaseUrl;
+	std::string latestReleaseUrl = "https://github.com/EmotiBit/ofxEmotiBit/releases/latest";
+	std::string latestReleaseApiRequest = "https://api.github.com/repos/EmotiBit/ofxEmotiBit/releases/latest";
+	std::string command = "curl " + latestReleaseApiRequest;
 	std::string response = "";
 	char buffer[200];
 	bool exceptionOccured = false;

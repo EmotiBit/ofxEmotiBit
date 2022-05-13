@@ -1,7 +1,7 @@
 #pragma once
 //#include <string>
 #include "ofMain.h"
-const std::string ofxEmotiBitVersion = "1.4.4.fix-SwVersionChecker-2";
+const std::string ofxEmotiBitVersion = "1.4.4.fix-SwVersionChecker-3";
 static const char SOFTWARE_VERSION_PREFIX = 'v';
 static void writeOfxEmotiBitVersionFile() {
 	string filename = "ofxEmotiBit_Version.txt";
