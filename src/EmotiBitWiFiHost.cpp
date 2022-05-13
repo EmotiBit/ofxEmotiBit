@@ -53,7 +53,7 @@ bool EmotiBitWiFiHost::isInNetworkList(string ipAddress, vector<string> networkL
 	for (string listIp : networkList) {
 		vector<string> listIpSplit = ofSplitString(listIp, ".");
 		bool partMatch = true;
-		for (uint8_t n = 0; n < size(ipSplit) && n < size(listIpSplit); n++) {
+		for (uint8_t n = 0; n < ipSplit.size() && n < listIpSplit.size(); n++) {
 			if (listIpSplit.at(n).compare("*") == 0 || listIpSplit.at(n).compare(ipSplit.at(n)) == 0) {
 				// partial match
 				bool breakpoint = true;
