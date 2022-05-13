@@ -11,6 +11,8 @@ void ofApp::setup() {
 	ofSetLogLevel(OF_LOG_NOTICE);
 	writeOfxEmotiBitVersionFile();
 	setTypeTagPlotAttributes();
+	//saveEmotiBitCommSettings();
+	loadEmotiBitCommSettings();
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
 	timeWindowOnSetup = 10;  // set timeWindow for setup (in seconds)
 	setupGui();
@@ -1752,4 +1754,80 @@ void ofApp::drawOscilloscopes()
 	ofPopMatrix();
 
 
+}
+
+void ofApp::saveEmotiBitCommSettings(string settingsFilePath, bool absolute, bool pretty)
+{
+	// ToDo: find a nice home like EmotiBitFileIO.h/cpp
+
+	try
+	{
+		EmotiBitWiFiHost::HostAdvertisingSettings settings = emotiBitWiFi.getHostAdvertisingSettings();
+		ofxJSONElement jsonSettings;
+
+		jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"] = settings.enableBroadcast;
+		jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["enabled"] = settings.enableUnicast;
+		jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMin"] = settings.unicastIpRange.first;
+		jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMax"] = settings.unicastIpRange.second;
+
+		int numIncludes = settings.networkIncludeList.size();
+		for (int i = 0; i < numIncludes; i++)
+		{
+			jsonSettings["wifi"]["network"]["includeList"][i] = settings.networkIncludeList.at(i);
+		}
+
+		int numExcludes = settings.networkExcludeList.size();
+		for (int i = 0; i < numExcludes; i++)
+		{
+			jsonSettings["wifi"]["network"]["excludeList"][i] = settings.networkExcludeList.at(i);
+		}
+
+		jsonSettings.save(ofToDataPath(settingsFilePath, absolute), pretty);
+		ofLog(OF_LOG_NOTICE, "Saving " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
+	}
+	catch (exception e)
+	{
+		ofLog(OF_LOG_ERROR, "ERROR: Failed to save " + settingsFilePath);
+	}
+}
+
+
+void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
+{
+	ofxJSONElement jsonSettings;
+	try
+	{
+		// ToDo find a nice home like EmotiBitFileIO.h/cpp
+		EmotiBitWiFiHost::HostAdvertisingSettings settings;
+		jsonSettings.open(ofToDataPath(settingsFilePath, absolute));
+
+		settings.enableBroadcast = jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"].asBool();
+		settings.enableUnicast = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["enabled"].asBool();
+		settings.unicastIpRange = make_pair(
+			jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMin"].asInt(),
+			jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMax"].asInt()
+		);
+
+		int numIncludes = jsonSettings["wifi"]["network"]["includeList"].size();
+		settings.networkIncludeList.clear();
+		for (int i = 0; i < numIncludes; i++)
+		{
+			settings.networkIncludeList.push_back(jsonSettings["wifi"]["network"]["includeList"][i].asString());
+		}
+
+		int numExcludes = jsonSettings["wifi"]["network"]["excludeList"].size();
+		settings.networkExcludeList.clear();
+		for (int i = 0; i < numIncludes; i++)
+		{
+			settings.networkExcludeList.push_back(jsonSettings["wifi"]["network"]["excludeList"][i].asString());
+		}
+
+		emotiBitWiFi.setHostAdvertisingSettings(settings);
+
+		ofLog(OF_LOG_NOTICE, "Loaded " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
+	}
+	catch (exception e)
+	{
+		ofLog(OF_LOG_ERROR, "ERROR: Failed to load " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
+	}
 }
