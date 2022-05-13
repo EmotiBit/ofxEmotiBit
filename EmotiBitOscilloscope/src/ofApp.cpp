@@ -122,64 +122,71 @@ void ofApp::checkLatestSwVersion()
 		ofLogError("Failed to open pipe");
 		exceptionOccured = true;
 	}
-
-	if (!exceptionOccured & response != "")
+	try 
 	{
-		ofxJSONElement jsonResponse;
-		if (jsonResponse.parse(response))
+		if (!exceptionOccured & response != "")
 		{
-			ofLog(OF_LOG_NOTICE, jsonResponse.getRawString(true));
-			std::string latestAvailableVersion = jsonResponse["tag_name"].asString();
-			ofLogNotice("Latest version") << latestAvailableVersion;
-			// compare with ofxEmotiBitVersion
-			std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
-			std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
-			int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
-			if (versionLength)
+			ofxJSONElement jsonResponse;
+			if (jsonResponse.parse(response))
 			{
-				for (int i = 0; i < versionLength; i++)
+				ofLog(OF_LOG_NOTICE, jsonResponse.getRawString(true));
+				std::string latestAvailableVersion = jsonResponse["tag_name"].asString();
+				ofLogNotice("Latest version") << latestAvailableVersion;
+				int swVerPrefixLoc = latestAvailableVersion.find(SOFTWARE_VERSION_PREFIX);
+				if (swVerPrefixLoc != std::string::npos)
 				{
-					if (ofToInt(latestVersionSplit.at(i)) > ofToInt(currentVersionSplit.at(i)))
+					latestAvailableVersion.erase(swVerPrefixLoc, 1);  // remove leading version char "v"
+				}
+				// compare with ofxEmotiBitVersion
+				std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
+				std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
+				int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
+				if (versionLength)
+				{
+					for (int i = 0; i < versionLength; i++)
 					{
-						newVersionAvailable = true;
-						break;
+						if (ofToInt(latestVersionSplit.at(i)) > ofToInt(currentVersionSplit.at(i)))
+						{
+							newVersionAvailable = true;
+							break;
+						}
 					}
+				}
+				else
+				{
+					ofLogError("Failed to parse version string");
 				}
 			}
 			else
 			{
-				ofLogError("Failed to parse version string");
+				ofLog(OF_LOG_ERROR, "unexpected curl response");
 			}
-		}
-		else
-		{
-			ofLog(OF_LOG_ERROR, "unexpected curl response");
-		}
-		// If newer version available, display alert message
-		if (newVersionAvailable)
-		{
-			// create alert dialog box
-			ofSystemAlertDialog("A new version of EmotiBit Software is available!");
-			// open browser to latest version
-			try
+			// If newer version available, display alert message
+			if (newVersionAvailable)
 			{
+				// create alert dialog box
+				ofSystemAlertDialog("A new version of EmotiBit Software is available!");
+				// open browser to latest version
+				try
+				{
 #ifdef TARGET_WIN32
-				std::string command = "start " + latestReleaseUrl;
-				system(command.c_str());
+					std::string command = "start " + latestReleaseUrl;
+					system(command.c_str());
 #else
-				std::string command = "open " + latestReleaseUrl;
-				system(command.c_str());
+					std::string command = "open " + latestReleaseUrl;
+					system(command.c_str());
 #endif
-			}
-			catch(...)
-			{
-				ofLogError("Failed to open browser");
+				}
+				catch (...)
+				{
+					ofLogError("Failed to open browser");
+				}
 			}
 		}
 	}
-	else
+	catch (...)
 	{
-		ofLogError("An exception occured while checking latest version of installer.");
+		ofLogError("An exception occured while checking latest version of EmotiBit software");
 	}
 }
 
