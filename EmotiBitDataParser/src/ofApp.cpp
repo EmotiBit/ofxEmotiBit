@@ -220,7 +220,7 @@ void ofApp::update() {
 					if (allTimestampData.size() < 2)
 					{
 						ofLogNotice() << ofToString(allTimestampData.size()) + " Timesyncs Found";
-						ofLog(OF_LOG_NOTICE, "Follow instructions on screen to improve data recording processes");
+						ofLog(OF_LOG_NOTICE, timesyncsWarning);
 						currentState = State::WARNING_INSUFFICIENT_TIMESYNCS;
 					}
 					else
@@ -242,7 +242,120 @@ void ofApp::update() {
 	{
 		guiPanels.at(0).getControl(GUI_PANEL_LOAD_FILE)->setBackgroundColor(ofColor(0, 0, 0));
 		processStatus.setBackgroundColor(ofColor(0, 0, 0));
-		processStatus.getParameter().fromString(GUI_STATUS_IDLE);
+		if (cmdLineStart)
+		{
+			ofExit();
+		}
+		else
+		{
+			processStatus.getParameter().fromString(GUI_STATUS_IDLE);
+		}
+	}
+}
+
+
+int ofApp::getShortestRtIndex(vector<pair<int, int>> rtIndexes) {
+	int out;
+	sort(rtIndexes.begin(), rtIndexes.end()); // Sort and track original indexes
+	out = rtIndexes.at(0).second;
+	return out;
+}
+
+pair<ofApp::TimestampData, ofApp::TimestampData> ofApp::getBestTimestampIndexes(const vector<TimestampData> &timestampData) {
+	// Cases Best to Worst
+	// Q1 : Q4
+	// Q1 : Q3
+	// Q2 : Q4
+	// Q2 : Q3
+	// Q1 : Q2
+	// Q3 : Q4
+	// Q2 : Q2
+	// Q3 : Q3
+	// Q1 : Q1
+	// Q4 : Q4
+	// Sorted by pair<roundTripTime, index>
+	// Returns pair<index-A, index-B>
+
+	pair<ofApp::TimestampData, ofApp::TimestampData> out;
+	pair<int, int> shortestRtInd;
+
+
+	// ToDo: improve algorithm finding shortest round trips
+	// -- Deal with cases where recording is stopped when emotibit is offline (i.e. no Q4 round trips)
+
+	// Sort the round trip times into quartiles
+	int q2Ind = ceil(timestampData.size() / 4);
+	int q3Ind = ceil(timestampData.size() / 2);
+	int q4Ind = ceil(timestampData.size() * 3 / 4);
+
+	vector<pair<int, int>> q1;
+	for (int i = 0; i < q2Ind; i++) {
+		q1.push_back(make_pair(timestampData.at(i).roundTrip, i));
+	}
+	vector<pair<int, int>> q2;
+	for (int i = q2Ind; i < q3Ind; i++) {
+		q2.push_back(make_pair(timestampData.at(i).roundTrip, i));
+	}
+	vector<pair<int, int>> q3;
+	for (int i = q3Ind; i < q4Ind; i++) {
+		q3.push_back(make_pair(timestampData.at(i).roundTrip, i));
+	}
+	vector<pair<int, int>> q4;
+	for (int i = q4Ind; i < timestampData.size(); i++) {
+		q4.push_back(make_pair(timestampData.at(i).roundTrip, i));
+	}
+
+	// Select the best quartiles 
+	if (q1.size() > 0 && q4.size() > 0) {
+		out = make_pair(timestampData.at(getShortestRtIndex(q1)), timestampData.at(getShortestRtIndex(q4)));
+		return out;
+	}
+	else if (q1.size() > 0 && q3.size() > 0) {
+		out = make_pair(timestampData.at(getShortestRtIndex(q1)), timestampData.at(getShortestRtIndex(q3)));
+		return out;
+	}
+	else if (q2.size() > 0 && q4.size() > 0) {
+		out = make_pair(timestampData.at(getShortestRtIndex(q2)), timestampData.at(getShortestRtIndex(q4)));
+		return out;
+	}
+	else if (q2.size() > 0 && q3.size() > 0) {
+		out = make_pair(timestampData.at(getShortestRtIndex(q2)), timestampData.at(getShortestRtIndex(q3)));
+		return out;
+	}
+	else if (q1.size() > 0 && q2.size() > 0) {
+		out = make_pair(timestampData.at(getShortestRtIndex(q1)), timestampData.at(getShortestRtIndex(q2)));
+		return out;
+	}
+	else if (q3.size() > 0 && q4.size() > 0) {
+		out = make_pair(timestampData.at(getShortestRtIndex(q3)), timestampData.at(getShortestRtIndex(q4)));
+		return out;
+	}
+	// ToDo: consider if we should add a warning when the timesyncs from the same quartile are used
+	else if (q2.size() > 1) {
+		sort(q2.begin(), q2.end()); // Sort and track original indexes
+		out = make_pair(timestampData.at(q2.at(0).second), timestampData.at(q2.at(1).second));
+		return out;
+	}
+	else if (q3.size() > 1) {
+		sort(q3.begin(), q3.end()); // Sort and track original indexes
+		out = make_pair(timestampData.at(q3.at(0).second), timestampData.at(q3.at(1).second));
+		return out;
+	}
+	else if (q1.size() > 1) {
+		sort(q1.begin(), q1.end()); // Sort and track original indexes
+		out = make_pair(timestampData.at(q1.at(0).second), timestampData.at(q1.at(1).second));
+		return out;
+	}
+	else if (q4.size() > 1) {
+		sort(q4.begin(), q4.end()); // Sort and track original indexes
+		out = make_pair(timestampData.at(q4.at(0).second), timestampData.at(q4.at(1).second));
+		return out;
+	}
+	else {
+		// We should never end up here
+		ofLog(OF_LOG_ERROR, "ERROR: getBestTimestampIndexes() failed to find 2 points");
+		out = make_pair(timestampData.at(0), timestampData.at(timestampData.size() - 1));
+		return out;
 	}
 }
 
@@ -322,32 +435,7 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 	}
 	else
 	{
-
-		int q1Ind = ceil(timestampData.size() / 4);
-		int q4Ind = floor(timestampData.size() * 3 / 4);
-		if (timestampData.size() < 20) {
-			// Use more points if not many points are available
-			q1Ind = floor(timestampData.size() / 2);
-			q4Ind = ceil(timestampData.size() / 2);
-		}
-
-		// ToDo: improve algorithm finding shortest round trips
-		// -- Deal with cases where recording is stopped when emotibit is offline (i.e. no Q4 round trips)
-
-		// Sort the first 25 percent by round trip time
-		vector<pair<int, int>> q1;
-		for (int i = 0; i < q1Ind; i++) {
-			q1.push_back(make_pair(timestampData.at(i).roundTrip, i));
-		}
-		sort(q1.begin(), q1.end()); // Sort and track original indexes
-
-		// Sort the last 25 percent by round trip time
-		vector<pair<int, int>> q4;
-		for (int i = q4Ind; i < timestampData.size(); i++) {
-			q4.push_back(make_pair(timestampData.at(i).roundTrip, i));
-		}
-		sort(q4.begin(), q4.end()); // Sort and track original indexes
-
+		// ToDo: Remove unused code
 		//vector<double> c2e;
 		//int num_c2e;
 		//// Calculate median c2e for Q1
@@ -370,6 +458,9 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 		//float c2eQ4Med = GetMedian(&(c2e.at(0)), num_c2e);
 		//cout << c2eQ4Med << endl;
 
+		pair<ofApp::TimestampData, ofApp::TimestampData> bestTimestamps;
+		bestTimestamps = ofApp::getBestTimestampIndexes(timestampData);
+
 		std::string ts;
 		std::time_t c;
 		long double m;
@@ -377,24 +468,24 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 		size_t lastNChar;
 
 		// Calculate Q1 timesync map
-		tsMap.e0 = timestampData.at(q1.at(0).second).TS_received;
-		ts = timestampData.at(q1.at(0).second).TS_sent;
+		tsMap.e0 = bestTimestamps.first.TS_received;
+		ts = bestTimestamps.first.TS_sent;
 		lastDelim = ts.find_last_of('-'); // find subsecond decimal
 		lastNChar = ts.size() - lastDelim - 1;
 		c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
 		m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar); // Convert subsecond
 		tsMap.c0 = (long double)c + m; // Append subsecond as decimal
-		tsMap.c0 += q1.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
+		tsMap.c0 += bestTimestamps.first.roundTrip / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
 
 		// Calculate Q4 timesync map
-		tsMap.e1 = timestampData.at(q4.at(0).second).TS_received;
-		ts = timestampData.at(q4.at(0).second).TS_sent;
+		tsMap.e1 = bestTimestamps.second.TS_received;
+		ts = bestTimestamps.second.TS_sent;
 		lastDelim = ts.find_last_of('-'); // find subsecond decimal
 		lastNChar = ts.size() - lastDelim - 1;
 		c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
 		m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar);	tsMap.c1 = (long double)c + m; // Convert subsecond
 		tsMap.c1 = (long double)c + m; // Append subsecond as decimal
-		tsMap.c1 += q4.at(0).first / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
+		tsMap.c1 += bestTimestamps.second.roundTrip / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
 	}
 	return tsMap;
 }
@@ -474,14 +565,8 @@ void ofApp::draw() {
 	else if (currentState == State::WARNING_INSUFFICIENT_TIMESYNCS)
 	{
 		ofSetColor(255, 128, 0);
-		std::string instructions = "WARNING: Data file was parsed with less than 2 time-sync events, which can reduce the timestamp accuracy.\n"
-		"\nEmotiBit periodically generates time-sync events while a connection is established with the EmotiBit Oscilloscope software.\n"
-		"At a minimum, it's recommended to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
-		"for at least one minute after starting data recording AND re-establish connection with EmotiBit Oscilloscope\n"
-		"software (using the same computer on which recording was started) for at least one minute before stopping data recording.\n"
-		"\nTo further improve timestamp accuracy, it's optimal to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
-		"throughout recording to generate many time-sync events in the data file.\n";
-		legendFont.drawString(instructions, 10, 100);
+		
+		legendFont.drawString(timesyncsWarning, 10, 100);
 	}
 	if (currentState != State::WARNING_INSUFFICIENT_TIMESYNCS)
 	{
