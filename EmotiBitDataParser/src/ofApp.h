@@ -156,7 +156,7 @@ public:
 			@param rtIndexes vector<pair<roundtripTime, index>>
 			@return index of shortest roundtrip
 	*/
-	int ofApp::getShortestRtIndex(vector<pair<int, int>> rtIndexes);
+	int getShortestRtIndex(vector<pair<int, int>> rtIndexes);
 
 	/*!
 		@brief returns the best 2 available TimestampData points for timesync map
