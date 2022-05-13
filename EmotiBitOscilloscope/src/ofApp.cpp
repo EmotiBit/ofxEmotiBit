@@ -61,7 +61,7 @@ void ofApp::checkLatestSwVersion()
 {
 	bool newVersionAvailable = false;
 	// system call to curl
-	std::string latestReleaseUrl = "https://github.com/EmotiBit/ofxEmotiBit/releases/latest";
+	std::string latestReleaseUrl = "https://api.github.com/repos/EmotiBit/ofxEmotiBit/releases/latest";
 	std::string command = "curl " + latestReleaseUrl;
 	std::string response = "";
 	char buffer[200];
@@ -122,62 +122,33 @@ void ofApp::checkLatestSwVersion()
 		ofLogError("Failed to open pipe");
 		exceptionOccured = true;
 	}
-	// The response is an empty string is threre is no internet access
+
 	if (!exceptionOccured & response != "")
 	{
-		// Sample curl response: <html><body>You are being <a href="https://github.com/EmotiBit/ofxEmotiBit/releases/tag/v1.3.0">redirected</a>.</body></html>
-		// extract redirected URL from the curl response.
-		int redirectedUrlStartLoc = response.find("\"");
-		if (redirectedUrlStartLoc != std::string::npos)
+		ofxJSONElement jsonResponse;
+		if (jsonResponse.parse(response))
 		{
-			std::string redirectedUrl = response.substr(redirectedUrlStartLoc + 1);
-			int redirectedUrlEndLoc = redirectedUrl.find("\"");
-			if (redirectedUrlEndLoc != std::string::npos)
+			ofLog(OF_LOG_NOTICE, jsonResponse.getRawString(true));
+			std::string latestAvailableVersion = jsonResponse["tag_name"].asString();
+			ofLogNotice("Latest version") << latestAvailableVersion;
+			// compare with ofxEmotiBitVersion
+			std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
+			std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
+			int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
+			if (versionLength)
 			{
-				redirectedUrl = redirectedUrl.substr(0, redirectedUrlEndLoc);
-				// print the redirecte URL
-				ofLog(OF_LOG_NOTICE, "Redirected URL: " + redirectedUrl);
-				// parse url based on "/"
-				std::vector<std::string> splitUrl = ofSplitString(redirectedUrl, "/");
-				if (splitUrl.size() > 0)
+				for (int i = 0; i < versionLength; i++)
 				{
-					if (splitUrl.back().size() > 1)
+					if (ofToInt(latestVersionSplit.at(i)) > ofToInt(currentVersionSplit.at(i)))
 					{
-						// extract the version. version = vx.y.z
-						std::string latestAvailableVersion = splitUrl.back().substr(1, string::npos); // removing the "v" from the version
-					    // compare with ofxEmotiBitVersion
-						std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
-						std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
-						int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
-						if (versionLength)
-						{
-							for (int i = 0; i < versionLength; i++)
-							{
-								if (ofToInt(latestVersionSplit.at(i)) > ofToInt(currentVersionSplit.at(i)))
-								{
-									newVersionAvailable = true;
-									break;
-								}
-							}
-						}
-						else
-						{
-							ofLogError("Failed to parse version string");
-						}
+						newVersionAvailable = true;
+						break;
 					}
-					else
-					{
-						ofLog(OF_LOG_ERROR, "failed to parse version string");
-					}
-				}
-				else
-				{
-					ofLog(OF_LOG_ERROR, "failed to parse latest version url");
 				}
 			}
 			else
 			{
-				ofLog(OF_LOG_ERROR, "unexpected curl response");
+				ofLogError("Failed to parse version string");
 			}
 		}
 		else
