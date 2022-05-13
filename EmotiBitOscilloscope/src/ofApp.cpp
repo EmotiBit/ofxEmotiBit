@@ -5,6 +5,10 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofLogToConsole();
+#ifdef TARGET_MAC_OS
+    ofSetDataPathRoot("../Resources/");
+    cout<<"Changed the data pathroot for macOS."<<endl;
+#endif
 	ofSetFrameRate(30);
 	ofBackground(255, 255, 255);
 	checkLatestSwVersion();
@@ -1125,10 +1129,7 @@ void ofApp::setupGui()
 	ofSetWindowTitle("EmotiBit Oscilloscope (v" + ofxEmotiBitVersion + ")");
 
 	string legendFontFilename = "verdanab.ttf";
-#ifdef TARGET_MAC_OS
-    ofSetDataPathRoot("../Resources/");
-    cout<<"Changed the data pathroot for macOS."<<endl;
-#endif
+
 	legendFont.load(ofToDataPath(legendFontFilename), 11, true, true);
 	axesFont.load(ofToDataPath("verdana.ttf"), 10, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
