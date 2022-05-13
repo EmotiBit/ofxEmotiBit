@@ -15,6 +15,7 @@ public:
 
 	string argFileName;
 	string stringData;
+	bool cmdLineStart = false;
 
 	ofTrueTypeFont legendFont;
 	ofTrueTypeFont subLegendFont;
@@ -108,6 +109,14 @@ public:
 		long double c1 = 1;
 	} timeSyncMap;
 
+	std::string timesyncsWarning = "WARNING: Data file was parsed with less than 2 time-sync events, which can reduce the timestamp accuracy.\n"
+		"\nEmotiBit periodically generates time-sync events while a connection is established with the EmotiBit Oscilloscope software.\n"
+		"At a minimum, it's recommended to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
+		"for at least one minute after starting data recording AND re-establish connection with EmotiBit Oscilloscope\n"
+		"software (using the same computer on which recording was started) for at least one minute before stopping data recording.\n"
+		"\nTo further improve timestamp accuracy, it's optimal to keep EmotiBit connected to the EmotiBit Oscilloscope software\n"
+		"throughout recording to generate many time-sync events in the data file.\n";
+
 	struct RecordedDataTimeRange {
 		long double emotibitStartTime = INT_MAX;
 		long double emotibitEndTime = 0;
@@ -141,6 +150,20 @@ public:
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void startProcessing(bool & processing);
+
+	/*!
+			@brief returns the index of the shortest roundtrip
+			@param rtIndexes vector<pair<roundtripTime, index>>
+			@return index of shortest roundtrip
+	*/
+	int ofApp::getShortestRtIndex(vector<pair<int, int>> rtIndexes);
+
+	/*!
+		@brief returns the best 2 available TimestampData points for timesync map
+		@param vector of all TimestampData
+		@return pair<earlier, later> TimestampData points
+	*/
+	pair<ofApp::TimestampData, ofApp::TimestampData> getBestTimestampIndexes(const vector<TimestampData> &timestampData);
 	TimeSyncMap calculateTimeSyncMap(vector<TimestampData> &timestampData);
 	std::time_t getEpochTime(const std::wstring& dateTime);
 	double GetMedian(double daArray[], int iSize);
