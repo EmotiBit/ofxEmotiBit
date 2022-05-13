@@ -39,6 +39,9 @@
 		8E6079E727C976A800959DDB /* Periodizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6079E527C976A800959DDB /* Periodizer.cpp */; };
 		8E6079EA27C978BE00959DDB /* inputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E827C978BE00959DDB /* inputSettings.xml */; };
 		8E6079EB27C978BE00959DDB /* ofxOscilloscopeSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */; };
+		8E7E8F4D282ED74700C2A24E /* emotibitCommSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E7E8F4C282ED74700C2A24E /* emotibitCommSettings.json */; };
+		8E7E8F52282EDE7800C2A24E /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E8F51282EDE7700C2A24E /* ofxJSONElement.cpp */; };
+		8E7E8F54282EDE9600C2A24E /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E7E8F53282EDE9600C2A24E /* jsoncpp.cpp */; };
 		8F5205AEF8861EF234F0651A /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81967292BFC87A0144BD32C6 /* ofxOscSender.cpp */; };
 		933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */; };
 		940DE31524A301480024AB67 /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 940DE31224A301480024AB67 /* EmotiBitPacket.cpp */; };
@@ -69,6 +72,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				8E7E8F4D282ED74700C2A24E /* emotibitCommSettings.json in CopyFiles */,
 				8E6079EA27C978BE00959DDB /* inputSettings.xml in CopyFiles */,
 				8E6079EB27C978BE00959DDB /* ofxOscilloscopeSettings.xml in CopyFiles */,
 				941B2FC325BA241400BB7E84 /* oscOutputSettings.xml in CopyFiles */,
@@ -179,6 +183,11 @@
 		8E6079E527C976A800959DDB /* Periodizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Periodizer.cpp; path = ../src/Signal/Periodizer.cpp; sourceTree = "<group>"; };
 		8E6079E827C978BE00959DDB /* inputSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = inputSettings.xml; path = bin/data/inputSettings.xml; sourceTree = "<group>"; };
 		8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = ofxOscilloscopeSettings.xml; path = bin/data/ofxOscilloscopeSettings.xml; sourceTree = "<group>"; };
+		8E7E8F4C282ED74700C2A24E /* emotibitCommSettings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = emotibitCommSettings.json; path = bin/data/emotibitCommSettings.json; sourceTree = "<group>"; };
+		8E7E8F4F282ED80900C2A24E /* libs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = libs; path = ../../ofxJSON/libs; sourceTree = "<group>"; };
+		8E7E8F50282ED80900C2A24E /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; name = src; path = ../../ofxJSON/src; sourceTree = "<group>"; };
+		8E7E8F51282EDE7700C2A24E /* ofxJSONElement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ofxJSONElement.cpp; path = ../../ofxJSON/src/ofxJSONElement.cpp; sourceTree = "<group>"; };
+		8E7E8F53282EDE9600C2A24E /* jsoncpp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = jsoncpp.cpp; path = ../../ofxJSON/libs/jsoncpp/src/jsoncpp.cpp; sourceTree = "<group>"; };
 		8F225C97B6ECA8B22FFB4B76 /* rc5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc5.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rc5.h; sourceTree = SOURCE_ROOT; };
 		907C5B5E104864A2D3A25745 /* ofxToggle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxToggle.cpp; path = ../../../addons/ofxGui/src/ofxToggle.cpp; sourceTree = SOURCE_ROOT; };
 		940DE31224A301480024AB67 /* EmotiBitPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitPacket.cpp; path = ../../../addons/EmotiBit_XPlat_Utils/src/EmotiBitPacket.cpp; sourceTree = "<group>"; };
@@ -820,6 +829,15 @@
 			name = oscpack;
 			sourceTree = "<group>";
 		};
+		8E7E8F4E282ED7E000C2A24E /* ofxJSON */ = {
+			isa = PBXGroup;
+			children = (
+				8E7E8F4F282ED80900C2A24E /* libs */,
+				8E7E8F50282ED80900C2A24E /* src */,
+			);
+			name = ofxJSON;
+			sourceTree = "<group>";
+		};
 		940DE30F24A3011C0024AB67 /* EmotiBIt_XPlat_Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -916,6 +934,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				8E7E8F4E282ED7E000C2A24E /* ofxJSON */,
 				27005CFF506A34FD3734C3CE /* ofxBiquadFilter */,
 				0B8ED02ED04845BC31B3E518 /* ofxEmotiBit */,
 				480A780D8D0308AE4A368801 /* ofxGui */,
@@ -1253,6 +1272,9 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				8E7E8F53282EDE9600C2A24E /* jsoncpp.cpp */,
+				8E7E8F51282EDE7700C2A24E /* ofxJSONElement.cpp */,
+				8E7E8F4C282ED74700C2A24E /* emotibitCommSettings.json */,
 				8E6079E827C978BE00959DDB /* inputSettings.xml */,
 				8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */,
 				8E6079E527C976A800959DDB /* Periodizer.cpp */,
@@ -1420,6 +1442,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E7E8F54282EDE9600C2A24E /* jsoncpp.cpp in Sources */,
+				8E7E8F52282EDE7800C2A24E /* ofxJSONElement.cpp in Sources */,
 				8E6079E727C976A800959DDB /* Periodizer.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
@@ -1591,6 +1615,8 @@
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
+					../../../addons/ofxJSON/src,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
@@ -1804,6 +1830,8 @@
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
+					../../../addons/ofxJSON/src,
 				);
 				ICON = "$(ICON_NAME_DEBUG)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
@@ -1879,6 +1907,8 @@
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
+					../../../addons/ofxJSON/src,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
