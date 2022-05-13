@@ -62,7 +62,8 @@ void ofApp::checkLatestSwVersion()
 	bool newVersionAvailable = false;
 	// system call to curl
 	std::string latestReleaseUrl = "https://github.com/EmotiBit/ofxEmotiBit/releases/latest";
-	std::string command = "curl " + latestReleaseUrl;
+	std::string latestReleaseApiRequest = "https://api.github.com/repos/EmotiBit/ofxEmotiBit/releases/latest";
+	std::string command = "curl " + latestReleaseApiRequest;
 	std::string response = "";
 	char buffer[200];
 	bool exceptionOccured = false;
@@ -122,93 +123,71 @@ void ofApp::checkLatestSwVersion()
 		ofLogError("Failed to open pipe");
 		exceptionOccured = true;
 	}
-	// The response is an empty string is threre is no internet access
-	if (!exceptionOccured & response != "")
+	try 
 	{
-		// Sample curl response: <html><body>You are being <a href="https://github.com/EmotiBit/ofxEmotiBit/releases/tag/v1.3.0">redirected</a>.</body></html>
-		// extract redirected URL from the curl response.
-		int redirectedUrlStartLoc = response.find("\"");
-		if (redirectedUrlStartLoc != std::string::npos)
+		if (!exceptionOccured & response != "")
 		{
-			std::string redirectedUrl = response.substr(redirectedUrlStartLoc + 1);
-			int redirectedUrlEndLoc = redirectedUrl.find("\"");
-			if (redirectedUrlEndLoc != std::string::npos)
+			ofxJSONElement jsonResponse;
+			if (jsonResponse.parse(response))
 			{
-				redirectedUrl = redirectedUrl.substr(0, redirectedUrlEndLoc);
-				// print the redirecte URL
-				ofLog(OF_LOG_NOTICE, "Redirected URL: " + redirectedUrl);
-				// parse url based on "/"
-				std::vector<std::string> splitUrl = ofSplitString(redirectedUrl, "/");
-				if (splitUrl.size() > 0)
+				//ofLog(OF_LOG_NOTICE, jsonResponse.getRawString(true));  // uncomment to print curl output
+				std::string latestAvailableVersion = jsonResponse["tag_name"].asString();
+				ofLogNotice("Latest version") << latestAvailableVersion;
+				int swVerPrefixLoc = latestAvailableVersion.find(SOFTWARE_VERSION_PREFIX);
+				if (swVerPrefixLoc != std::string::npos)
 				{
-					if (splitUrl.back().size() > 1)
+					latestAvailableVersion.erase(swVerPrefixLoc, 1);  // remove leading version char "v"
+				}
+				// compare with ofxEmotiBitVersion
+				std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
+				std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
+				int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
+				if (versionLength)
+				{
+					for (int i = 0; i < versionLength; i++)
 					{
-						// extract the version. version = vx.y.z
-						std::string latestAvailableVersion = splitUrl.back().substr(1, string::npos); // removing the "v" from the version
-					    // compare with ofxEmotiBitVersion
-						std::vector<std::string> latestVersionSplit = ofSplitString(latestAvailableVersion, ".");
-						std::vector<std::string> currentVersionSplit = ofSplitString(ofxEmotiBitVersion, ".");
-						int versionLength = latestVersionSplit.size() < currentVersionSplit.size() ? latestVersionSplit.size() : currentVersionSplit.size();
-						if (versionLength)
+						if (ofToInt(latestVersionSplit.at(i)) > ofToInt(currentVersionSplit.at(i)))
 						{
-							for (int i = 0; i < versionLength; i++)
-							{
-								if (ofToInt(latestVersionSplit.at(i)) > ofToInt(currentVersionSplit.at(i)))
-								{
-									newVersionAvailable = true;
-									break;
-								}
-							}
+							newVersionAvailable = true;
+							break;
 						}
-						else
-						{
-							ofLogError("Failed to parse version string");
-						}
-					}
-					else
-					{
-						ofLog(OF_LOG_ERROR, "failed to parse version string");
 					}
 				}
 				else
 				{
-					ofLog(OF_LOG_ERROR, "failed to parse latest version url");
+					ofLogError("Failed to parse version string");
 				}
 			}
 			else
 			{
 				ofLog(OF_LOG_ERROR, "unexpected curl response");
 			}
-		}
-		else
-		{
-			ofLog(OF_LOG_ERROR, "unexpected curl response");
-		}
-		// If newer version available, display alert message
-		if (newVersionAvailable)
-		{
-			// create alert dialog box
-			ofSystemAlertDialog("A new version of EmotiBit Software is available!");
-			// open browser to latest version
-			try
+			// If newer version available, display alert message
+			if (newVersionAvailable)
 			{
+				// create alert dialog box
+				ofSystemAlertDialog("A new version of EmotiBit Software is available!");
+				// open browser to latest version
+				try
+				{
 #ifdef TARGET_WIN32
-				std::string command = "start " + latestReleaseUrl;
-				system(command.c_str());
+					std::string command = "start " + latestReleaseUrl;
+					system(command.c_str());
 #else
-				std::string command = "open " + latestReleaseUrl;
-				system(command.c_str());
+					std::string command = "open " + latestReleaseUrl;
+					system(command.c_str());
 #endif
-			}
-			catch(...)
-			{
-				ofLogError("Failed to open browser");
+				}
+				catch (...)
+				{
+					ofLogError("Failed to open browser");
+				}
 			}
 		}
 	}
-	else
+	catch (...)
 	{
-		ofLogError("An exception occured while checking latest version of installer.");
+		ofLogError("An exception occured while checking latest version of EmotiBit software");
 	}
 }
 

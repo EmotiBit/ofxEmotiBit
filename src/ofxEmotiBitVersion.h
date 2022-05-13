@@ -2,7 +2,8 @@
 //#include <string>
 #include "ofMain.h"
 
-const std::string ofxEmotiBitVersion = "1.4.7";
+const std::string ofxEmotiBitVersion = "1.4.8";
+static const char SOFTWARE_VERSION_PREFIX = 'v';
 
 static void writeOfxEmotiBitVersionFile() {
 	string filename = "ofxEmotiBit_Version.txt";
