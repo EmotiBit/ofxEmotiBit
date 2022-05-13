@@ -32,6 +32,16 @@ class EmotiBitWiFiHost
 {
 public:
 
+	struct HostAdvertisingSettings {
+		bool enableBroadcast = true;
+		bool enableUnicast = false;
+
+		pair<int, int> unicastIpRange = { 2, 254 };
+
+		vector<string> networkIncludeList = { "*.*.*.*" };
+		vector<string> networkExcludeList = { "" };
+	} _hostAdvSettings;
+
 	static const uint8_t SUCCESS = 0;
 	static const uint8_t FAIL = -1;
 
@@ -53,8 +63,8 @@ public:
 	uint16_t sendDataPort;
 	uint16_t controlPort;
 
-	vector<string> availableSubnets; // All available subnets, with or without emotibits
-	vector<string> emotibitSubnets; // Subnets that contain emotibits
+	vector<string> availableNetworks; // All available networks, with or without emotibits
+	vector<string> emotibitNetworks; // Networks that contain emotibits
 	bool enableBroadcast = false; 
 	uint64_t advertizingTimer;
 
@@ -62,6 +72,8 @@ public:
 	string connectedEmotibitIp;
 	bool _isConnected;
 	bool isStartingConnection;
+	uint16_t startCxnTimeout = 5000;	// milliseconds
+	uint64_t startCxnAbortTimer;
 
 	uint16_t advertisingPacketCounter = 0;
 	uint16_t controlPacketCounter = 0;
@@ -80,8 +92,8 @@ public:
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
-	void getAvailableSubnets();
-	void pingAvailableSubnets();
+	void getAvailableNetworks();
+	void pingAvailableNetworks();
 	void updateAdvertisingIpList(string ip); 
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
@@ -103,6 +115,44 @@ public:
 	//string createPacket(string typeTag, vector<string> data, uint8_t protocolVersion = 1, uint8_t dataReliability = 100);
 	bool isConnected();
 	int8_t _startDataCxn(uint16_t dataPort);
+
+	/*!
+			@brief returns whether the passed ipAddress is in the network includeList
+			@param ipAddress
+			@return true if ipAddress is in the includeList
+	*/
+	bool isInNetworkIncludeList(string ipAddress);
+
+	/*!
+		@brief returns whether the passed ipAddress is in the network excludeList
+		@param ipAddress
+		@return true if ipAddress is in the excludeList
+	*/
+	bool isInNetworkExcludeList(string ipAddress);
+
+	/*!
+	@brief returns whether the passed ipAddress is in passed network list
+	@param ipAddress to check
+	@param networkList of ipAddresses to check ipAddress against
+	@return true if ipAddress is in networkList
+	*/
+	bool isInNetworkList(string ipAddress, vector<string> networkList);
+
+	void setAdvertTransSettings(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange);
+	void setNetworkIncludeList(vector<string> networkIncludeList);
+	void setNetworkExcludeList(vector<string> networkExcludeList);
+
+	/*!
+	@brief Sets EmotiBit host advertising settings
+	@param settings
+	*/
+	void setHostAdvertisingSettings(HostAdvertisingSettings settings);
+
+	/*!
+	@brief Gets EmotiBit host advertising settings
+	@return settings
+	*/
+	HostAdvertisingSettings getHostAdvertisingSettings();
 
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
 };

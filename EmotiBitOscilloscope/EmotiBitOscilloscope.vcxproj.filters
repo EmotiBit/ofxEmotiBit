@@ -148,6 +148,12 @@
     <ClCompile Include="..\src\Signal\Periodizer.cpp">
       <Filter>addons\ofxEmotiBit\src\Signal</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp">
+      <Filter>addons\ofxJSON\libs\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxJSON\src\ofxJSONElement.cpp">
+      <Filter>addons\ofxJSON\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -278,6 +284,24 @@
     </Filter>
     <Filter Include="addons\ofxEmotiBit\src\Signal">
       <UniqueIdentifier>{d1515230-6612-416e-ab3b-169034e462f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxJSON">
+      <UniqueIdentifier>{b516006f-7305-4024-971c-aeddc678c1ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxJSON\libs">
+      <UniqueIdentifier>{cc7fda66-98c0-4ad6-a2d6-82a395ffdebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxJSON\libs\include">
+      <UniqueIdentifier>{635988bd-8c91-4d4c-a9a4-e4d97e5bef4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxJSON\libs\src">
+      <UniqueIdentifier>{77fac288-c2e5-474f-b9b2-43af7f368a74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxJSON\libs\include\json">
+      <UniqueIdentifier>{eb41102e-ad8e-4425-bb26-86e898b1372a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxJSON\src">
+      <UniqueIdentifier>{6b0a7f8d-1d97-4932-9a0b-367affb0d926}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -475,6 +499,18 @@
     </ClInclude>
     <ClInclude Include="..\src\Signal\Periodizer.h">
       <Filter>addons\ofxEmotiBit\src\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxJSON\libs\jsoncpp\include\json\json.h">
+      <Filter>addons\ofxJSON\libs\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxJSON\libs\jsoncpp\include\json\json-forwards.h">
+      <Filter>addons\ofxJSON\libs\include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxJSON\src\ofxJSON.h">
+      <Filter>addons\ofxJSON\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxJSON\src\ofxJSONElement.h">
+      <Filter>addons\ofxJSON\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

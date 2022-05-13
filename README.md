@@ -12,6 +12,7 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 - ofxOscilloscope - https://github.com/produceconsumerobot/ofxOscilloscope
 - ofxThreadedLogger - https://github.com/produceconsumerobot/ofxThreadedLogger
 - ofxBiquadFilter - https://github.com/mrbichel/ofxBiquadFilter
+- ofxJSON - https://github.com/jeffcrouse/ofxJSON
 - EmotiBit_XPlat_Utils - https://github.com/EmotiBit/EmotiBit_XPlat_Utils
 - ofxLSL - https://github.com/EmotiBit/ofxLSL
   - _**NOTE:**_ for lsl support, if developing with visual studio, code should be compiled for x64

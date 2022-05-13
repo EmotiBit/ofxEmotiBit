@@ -1,0 +1,21 @@
+{
+	"wifi" : {
+		 "advertising" : {
+				"transmission" : {
+					 "broadcast" : {
+							"enabled" : true
+					 },
+					 "unicast" : {
+							"enabled" : false,
+							"ipMax" : 254,
+							"ipMin" : 2
+					 }
+				}
+		 },
+		 "network" : {
+				"excludeList" : [ "" ],
+				"includeList" : [ "*.*.*.*" ]
+		 }
+	}
+}
+
