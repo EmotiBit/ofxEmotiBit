@@ -487,7 +487,38 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 		tsMap.c1 = (long double)c + m; // Append subsecond as decimal
 		tsMap.c1 += bestTimestamps.second.roundTrip / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
 	}
+	// calculate l0 and l1 if parsing LSL time
+	if (parseLsl)
+	{
+		LslTimestampData firstDataPoint, lastDataPoint;
+		firstDataPoint = allLslTimestampData.front();
+		lastDataPoint = allLslTimestampData.back();
+		long double localUnixTime = getLocalUnixTime(firstDataPoint.localTime);
+		tsMap.l0 = linterp(localUnixTime, tsMap.c0, tsMap.c1, firstDataPoint.lslTime, lastDataPoint.lslTime);
+
+		localUnixTime = getLocalUnixTime(lastDataPoint.localTime);
+		tsMap.l1 = linterp(localUnixTime, tsMap.c0, tsMap.c1, firstDataPoint.lslTime, lastDataPoint.lslTime);
+
+	}
 	return tsMap;
+}
+
+long double ofApp::getLocalUnixTime(std::string timestamp)
+{
+	std::string ts;
+	std::time_t c;
+	long double m;
+	size_t lastDelim;
+	size_t lastNChar;
+	long double localUnixTime;
+
+	ts = timestamp;
+	lastDelim = ts.find_last_of('-'); // find subsecond decimal
+	lastNChar = ts.size() - lastDelim - 1;
+	c = getEpochTime(std::wstring(ts.begin(), ts.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+	m = ((float)atoi(ts.substr(lastDelim + 1, lastNChar).c_str())) / pow(10.f, lastNChar); // Convert subsecond
+	localUnixTime = (long double)c + m; // Append subsecond as decimal
+	return localUnixTime;
 }
 
 bool ofApp::timestampDataCompare(pair<int, TimestampData> i, pair<int, TimestampData> j) {
@@ -619,7 +650,7 @@ void ofApp::parseDataLine(string packet) {
 		// only check for a missed packet if not processing the first packet
 		if (packetNumber != -1 && tempPacketNumber - packetNumber > 1) {
 			cout << "Missed packet: " << packetNumber << "," << tempPacketNumber << endl;
-		} 
+		}
 		// ToDo: Figure out a way to deal with multiple packets of each number (e.g. UDPx3)
 		packetNumber = tempPacketNumber;
 
@@ -702,6 +733,44 @@ void ofApp::parseDataLine(string packet) {
 					}
 				}
 				// ToDo: Add TIMESTAMP_UTC processing
+			}
+			if (parseLsl)
+			{
+				if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME) == 0)
+				{
+					allLslTimestampData.emplace_back();
+					vector<string> splitData = ofSplitString(packet, ",");
+					if (splitData.size() > 7)
+					{
+						if (splitData.at(7) != "")
+						{
+							allLslTimestampData.back().localTime = splitData.at(7);
+						}
+						else
+						{
+							ofLogError() << "LSL parse error: local timstamp is NULL";
+						}
+					}
+					else
+					{
+						ofLogError() << "LSL parse error: local timstamp not found";
+					}
+					if (splitData.size() > 9)
+					{
+						if (splitData.at(9) != "")
+						{
+							allLslTimestampData.back().lslTime = ofToDouble(splitData.at(9));
+						}
+						else
+						{
+							ofLogError() << "LSL parse error: LSL timstamp is NULL";
+						}
+					}
+					else
+					{
+						ofLogError() << "LSL parse error: LSL timstamp not found";
+					}
+				}
 			}
 
 		}
