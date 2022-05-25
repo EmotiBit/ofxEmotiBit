@@ -205,11 +205,13 @@ void ofApp::update() {
 					cout << "Creating file: " << filename << endl;
 					ofstream mFile;
 					mFile.open(filename.c_str(), ios::out);
-					mFile << "e0,e1,c0,c1,TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime" << endl;
+					mFile << "e0,e1,c0,c1,l0,l1,TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime" << endl;
 					mFile << ofToString(timeSyncMap.e0, 6) << "," 
 						<< ofToString(timeSyncMap.e1, 6) << "," 
 						<< ofToString(timeSyncMap.c0, 6) << "," 
 						<< ofToString(timeSyncMap.c1, 6) << "," 
+						<< ofToString(timeSyncMap.l0, 6) << "," 
+						<< ofToString(timeSyncMap.l1, 6) << "," 
 						<<ofToString(allTimestampData.size()) << ","
 						<<ofToString(recordedDataTimeRange.emotibitStartTime) << ","
 						<<ofToString(recordedDataTimeRange.emotibitEndTime);
@@ -490,14 +492,13 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 	// calculate l0 and l1 if parsing LSL time
 	if (parseLsl)
 	{
-		LslTimestampData firstDataPoint, lastDataPoint;
-		firstDataPoint = allLslTimestampData.front();
-		lastDataPoint = allLslTimestampData.back();
-		long double localUnixTime = getLocalUnixTime(firstDataPoint.localTime);
-		tsMap.l0 = linterp(localUnixTime, tsMap.c0, tsMap.c1, firstDataPoint.lslTime, lastDataPoint.lslTime);
-
-		localUnixTime = getLocalUnixTime(lastDataPoint.localTime);
-		tsMap.l1 = linterp(localUnixTime, tsMap.c0, tsMap.c1, firstDataPoint.lslTime, lastDataPoint.lslTime);
+		LslTimestampData firstLslPoint, lastLslPoint;
+		firstLslPoint = allLslTimestampData.front();
+		lastLslPoint = allLslTimestampData.back();
+		long double firstLocalUnixTime = getLocalUnixTime(firstLslPoint.localTime);
+		long double lastLocalUnixTime = getLocalUnixTime(lastLslPoint.localTime);
+		tsMap.l0 = linterp(tsMap.c0, firstLocalUnixTime, lastLocalUnixTime, firstLslPoint.lslTime, lastLslPoint.lslTime);
+		tsMap.l1 = linterp(tsMap.c1, firstLocalUnixTime, lastLocalUnixTime, firstLslPoint.lslTime, lastLslPoint.lslTime);
 
 	}
 	return tsMap;
@@ -834,7 +835,7 @@ void ofApp::parseDataLine(string packet) {
 					loggers.emplace(typeTag, new LoggerThread("", outFilePath));
 					loggerPtr = loggers.find(typeTag);
 					loggerPtr->second->startThread();
-					loggerPtr->second->push("LocalTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
+					loggerPtr->second->push("LslTime,LocalTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
 				}
 				bool isAperiodicType = false;
 				for (int i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_APERIODIC; i++)
@@ -852,8 +853,10 @@ void ofApp::parseDataLine(string packet) {
 						}
 						else {
 							long double epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+							long double lslTimestamp = linterp(epochTimestamp, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
 							loggerPtr->second->push(
 
+								ofToString(lslTimestamp, 6) + "," +
 								ofToString(epochTimestamp, 6) + "," +
 								ofToString(timestamp, 3) + "," +
 								splitData.at(1) + "," +
@@ -877,7 +880,9 @@ void ofApp::parseDataLine(string packet) {
 						size_t lastDelim = computerTime.find_last_of('-'); // find subsecond decimal
 						size_t lastNChar = computerTime.size() - lastDelim - 1;
 						std::time_t c = getEpochTime(std::wstring(computerTime.begin(), computerTime.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+						long double lslTimestamp = linterp((long double)c, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
 						loggerPtr->second->push(
+							ofToString(lslTimestamp, 6) + "," +
 							ofToString((long double)c, 6) + "," +
 							ofToString(timestamp, 3) + "," +
 							splitData.at(1) + "," +
@@ -900,7 +905,9 @@ void ofApp::parseDataLine(string packet) {
 							//uint32_t interpTimestamp = ofMap(i + 1, 0, dataLength, prevtimestamp, timestamp);
 							long double interpTimestamp = linterp(i + 1, 0, dataLength, prevtimestamp, timestamp);
 							long double epochTimestamp = linterp(interpTimestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+							long double lslTimestamp = linterp(epochTimestamp, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
 							loggerPtr->second->push(
+								ofToString(lslTimestamp, 6) + "," +
 								ofToString(epochTimestamp, 6) + "," +
 								ofToString(interpTimestamp, 3) + "," +
 								splitData.at(1) + "," +

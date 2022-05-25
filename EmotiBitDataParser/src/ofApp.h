@@ -100,7 +100,7 @@ public:
 	uint16_t MAX_BUFFER_LENGTH = 64;
 	size_t messageLen = 0;
 
-	bool parseLsl = false;
+	bool parseLsl = true;
 	struct LslTimestampData {
 		string localTime = "";
 		long double lslTime = 0;
