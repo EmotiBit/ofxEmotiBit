@@ -100,13 +100,20 @@ public:
 	uint16_t MAX_BUFFER_LENGTH = 64;
 	size_t messageLen = 0;
 
+	bool parseLsl = false;
+	struct LslTimestampData {
+		string localTime = "";
+		long double lslTime = 0;
+	};
 	string timestampFilenameString = "timesyncs";
-
+	std::vector<LslTimestampData> allLslTimestampData;
 	struct TimeSyncMap {
 		long double e0 = 0;
 		long double e1 = 0;
 		long double c0 = 0;
 		long double c1 = 1;
+		long double l0 = 0;
+		long double l1 = 0;
 	} timeSyncMap;
 
 	std::string timesyncsWarning = "WARNING: Data file was parsed with less than 2 time-sync events, which can reduce the timestamp accuracy.\n"
@@ -150,7 +157,7 @@ public:
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void startProcessing(bool & processing);
-
+	long double getLocalUnixTime(std::string timestamp);
 	/*!
 			@brief returns the index of the shortest roundtrip
 			@param rtIndexes vector<pair<roundtripTime, index>>
