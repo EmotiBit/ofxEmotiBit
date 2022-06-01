@@ -101,20 +101,41 @@ public:
 	uint16_t MAX_BUFFER_LENGTH = 64;
 	size_t messageLen = 0;
 
-	struct LslTimestampData {
-		string localTime = "";
-		long double lslTime = 0;
-	};
 	string timestampFilenameString = "timesyncs";
-	std::vector<LslTimestampData> allLslTimestampData;
-	struct TimeSyncMap {
-		std::string columnHeaders = "eo,e1,"; // header for EmotiBit timestamp
-		unordered_map<std::string, std::string> headerForType{ {EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, "c0,c1" },
-														{EmotiBitPacket::TypeTag::TIMESTAMP_UTC, "u0,u1"},
-														{EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, "l0,l1"},
-														{EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP, "m0,m1"}
+	struct XTimeDomainPair {
+		std::string domainA;
+		std::string domainB;
+	};
+	unordered_map<std::string, unordered_map<std::string, std::vector<XTimeDomainPair>>> allCrossTimePoints;
+	unordered_map < std::string, unordered_map < std::string, pair<XTimeDomainPair, XTimeDomainPair>>> bestCrossDomainPoints;
+	
+	class TimeSyncMap {
+	public:
+		std::string columnHeaders = ""; // header for EmotiBit timestamp
+		unordered_map<std::string, std::string> headerForType{ 
+				{EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT, "eo,e1" },
+				{EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, "c0,c1" },
+				{EmotiBitPacket::TypeTag::TIMESTAMP_UTC, "u0,u1"},
+				{EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, "l0,l1"},
+				{EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP, "m0,m1"}
 		};
-		void updateSyncMapHeader(std::string typetag);
+		// This should probably be defined as static.
+		unordered_map<std::string, std::vector<std::string>> links = { 
+			// LC = TL:LC
+			{EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, 
+						std::vector<std::string>{EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL,
+												EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP}
+			},
+			// LM = TL:LC:LM
+			{EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP, 
+						std::vector<std::string>{EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL,
+												EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP,
+												EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP}
+			}
+		};
+		unordered_map<std::string, pair<long double, long double>> anchorPoints;
+		/*
+		long double e0 = 0;
 		long double e1 = 0;
 		long double c0 = 0;
 		long double c1 = 1;
@@ -122,6 +143,10 @@ public:
 		long double l1 = 0;
 		long double m0 = 0;
 		long double m1 = 0;
+		*/
+		void updateAnchorPoints(std::string identifier, pair<long double, long double> points);
+	private:
+		void updateSyncMapHeader(std::string identifier);
 	} timeSyncMap;
 
 	std::string timesyncsWarning = "WARNING: Data file was parsed with less than 2 time-sync events, which can reduce the timestamp accuracy.\n"
@@ -141,7 +166,7 @@ public:
 	class ParsedDataFormat{
 	public:
 		static const char MAP_DELIMETER = ':';
-		unordered_map<std::string, std::vector<std::string>> additionalTimestampMaps;
+		std::vector<std::string> additionalTimestamps;
 		std::vector<std::string> parsedDataHeaders = { "EmotiBitTimestamp",
 														"PacketNumber",
 														"DataLength",
@@ -180,7 +205,8 @@ public:
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void startProcessing(bool & processing);
-	long double getLocalUnixTime(std::string timestamp);
+	void selectBestCrossTimePoints();
+	long double getLocalTimeSecs(std::string timestamp);
 	/*!
 			@brief returns the index of the shortest roundtrip
 			@param rtIndexes vector<pair<roundtripTime, index>>
