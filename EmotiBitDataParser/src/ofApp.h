@@ -9,6 +9,7 @@
 #include "ofxInputField.h"
 #include "EmotiBitPacket.h"
 #include "ofxEmotiBitVersion.h"
+#include "ofxJSON.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -100,7 +101,6 @@ public:
 	uint16_t MAX_BUFFER_LENGTH = 64;
 	size_t messageLen = 0;
 
-	bool parseLsl = true;
 	struct LslTimestampData {
 		string localTime = "";
 		long double lslTime = 0;
@@ -108,12 +108,20 @@ public:
 	string timestampFilenameString = "timesyncs";
 	std::vector<LslTimestampData> allLslTimestampData;
 	struct TimeSyncMap {
-		long double e0 = 0;
+		std::string columnHeaders = "eo,e1,"; // header for EmotiBit timestamp
+		unordered_map<std::string, std::string> headerForType{ {EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, "c0,c1" },
+														{EmotiBitPacket::TypeTag::TIMESTAMP_UTC, "u0,u1"},
+														{EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, "l0,l1"},
+														{EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP, "m0,m1"}
+		};
+		void updateSyncMapHeader(std::string typetag);
 		long double e1 = 0;
 		long double c0 = 0;
 		long double c1 = 1;
 		long double l0 = 0;
 		long double l1 = 0;
+		long double m0 = 0;
+		long double m1 = 0;
 	} timeSyncMap;
 
 	std::string timesyncsWarning = "WARNING: Data file was parsed with less than 2 time-sync events, which can reduce the timestamp accuracy.\n"
@@ -128,6 +136,21 @@ public:
 		long double emotibitStartTime = INT_MAX;
 		long double emotibitEndTime = 0;
 	}recordedDataTimeRange;
+
+	
+	class ParsedDataFormat{
+	public:
+		static const char MAP_DELIMETER = ':';
+		unordered_map<std::string, std::vector<std::string>> additionalTimestampMaps;
+		std::vector<std::string> parsedDataHeaders = { "EmotiBitTimestamp",
+														"PacketNumber",
+														"DataLength",
+														"TypeTag",
+														"ProtocolVersion",
+														"DataReliability"};
+		void loadFromFile(std::string filepath, bool absolute = false);
+		std::string getParsedFileColHeaders();
+	}parsedDataFormat;
 
 	int eofCounter = 0;
 

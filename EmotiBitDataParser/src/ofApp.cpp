@@ -6,17 +6,18 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofLogToConsole();
-	writeOfxEmotiBitVersionFile();
-	ofSetWindowTitle("EmotiBit Data Parser (v" + ofxEmotiBitVersion + ")");
-
 #ifdef TARGET_MAC_OS
     ofSetDataPathRoot("../Resources/");
     cout<<"Changed the data pathroot for Release"<<endl;
 #endif
+	writeOfxEmotiBitVersionFile();
+	ofSetWindowTitle("EmotiBit Data Parser (v" + ofxEmotiBitVersion + ")");
+
 	ofBackground(255, 255, 255);
 	legendFont.load(ofToDataPath("verdana.ttf"), 12, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
-
+	parsedDataFormat.loadFromFile("ParsedDataFormat.json");
+	std::string colHeaders = parsedDataFormat.getParsedFileColHeaders();
 	processButton.addListener(this, &ofApp::startProcessing);
 
 	int guiXPos = 0;
@@ -205,14 +206,20 @@ void ofApp::update() {
 					cout << "Creating file: " << filename << endl;
 					ofstream mFile;
 					mFile.open(filename.c_str(), ios::out);
-					mFile << "e0,e1,c0,c1,l0,l1,TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime" << endl;
-					mFile << ofToString(timeSyncMap.e0, 6) << "," 
-						<< ofToString(timeSyncMap.e1, 6) << "," 
-						<< ofToString(timeSyncMap.c0, 6) << "," 
-						<< ofToString(timeSyncMap.c1, 6) << "," 
-						<< ofToString(timeSyncMap.l0, 6) << "," 
-						<< ofToString(timeSyncMap.l1, 6) << "," 
-						<<ofToString(allTimestampData.size()) << ","
+					mFile << timeSyncMap.columnHeaders + "TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime" << endl;
+					mFile << ofToString(timeSyncMap.e0, 6) << ","
+						<< ofToString(timeSyncMap.e1, 6) << ",";
+					if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != parsedDataFormat.additionalTimestampMaps.end())
+					{
+						mFile << ofToString(timeSyncMap.c0, 6) << ","
+							<< ofToString(timeSyncMap.c1, 6) << ",";
+					}
+					if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) != parsedDataFormat.additionalTimestampMaps.end())
+					{
+						mFile << ofToString(timeSyncMap.l0, 6) << ","
+							<< ofToString(timeSyncMap.l1, 6) << ",";
+					}
+					mFile <<ofToString(allTimestampData.size()) << ","
 						<<ofToString(recordedDataTimeRange.emotibitStartTime) << ","
 						<<ofToString(recordedDataTimeRange.emotibitEndTime);
 					mFile.close();
@@ -255,6 +262,66 @@ void ofApp::update() {
 	}
 }
 
+void ofApp::ParsedDataFormat::loadFromFile(std::string filename, bool absolute)
+{
+	ofxJSONElement jsonSettings;
+	try
+	{
+		// ToDo: find a place for these settings to be stored. a struct in ofApp?
+		jsonSettings.open(ofToDataPath(filename, absolute));
+		// for TL
+		if(jsonSettings["TimestampColumns"].isMember(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL))
+		{
+			if (jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL]["AddToOutput"].asBool())
+			{
+				std::string colHeader = jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL]["ColumnHeader"].asString();
+				parsedDataHeaders.insert(parsedDataHeaders.begin(), colHeader);
+				std::vector<std::string> conversionMap;
+				additionalTimestampMaps[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL] = conversionMap;
+			}
+		}
+		if (jsonSettings["TimestampColumns"].isMember(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME))
+		{
+			int numMaps = jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME]["Maps"].size();
+			for (int i = 0; i < numMaps; i++)
+			{
+				if (jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME]["Maps"][i]["AddToOutput"].asBool())
+				{
+					std::string colHeader = jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME]["Maps"][i]["ColumnHeader"].asString();
+					parsedDataHeaders.insert(parsedDataHeaders.begin(), colHeader);
+					std::vector<std::string> conversionMap = ofSplitString(jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME]["Maps"][i]["Link"].asString(), ofToString(MAP_DELIMETER));
+					additionalTimestampMaps[conversionMap.back()] = conversionMap;
+				}
+			}
+		}
+		if (jsonSettings["TimestampColumns"].isMember(EmotiBitPacket::TypeTag::TIMESTAMP_UTC))
+		{
+			if (jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_UTC]["AddToOutput"].asBool())
+			{
+				std::string colHeader = jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_UTC]["ColumnHeader"].asString();
+				parsedDataHeaders.insert(parsedDataHeaders.begin(), colHeader);
+				std::vector<std::string> conversionMap;
+				additionalTimestampMaps[EmotiBitPacket::TypeTag::TIMESTAMP_UTC] = conversionMap;
+			}
+		}
+		ofLog(OF_LOG_NOTICE, "Loaded " + filename + ": \n" + jsonSettings.getRawString(true));
+	}
+	catch (exception e)
+	{
+		ofLog(OF_LOG_ERROR, "ERROR: Failed to load " + filename + ": \n" + jsonSettings.getRawString(true));
+	}
+}
+
+std::string ofApp::ParsedDataFormat::getParsedFileColHeaders()
+{
+	std::string colHeaders;
+	for (int i = 0; i < parsedDataHeaders.size(); i++)
+	{
+		colHeaders += parsedDataHeaders.at(i);
+		colHeaders += EmotiBitPacket::PAYLOAD_DELIMITER;
+	}
+	return colHeaders;
+}
 
 int ofApp::getShortestRtIndex(vector<pair<int, int>> rtIndexes) {
 	int out;
@@ -489,19 +556,83 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 		tsMap.c1 = (long double)c + m; // Append subsecond as decimal
 		tsMap.c1 += bestTimestamps.second.roundTrip / 2.f / 1000.f; // adjust computer time by 1/2 the shortest round-trip time
 	}
-	// calculate l0 and l1 if parsing LSL time
-	if (parseLsl)
+	tsMap.updateSyncMapHeader(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL);
+	
+	if (timestampData.size() >= 1)
 	{
-		LslTimestampData firstLslPoint, lastLslPoint;
-		firstLslPoint = allLslTimestampData.front();
-		lastLslPoint = allLslTimestampData.back();
-		long double firstLocalUnixTime = getLocalUnixTime(firstLslPoint.localTime);
-		long double lastLocalUnixTime = getLocalUnixTime(lastLslPoint.localTime);
-		tsMap.l0 = linterp(tsMap.c0, firstLocalUnixTime, lastLocalUnixTime, firstLslPoint.lslTime, lastLslPoint.lslTime);
-		tsMap.l1 = linterp(tsMap.c1, firstLocalUnixTime, lastLocalUnixTime, firstLslPoint.lslTime, lastLslPoint.lslTime);
+		// calculate timestamps other than TU/TL
+		for (auto const& timestampMap : parsedDataFormat.additionalTimestampMaps)
+		{
+			// constants for LC
+			if(timestampMap.first.compare(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) == 0)
+			{
+				// update the map column headers
+				tsMap.updateSyncMapHeader(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
+				int mapSize = timestampMap.second.size();
+				long double currTimeDomainPoint0, currTimeDomainPoint1, currTimeDomainPoint2, currTimeDomainPoint3;
+				long double nextTimeDomainPoint0, nextTimeDomainPoint1, nextTimeDomainPoint2, nextTimeDomainPoint3;
 
+				for (int i = 0; i < mapSize - 1; i++)
+				{
+					struct PointsPerDomain {
+						long double *map0;
+						long double *map1;
+						long double x;
+						long double y;
+					}domainA, domainB;
+					if (timestampMap.second.at(i).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0 )
+					{
+						// TL > LC
+						if (timestampMap.second.at(i + 1).compare(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) == 0)
+						{
+							// define source domain
+							LslTimestampData firstLslPoint, lastLslPoint;
+							firstLslPoint = allLslTimestampData.front();
+							lastLslPoint = allLslTimestampData.back();
+							domainA.map0 = &tsMap.c0;
+							domainA.map1 = &tsMap.c1;
+							domainA.x = getLocalUnixTime(firstLslPoint.localTime);
+							domainA.y = getLocalUnixTime(lastLslPoint.localTime);
+							// define destination domain
+							domainB.map0 = &tsMap.l0;
+							domainB.map1 = &tsMap.l1;
+							domainB.x = firstLslPoint.lslTime;
+							domainB.y = lastLslPoint.lslTime;
+						}
+						else
+						{
+							// define for others
+						}
+					}
+					if (timestampMap.second.at(i).compare(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) == 0)
+					{
+						// LC > LM
+						if (timestampMap.second.at(i + 1).compare(EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP) == 0)
+						{
+							LslTimestampData firstLslPoint, lastLslPoint;
+							firstLslPoint = allLslTimestampData.front();
+							lastLslPoint = allLslTimestampData.back();
+							domainA.map0 = &tsMap.l0;
+							domainA.map1 = &tsMap.l1;
+							domainA.x = firstLslPoint.lslTime;
+							domainA.y = lastLslPoint.lslTime;
+							// define domain B
+							// ToDo: define for LM - Needs reorg in packet architecture, about how to send LM with LC
+						}
+					}
+					*(domainB.map0) = linterp(*(domainA.map0), domainA.x, domainA.y, domainB.x, domainB.y);
+					*(domainB.map1) = linterp(*(domainA.map1), domainA.x, domainA.y, domainB.x, domainB.y);
+				}
+			}
+		}
 	}
 	return tsMap;
+}
+
+void ofApp::TimeSyncMap::updateSyncMapHeader(std::string typetag)
+{
+	columnHeaders += headerForType[typetag];
+	columnHeaders += EmotiBitPacket::PAYLOAD_DELIMITER;
 }
 
 long double ofApp::getLocalUnixTime(std::string timestamp)
@@ -735,47 +866,43 @@ void ofApp::parseDataLine(string packet) {
 				}
 				// ToDo: Add TIMESTAMP_UTC processing
 			}
-			if (parseLsl)
+
+			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME) == 0)
 			{
-				if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME) == 0)
+				allLslTimestampData.emplace_back();
+				vector<string> splitData = ofSplitString(packet, ",");
+				if (splitData.size() > 7)
 				{
-					allLslTimestampData.emplace_back();
-					vector<string> splitData = ofSplitString(packet, ",");
-					if (splitData.size() > 7)
+					if (splitData.at(7) != "")
 					{
-						if (splitData.at(7) != "")
-						{
-							allLslTimestampData.back().localTime = splitData.at(7);
-						}
-						else
-						{
-							ofLogError() << "LSL parse error: local timstamp is NULL";
-						}
+						allLslTimestampData.back().localTime = splitData.at(7);
 					}
 					else
 					{
-						ofLogError() << "LSL parse error: local timstamp not found";
-					}
-					if (splitData.size() > 9)
-					{
-						if (splitData.at(9) != "")
-						{
-							allLslTimestampData.back().lslTime = ofToDouble(splitData.at(9));
-						}
-						else
-						{
-							ofLogError() << "LSL parse error: LSL timstamp is NULL";
-						}
-					}
-					else
-					{
-						ofLogError() << "LSL parse error: LSL timstamp not found";
+						ofLogError() << "LSL parse error: local timstamp is NULL";
 					}
 				}
+				else
+				{
+					ofLogError() << "LSL parse error: local timstamp not found";
+				}
+				if (splitData.size() > 9)
+				{
+					if (splitData.at(9) != "")
+					{
+						allLslTimestampData.back().lslTime = ofToDouble(splitData.at(9));
+					}
+					else
+					{
+						ofLogError() << "LSL parse error: LSL timstamp is NULL";
+					}
+				}
+				else
+				{
+					ofLogError() << "LSL parse error: LSL timstamp not found";
+				}
 			}
-
 		}
-
 		else if (currentState == State::PARSING_DATA) {
 			// ToDo: Update with EmotiBitPacket::Header usage
 			vector<string> splitData = ofSplitString(packet, ",");	// split data into separate value pairs
@@ -827,7 +954,14 @@ void ofApp::parseDataLine(string packet) {
 					timestamps.emplace(typeTag, timestamp);
 					prevtimestamp = timestamp;
 				}
-
+				bool isCompositePayload = false;
+				for (int i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_COMPOSITE_PAYLOAD; i++)
+				{
+					if (typeTag.compare(EmotiBitPacket::TypeTagGroups::COMPOSITE_PAYLOAD[i]) == 0)
+					{
+						isCompositePayload = true;
+					}
+				}
 				auto loggerPtr = loggers.find(typeTag);
 				if (loggerPtr == loggers.end()) {	// we don't have a logger already
 					string outFilePath = inFileDir + inFileBase + "_" + typeTag + fileExt;
@@ -835,7 +969,32 @@ void ofApp::parseDataLine(string packet) {
 					loggers.emplace(typeTag, new LoggerThread("", outFilePath));
 					loggerPtr = loggers.find(typeTag);
 					loggerPtr->second->startThread();
-					loggerPtr->second->push("LslTime,LocalTimestamp,EmotiBitTimestamp,PacketNumber,DataLength,TypeTag,ProtocolVersion,DataReliability," + typeTag + "\n");
+					std::string headerString = "";
+					if (!isCompositePayload)
+					{
+						headerString = parsedDataFormat.getParsedFileColHeaders() + typeTag + "\n";
+					}
+					else
+					{
+						headerString += parsedDataFormat.getParsedFileColHeaders();
+						for (int i = 0; i < dataLength; i++)
+						{
+							if (i + 6 >= splitData.size())
+							{
+								cout << "Error: dataLength > size, " << packet << endl;
+							}
+							else
+							{
+								if ((i + 6) % 2 == 0) // is even
+								{
+									headerString += splitData.at(i + 6);
+									headerString += EmotiBitPacket::PAYLOAD_DELIMITER;
+								}
+							}
+						}
+						headerString += "\n";
+					}
+					loggerPtr->second->push(headerString);
 				}
 				bool isAperiodicType = false;
 				for (int i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_APERIODIC; i++)
@@ -845,19 +1004,29 @@ void ofApp::parseDataLine(string packet) {
 						isAperiodicType = true;
 					}
 				}
-
+				
 				if (isAperiodicType) { //for aperiodic
+					std::string parsedDataRow = "";
 					for (int i = 0; i < dataLength; i++) {
 						if (i + 6 >= splitData.size()) {
 							cout << "Error: dataLength > size, " << packet << endl;
 						}
 						else {
-							long double epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
-							long double lslTimestamp = linterp(epochTimestamp, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
+							long double epochTimestamp;
+							long double lslTimestamp;
+							if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != parsedDataFormat.additionalTimestampMaps.end())
+							{
+								epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+								parsedDataRow = ofToString(epochTimestamp, 6) + ",";
+							}
+							if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) != parsedDataFormat.additionalTimestampMaps.end())
+							{
+								lslTimestamp = linterp(epochTimestamp, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
+								parsedDataRow = ofToString(lslTimestamp, 6) + "," + parsedDataRow;
+							}
+							// ToDo: Add provision for LM timestamp
 							loggerPtr->second->push(
-
-								ofToString(lslTimestamp, 6) + "," +
-								ofToString(epochTimestamp, 6) + "," +
+								parsedDataRow +
 								ofToString(timestamp, 3) + "," +
 								splitData.at(1) + "," +
 								splitData.at(2) + "," +
@@ -870,21 +1039,69 @@ void ofApp::parseDataLine(string packet) {
 						}
 					}
 				}
+				else if (isCompositePayload)
+				{
+					std::string parsedDataRow = "";
+					long double epochTimestamp;
+					long double lslTimestamp;
+					if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != parsedDataFormat.additionalTimestampMaps.end())
+					{
+						epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+						parsedDataRow = ofToString(epochTimestamp, 6) + ",";
+					}
+					if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) != parsedDataFormat.additionalTimestampMaps.end())
+					{
+						lslTimestamp = linterp(epochTimestamp, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
+						parsedDataRow = ofToString(lslTimestamp, 6) + "," + parsedDataRow;
+					}
+					// ToDo: Add provision for LM timestamp
+					parsedDataRow += ofToString(timestamp, 3) + "," +
+						splitData.at(1) + "," +
+						splitData.at(2) + "," +
+						splitData.at(3) + "," +
+						splitData.at(4) + "," +
+						splitData.at(5) + ",";
+					for (int i = 0; i < dataLength; i++) 
+					{
+						if (i + 6 >= splitData.size()) 
+						{
+							cout << "Error: dataLength > size, " << packet << endl;
+						}
+						else 
+						{
+							if ((i + 6) % 2 == 1)
+							{
+								parsedDataRow += splitData.at(i + 6);
+								parsedDataRow += EmotiBitPacket::PAYLOAD_DELIMITER;
+							}
+						}
+					}
+					loggerPtr->second->push(parsedDataRow + '\n');
+				}
 				else if (typeTag == EmotiBitPacket::TypeTagGroups::USER_MESSAGES[0]) { // for push messages
 					if (splitData.size() != 8) {
 						cout << "Error: userNote package error " << packet << endl;
 					}
 					else {
-						//                        long double epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
-						std::string computerTime = splitData.at(6);
-						size_t lastDelim = computerTime.find_last_of('-'); // find subsecond decimal
-						size_t lastNChar = computerTime.size() - lastDelim - 1;
-						std::time_t c = getEpochTime(std::wstring(computerTime.begin(), computerTime.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
-						long double lslTimestamp = linterp((long double)c, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
+						std::string parsedDataRow = "";
+						std::time_t c;
+						long double lslTimestamp;
+						if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != parsedDataFormat.additionalTimestampMaps.end())
+						{
+							std::string computerTime = splitData.at(6);
+							size_t lastDelim = computerTime.find_last_of('-'); // find subsecond decimal
+							size_t lastNChar = computerTime.size() - lastDelim - 1;
+							c = getEpochTime(std::wstring(computerTime.begin(), computerTime.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+							parsedDataRow += ofToString((long double)c, 6) + ",";
+						}
+						if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) != parsedDataFormat.additionalTimestampMaps.end())
+						{
+							lslTimestamp = linterp((long double)c, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
+							parsedDataRow = ofToString(lslTimestamp, 6) + "," + parsedDataRow;
+						}
+						// ToDo: Add provision for LM timestamp
 						loggerPtr->second->push(
-							ofToString(lslTimestamp, 6) + "," +
-							ofToString((long double)c, 6) + "," +
-							ofToString(timestamp, 3) + "," +
+							parsedDataRow + ofToString(timestamp, 3) + "," +
 							splitData.at(1) + "," +
 							splitData.at(2) + "," +
 							splitData.at(3) + "," +
@@ -902,14 +1119,22 @@ void ofApp::parseDataLine(string packet) {
 							cout << "Error: dataLength > size, " << packet << endl;
 						}
 						else {
-							//uint32_t interpTimestamp = ofMap(i + 1, 0, dataLength, prevtimestamp, timestamp);
+							std::string parsedDataRow = "";
+							long double epochTimestamp;
+							long double lslTimestamp;
 							long double interpTimestamp = linterp(i + 1, 0, dataLength, prevtimestamp, timestamp);
-							long double epochTimestamp = linterp(interpTimestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
-							long double lslTimestamp = linterp(epochTimestamp, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
+							if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != parsedDataFormat.additionalTimestampMaps.end())
+							{
+								epochTimestamp = linterp(timestamp, timeSyncMap.e0, timeSyncMap.e1, timeSyncMap.c0, timeSyncMap.c1);
+								parsedDataRow = ofToString(epochTimestamp, 6) + ",";
+							}
+							if (parsedDataFormat.additionalTimestampMaps.find(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) != parsedDataFormat.additionalTimestampMaps.end())
+							{
+								lslTimestamp = linterp(epochTimestamp, timeSyncMap.c0, timeSyncMap.c1, timeSyncMap.l0, timeSyncMap.l1);
+								parsedDataRow = ofToString(lslTimestamp, 6) + "," + parsedDataRow;
+							}
 							loggerPtr->second->push(
-								ofToString(lslTimestamp, 6) + "," +
-								ofToString(epochTimestamp, 6) + "," +
-								ofToString(interpTimestamp, 3) + "," +
+								parsedDataRow + ofToString(interpTimestamp, 3) + "," +
 								splitData.at(1) + "," +
 								splitData.at(2) + "," +
 								splitData.at(3) + "," +

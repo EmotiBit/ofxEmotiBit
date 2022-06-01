@@ -1419,19 +1419,19 @@ void ofApp::updateLsl()
 			auto sampleToUse = buffer.back();
 			std::stringstream ss;
 			for (auto channel : sampleToUse.sample) {
-				ss << "," << ofToString(channel);
+				ss << ofToString(channel) << EmotiBitPacket::PAYLOAD_DELIMITER;
 			}
 
 			vector<string> payload;
 
 			payload.clear();
-			payload.push_back("TSC");
+			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_DESTINATION_TIMESTAMP);
 			payload.push_back(ofToString(sampleToUse.timestampLocal, 7));
-			payload.push_back("TS");
+			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP);
 			payload.push_back(ofToString(sampleToUse.timestamp, 7));
-			payload.push_back("LC");
+			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
 			payload.push_back(ofToString(sampleToUse.localClock, 7));
-			payload.push_back("LD");
+			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_DATA);
 			payload.push_back(ss.str());
 			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::LSL_MARKER, emotiBitWiFi.controlPacketCounter++, payload);
 			emotiBitWiFi.sendControl(packet);
