@@ -1412,11 +1412,11 @@ void ofApp::setupOscilloscopes()
 
 void ofApp::updateLsl()
 {
-	ofSetLogLevel(OF_LOG_VERBOSE);
 	if (lsl.isConnected()) {
 		auto buffer = lsl.flush();
 
 		if (buffer.size()) {
+			consoleOutput.lslMarkerCount++;
 			auto sampleToUse = buffer.back();
 			std::stringstream ss;
 			for (auto channel : sampleToUse.sample) {
@@ -1457,7 +1457,6 @@ void ofApp::updateLsl()
 			emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, emotiBitWiFi.controlPacketCounter++, payload));
 		}
 	}
-	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
 
 void ofApp::clearOscilloscopes(bool connectedDeviceUpdated)
@@ -1646,6 +1645,12 @@ void ofApp::drawConsole()
 		}
 	}
 
+	if (consoleOutput.lslMarkerCount)
+	{
+		_consoleString += EmotiBitPacket::PAYLOAD_DELIMITER;
+		_consoleString += ("LSL marker count: " + ofToString(consoleOutput.lslMarkerCount));
+	}
+
 	int consoleTextPadding = 3;
 	ofPushStyle();
 	ofFill();
@@ -1816,7 +1821,6 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 		emotiBitWiFi.setHostAdvertisingSettings(settings);
 
 		lslSettings.markerStreamName = jsonSettings["lsl"]["marker"]["name"].asString();
-
 		ofLog(OF_LOG_NOTICE, "Loaded " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
 	}
 	catch (exception e)

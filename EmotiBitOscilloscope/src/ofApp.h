@@ -116,6 +116,9 @@ public:
 
 	ofxUDPManager udpConnection;
 	LoggerThread dataLogger;
+	struct ConsoleOutput {
+		int lslMarkerCount = 0;
+	}consoleOutput;
 	LoggerThread consoleLogger;
 	bool logData;
 	bool logConsole;
