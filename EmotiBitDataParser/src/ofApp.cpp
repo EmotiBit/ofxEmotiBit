@@ -206,7 +206,7 @@ void ofApp::update() {
 					cout << "Creating file: " << filename << endl;
 					ofstream mFile;
 					mFile.open(filename.c_str(), ios::out);
-					mFile << timeSyncMap.columnHeaders + "TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime" << endl;
+					mFile << timeSyncMap.columnHeaders + "TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime, DataParserVersion" << endl;
 					mFile << ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first, 6) << ","
 						<< ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second, 6) << ",";
 					for (int i = 0;i <= parsedDataFormat.additionalTimestamps.size() - 1; i++)
@@ -217,7 +217,8 @@ void ofApp::update() {
 					}
 					mFile <<ofToString(allTimestampData.size()) << ","
 						<<ofToString(recordedDataTimeRange.emotibitStartTime) << ","
-						<<ofToString(recordedDataTimeRange.emotibitEndTime);
+						<<ofToString(recordedDataTimeRange.emotibitEndTime) << ","
+						<<ofxEmotiBitVersion;
 					mFile.close();
 
 				}
@@ -275,43 +276,6 @@ void ofApp::ParsedDataFormat::loadFromFile(std::string filename, bool absolute)
 				additionalTimestamps.push_back(jsonSettings["timestampColumns"][i]["identifier"].asString());
 			}
 		}
-		/*
-		// for TL
-		if(jsonSettings["TimestampColumns"].isMember(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL))
-		{
-			if (jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL]["AddToOutput"].asBool())
-			{
-				std::string colHeader = jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL]["ColumnHeader"].asString();
-				parsedDataHeaders.insert(parsedDataHeaders.begin(), colHeader);
-				std::vector<std::string> conversionMap;
-				additionalTimestampMaps[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL] = conversionMap;
-			}
-		}
-		if (jsonSettings["TimestampColumns"].isMember(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME))
-		{
-			int numMaps = jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME]["Maps"].size();
-			for (int i = 0; i < numMaps; i++)
-			{
-				if (jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME]["Maps"][i]["AddToOutput"].asBool())
-				{
-					std::string colHeader = jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME]["Maps"][i]["ColumnHeader"].asString();
-					parsedDataHeaders.insert(parsedDataHeaders.begin(), colHeader);
-					std::vector<std::string> conversionMap = ofSplitString(jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME]["Maps"][i]["Link"].asString(), ofToString(MAP_DELIMETER));
-					additionalTimestampMaps[conversionMap.back()] = conversionMap;
-				}
-			}
-		}
-		if (jsonSettings["TimestampColumns"].isMember(EmotiBitPacket::TypeTag::TIMESTAMP_UTC))
-		{
-			if (jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_UTC]["AddToOutput"].asBool())
-			{
-				std::string colHeader = jsonSettings["TimestampColumns"][EmotiBitPacket::TypeTag::TIMESTAMP_UTC]["ColumnHeader"].asString();
-				parsedDataHeaders.insert(parsedDataHeaders.begin(), colHeader);
-				std::vector<std::string> conversionMap;
-				additionalTimestampMaps[EmotiBitPacket::TypeTag::TIMESTAMP_UTC] = conversionMap;
-			}
-		}
-		*/
 		ofLog(OF_LOG_NOTICE, "Loaded " + filename + ": \n" + jsonSettings.getRawString(true));
 	}
 	catch (exception e)
@@ -582,92 +546,52 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 			if(newTimeDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != 0)
 			{
 				auto conversionMap = timeSyncMap.links[newTimeDomain];
+				// traversing through the conversionMap
 				for (int i = 0; i < conversionMap.size() - 1; i++)
 				{
 					std::string fromDomain = conversionMap.at(i);
 					std::string toDomain  = conversionMap.at(i + 1);
-					long double ax, ay, bx, by;
-					if (fromDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0)
+					// perform calculation only if anchor points do not exist
+					if (tsMap.anchorPoints.find(toDomain) != tsMap.anchorPoints.end())
 					{
-						// convert to local time in secs if converting from TL
-						ax = getLocalTimeSecs(bestCrossDomainPoints[fromDomain][toDomain].first.domainA);
-						ay = getLocalTimeSecs(bestCrossDomainPoints[fromDomain][toDomain].second.domainA);
+						continue;
 					}
 					else
 					{
-						// get the first and second point in time domain A
-						ax = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].first.domainA);
-						ay = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].second.domainA);
-					}
-					// get the first and second point in time domain B
-					bx = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].first.domainB);
-					by = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].second.domainB);
-					long double k0, k1;
-					k0 = linterp(tsMap.anchorPoints[fromDomain].first, ax, ay, bx, by);
-					k1 = linterp(tsMap.anchorPoints[fromDomain].second, ax, ay, bx, by);
-					
-					// update teh timeSyncMap with enw map constants
-					tsMap.updateAnchorPoints(toDomain, make_pair(k0, k1));
-				}
-				/*
-				// update the map column headers
-				tsMap.updateSyncMapHeader(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
-				int mapSize = timestampMap.second.size();
-				long double currTimeDomainPoint0, currTimeDomainPoint1, currTimeDomainPoint2, currTimeDomainPoint3;
-				long double nextTimeDomainPoint0, nextTimeDomainPoint1, nextTimeDomainPoint2, nextTimeDomainPoint3;
-
-				for (int i = 0; i < mapSize - 1; i++)
-				{
-					struct PointsPerDomain {
-						long double *map0;
-						long double *map1;
-						long double x;
-						long double y;
-					}domainA, domainB;
-					if (timestampMap.second.at(i).compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0 )
-					{
-						// TL > LC
-						if (timestampMap.second.at(i + 1).compare(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) == 0)
+						// perform calculation only if we received enough timeCross points for domain transfer
+						if (bestCrossDomainPoints[fromDomain].find(toDomain) != bestCrossDomainPoints[fromDomain].end())
 						{
-							// define source domain
-							LslTimestampData firstLslPoint, lastLslPoint;
-							firstLslPoint = allLslTimestampData.front();
-							lastLslPoint = allLslTimestampData.back();
-							domainA.map0 = &tsMap.c0;
-							domainA.map1 = &tsMap.c1;
-							domainA.x = getLocalUnixTime(firstLslPoint.localTime);
-							domainA.y = getLocalUnixTime(lastLslPoint.localTime);
-							// define destination domain
-							domainB.map0 = &tsMap.l0;
-							domainB.map1 = &tsMap.l1;
-							domainB.x = firstLslPoint.lslTime;
-							domainB.y = lastLslPoint.lslTime;
+							long double ax, ay, bx, by;
+							if (fromDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0)
+							{
+								// convert to local time in secs if converting from TL
+								ax = getLocalTimeSecs(bestCrossDomainPoints[fromDomain][toDomain].first.domainA);
+								ay = getLocalTimeSecs(bestCrossDomainPoints[fromDomain][toDomain].second.domainA);
+							}
+							else
+							{
+								// get the first and second point in time domain A
+								ax = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].first.domainA);
+								ay = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].second.domainA);
+							}
+							// get the first and second point in time domain B
+							bx = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].first.domainB);
+							by = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].second.domainB);
+							long double k0, k1;
+							k0 = linterp(tsMap.anchorPoints[fromDomain].first, ax, ay, bx, by);
+							k1 = linterp(tsMap.anchorPoints[fromDomain].second, ax, ay, bx, by);
+
+							// update teh timeSyncMap with enw map constants
+							tsMap.updateAnchorPoints(toDomain, make_pair(k0, k1));
 						}
 						else
 						{
-							// define for others
+							ofLog(OF_LOG_WARNING, "Too few timestamps received to convert: " + fromDomain + "->" + toDomain);
+							// set anchor poitns to 0,0 if domain transfer not possible
+							tsMap.updateAnchorPoints(toDomain, make_pair(0, 0));
 						}
 					}
-					if (timestampMap.second.at(i).compare(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP) == 0)
-					{
-						// LC > LM
-						if (timestampMap.second.at(i + 1).compare(EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP) == 0)
-						{
-							LslTimestampData firstLslPoint, lastLslPoint;
-							firstLslPoint = allLslTimestampData.front();
-							lastLslPoint = allLslTimestampData.back();
-							domainA.map0 = &tsMap.l0;
-							domainA.map1 = &tsMap.l1;
-							domainA.x = firstLslPoint.lslTime;
-							domainA.y = lastLslPoint.lslTime;
-							// define domain B
-							// ToDo: define for LM - Needs reorg in packet architecture, about how to send LM with LC
-						}
-					}
-					*(domainB.map0) = linterp(*(domainA.map0), domainA.x, domainA.y, domainB.x, domainB.y);
-					*(domainB.map1) = linterp(*(domainA.map1), domainA.x, domainA.y, domainB.x, domainB.y);
 				}
-				*/
 			}
 		}
 	}
@@ -686,13 +610,17 @@ void ofApp::selectBestCrossTimePoints()
 			// for each link in the map
 			for (int i = 0; link.size() > 1 && i < link.size() - 1; i++)
 			{
-				// check if we received more than 2 CROSS_TIMESTAMPS for the required conversion 
-				if (allCrossTimePoints[link.at(i)][link.at(i+1)].size() >= 2)
+				// only update if does not exist
+				if (bestCrossDomainPoints[link.at(i)].find(link.at(i + 1)) == bestCrossDomainPoints[link.at(i)].end())
 				{
-					XTimeDomainPair first, second;
-					first = allCrossTimePoints[link.at(i)][link.at(i + 1)].front();  // first common point between time domains
-					second = allCrossTimePoints[link.at(i)][link.at(i + 1)].back();  // first common point between time domains
-					bestCrossDomainPoints[link.at(i)][link.at(i + 1)] = make_pair(first,second);
+					// check if we received more than 2 CROSS_TIMESTAMPS for the required conversion 
+					if (allCrossTimePoints[link.at(i)][link.at(i + 1)].size() >= 2)
+					{
+						XTimeDomainPair first, second;
+						first = allCrossTimePoints[link.at(i)][link.at(i + 1)].front();  // first common point between time domains
+						second = allCrossTimePoints[link.at(i)][link.at(i + 1)].back();  // first common point between time domains
+						bestCrossDomainPoints[link.at(i)][link.at(i + 1)] = make_pair(first, second);
+					}
 				}
 			}
 		}
@@ -1044,17 +972,6 @@ void ofApp::parseDataLine(string packet) {
 
 				//outFile.open(outFilePath.c_str(), ios::out | ios::app);
 				//if (outFile.is_open()) {
-
-
-				auto indexPtr = timestamps.find(typeTag);
-				if (indexPtr != timestamps.end()) {	// we have a previous timestamp!
-					prevtimestamp = indexPtr->second;
-					indexPtr->second = timestamp;
-				}
-				else {
-					timestamps.emplace(typeTag, timestamp);
-					prevtimestamp = timestamp;
-				}
 				bool isCompositePayload = false;
 				for (int i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_COMPOSITE_PAYLOAD; i++)
 				{
@@ -1063,12 +980,49 @@ void ofApp::parseDataLine(string packet) {
 						isCompositePayload = true;
 					}
 				}
-				auto loggerPtr = loggers.find(typeTag);
+
+				std::string fileTypeModifier;
+				if (typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME) == 0)
+				{
+					std::string modifier;
+					for (int i = 0; i < dataLength; i++)
+					{
+						if (i + 6 >= splitData.size())
+						{
+							cout << "Error: dataLength > size, " << packet << endl;
+						}
+						else
+						{
+							if ((i + 6) % 2 == 0) // is even
+							{
+								modifier += ParsedDataFormat::FILE_EXT_DELIMITER;
+								modifier += splitData.at(i + 6);
+							}
+						}
+					}
+					fileTypeModifier = typeTag + modifier;
+				}
+				else
+				{
+					fileTypeModifier = typeTag;
+				}
+
+				auto indexPtr = timestamps.find(fileTypeModifier);
+				if (indexPtr != timestamps.end()) {	// we have a previous timestamp!
+					prevtimestamp = indexPtr->second;
+					indexPtr->second = timestamp;
+				}
+				else {
+					timestamps.emplace(fileTypeModifier, timestamp);
+					prevtimestamp = timestamp;
+				}
+
+				auto loggerPtr = loggers.find(fileTypeModifier);
 				if (loggerPtr == loggers.end()) {	// we don't have a logger already
-					string outFilePath = inFileDir + inFileBase + "_" + typeTag + fileExt;
+					string outFilePath = inFileDir + inFileBase + "_" + fileTypeModifier + fileExt;
 					cout << "Creating file: " << outFilePath << endl;
-					loggers.emplace(typeTag, new LoggerThread("", outFilePath));
-					loggerPtr = loggers.find(typeTag);
+					loggers.emplace(fileTypeModifier, new LoggerThread("", outFilePath));
+					loggerPtr = loggers.find(fileTypeModifier);
 					loggerPtr->second->startThread();
 					std::string headerString = "";
 					if (!isCompositePayload)

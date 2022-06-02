@@ -134,16 +134,7 @@ public:
 			}
 		};
 		unordered_map<std::string, pair<long double, long double>> anchorPoints;
-		/*
-		long double e0 = 0;
-		long double e1 = 0;
-		long double c0 = 0;
-		long double c1 = 1;
-		long double l0 = 0;
-		long double l1 = 0;
-		long double m0 = 0;
-		long double m1 = 0;
-		*/
+
 		void updateAnchorPoints(std::string identifier, pair<long double, long double> points);
 	private:
 		void updateSyncMapHeader(std::string identifier);
@@ -165,7 +156,7 @@ public:
 	
 	class ParsedDataFormat{
 	public:
-		static const char MAP_DELIMETER = ':';
+		static const char FILE_EXT_DELIMITER = '_';
 		std::vector<std::string> additionalTimestamps;
 		std::vector<std::string> parsedDataHeaders = { "EmotiBitTimestamp",
 														"PacketNumber",

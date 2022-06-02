@@ -2,7 +2,7 @@
 //#include <string>
 #include "ofMain.h"
 
-const std::string ofxEmotiBitVersion = "1.4.11.feat-lslParsing.5";
+const std::string ofxEmotiBitVersion = "1.4.11.feat-lslParsing.6";
 static const char SOFTWARE_VERSION_PREFIX = 'v';
 
 static void writeOfxEmotiBitVersionFile() {
