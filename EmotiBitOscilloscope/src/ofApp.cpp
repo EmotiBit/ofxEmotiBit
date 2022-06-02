@@ -34,7 +34,7 @@ void ofApp::setup() {
 	{
 		consoleLogger.startThread();
 	}
-	lsl.start(); //Start up lsl connection on a seperate thread
+	lsl.start(LslSettings::formatStreamName(lslSettings.markerStreamName)); //Start up lsl connection on a seperate thread
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
 	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
@@ -1412,6 +1412,7 @@ void ofApp::setupOscilloscopes()
 
 void ofApp::updateLsl()
 {
+	ofSetLogLevel(OF_LOG_VERBOSE);
 	if (lsl.isConnected()) {
 		auto buffer = lsl.flush();
 
@@ -1437,16 +1438,26 @@ void ofApp::updateLsl()
 			emotiBitWiFi.sendControl(packet);
 			//cout << packet;
 
+			// send TX packet for LCxLM
+			payload.clear();
+			payload.push_back(ofToString(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP));
+			payload.push_back(ofToString(sampleToUse.timestampLocal, 7));
+			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP);
+			payload.push_back(ofToString(sampleToUse.timestamp, 7));
+			emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, emotiBitWiFi.controlPacketCounter++, payload));
+
+
 			// ToDo: Consider if TIMESTAMP_CROSS_TIME packet sending needs to be in a different spot
 			double lsltime = lsl::local_clock();
 			payload.clear();
 			payload.push_back(ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL));
 			payload.push_back(ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT));
-			payload.push_back("LC");
+			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
 			payload.push_back(ofToString(lsltime, 7));
 			emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, emotiBitWiFi.controlPacketCounter++, payload));
 		}
 	}
+	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
 
 void ofApp::clearOscilloscopes(bool connectedDeviceUpdated)
@@ -1803,6 +1814,8 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 		}
 
 		emotiBitWiFi.setHostAdvertisingSettings(settings);
+
+		lslSettings.markerStreamName = jsonSettings["lsl"]["marker"]["name"].asString();
 
 		ofLog(OF_LOG_NOTICE, "Loaded " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
 	}

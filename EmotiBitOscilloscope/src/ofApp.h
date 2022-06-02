@@ -26,6 +26,15 @@ public:
 	void exit();
 
 	ofxLSL lsl;
+	struct LslSettings {
+		std::string markerStreamName;
+	
+		static std::string formatStreamName(std::string name)
+		{
+			// returns "name = 'sName'"
+			return("name = '" + name + "'");
+		}
+	}lslSettings;
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y);
