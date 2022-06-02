@@ -1178,7 +1178,7 @@ void ofApp::parseDataLine(string packet) {
 							for (auto newTimeDomain : parsedDataFormat.additionalTimestamps)
 							{
 								long double newDomainTimestamp;
-								newDomainTimestamp = linterp(timestamp,
+								newDomainTimestamp = linterp(interpTimestamp,
 									timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first,
 									timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second,
 									timeSyncMap.anchorPoints[newTimeDomain].first,

@@ -113,7 +113,7 @@ public:
 	public:
 		std::string columnHeaders = ""; // header for EmotiBit timestamp
 		unordered_map<std::string, std::string> headerForType{ 
-				{EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT, "eo,e1" },
+				{EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT, "e0,e1" },
 				{EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, "c0,c1" },
 				{EmotiBitPacket::TypeTag::TIMESTAMP_UTC, "u0,u1"},
 				{EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, "l0,l1"},

@@ -34,7 +34,7 @@ void ofApp::setup() {
 	{
 		consoleLogger.startThread();
 	}
-	lsl.start(LslSettings::formatStreamName(lslSettings.markerStreamName)); //Start up lsl connection on a seperate thread
+	lsl.start(lslSettings.markerStreamName); //Start up lsl connection on a seperate thread
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
 	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
@@ -1648,7 +1648,7 @@ void ofApp::drawConsole()
 	if (consoleOutput.lslMarkerCount)
 	{
 		_consoleString += EmotiBitPacket::PAYLOAD_DELIMITER;
-		_consoleString += ("LSL marker count: " + ofToString(consoleOutput.lslMarkerCount));
+		_consoleString += ("LSL markers Received: " + ofToString(consoleOutput.lslMarkerCount));
 	}
 
 	int consoleTextPadding = 3;

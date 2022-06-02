@@ -28,12 +28,6 @@ public:
 	ofxLSL lsl;
 	struct LslSettings {
 		std::string markerStreamName;
-	
-		static std::string formatStreamName(std::string name)
-		{
-			// returns "name = 'sName'"
-			return("name = '" + name + "'");
-		}
 	}lslSettings;
 	void keyPressed(int key);
 	void keyReleased(int key);
