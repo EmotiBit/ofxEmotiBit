@@ -26,8 +26,11 @@ public:
 	void exit();
 
 	ofxLSL lsl;
+	/*!
+	@brief data structure to hold LSL settings
+	*/
 	struct LslSettings {
-		std::string markerStreamName;
+		std::string markerStreamName; //!< marker stream inlet for LSL
 	}lslSettings;
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -110,6 +113,7 @@ public:
 
 	ofxUDPManager udpConnection;
 	LoggerThread dataLogger;
+	// ToDo: This will probably change when we come up with a better solution for updating status bar.
 	struct ConsoleOutput {
 		int lslMarkerCount = 0;
 	}consoleOutput;

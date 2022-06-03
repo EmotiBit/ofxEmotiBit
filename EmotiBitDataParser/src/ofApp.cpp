@@ -17,7 +17,6 @@ void ofApp::setup() {
 	legendFont.load(ofToDataPath("verdana.ttf"), 12, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
 	parsedDataFormat.loadFromFile("ParsedDataFormat.json");
-	std::string colHeaders = parsedDataFormat.getParsedFileColHeaders();
 	processButton.addListener(this, &ofApp::startProcessing);
 
 	int guiXPos = 0;
@@ -209,6 +208,7 @@ void ofApp::update() {
 					mFile << timeSyncMap.columnHeaders + "TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime, DataParserVersion" << endl;
 					mFile << ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first, 6) << ","
 						<< ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second, 6) << ",";
+					// Add column headers for additional time domains read from parsed data format file
 					for (int i = 0;i <= parsedDataFormat.additionalTimestamps.size() - 1; i++)
 					{
 						auto timeDomain = parsedDataFormat.additionalTimestamps.at(i);
@@ -537,14 +537,17 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 	tsMap.updateAnchorPoints(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, make_pair(c0,c1));
 	// find the best CrossTime points for time domain transfers
 	selectBestCrossTimePoints();
+
+	// calculate anchor points for all other time domains
 	if (timestampData.size() >= 1 && parsedDataFormat.additionalTimestamps.size())
 	{
-		// calculate timestamps other than TU/TL
+		// for all new domains specified by user
 		for (auto const& newTimeDomain : parsedDataFormat.additionalTimestamps)
 		{
 			// only for non TL timestamps
 			if(newTimeDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != 0)
 			{
+				// load the conversion map
 				auto conversionMap = timeSyncMap.links[newTimeDomain];
 				// traversing through the conversionMap
 				for (int i = 0; i < conversionMap.size() - 1; i++)
@@ -564,7 +567,8 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 							long double ax, ay, bx, by;
 							if (fromDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0)
 							{
-								// convert to local time in secs if converting from TL
+								// convert to local time in secs if converting from TL.
+								// TL is specified in non-numeral format in raw file
 								ax = getLocalTimeSecs(bestCrossDomainPoints[fromDomain][toDomain].first.domainA);
 								ay = getLocalTimeSecs(bestCrossDomainPoints[fromDomain][toDomain].second.domainA);
 							}
@@ -578,10 +582,11 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 							bx = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].first.domainB);
 							by = ofToDouble(bestCrossDomainPoints[fromDomain][toDomain].second.domainB);
 							long double k0, k1;
+							// find anchor points in second domain, given anchor points in first domain
 							k0 = linterp(tsMap.anchorPoints[fromDomain].first, ax, ay, bx, by);
 							k1 = linterp(tsMap.anchorPoints[fromDomain].second, ax, ay, bx, by);
 
-							// update teh timeSyncMap with enw map constants
+							// update the timeSyncMap with calculated anchor points for the new domain
 							tsMap.updateAnchorPoints(toDomain, make_pair(k0, k1));
 						}
 						else
@@ -607,7 +612,7 @@ void ofApp::selectBestCrossTimePoints()
 		if (timeSyncMap.links.find(timestamp) != timeSyncMap.links.end())
 		{
 			auto link = timeSyncMap.links[timestamp];
-			// for each link in the map
+			// traversing through the conversion map
 			for (int i = 0; link.size() > 1 && i < link.size() - 1; i++)
 			{
 				// only update if does not exist
@@ -877,7 +882,7 @@ void ofApp::parseDataLine(string packet) {
 				}
 				// ToDo: Add TIMESTAMP_UTC processing
 			}
-
+			// gather all cross timestampsin raw data
 			if (packetHeader.typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME) == 0)
 			{
 				vector<string> splitData = ofSplitString(packet, ",");
@@ -982,9 +987,11 @@ void ofApp::parseDataLine(string packet) {
 				}
 
 				std::string fileTypeModifier;
+				// If packet is of type TX, create a file with name _TL_AA_BB.csv
 				if (typeTag.compare(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME) == 0)
 				{
 					std::string modifier;
+					// traverse through payload to extract typetags/ payload labels
 					for (int i = 0; i < dataLength; i++)
 					{
 						if (i + 6 >= splitData.size())
@@ -1066,9 +1073,11 @@ void ofApp::parseDataLine(string packet) {
 						cout << "Error: dataLength < size, " << packet << endl;
 					}
 					else {
+						// add timestamp for each new domain
 						for (auto newTimeDomain : parsedDataFormat.additionalTimestamps)
 						{
 							long double newDomainTimestamp;
+							// use calculated anchor poitns to find timestamps
 							newDomainTimestamp = linterp(timestamp,
 								timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first,
 								timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second,

@@ -1648,7 +1648,7 @@ void ofApp::drawConsole()
 	if (consoleOutput.lslMarkerCount)
 	{
 		_consoleString += EmotiBitPacket::PAYLOAD_DELIMITER;
-		_consoleString += ("LSL markers Received: " + ofToString(consoleOutput.lslMarkerCount));
+		_consoleString += (" LSL markers Received: " + ofToString(consoleOutput.lslMarkerCount));
 	}
 
 	int consoleTextPadding = 3;

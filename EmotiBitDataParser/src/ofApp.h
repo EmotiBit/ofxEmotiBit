@@ -102,16 +102,35 @@ public:
 	size_t messageLen = 0;
 
 	string timestampFilenameString = "timesyncs";
+	/*!
+	@brief An instance of this structure represents a point in time in 2 domains.
+			
+	*/
 	struct XTimeDomainPair {
-		std::string domainA;
-		std::string domainB;
+		std::string domainA;  //!< timespoint in the first domain
+		std::string domainB;  //!< timespoint in the second domain
 	};
+
+	/*!
+	@brief holds all cross-time points stored in the raw file
+		Each vector is a list of all crossTime points between 2 domains. Each vector can be accessed by 
+		2 typetags which represent the 2 time domains.
+		Ex. [TL]LC] is a vector that holds all cross timepoints between TL and LC
+	*/
 	unordered_map<std::string, unordered_map<std::string, std::vector<XTimeDomainPair>>> allCrossTimePoints;
+	
+	/*!
+	@brief holds the 2 best cross time points which will be used to create the timeSyncMap
+	*/
 	unordered_map < std::string, unordered_map < std::string, pair<XTimeDomainPair, XTimeDomainPair>>> bestCrossDomainPoints;
 	
 	class TimeSyncMap {
 	public:
-		std::string columnHeaders = ""; // header for EmotiBit timestamp
+		std::string columnHeaders = ""; //!< header for EmotiBit timesSyncMap.csv
+		
+		/*!
+		@brief holds the column headers for each time domain which will be added to the sync map
+		*/
 		unordered_map<std::string, std::string> headerForType{ 
 				{EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT, "e0,e1" },
 				{EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, "c0,c1" },
@@ -119,7 +138,11 @@ public:
 				{EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, "l0,l1"},
 				{EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP, "m0,m1"}
 		};
-		// This should probably be defined as static.
+		
+		// ToDo: This should probably be defined as static.
+		/*!
+		@brief holds all links to convert one time domain to another
+		*/
 		unordered_map<std::string, std::vector<std::string>> links = { 
 			// LC = TL:LC
 			{EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, 
@@ -133,10 +156,23 @@ public:
 												EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP}
 			}
 		};
-		unordered_map<std::string, pair<long double, long double>> anchorPoints;
 
+		/*!
+		@brief holds the anchor points for domain, which will be used to interpolate time
+		*/
+		unordered_map<std::string, pair<long double, long double>> anchorPoints;
+		/*!
+		@brief Function to update the anchor points for a time domain. 
+			Calls updateSyncMapHeader() to update column header after amchor poitns are updated for the domain
+		@param identifier typetag representing the time domain
+		@param points pair representing teh anchor points
+		*/
 		void updateAnchorPoints(std::string identifier, pair<long double, long double> points);
 	private:
+		/*!
+		@brief update the column headers for timeSyncMap csv file
+		@param typetag or paylaod label representing the time domain
+		*/
 		void updateSyncMapHeader(std::string identifier);
 	} timeSyncMap;
 
@@ -153,18 +189,29 @@ public:
 		long double emotibitEndTime = 0;
 	}recordedDataTimeRange;
 
-	
+	/*!
+	@brief holds information about the column headers in the parsed output
+	*/
 	class ParsedDataFormat{
 	public:
 		static const char FILE_EXT_DELIMITER = '_';
-		std::vector<std::string> additionalTimestamps;
+		std::vector<std::string> additionalTimestamps; //!< list of all additional time domains requested by user
 		std::vector<std::string> parsedDataHeaders = { "EmotiBitTimestamp",
 														"PacketNumber",
 														"DataLength",
 														"TypeTag",
 														"ProtocolVersion",
 														"DataReliability"};
+		/*!
+		@brief Function to load timestamp options chosen by user
+		@param filepath path to file containing details about parsed data format
+		@param absolute true if path specified is absolute path, else false
+		*/
 		void loadFromFile(std::string filepath, bool absolute = false);
+		/*!
+		@brief function to get string representing column headers in parsed output
+		@return parsed output column header string 
+		*/
 		std::string getParsedFileColHeaders();
 	}parsedDataFormat;
 
@@ -196,7 +243,14 @@ public:
 	vector<vector<vector<T>>> initBuffer(vector<vector<vector<T>>> buffer);
 	float smoother(float smoothData, float newData, float newDataWeight);
 	void startProcessing(bool & processing);
+	/*!
+	@brief selects best cross time points to calculate anchor points for each time domain
+	*/
 	void selectBestCrossTimePoints();
+	/*
+	@brief converts Local time in string to time in seconds
+	@param timestamp timestamp in H-M-S format
+	*/
 	long double getLocalTimeSecs(std::string timestamp);
 	/*!
 			@brief returns the index of the shortest roundtrip
