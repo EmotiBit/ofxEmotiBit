@@ -16,7 +16,7 @@ void ofApp::setup() {
 	ofBackground(255, 255, 255);
 	legendFont.load(ofToDataPath("verdana.ttf"), 12, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
-	parsedDataFormat.loadFromFile("ParsedDataFormat.json");
+	parsedDataFormat.loadFromFile("parsedDataFormat.json");
 	processButton.addListener(this, &ofApp::startProcessing);
 
 	int guiXPos = 0;
