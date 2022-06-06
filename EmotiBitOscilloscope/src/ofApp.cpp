@@ -150,8 +150,21 @@ void ofApp::checkLatestSwVersion()
 				{
 					for (int i = 0; i < versionLength; i++)
 					{
-						if (ofToInt(latestVersionSplit.at(i)) > ofToInt(currentVersionSplit.at(i)))
+						int latest = ofToInt(latestVersionSplit.at(i));
+						int current = ofToInt(currentVersionSplit.at(i));
+						if (latest == current)
 						{
+							// need to check minor version
+							continue;
+						}
+						else if (latest < current)
+						{
+							// current version higher than latest available
+							break;
+						}
+						else // latest > current
+						{
+							// new version available
 							newVersionAvailable = true;
 							break;
 						}
