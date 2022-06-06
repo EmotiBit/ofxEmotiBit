@@ -1,0 +1,19 @@
+{
+  "timestampColumns": [
+    {
+      "identifier": "TL",
+      "columnHeader": "LocalTimestamp",
+      "addToOutput": true
+    },
+    {
+      "identifier": "LC",
+      "columnHeader": "LslLocalTimestamp",
+      "addToOutput": true
+    },
+    {
+      "identifier": "LM",
+      "columnHeader": "LslMarkerSourceTimestamp",
+      "addToOutput": false
+    }
+  ]
+}
