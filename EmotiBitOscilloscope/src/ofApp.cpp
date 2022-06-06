@@ -1426,9 +1426,9 @@ void ofApp::updateLsl()
 			vector<string> payload;
 
 			payload.clear();
-			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_DESTINATION_TIMESTAMP);
+			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_RX_TIMESTAMP);
 			payload.push_back(ofToString(sampleToUse.timestampLocal, 7));
-			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP);
+			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP);
 			payload.push_back(ofToString(sampleToUse.timestamp, 7));
 			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
 			payload.push_back(ofToString(sampleToUse.localClock, 7));
@@ -1442,16 +1442,17 @@ void ofApp::updateLsl()
 			payload.clear();
 			payload.push_back(ofToString(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP));
 			payload.push_back(ofToString(sampleToUse.timestampLocal, 7));
-			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP);
+			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP);
 			payload.push_back(ofToString(sampleToUse.timestamp, 7));
 			emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, emotiBitWiFi.controlPacketCounter++, payload));
 
 
 			// ToDo: Consider if TIMESTAMP_CROSS_TIME packet sending needs to be in a different spot
 			double lsltime = lsl::local_clock();
+			string timestampLocal = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
 			payload.clear();
 			payload.push_back(ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL));
-			payload.push_back(ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT));
+			payload.push_back(timestampLocal);
 			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
 			payload.push_back(ofToString(lsltime, 7));
 			emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, emotiBitWiFi.controlPacketCounter++, payload));
@@ -1819,7 +1820,7 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 		}
 
 		emotiBitWiFi.setHostAdvertisingSettings(settings);
-
+		// ToDo: Add error handling for each section so that one section can fail, but the rest of the file can load properly and run.
 		lslSettings.markerStreamName = jsonSettings["lsl"]["marker"]["name"].asString();
 		ofLog(OF_LOG_NOTICE, "Loaded " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
 	}

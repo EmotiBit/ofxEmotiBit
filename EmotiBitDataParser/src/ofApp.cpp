@@ -544,8 +544,8 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 		// for all new domains specified by user
 		for (auto const& newTimeDomain : parsedDataFormat.additionalTimestamps)
 		{
-			// only for non TL timestamps
-			if(newTimeDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != 0)
+			// only for non TL/TU timestamps
+			if(newTimeDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != 0 && newTimeDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) != 0)
 			{
 				// load the conversion map
 				auto conversionMap = timeSyncMap.links[newTimeDomain];
@@ -623,7 +623,7 @@ void ofApp::selectBestCrossTimePoints()
 					{
 						XTimeDomainPair first, second;
 						first = allCrossTimePoints[link.at(i)][link.at(i + 1)].front();  // first common point between time domains
-						second = allCrossTimePoints[link.at(i)][link.at(i + 1)].back();  // first common point between time domains
+						second = allCrossTimePoints[link.at(i)][link.at(i + 1)].back();  // last common point between time domains
 						bestCrossDomainPoints[link.at(i)][link.at(i + 1)] = make_pair(first, second);
 					}
 				}
@@ -647,7 +647,11 @@ void ofApp::TimeSyncMap::updateAnchorPoints(std::string identifier, pair<long do
 
 void ofApp::TimeSyncMap::updateSyncMapHeader(std::string identifier)
 {
-	columnHeaders += headerForType[identifier];
+	std::string suffix0 = "0";
+	std::string suffix1 = "1";
+	columnHeaders += (identifier + suffix0);
+	columnHeaders += EmotiBitPacket::PAYLOAD_DELIMITER;
+	columnHeaders += (identifier + suffix1);
 	columnHeaders += EmotiBitPacket::PAYLOAD_DELIMITER;
 }
 

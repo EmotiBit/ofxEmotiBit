@@ -115,7 +115,7 @@ public:
 	@brief holds all cross-time points stored in the raw file
 		Each vector is a list of all crossTime points between 2 domains. Each vector can be accessed by 
 		2 typetags which represent the 2 time domains.
-		Ex. [TL]LC] is a vector that holds all cross timepoints between TL and LC
+		Ex. [TL][LC] is a vector that holds all cross timepoints between TL and LC
 	*/
 	unordered_map<std::string, unordered_map<std::string, std::vector<XTimeDomainPair>>> allCrossTimePoints;
 	
@@ -128,18 +128,7 @@ public:
 	public:
 		std::string columnHeaders = ""; //!< header for EmotiBit timesSyncMap.csv
 		
-		/*!
-		@brief holds the column headers for each time domain which will be added to the sync map
-		*/
-		unordered_map<std::string, std::string> headerForType{ 
-				{EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT, "e0,e1" },
-				{EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, "c0,c1" },
-				{EmotiBitPacket::TypeTag::TIMESTAMP_UTC, "u0,u1"},
-				{EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, "l0,l1"},
-				{EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP, "m0,m1"}
-		};
-		
-		// ToDo: This should probably be defined as static.
+		// ToDo: Convert this hard-coded linkage into an algo. Probably a tree traversal to link domain to TL/TU
 		/*!
 		@brief holds all links to convert one time domain to another
 		*/
@@ -150,10 +139,10 @@ public:
 												EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP}
 			},
 			// LM = TL:LC:LM
-			{EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP, 
+			{EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP, 
 						std::vector<std::string>{EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL,
 												EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP,
-												EmotiBitPacket::PayloadLabel::LSL_MARKER_SOURCE_TIMESTAMP}
+												EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP}
 			}
 		};
 
