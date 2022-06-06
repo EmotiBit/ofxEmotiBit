@@ -29,6 +29,9 @@
 		933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */; };
 		9421687B2609257200B28F44 /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942168792609257200B28F44 /* EmotiBitPacket.cpp */; };
 		9421687D2609450D00B28F44 /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9421687C2609450C00B28F44 /* verdana.ttf */; };
+		948E6B3E284EAF1D000A8B76 /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 948E6B3C284EAF1D000A8B76 /* ofxJSONElement.cpp */; };
+		948E6B44284EAF6C000A8B76 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 948E6B43284EAF6C000A8B76 /* jsoncpp.cpp */; };
+		948E6B4C284EB347000A8B76 /* parsedDataFormat.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 948E6B4B284EB347000A8B76 /* parsedDataFormat.json */; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
 		9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */; };
 		9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832BDC407620CDBA568B713D /* tinyxmlerror.cpp */; };
@@ -51,6 +54,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				948E6B4C284EB347000A8B76 /* parsedDataFormat.json in CopyFiles */,
 				9421687D2609450D00B28F44 /* verdana.ttf in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,6 +144,13 @@
 		9421687A2609257200B28F44 /* EmotiBitComms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitComms.h; path = ../../EmotiBit_XPlat_Utils/src/EmotiBitComms.h; sourceTree = "<group>"; };
 		9421687C2609450C00B28F44 /* verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdana.ttf; path = bin/data/verdana.ttf; sourceTree = "<group>"; };
 		9421687E2609476800B28F44 /* verdanab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdanab.ttf; path = bin/data/verdanab.ttf; sourceTree = "<group>"; };
+		948E6B3B284EAF1D000A8B76 /* ofxJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxJSON.h; sourceTree = "<group>"; };
+		948E6B3C284EAF1D000A8B76 /* ofxJSONElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxJSONElement.cpp; sourceTree = "<group>"; };
+		948E6B3D284EAF1D000A8B76 /* ofxJSONElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxJSONElement.h; sourceTree = "<group>"; };
+		948E6B43284EAF6C000A8B76 /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsoncpp.cpp; sourceTree = "<group>"; };
+		948E6B46284EAFA6000A8B76 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		948E6B47284EAFA7000A8B76 /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "json-forwards.h"; sourceTree = "<group>"; };
+		948E6B4B284EB347000A8B76 /* parsedDataFormat.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = parsedDataFormat.json; path = bin/data/parsedDataFormat.json; sourceTree = "<group>"; };
 		958F068D5A2037583179BDED /* NetworkInterfaceListener.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = NetworkInterfaceListener.h; path = ../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx/Net/NetworkInterfaceListener.h; sourceTree = SOURCE_ROOT; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
 		974B6F6CECCC45548FC1A608 /* EmotiBitTestingHelper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = EmotiBitTestingHelper.h; path = ../../../addons/ofxEmotiBit/src/EmotiBitTestingHelper.h; sourceTree = SOURCE_ROOT; };
@@ -696,6 +707,67 @@
 			name = EmotiBit_XPlat_Utils;
 			sourceTree = "<group>";
 		};
+		948E6B39284EAEDC000A8B76 /* ofxJSON */ = {
+			isa = PBXGroup;
+			children = (
+				948E6B3F284EAF25000A8B76 /* libs */,
+				948E6B3A284EAF07000A8B76 /* src */,
+			);
+			name = ofxJSON;
+			sourceTree = "<group>";
+		};
+		948E6B3A284EAF07000A8B76 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				948E6B3B284EAF1D000A8B76 /* ofxJSON.h */,
+				948E6B3C284EAF1D000A8B76 /* ofxJSONElement.cpp */,
+				948E6B3D284EAF1D000A8B76 /* ofxJSONElement.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		948E6B3F284EAF25000A8B76 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				948E6B40284EAF3C000A8B76 /* jsoncpp */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		948E6B40284EAF3C000A8B76 /* jsoncpp */ = {
+			isa = PBXGroup;
+			children = (
+				948E6B42284EAF59000A8B76 /* include */,
+				948E6B41284EAF4F000A8B76 /* src */,
+			);
+			name = jsoncpp;
+			sourceTree = "<group>";
+		};
+		948E6B41284EAF4F000A8B76 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				948E6B43284EAF6C000A8B76 /* jsoncpp.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		948E6B42284EAF59000A8B76 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				948E6B45284EAF76000A8B76 /* json */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		948E6B45284EAF76000A8B76 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				948E6B47284EAFA7000A8B76 /* json-forwards.h */,
+				948E6B46284EAFA6000A8B76 /* json.h */,
+			);
+			name = json;
+			sourceTree = "<group>";
+		};
 		959BC13926B6C962531CEF17 /* libs */ = {
 			isa = PBXGroup;
 			children = (
@@ -765,6 +837,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				948E6B39284EAEDC000A8B76 /* ofxJSON */,
 				942168772609256100B28F44 /* EmotiBit_XPlat_Utils */,
 				27005CFF506A34FD3734C3CE /* ofxBiquadFilter */,
 				0B8ED02ED04845BC31B3E518 /* ofxEmotiBit */,
@@ -1073,6 +1146,7 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				948E6B4B284EB347000A8B76 /* parsedDataFormat.json */,
 				9421687E2609476800B28F44 /* verdanab.ttf */,
 				9421687C2609450C00B28F44 /* verdana.ttf */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
@@ -1212,6 +1286,7 @@
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				9421687B2609257200B28F44 /* EmotiBitPacket.cpp in Sources */,
+				948E6B44284EAF6C000A8B76 /* jsoncpp.cpp in Sources */,
 				853E0BA2F448076739446874 /* ofxColorPicker.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
 				852E0891794923EE7583C621 /* ofxInputField.cpp in Sources */,
@@ -1227,6 +1302,7 @@
 				E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */,
 				1C36947250DCB09A8A375C0C /* ofxXmlPoco.cpp in Sources */,
 				633AFFDB4EC6674D34F0EF7D /* IPAddressRange.cpp in Sources */,
+				948E6B3E284EAF1D000A8B76 /* ofxJSONElement.cpp in Sources */,
 				B65D7C8C591DF95D595E2053 /* NetworkInterfaceListener.cpp in Sources */,
 				69AF35586CA18EA57C5CFCD3 /* NetworkUtils.cpp in Sources */,
 				AEAE7BD10A06519AE832EC52 /* ofxNetworkUtils.cpp in Sources */,
@@ -1329,6 +1405,8 @@
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
+					../../../addons/ofxJSON/src,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
@@ -1494,6 +1572,8 @@
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
+					../../../addons/ofxJSON/src,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
 				);
 				ICON = "$(ICON_NAME_DEBUG)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
@@ -1551,6 +1631,8 @@
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
+					../../../addons/ofxJSON/src,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
