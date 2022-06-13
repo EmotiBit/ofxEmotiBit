@@ -56,9 +56,10 @@ void ofApp::update() {
 	vector<string> infoPackets;
 	emotiBitWiFi.processAdvertising(infoPackets);
 	// ToDo: Handle info packets with mode change information
-
-	updateLsl();
-
+	if (!lslMarkerStreamInfo.name.empty())
+	{
+		updateLsl();
+	}
 	vector<string> dataPackets;
 	emotiBitWiFi.readData(dataPackets);
 	for (string packet : dataPackets)
