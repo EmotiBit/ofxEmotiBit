@@ -47,8 +47,7 @@ void ofApp::setup() {
 		}
 	}
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
-	//ofSetLogLevel(OF_LOG_FATAL_ERROR);
-	ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
 
 //--------------------------------------------------------------
