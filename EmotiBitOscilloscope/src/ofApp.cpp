@@ -34,7 +34,18 @@ void ofApp::setup() {
 	{
 		consoleLogger.startThread();
 	}
-	lsl.start(lslSettings.markerStreamName); //Start up lsl connection on a seperate thread
+	//Start up lsl connection on a seperate thread
+	if (!lslMarkerStreamInfo.name.empty())
+	{
+		if (!lslMarkerStreamInfo.srcId.empty())
+		{
+			lslMarkerStream = std::make_shared<ofxLSL::Receiver<string>>(lslMarkerStreamInfo.name, lslMarkerStreamInfo.srcId);
+		}
+		else
+		{
+			lslMarkerStream = std::make_shared<ofxLSL::Receiver<string>>(lslMarkerStreamInfo.name);
+		}
+	}
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
 	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
@@ -44,9 +55,10 @@ void ofApp::update() {
 	vector<string> infoPackets;
 	emotiBitWiFi.processAdvertising(infoPackets);
 	// ToDo: Handle info packets with mode change information
-
-	updateLsl();
-
+	if (!lslMarkerStreamInfo.name.empty())
+	{
+		updateLsl();
+	}
 	vector<string> dataPackets;
 	emotiBitWiFi.readData(dataPackets);
 	for (string packet : dataPackets)
@@ -1425,50 +1437,54 @@ void ofApp::setupOscilloscopes()
 
 void ofApp::updateLsl()
 {
-	if (lsl.isConnected()) {
-		auto buffer = lsl.flush();
+	if (lslMarkerStream->isConnected())
+	{
+		auto markerSamples = lslMarkerStream->flush();
+		if (markerSamples.size()) {
+			// for all samples received
+			for (int i = 0; i < markerSamples.size(); i++)
+			{
+				consoleOutput.lslMarkerCount++;
+				auto markerSample = markerSamples.at(i);
+				std::stringstream ss;
+				for (auto channel : markerSample->sample) {
+					ss << ofToString(channel) << EmotiBitPacket::PAYLOAD_DELIMITER;
+				}
 
-		if (buffer.size()) {
-			consoleOutput.lslMarkerCount++;
-			auto sampleToUse = buffer.back();
-			std::stringstream ss;
-			for (auto channel : sampleToUse.sample) {
-				ss << ofToString(channel) << EmotiBitPacket::PAYLOAD_DELIMITER;
+				vector<string> payload;
+
+				payload.clear();
+				payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_RX_TIMESTAMP);
+				payload.push_back(ofToString(markerSample->timeStamp + markerSample->timeCorrection, 7));
+				payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP);
+				payload.push_back(ofToString(markerSample->timeStamp, 7));
+				payload.push_back(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
+				payload.push_back(ofToString(lsl::local_clock(), 7));
+				payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_DATA);
+				payload.push_back(ss.str());
+				string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::LSL_MARKER, emotiBitWiFi.controlPacketCounter++, payload);
+				emotiBitWiFi.sendControl(packet);
+
+				// ToDo: consider if we even need a marker sample to get cross domain points.
+				//		Can we just not do: LC = lsl::local_clock, and LM = lsl::local_clock() - timeCorretion()?
+				// send TX packet for LCxLM
+				payload.clear();
+				payload.push_back(ofToString(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP));
+				payload.push_back(ofToString(markerSample->timeStamp + markerSample->timeCorrection, 7));
+				payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP);
+				payload.push_back(ofToString(markerSample->timeStamp, 7));
+				emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, emotiBitWiFi.controlPacketCounter++, payload));
+
+				// ToDo: Consider if TIMESTAMP_CROSS_TIME packet sending needs to be in a different spot
+				double lsltime = lsl::local_clock();
+				string timestampLocal = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+				payload.clear();
+				payload.push_back(ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL));
+				payload.push_back(timestampLocal);
+				payload.push_back(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
+				payload.push_back(ofToString(lsltime, 7));
+				emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, emotiBitWiFi.controlPacketCounter++, payload));
 			}
-
-			vector<string> payload;
-
-			payload.clear();
-			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_RX_TIMESTAMP);
-			payload.push_back(ofToString(sampleToUse.timestampLocal, 7));
-			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP);
-			payload.push_back(ofToString(sampleToUse.timestamp, 7));
-			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
-			payload.push_back(ofToString(sampleToUse.localClock, 7));
-			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_DATA);
-			payload.push_back(ss.str());
-			string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::LSL_MARKER, emotiBitWiFi.controlPacketCounter++, payload);
-			emotiBitWiFi.sendControl(packet);
-			//cout << packet;
-
-			// send TX packet for LCxLM
-			payload.clear();
-			payload.push_back(ofToString(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP));
-			payload.push_back(ofToString(sampleToUse.timestampLocal, 7));
-			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP);
-			payload.push_back(ofToString(sampleToUse.timestamp, 7));
-			emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, emotiBitWiFi.controlPacketCounter++, payload));
-
-
-			// ToDo: Consider if TIMESTAMP_CROSS_TIME packet sending needs to be in a different spot
-			double lsltime = lsl::local_clock();
-			string timestampLocal = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-			payload.clear();
-			payload.push_back(ofToString(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL));
-			payload.push_back(timestampLocal);
-			payload.push_back(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP);
-			payload.push_back(ofToString(lsltime, 7));
-			emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, emotiBitWiFi.controlPacketCounter++, payload));
 		}
 	}
 }
@@ -1658,11 +1674,36 @@ void ofApp::drawConsole()
 			_consoleString += "Hibernating";
 		}
 	}
-
-	if (consoleOutput.lslMarkerCount)
+	// ToDo: find a more elegant solution console output
+	// hanlde printing LSL details
+	if (!lslMarkerStreamInfo.name.empty())
 	{
-		_consoleString += EmotiBitPacket::PAYLOAD_DELIMITER;
-		_consoleString += (" LSL markers Received: " + ofToString(consoleOutput.lslMarkerCount));
+		if (consoleOutput.lslMarkerCount)
+		{
+			_consoleString += EmotiBitPacket::PAYLOAD_DELIMITER;
+			std::string updateStr = " LSL markers Received (name: " + lslMarkerStreamInfo.name;
+			if (!lslMarkerStreamInfo.srcId.empty())
+			{
+				updateStr += EmotiBitPacket::PAYLOAD_DELIMITER;
+				updateStr += " source_id: ";
+				updateStr += lslMarkerStreamInfo.srcId;
+			}
+			updateStr += ("): " + ofToString(consoleOutput.lslMarkerCount));
+			_consoleString += updateStr;
+		}
+		else
+		{
+			_consoleString += EmotiBitPacket::PAYLOAD_DELIMITER;
+			std::string updateStr = "";
+			_consoleString += (" Searching for LSL stream:: name: " + lslMarkerStreamInfo.name);
+			if (!lslMarkerStreamInfo.srcId.empty())
+			{
+				updateStr += EmotiBitPacket::PAYLOAD_DELIMITER;
+				updateStr += " source_id: ";
+				updateStr += lslMarkerStreamInfo.srcId;
+			}
+			_consoleString += updateStr;
+		}
 	}
 
 	int consoleTextPadding = 3;
@@ -1834,7 +1875,8 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 
 		emotiBitWiFi.setHostAdvertisingSettings(settings);
 		// ToDo: Add error handling for each section so that one section can fail, but the rest of the file can load properly and run.
-		lslSettings.markerStreamName = jsonSettings["lsl"]["marker"]["name"].asString();
+		lslMarkerStreamInfo.name = jsonSettings["lsl"]["marker"]["name"].asString();
+		lslMarkerStreamInfo.srcId = jsonSettings["lsl"]["marker"]["source_id"].asString();
 		ofLog(OF_LOG_NOTICE, "Loaded " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
 	}
 	catch (exception e)
