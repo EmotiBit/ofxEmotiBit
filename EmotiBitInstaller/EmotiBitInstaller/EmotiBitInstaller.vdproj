@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0E411FC72F5F4B86B5A20F5E76B9EC8C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_1985A01C8245443EA25EFABE51D49986"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -88,12 +94,6 @@
         "Entry"
         {
         "MsmKey" = "8:_9E29B74E7F2B40D6A1F681EB9ADDAC1B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A95A5CFC8C5D4D72A52053698B94B807"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -324,6 +324,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E411FC72F5F4B86B5A20F5E76B9EC8C"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\lsl.dll"
+            "TargetName" = "8:lsl.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1985A01C8245443EA25EFABE51D49986"
             {
             "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\WINC\\m2m_aio_3a0.bin"
@@ -470,26 +490,6 @@
             "TargetName" = "8:verdana.ttf"
             "Tag" = "8:"
             "Folder" = "8:_F64D9B09A4D2488E87CD314A5BA25F9C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A95A5CFC8C5D4D72A52053698B94B807"
-            {
-            "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\liblsl64.dll"
-            "TargetName" = "8:liblsl64.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1019,15 +1019,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EmotiBit"
-        "ProductCode" = "8:{89A95A63-EF41-42F2-9E64-0CC1D536CF4E}"
-        "PackageCode" = "8:{B0A3A0B1-57C3-4CF9-9B44-A28506697AD9}"
+        "ProductCode" = "8:{6CFC40FA-CDE2-4842-A984-B0231B92EB94}"
+        "PackageCode" = "8:{3B165E9C-26A2-4DF0-BE59-750C8D746DE7}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.5.0"
+        "ProductVersion" = "8:1.5.2"
         "Manufacturer" = "8:EmotiBit"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
