@@ -856,8 +856,6 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 
 	string outputName = output.getName();
 	bool selected = output.cast<bool>().get();
-	std::string previousList = sendOptionSelected.getParameter().toString();
-	std::string newSendType = "";
 	for (int j = 0; j < sendDataList.size(); j++) {
 		// if the Tx type is disabled, do nothing
 		if (sendDataDisabled.at(j))
@@ -874,8 +872,6 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 			{
 				if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
 				{
-					// update "send via:" string
-					newSendType = GUI_STRING_SEND_DATA_OSC;
 					if (selected)
 					{
 						string patchboardFile = "oscOutputSettings.xml";
@@ -887,24 +883,42 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 								<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
 								oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 							sendOsc = true;
-							sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, newSendType);
+							
 						}
 						catch (exception e)
 						{
 							cout << "OSC output setup failed " << endl;
-							sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, previousList);
+							sendDataList.at(j).set(false);
+							sendOsc = false;
 						}
 					}
 					else
 					{
-						sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, GUI_STRING_SEND_DATA_NONE);
 						sendOsc = false;
 					}
 				}
 			}
 		}
 	}
-
+	bool isSending = false;
+	// check if we are sending data out on any channel
+	for (int i = 0; i < sendDataList.size(); i++)
+	{
+		if (sendDataList.at(i).get())
+		{
+			// we are sending data on some channel
+			isSending = true;
+			break;
+		}
+	}
+	if (isSending)
+	{
+		sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, "");
+	}
+	else
+	{
+		sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, GUI_STRING_SEND_DATA_NONE);
+	}
 	return;  
 #if (0)
 	if (selected) {
