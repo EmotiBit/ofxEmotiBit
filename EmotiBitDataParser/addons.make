@@ -8,3 +8,4 @@ ofxOscilloscope
 ofxThreadedLogger
 ofxXmlSettings
 EmotiBit_XPlat_Utils
+ofxJSON
