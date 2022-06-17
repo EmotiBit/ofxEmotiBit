@@ -8,7 +8,7 @@
     {
       "identifier": "LC",
       "columnHeader": "LslLocalTimestamp",
-      "addToOutput": true
+      "addToOutput": false
     },
     {
       "identifier": "LM",

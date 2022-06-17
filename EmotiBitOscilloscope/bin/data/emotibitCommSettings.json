@@ -19,8 +19,8 @@
   },
   "lsl": {
     "marker": {
-      "name": "DataSyncMarker",
-      "source_id": "12345"
+      "name": "",
+      "source_id": ""
     }
   }
 }
