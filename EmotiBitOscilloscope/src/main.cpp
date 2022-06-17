@@ -2,7 +2,7 @@
 #include "ofApp.h"
 #include "ofxLSL.h"
 
-const char * ofxLSL::resInletInfo = "name = 'CFL'";
+
 //========================================================================
 int main( ){
 	ofSetupOpenGL(1500,900,OF_WINDOW);			// <-------- setup the GL context

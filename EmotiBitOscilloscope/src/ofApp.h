@@ -25,7 +25,15 @@ public:
 	void draw();
 	void exit();
 
-	ofxLSL lsl;
+	std::shared_ptr<ofxLSL::Receiver<string>> lslMarkerStream;
+	/*!
+	@brief data structure to hold LSL settings
+	*/
+	struct LslMarkerStreamInfo {
+		// For more info: https://github.com/sccn/liblsl/blob/5eded5c1d381a1a5fbbcce105edfaa53f009176a/include/lsl_cpp.h#L161
+		std::string name;  //!< marker stream inlet name for LSL
+		std::string srcId;  //!< marker stream inlet sourceId for LSL
+	}lslMarkerStreamInfo;
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y);
@@ -107,6 +115,10 @@ public:
 
 	ofxUDPManager udpConnection;
 	LoggerThread dataLogger;
+	// ToDo: This will probably change when we come up with a better solution for updating status bar.
+	struct ConsoleOutput {
+		int lslMarkerCount = 0;
+	}consoleOutput;
 	LoggerThread consoleLogger;
 	bool logData;
 	bool logConsole;

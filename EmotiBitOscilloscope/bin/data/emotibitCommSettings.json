@@ -1,21 +1,27 @@
 {
-	"wifi" : {
-		 "advertising" : {
-				"transmission" : {
-					 "broadcast" : {
-							"enabled" : true
-					 },
-					 "unicast" : {
-							"enabled" : false,
-							"ipMax" : 254,
-							"ipMin" : 2
-					 }
-				}
-		 },
-		 "network" : {
-				"excludeList" : [ "" ],
-				"includeList" : [ "*.*.*.*" ]
-		 }
-	}
+  "wifi": {
+    "advertising": {
+      "transmission": {
+        "broadcast": {
+          "enabled": true
+        },
+        "unicast": {
+          "enabled": false,
+          "ipMax": 254,
+          "ipMin": 2
+        }
+      }
+    },
+    "network": {
+      "excludeList": [ "" ],
+      "includeList": [ "*.*.*.*" ]
+    }
+  },
+  "lsl": {
+    "marker": {
+      "name": "DataSyncMarker",
+      "source_id": "12345"
+    }
+  }
 }
 

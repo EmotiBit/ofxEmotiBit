@@ -159,6 +159,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_CFD096B21C324AAC94653AA781ECEB90"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D1C5A6BCF8FD481DA701EF87B6794588"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -678,6 +684,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CFD096B21C324AAC94653AA781ECEB90"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitDataParser\\bin\\data\\parsedDataFormat.json"
+            "TargetName" = "8:parsedDataFormat.json"
+            "Tag" = "8:"
+            "Folder" = "8:_0DA1B3D44C1445E2A5A8EEFE782481BE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D1C5A6BCF8FD481DA701EF87B6794588"
             {
             "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\verdana.ttf"
@@ -993,15 +1019,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EmotiBit"
-        "ProductCode" = "8:{B66DAC0F-6DF0-49AA-AA8E-DB4650E3CC9C}"
-        "PackageCode" = "8:{67318FE3-261F-4929-93BC-AB391C5E9424}"
+        "ProductCode" = "8:{89A95A63-EF41-42F2-9E64-0CC1D536CF4E}"
+        "PackageCode" = "8:{B0A3A0B1-57C3-4CF9-9B44-A28506697AD9}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.4.11"
+        "ProductVersion" = "8:1.5.0"
         "Manufacturer" = "8:EmotiBit"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

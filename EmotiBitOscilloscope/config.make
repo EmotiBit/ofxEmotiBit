@@ -76,7 +76,7 @@
 # add a runtime path to search for those shared libraries, since they aren't 
 # incorporated directly into the final executable application binary.
 ################################################################################
-PROJECT_LDFLAGS=-Wl,-rpath=./libs,./bin/liblsl64.so
+PROJECT_LDFLAGS=-Wl,-rpath=./libs,./bin/liblsl-1.14.0-manylinux2010_x64.so
 
 ################################################################################
 # PROJECT DEFINES

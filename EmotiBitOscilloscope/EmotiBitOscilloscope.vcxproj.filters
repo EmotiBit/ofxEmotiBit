@@ -55,9 +55,6 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxLSL\src\ofxLSL.cpp">
-      <Filter>addons\ofxLSL\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxNetworkUtils.cpp">
       <Filter>addons\ofxNetwork\src</Filter>
     </ClCompile>
@@ -153,6 +150,12 @@
     </ClCompile>
     <ClCompile Include="..\..\ofxJSON\src\ofxJSONElement.cpp">
       <Filter>addons\ofxJSON\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxLSL\src\ofxLSLReceiver.cpp">
+      <Filter>addons\ofxLSL\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxLSL\src\ofxLSLResolver.cpp">
+      <Filter>addons\ofxLSL\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -511,6 +514,15 @@
     </ClInclude>
     <ClInclude Include="..\..\ofxJSON\src\ofxJSONElement.h">
       <Filter>addons\ofxJSON\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxLSL\src\ofxLSLReceiver.h">
+      <Filter>addons\ofxLSL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxLSL\src\ofxLSLResolver.h">
+      <Filter>addons\ofxLSL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxLSL\src\ofxLSLSender.h">
+      <Filter>addons\ofxLSL\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
