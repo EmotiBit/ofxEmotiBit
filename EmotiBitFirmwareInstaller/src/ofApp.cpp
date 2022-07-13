@@ -44,6 +44,8 @@ void ofApp::setup(){
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::START;
+	ofLogNotice("Step:") << "Running ESP driver installer";
+	installEspDrivers();
 	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
@@ -707,4 +709,29 @@ bool ofApp::runWincUpdater()
 bool ofApp::uploadEmotiBitFw()
 {
     return updateUsingBossa(ofToDataPath("EmotiBit_stock_firmware.ino.feather_m0.bin"));
+}
+
+void ofApp::installEspDrivers()
+{
+	std::string command = "";
+	std::string osDir = "";
+	std::string appName = "";
+#ifdef TARGET_WIN32
+	osDir = "win";
+	appName = "CP210xVCPInstaller_x64.exe";
+#else
+	// define for macOS and linux
+#endif
+	std::string appPath = ofFilePath::join("exec", osDir);
+	command = ofToDataPath(ofFilePath::join(appPath, appName));
+	ofLogNotice("Executing command") << command;
+	threadedSystemCall.setup(command);
+	threadedSystemCall.startThread();
+	systemCommandExecuted = true;
+
+	while (!checkSystemCallResponse())
+	{
+		ofLogNotice("installing drivers");
+		ofSleepMillis(1000);
+	}
 }
