@@ -44,8 +44,12 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
+        /*!
+            @brief Function to call and wait while system call is being executed
+         */
+        void makeSyncSystemCall(std::string command, std::string echoMsg = "executing system command");
 		/*!
-			@brief 
+			@brief Function to run system commands to install drivers for ESP32
 		*/
 		void installEspDrivers();
 

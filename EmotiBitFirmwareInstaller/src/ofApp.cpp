@@ -40,18 +40,18 @@ Additional Notes:
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+#ifdef TARGET_OSX
+    ofSetDataPathRoot("../Resources/");
+#endif
 	ofSetWindowTitle("EmotiBit Firmware Installer (v" + ofxEmotiBitVersion + ")");
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::START;
-	ofLogNotice("Step:") << "Running ESP driver installer";
+	ofLogNotice("Step") << "Running ESP driver installer";
 	installEspDrivers();
 	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
-    #ifdef TARGET_OSX
-        ofSetDataPathRoot("../Resources/");
-    #endif
 	titleImage.load("EmotiBit.png");
 	titleImage.resize(300, 266); // width, height
 	ofBackground(255, 255, 255, 255);
@@ -716,22 +716,46 @@ void ofApp::installEspDrivers()
 	std::string command = "";
 	std::string osDir = "";
 	std::string appName = "";
+    std::string appPath;
 #ifdef TARGET_WIN32
 	osDir = "win";
 	appName = "CP210xVCPInstaller_x64.exe";
-#else
-	// define for macOS and linux
+    appPath = ofFilePath::join("exec", osDir);
+    command += ofToDataPath(ofFilePath::join(appPath, appName));
+    makeSyncSystemCall(command, "installing drivers");
+#elif defined TARGET_OSX
+    osDir = "macOS";
+    std::string ext = ".dmg";
+    appName = "SiLabsUSBDriverDisk";
+    // mount dmg package
+    command = "hdiutil attach ";
+    appPath = ofFilePath::join("exec", osDir);
+    appPath = ofToDataPath(ofFilePath::join(appPath, appName));
+    command += (appPath + ext);
+    makeSyncSystemCall(command, "mounting driver img");
+    // install package from
+    command = "cp -R \"/Volumes/Silicon Labs VCP Driver Install Disk/Install CP210x VCP Driver.app\" /Applications";
+    makeSyncSystemCall(command, "installing drivers");
+    // Run driver installer
+    command = "open -a \"Install CP210x VCP Driver\"";
+    makeSyncSystemCall(command);
+    // Unmount driver disk image
+    command = "hdiutil detach \"/Volumes/Silicon Labs VCP Driver Install Disk\"";
+    makeSyncSystemCall(command);
 #endif
-	std::string appPath = ofFilePath::join("exec", osDir);
-	command = ofToDataPath(ofFilePath::join(appPath, appName));
-	ofLogNotice("Executing command") << command;
-	threadedSystemCall.setup(command);
-	threadedSystemCall.startThread();
-	systemCommandExecuted = true;
+	
+}
 
-	while (!checkSystemCallResponse())
-	{
-		ofLogNotice("installing drivers");
-		ofSleepMillis(1000);
-	}
+void ofApp::makeSyncSystemCall(std::string command, std::string echoMsg)
+{
+    ofLogNotice("Executing command") << command;
+    threadedSystemCall.setup(command);
+    threadedSystemCall.startThread();
+    systemCommandExecuted = true;
+    
+    while (!checkSystemCallResponse())
+    {
+        ofLog(OF_LOG_NOTICE, echoMsg);
+        ofSleepMillis(2000);
+    }
 }
