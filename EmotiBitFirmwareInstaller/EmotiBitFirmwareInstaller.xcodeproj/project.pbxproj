@@ -7,179 +7,359 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00C132F18095103B36BC4B5C /* memory.c in Sources */ = {isa = PBXBuildFile; fileRef = ADC45E383B2885CD8ED44C32 /* memory.c */; };
 		02FA22EAD4CE81F39CC58EEA /* Periodizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA65A234F6CABD350A1BA57 /* Periodizer.cpp */; };
+		04BC555ECE44AFF182D37D27 /* SerialEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FF1FC9CD893EAFB39035E3C6 /* SerialEvents.cpp */; };
 		125506CD3E5F428AAFE5CC65 /* ofxTCPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F399B91E98DC31CDA6DDACB4 /* ofxTCPManager.cpp */; };
+		1298066D39CE7EC3DA60256A /* snappy-stubs-internal.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2FB74FF42B08FC378F74B2B7 /* snappy-stubs-internal.cc */; };
+		199E20C3CE29DBDA5F9DA16C /* BufferedSerialDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB137BD0187E28CD8B59874 /* BufferedSerialDevice.cpp */; };
 		1C36947250DCB09A8A375C0C /* ofxXmlPoco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9998694E5001F9CF0B13BF0 /* ofxXmlPoco.cpp */; };
+		1CC07C1A616F29EB8EEC3D21 /* SearchPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D76B424A6DF4D70AACCDBAE /* SearchPath.cpp */; };
 		1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907C5B5E104864A2D3A25745 /* ofxToggle.cpp */; };
+		2052DE964A69C81B3F68CCB0 /* ImageUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C4D2E84034752C8DDB2D67B2 /* ImageUtils.cpp */; };
+		253050340F29FA5D8EF20BC4 /* metablock.c in Sources */ = {isa = PBXBuildFile; fileRef = 50FC1C7AE5280445EB0FD2B8 /* metablock.c */; };
+		28A6E9BA6E8D63725FFB7D7E /* histogram.c in Sources */ = {isa = PBXBuildFile; fileRef = CB977F55D4B0D819421437AD /* histogram.c */; };
+		29BCD325C314242FECC8E5B7 /* list_ports_win.cc in Sources */ = {isa = PBXBuildFile; fileRef = 79F1B32CBD205754ECBE956E /* list_ports_win.cc */; };
+		2A67827653E1B5BD965D7DC7 /* BackoffStrategy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C04DBADC786680C5A1DC457 /* BackoffStrategy.cpp */; };
 		2CB15D77D4862C444CBAD4FA /* EmotiBitWiFiHost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA793E39D386EF32CB1ADD /* EmotiBitWiFiHost.cpp */; };
+		30050FAC4E27016914F7D8AE /* Hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C9D49450D420BF2FA36851C /* Hash.cpp */; };
+		3051FC0E8EA430C2E693DEBB /* snappy-c.cc in Sources */ = {isa = PBXBuildFile; fileRef = A959274BEDC34E590C25B3EA /* snappy-c.cc */; };
+		332ECDD39392CEA22A8D8DF3 /* cluster.c in Sources */ = {isa = PBXBuildFile; fileRef = D1845E7B199B61C2A89A95DD /* cluster.c */; };
+		3336758D15FD0710326AAC25 /* serial.cc in Sources */ = {isa = PBXBuildFile; fileRef = 47B9A234B65D63015C0CFEDD /* serial.cc */; };
+		3433E2A234C5EB99BE2654F6 /* FilteredStreams.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D2178E97885D60A7552A030 /* FilteredStreams.cpp */; };
+		347D67CCF4C7C7725118DD59 /* ByteBufferStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6C68D431AF8FD1A9E2DCFF2 /* ByteBufferStream.cpp */; };
+		3942018D51482A1D54EC1669 /* compress_fragment_two_pass.c in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD8ACB4BC032E3F12F5AC8 /* compress_fragment_two_pass.c */; };
+		39C8F5BF18E0BDE288F6F195 /* utf8_util.c in Sources */ = {isa = PBXBuildFile; fileRef = DFDFD6F8619819B10AB9F44C /* utf8_util.c */; };
+		3BFC7CF50BEB0307821B90A6 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 7913239832BBBF6B56ED2600 /* lz4.c */; };
+		3C9A355A55D68A8E882FEF85 /* RegexPathFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D68F0C2CAE7809D621924C /* RegexPathFilter.cpp */; };
+		3EE0A72E3AC3DB229FCD9054 /* block_splitter.c in Sources */ = {isa = PBXBuildFile; fileRef = C11115BCD18AB012DE4B9911 /* block_splitter.c */; };
+		478E5F494F2E679C6C198677 /* PollingThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B958A9EA0CCC23B12812A232 /* PollingThread.cpp */; };
 		483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78D67A00EB899FAC09430597 /* ofxLabel.cpp */; };
+		494950167FFB212CEB9ECD0A /* ByteBufferWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9BE77ADAEF79E623523E9D9 /* ByteBufferWriter.cpp */; };
+		52879B293457F714C2FCDE30 /* bit_reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 435F153348292B6921D118D7 /* bit_reader.c */; };
+		52E0D9D8CC9D0F3AB04182F5 /* entropy_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = CA68874B4EA8C0D647FA49C8 /* entropy_encode.c */; };
+		55DE46182F529D5E0D756503 /* win.cc in Sources */ = {isa = PBXBuildFile; fileRef = D1B098B33ACA6D5EF0DE53FB /* win.cc */; };
 		5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC5DA1C87211D4F6377DA719 /* tinyxmlparser.cpp */; };
+		5AE4CDDF24D05CAD3D2863A7 /* streams.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3457BE6FA2A60931AED56935 /* streams.cc */; };
+		5B0B37678CB86DF7936E36E6 /* dictionary.c in Sources */ = {isa = PBXBuildFile; fileRef = 784C0DB32ADDBDBF29DB5910 /* dictionary.c */; };
+		5BB82711925A3764235C2CEB /* FileExtensionFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6BD291FB03292C6D352C26FE /* FileExtensionFilter.cpp */; };
 		5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C88333E71C9457E441C33474 /* ofxButton.cpp */; };
 		5FD318D4DCF1B7169E9F1F64 /* EmotiBitTestingHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A8815F94AF8B1A79DAF932B /* EmotiBitTestingHelper.cpp */; };
+		62509F39EA6197BEA0194276 /* ByteBufferReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 021CAF811F031FFBDFB18797 /* ByteBufferReader.cpp */; };
 		63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */; };
 		661A1991F5CE4CCC2919D8E7 /* ofxNetworkUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE30B18B42BAF0E92CB140E5 /* ofxNetworkUtils.cpp */; };
+		66A80FD312926DEB8C9FE7F6 /* ByteBufferUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE5B3B19544657B6F9CCCA03 /* ByteBufferUtils.cpp */; };
 		66CA411C5A9664E27326BF36 /* ofxTCPServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1C085E327DAB912CFA2A443D /* ofxTCPServer.cpp */; };
+		72BCC46DF35982704F1906BD /* brotli_bit_stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 863E9634DCC98853BF984072 /* brotli_bit_stream.c */; };
+		790CD6606BE3D38A9AD52AF1 /* URIEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 60F63F5C68476F0C9095B247 /* URIEncoding.cpp */; };
+		79B473EA502400F08F6C420D /* static_dict.c in Sources */ = {isa = PBXBuildFile; fileRef = 838AF229C2183CBDCC150342 /* static_dict.c */; };
+		7B750C170EB39967BA9AB0DA /* list_ports_linux.cc in Sources */ = {isa = PBXBuildFile; fileRef = F0B7B8B3CBC6603E4EBB50CB /* list_ports_linux.cc */; };
+		827717308B7CF78FB6CC2B8A /* huffman.c in Sources */ = {isa = PBXBuildFile; fileRef = 0B4469F9BB9FC42CC5B721A5 /* huffman.c */; };
 		837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15F2C6477A769C03A56D1401 /* ofxSlider.cpp */; };
+		84FED53B4CEB4C25C00E172B /* DirectoryFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E362E12547978AB05ABA9C57 /* DirectoryFilter.cpp */; };
 		852E0891794923EE7583C621 /* ofxInputField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44B351490B620D04E1E7C52D /* ofxInputField.cpp */; };
 		853E0BA2F448076739446874 /* ofxColorPicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 181D363B6DD54D1FA6309C43 /* ofxColorPicker.cpp */; };
 		856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9604B925D32EE39065747725 /* ofxBaseGui.cpp */; };
+		868BEDC19B53FD512D7E3100 /* snappy.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7362D621E1B9A92F5F4AC73B /* snappy.cc */; };
+		86B56E23D787A5F24641398F /* LinkFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370DA13018950E5BFF8CF171 /* LinkFilter.cpp */; };
+		899BAF53175868463FE1B029 /* RecursiveDirectoryIteratorStategies.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F27637AABA89A235C5974D56 /* RecursiveDirectoryIteratorStategies.cpp */; };
+		89D1BB84C86305D9A5C34DC4 /* list_ports_osx.cc in Sources */ = {isa = PBXBuildFile; fileRef = 857A942126908B1806B67CE6 /* list_ports_osx.cc */; };
+		8FCD72DD7D027102A10390B3 /* backward_references.c in Sources */ = {isa = PBXBuildFile; fileRef = 4212102D1CF2815EEEC62736 /* backward_references.c */; };
 		933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */; };
-		9480A41027F23D5F0065570B /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A40627F23D5F0065570B /* EmotiBitPacket.cpp */; };
-		9480A41127F23D5F0065570B /* EmotiBitEdaCalibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A40727F23D5F0065570B /* EmotiBitEdaCalibration.cpp */; };
-		9480A41227F23D5F0065570B /* EmotiBitFactoryTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A40927F23D5F0065570B /* EmotiBitFactoryTest.cpp */; };
-		9480A41327F23D5F0065570B /* EmotiBitVariants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A40D27F23D5F0065570B /* EmotiBitVariants.cpp */; };
-		9480A41427F23D5F0065570B /* DigitalFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9480A40F27F23D5F0065570B /* DigitalFilter.cpp */; };
-		9480A41627F23EE50065570B /* instructions in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41527F23EE50065570B /* instructions */; };
-		9480A41D27F23F030065570B /* bossac in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41727F23F030065570B /* bossac */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		9480A41E27F23F030065570B /* verdana.ttf in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41827F23F030065570B /* verdana.ttf */; };
-		9480A41F27F23F030065570B /* verdanab.ttf in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41927F23F030065570B /* verdanab.ttf */; };
-		9480A42027F23F030065570B /* EmotiBit.png in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41A27F23F030065570B /* EmotiBit.png */; };
-		9480A42127F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41B27F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */; };
-		9480A42227F23F030065570B /* WINC in Copy Files */ = {isa = PBXBuildFile; fileRef = 9480A41C27F23F030065570B /* WINC */; };
-		94E22CB5287F4C5600C8F3C0 /* exec in Copy Files */ = {isa = PBXBuildFile; fileRef = 94E22CB4287F4C5500C8F3C0 /* exec */; };
+		93640C223A2F5BEAD6DA2E35 /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FC8E2266FE2F5545775A16D /* Compression.cpp */; };
+		94E22CF92882062400C8F3C0 /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94E22CF72882062400C8F3C0 /* EmotiBitPacket.cpp */; };
+		94E22D022882070C00C8F3C0 /* exec in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFA2882070B00C8F3C0 /* exec */; };
+		94E22D032882070C00C8F3C0 /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFB2882070B00C8F3C0 /* verdana.ttf */; };
+		94E22D042882070C00C8F3C0 /* instructions in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFC2882070C00C8F3C0 /* instructions */; };
+		94E22D052882070C00C8F3C0 /* EmotiBit.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFD2882070C00C8F3C0 /* EmotiBit.png */; };
+		94E22D062882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFE2882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin */; };
+		94E22D072882070C00C8F3C0 /* verdanab.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFF2882070C00C8F3C0 /* verdanab.ttf */; };
+		94E22D082882070C00C8F3C0 /* WINC in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22D002882070C00C8F3C0 /* WINC */; };
+		94E22D092882070C00C8F3C0 /* bossac in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22D012882070C00C8F3C0 /* bossac */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
+		9B0C4048D6313FF975C15606 /* decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DBD4311D51383233476A246 /* decode.c */; };
+		9C1D533ACA24526D098B688F /* compressor.cc in Sources */ = {isa = PBXBuildFile; fileRef = AF2EFC111D54B546BA67C5F8 /* compressor.cc */; };
+		9C3C88078AAE29F745463AA1 /* encode_parallel.cc in Sources */ = {isa = PBXBuildFile; fileRef = 65DC6B9109EFA2E2C8C4BCA8 /* encode_parallel.cc */; };
 		9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */; };
 		9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832BDC407620CDBA568B713D /* tinyxmlerror.cpp */; };
 		A7CF97A6E1DAE4A002CA6F82 /* ofxBiquadFilterInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F32C175B3E53B0864752B5D7 /* ofxBiquadFilterInstance.cpp */; };
+		B1BF03D79762719793CC9F1A /* SLIPEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1616DA13ECD5FC9DB4D5714 /* SLIPEncoding.cpp */; };
 		B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */; };
+		B3E6D60405574847412D7441 /* HiddenFileFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FCAF85B857266C511DB50341 /* HiddenFileFilter.cpp */; };
 		B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */; };
+		B647E3FA04D0A66F8AA12D8D /* bit_cost.c in Sources */ = {isa = PBXBuildFile; fileRef = E33245F4A84B5ECC7F2DD52A /* bit_cost.c */; };
+		B7E0003B826CBA379A3F66E5 /* PathFilterCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5114D2AF276E4E6E9A67B342 /* PathFilterCollection.cpp */; };
+		B895E317977FEBE5F79F8B94 /* encode.c in Sources */ = {isa = PBXBuildFile; fileRef = BE10E456A9066BE3516AD23E /* encode.c */; };
+		BC187E3BEC1C894471B93EA6 /* JSONUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D6C4E1EAB3146AB043AAE52 /* JSONUtils.cpp */; };
 		BDCF478C4EBDE821E6E29C6C /* ThreadedSystemCall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F76D6604BBFA486BAD0F8BA /* ThreadedSystemCall.cpp */; };
+		BE177617474F11F05E9260FC /* DirectoryWatcherManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B6179498D0110BD2E161373 /* DirectoryWatcherManager.cpp */; };
+		BFE92C3743ECA623B4D2F6A6 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B81392DD7D58DEEDA83783B0 /* Thread.cpp */; };
+		C9B84C2206A19C8EF7FF2FC2 /* compress_fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4516F27183BD1973BBE37 /* compress_fragment.c */; };
+		CDB5B1D2D12F42502906F30F /* DeviceFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00F3330A5DEBD082CEE0C12C /* DeviceFilter.cpp */; };
+		CEFD3CCAB8B3251DFCAAA0EE /* DirectoryUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A967D1FAFA98A7CBBFA4F55 /* DirectoryUtils.cpp */; };
+		D81A435CE7FDF51B41956210 /* snappy-sinksource.cc in Sources */ = {isa = PBXBuildFile; fileRef = 9A430D6BD10DC31AE2D07DA0 /* snappy-sinksource.cc */; };
 		D820615CFDD5F497033D7C5A /* ofxBiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E6502FFB31969C644E02C1 /* ofxBiquadFilter.cpp */; };
+		D932A5A24FCF08AE510A265D /* ByteBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93384835C77BD4299F8A7F90 /* ByteBuffer.cpp */; };
+		D962D295AC954F2275EC80AB /* state.c in Sources */ = {isa = PBXBuildFile; fileRef = 93E26814A54A32C6C2B713FE /* state.c */; };
+		DABEB23B35B4884860B1A814 /* unix.cc in Sources */ = {isa = PBXBuildFile; fileRef = E4F6F31D084699BAD89878B9 /* unix.cc */; };
+		DB1B6C56A8D6E1DF0AB8B5DA /* SerialDeviceUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A28F98E9F26E32A14FAE918C /* SerialDeviceUtils.cpp */; };
+		DFA0F30B1193D5DC1BB53E5E /* Base64Encoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D639BA31583580D80CFE15D /* Base64Encoding.cpp */; };
 		E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 35BB9BB90DBABFD3B39F8DB6 /* ofxUDPManager.cpp */; };
+		E2C54FD4C85A860582282F7C /* RecursiveDirectoryIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E95C4518AEDCDBEA357754B0 /* RecursiveDirectoryIterator.cpp */; };
+		E4029ECB5B38A0B16AA4C898 /* StreamFilters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 964894707DA74D07D5296965 /* StreamFilters.cpp */; };
+		E44BD2C35ED1D7A0E32AD356 /* literal_cost.c in Sources */ = {isa = PBXBuildFile; fileRef = 6D2A056D5D95C22910B771AB /* literal_cost.c */; };
+		E47400D4565245776213FFD6 /* SerialDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B8F262E90F842B6011F0935 /* SerialDevice.cpp */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
 		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
+		EA3F090FF2D25D87AF29F830 /* ThreadsafeLoggerChannel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8C2DABE3DA33A6F3DC4A7C4 /* ThreadsafeLoggerChannel.cpp */; };
+		EB4F14C4AE3B3EFD04520383 /* DirectoryWatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12A42DF3BFDE28A4818C2EC4 /* DirectoryWatcher.cpp */; };
 		F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */; };
+		F953E11952BFF8C207418550 /* HexBinaryEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22565CAF8FFEF25C805A438F /* HexBinaryEncoding.cpp */; };
+		FE9170FE54D704DF97B0E5BD /* COBSEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4164C6C6CE5115889A99F42C /* COBSEncoding.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E4C2427710CC5ABF004149E2 /* Copy Files */ = {
+		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				94E22CB5287F4C5600C8F3C0 /* exec in Copy Files */,
-				9480A41D27F23F030065570B /* bossac in Copy Files */,
-				9480A41E27F23F030065570B /* verdana.ttf in Copy Files */,
-				9480A41F27F23F030065570B /* verdanab.ttf in Copy Files */,
-				9480A42027F23F030065570B /* EmotiBit.png in Copy Files */,
-				9480A42127F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin in Copy Files */,
-				9480A42227F23F030065570B /* WINC in Copy Files */,
-				9480A41627F23EE50065570B /* instructions in Copy Files */,
+				94E22D022882070C00C8F3C0 /* exec in CopyFiles */,
+				94E22D032882070C00C8F3C0 /* verdana.ttf in CopyFiles */,
+				94E22D042882070C00C8F3C0 /* instructions in CopyFiles */,
+				94E22D052882070C00C8F3C0 /* EmotiBit.png in CopyFiles */,
+				94E22D062882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin in CopyFiles */,
+				94E22D072882070C00C8F3C0 /* verdanab.ttf in CopyFiles */,
+				94E22D082882070C00C8F3C0 /* WINC in CopyFiles */,
+				94E22D092882070C00C8F3C0 /* bossac in CopyFiles */,
 			);
-			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00F3330A5DEBD082CEE0C12C /* DeviceFilter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DeviceFilter.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/DeviceFilter.cpp; sourceTree = SOURCE_ROOT; };
 		01DCC0911400F9ACF5B65578 /* ofxXmlSettings.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxXmlSettings.h; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.h; sourceTree = SOURCE_ROOT; };
+		021CAF811F031FFBDFB18797 /* ByteBufferReader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ByteBufferReader.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/ByteBufferReader.cpp; sourceTree = SOURCE_ROOT; };
+		02CD15E418A33892225A879B /* state.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = state.h; path = ../../../addons/ofxIO/libs/brotli/src/dec/state.h; sourceTree = SOURCE_ROOT; };
+		06D50E9C290B37C024652A02 /* types.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = types.h; path = ../../../addons/ofxIO/libs/brotli/src/common/types.h; sourceTree = SOURCE_ROOT; };
+		079299A87017EDB0524077EA /* SerialDevice.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SerialDevice.h; path = ../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO/SerialDevice.h; sourceTree = SOURCE_ROOT; };
+		08401BD1A5AEF44AFF422B23 /* ByteBufferStream.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ByteBufferStream.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ByteBufferStream.h; sourceTree = SOURCE_ROOT; };
+		08546F6696FA9F0107717C6F /* literal_cost.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = literal_cost.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/literal_cost.h; sourceTree = SOURCE_ROOT; };
 		0A1DAC09F322AE313A40706D /* ofxToggle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxToggle.h; path = ../../../addons/ofxGui/src/ofxToggle.h; sourceTree = SOURCE_ROOT; };
+		0A6573F26422F8DA0D7A4299 /* block_encoder_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = block_encoder_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/block_encoder_inc.h; sourceTree = SOURCE_ROOT; };
 		0B26945A52EE3207EE20D083 /* buffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = buffer.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/buffer.h; sourceTree = SOURCE_ROOT; };
+		0B4469F9BB9FC42CC5B721A5 /* huffman.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = huffman.c; path = ../../../addons/ofxIO/libs/brotli/src/dec/huffman.c; sourceTree = SOURCE_ROOT; };
+		0B6179498D0110BD2E161373 /* DirectoryWatcherManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DirectoryWatcherManager.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/DirectoryWatcherManager.cpp; sourceTree = SOURCE_ROOT; };
 		0BD09643AC5AD15F65EB42CC /* ThreadedSystemCall.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ThreadedSystemCall.h; path = src/ThreadedSystemCall.h; sourceTree = SOURCE_ROOT; };
+		0C04DBADC786680C5A1DC457 /* BackoffStrategy.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BackoffStrategy.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/BackoffStrategy.cpp; sourceTree = SOURCE_ROOT; };
 		0ED9E7E17E11365C9F07BC90 /* symhacks.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = symhacks.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/symhacks.h; sourceTree = SOURCE_ROOT; };
+		0F8127F302C54B5E807A4DEB /* huffman.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = huffman.h; path = ../../../addons/ofxIO/libs/brotli/src/dec/huffman.h; sourceTree = SOURCE_ROOT; };
+		0FC82546C315D104CC8178D7 /* PathFilterCollection.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = PathFilterCollection.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/PathFilterCollection.h; sourceTree = SOURCE_ROOT; };
 		101E00135DD5F4A88AA3119E /* rc2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc2.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rc2.h; sourceTree = SOURCE_ROOT; };
+		12A42DF3BFDE28A4818C2EC4 /* DirectoryWatcher.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DirectoryWatcher.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/DirectoryWatcher.cpp; sourceTree = SOURCE_ROOT; };
+		13D68F0C2CAE7809D621924C /* RegexPathFilter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = RegexPathFilter.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/RegexPathFilter.cpp; sourceTree = SOURCE_ROOT; };
+		13EF5AFAAD1F10B9A60863B8 /* dictionary_hash.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = dictionary_hash.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/dictionary_hash.h; sourceTree = SOURCE_ROOT; };
+		14290ED8DE68778AE3023FBC /* LinkFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = LinkFilter.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/LinkFilter.h; sourceTree = SOURCE_ROOT; };
 		15F2C6477A769C03A56D1401 /* ofxSlider.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxSlider.cpp; path = ../../../addons/ofxGui/src/ofxSlider.cpp; sourceTree = SOURCE_ROOT; };
 		163ABB7F5E22B6A0ECF51B07 /* ofxTCPSettings.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxTCPSettings.h; path = ../../../addons/ofxNetwork/src/ofxTCPSettings.h; sourceTree = SOURCE_ROOT; };
 		16D8E1844A44453A0C287E72 /* ssl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ssl.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ssl.h; sourceTree = SOURCE_ROOT; };
 		17006150745E007FA32014F5 /* modes.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = modes.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/modes.h; sourceTree = SOURCE_ROOT; };
 		17E65988300FBD9AAA2CD0CA /* ofxGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxGui.h; path = ../../../addons/ofxGui/src/ofxGui.h; sourceTree = SOURCE_ROOT; };
 		181D363B6DD54D1FA6309C43 /* ofxColorPicker.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxColorPicker.cpp; path = ../../../addons/ofxGui/src/ofxColorPicker.cpp; sourceTree = SOURCE_ROOT; };
+		181F02B531162F6039F6ADC2 /* DirectoryWatcher.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DirectoryWatcher.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/DirectoryWatcher.h; sourceTree = SOURCE_ROOT; };
 		1AEDCF9A6D7A9C81A1FFFB82 /* cmac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cmac.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/cmac.h; sourceTree = SOURCE_ROOT; };
+		1C011DA756FF131FC46A2907 /* FileExtensionFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = FileExtensionFilter.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/FileExtensionFilter.h; sourceTree = SOURCE_ROOT; };
 		1C085E327DAB912CFA2A443D /* ofxTCPServer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxTCPServer.cpp; path = ../../../addons/ofxNetwork/src/ofxTCPServer.cpp; sourceTree = SOURCE_ROOT; };
 		1C0972A2A90100E10C49938E /* rsa.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rsa.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rsa.h; sourceTree = SOURCE_ROOT; };
 		1C0DA2561397A7DE0246858B /* ofxGuiGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxGuiGroup.h; path = ../../../addons/ofxGui/src/ofxGuiGroup.h; sourceTree = SOURCE_ROOT; };
 		1D548216CC2978215BFDAC85 /* engine.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = engine.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/engine.h; sourceTree = SOURCE_ROOT; };
 		1DFA26F2C6BBD1B8AC24C0B1 /* ofxNetworkUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxNetworkUtils.h; path = ../../../addons/ofxNetwork/src/ofxNetworkUtils.h; sourceTree = SOURCE_ROOT; };
+		1E8B79D0091B95C305295952 /* URIEncoding.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = URIEncoding.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/URIEncoding.h; sourceTree = SOURCE_ROOT; };
+		20729DD0AE1CA44D2A7CBE8F /* ThreadsafeLoggerChannel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ThreadsafeLoggerChannel.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ThreadsafeLoggerChannel.h; sourceTree = SOURCE_ROOT; };
+		22565CAF8FFEF25C805A438F /* HexBinaryEncoding.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = HexBinaryEncoding.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/HexBinaryEncoding.cpp; sourceTree = SOURCE_ROOT; };
+		23C4AB2D5C847C1D6A7A69A8 /* port.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = port.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/port.h; sourceTree = SOURCE_ROOT; };
 		26EF3E71A07C6948EAF6709E /* ofxTCPManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxTCPManager.h; path = ../../../addons/ofxNetwork/src/ofxTCPManager.h; sourceTree = SOURCE_ROOT; };
 		26FD7792D0FC0533A46C4B0D /* comp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = comp.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/comp.h; sourceTree = SOURCE_ROOT; };
 		27CAA440EF9F67BEE7464F89 /* ofxBiquadFilterInstance.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxBiquadFilterInstance.h; path = ../../../addons/ofxBiquadFilter/src/ofxBiquadFilterInstance.h; sourceTree = SOURCE_ROOT; };
 		2834D88A62CD23F3DE2C47D1 /* ofxButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxButton.h; path = ../../../addons/ofxGui/src/ofxButton.h; sourceTree = SOURCE_ROOT; };
+		296E908620C8DC7216F403A6 /* dictionary.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = dictionary.h; path = ../../../addons/ofxIO/libs/brotli/src/common/dictionary.h; sourceTree = SOURCE_ROOT; };
 		2A20F45E8472AF83015D687B /* ec.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ec.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ec.h; sourceTree = SOURCE_ROOT; };
 		2A61AA76A834926F81F48ADC /* async.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = async.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/async.h; sourceTree = SOURCE_ROOT; };
+		2A8D9C10CB2FDB071CC1639F /* quality.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = quality.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/quality.h; sourceTree = SOURCE_ROOT; };
 		2A8E6EE70DD635A657EEEC99 /* x509v3.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = x509v3.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/x509v3.h; sourceTree = SOURCE_ROOT; };
 		2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = tinyxml.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxml.cpp; sourceTree = SOURCE_ROOT; };
+		2BC552B95352F479531DC424 /* snappy-stubs-internal.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "snappy-stubs-internal.h"; path = "../../../addons/ofxIO/libs/snappy/src/snappy-stubs-internal.h"; sourceTree = SOURCE_ROOT; };
+		2C49C0820819184530BC1AC8 /* backward_references.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = backward_references.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/backward_references.h; sourceTree = SOURCE_ROOT; };
+		2D170F102215CF0511959D79 /* ByteBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ByteBuffer.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ByteBuffer.h; sourceTree = SOURCE_ROOT; };
 		2D45A496EFB9F361A92C1F2A /* ct.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ct.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ct.h; sourceTree = SOURCE_ROOT; };
+		2E1B067CF92CF6003406D36E /* bit_cost.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bit_cost.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/bit_cost.h; sourceTree = SOURCE_ROOT; };
 		2EEA793E39D386EF32CB1ADD /* EmotiBitWiFiHost.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = EmotiBitWiFiHost.cpp; path = ../../../addons/ofxEmotiBit/src/EmotiBitWiFiHost.cpp; sourceTree = SOURCE_ROOT; };
 		2F519EB3B0DCD7378FB86ABE /* ofxUDPManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxUDPManager.h; path = ../../../addons/ofxNetwork/src/ofxUDPManager.h; sourceTree = SOURCE_ROOT; };
+		2F6C7F53A990035EB21AC78C /* LRUCache.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = LRUCache.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/LRUCache.h; sourceTree = SOURCE_ROOT; };
+		2FB74FF42B08FC378F74B2B7 /* snappy-stubs-internal.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = "snappy-stubs-internal.cc"; path = "../../../addons/ofxIO/libs/snappy/src/snappy-stubs-internal.cc"; sourceTree = SOURCE_ROOT; };
+		2FC8E2266FE2F5545775A16D /* Compression.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Compression.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/Compression.cpp; sourceTree = SOURCE_ROOT; };
 		30841703B7AC8487D16FB4AA /* ofxTCPServer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxTCPServer.h; path = ../../../addons/ofxNetwork/src/ofxTCPServer.h; sourceTree = SOURCE_ROOT; };
 		3196BB02FD710583AD1E8682 /* opensslconf_osx.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = opensslconf_osx.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/opensslconf_osx.h; sourceTree = SOURCE_ROOT; };
+		321A94B5DA29E6354C6A0717 /* Hash.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Hash.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/Hash.h; sourceTree = SOURCE_ROOT; };
+		329AFDF48160D0227126AD22 /* histogram.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = histogram.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/histogram.h; sourceTree = SOURCE_ROOT; };
+		32CC9FC8F28CF3D4C0E1192B /* ObjectPool.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ObjectPool.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ObjectPool.h; sourceTree = SOURCE_ROOT; };
+		3457BE6FA2A60931AED56935 /* streams.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = streams.cc; path = ../../../addons/ofxIO/libs/brotli/src/enc/streams.cc; sourceTree = SOURCE_ROOT; };
 		355218D9B12A28AD4F099029 /* txt_db.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = txt_db.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/txt_db.h; sourceTree = SOURCE_ROOT; };
 		35BB9BB90DBABFD3B39F8DB6 /* ofxUDPManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxUDPManager.cpp; path = ../../../addons/ofxNetwork/src/ofxUDPManager.cpp; sourceTree = SOURCE_ROOT; };
+		370DA13018950E5BFF8CF171 /* LinkFilter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = LinkFilter.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/LinkFilter.cpp; sourceTree = SOURCE_ROOT; };
+		3740B546F5FA81F9B404F565 /* write_bits.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = write_bits.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/write_bits.h; sourceTree = SOURCE_ROOT; };
 		37A00AAE55CA7B437073B0C9 /* bio.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bio.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/bio.h; sourceTree = SOURCE_ROOT; };
+		3C9D49450D420BF2FA36851C /* Hash.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Hash.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/Hash.cpp; sourceTree = SOURCE_ROOT; };
+		3CFE04CCE515BDEA95DEAA71 /* ByteBufferReader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ByteBufferReader.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ByteBufferReader.h; sourceTree = SOURCE_ROOT; };
+		3D61D3B61CE158DC7238DF52 /* bit_reader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bit_reader.h; path = ../../../addons/ofxIO/libs/brotli/src/dec/bit_reader.h; sourceTree = SOURCE_ROOT; };
+		3E54175A950386E293ED23C0 /* command.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = command.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/command.h; sourceTree = SOURCE_ROOT; };
+		3F20B5AB61CAC5F8BA24E3A4 /* constants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = constants.h; path = ../../../addons/ofxIO/libs/brotli/src/common/constants.h; sourceTree = SOURCE_ROOT; };
 		3F9F5D5E3A4CDE45682F38E2 /* sha.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sha.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/sha.h; sourceTree = SOURCE_ROOT; };
 		3FED4C887C37A3FD70D004E8 /* ui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ui.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ui.h; sourceTree = SOURCE_ROOT; };
 		40F8AFFCAB8F69A35DA9FD2A /* ssl3.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ssl3.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ssl3.h; sourceTree = SOURCE_ROOT; };
 		413E48C985AFC06586413FB9 /* pkcs7.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = pkcs7.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/pkcs7.h; sourceTree = SOURCE_ROOT; };
+		4164C6C6CE5115889A99F42C /* COBSEncoding.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = COBSEncoding.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/COBSEncoding.cpp; sourceTree = SOURCE_ROOT; };
+		4212102D1CF2815EEEC62736 /* backward_references.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = backward_references.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/backward_references.c; sourceTree = SOURCE_ROOT; };
+		435F153348292B6921D118D7 /* bit_reader.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = bit_reader.c; path = ../../../addons/ofxIO/libs/brotli/src/dec/bit_reader.c; sourceTree = SOURCE_ROOT; };
 		44B351490B620D04E1E7C52D /* ofxInputField.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxInputField.cpp; path = ../../../addons/ofxGui/src/ofxInputField.cpp; sourceTree = SOURCE_ROOT; };
+		4593838C4B4BCE40284AAE07 /* ofxIO.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxIO.h; path = ../../../addons/ofxIO/src/ofxIO.h; sourceTree = SOURCE_ROOT; };
+		469AA5350C4777BED9805BC4 /* RecursiveDirectoryIteratorStategies.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = RecursiveDirectoryIteratorStategies.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/RecursiveDirectoryIteratorStategies.h; sourceTree = SOURCE_ROOT; };
+		47B9A234B65D63015C0CFEDD /* serial.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = serial.cc; path = ../../../addons/ofxSerial/libs/serial/src/serial.cc; sourceTree = SOURCE_ROOT; };
 		4882CC26D63610292CFADBE9 /* cms.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cms.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/cms.h; sourceTree = SOURCE_ROOT; };
 		489B196944B06ADC2A071076 /* ofxColorPicker.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxColorPicker.h; path = ../../../addons/ofxGui/src/ofxColorPicker.h; sourceTree = SOURCE_ROOT; };
 		490DE03DA72EE341B37B4BBB /* conf_api.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = conf_api.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/conf_api.h; sourceTree = SOURCE_ROOT; };
 		4A941E617512F1E87E294653 /* x509_vfy.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = x509_vfy.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/x509_vfy.h; sourceTree = SOURCE_ROOT; };
 		4BF97AC133A743F7D2E222B6 /* bn.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bn.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/bn.h; sourceTree = SOURCE_ROOT; };
+		4D38898647BBFEEBB89C1569 /* alphanum.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = alphanum.hpp; path = ../../../addons/ofxIO/libs/alphanum/include/alphanum.hpp; sourceTree = SOURCE_ROOT; };
+		4EAC68CB142D702F9E3FD73E /* HexBinaryEncoding.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = HexBinaryEncoding.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/HexBinaryEncoding.h; sourceTree = SOURCE_ROOT; };
+		5066E964AC843C201FA667AB /* hash_longest_match_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = hash_longest_match_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/hash_longest_match_inc.h; sourceTree = SOURCE_ROOT; };
 		50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxXmlSettings.cpp; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.cpp; sourceTree = SOURCE_ROOT; };
+		50FC1C7AE5280445EB0FD2B8 /* metablock.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = metablock.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/metablock.c; sourceTree = SOURCE_ROOT; };
+		5114D2AF276E4E6E9A67B342 /* PathFilterCollection.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = PathFilterCollection.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/PathFilterCollection.cpp; sourceTree = SOURCE_ROOT; };
+		5235265B9D62AC76B086F9D7 /* port.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = port.h; path = ../../../addons/ofxIO/libs/brotli/src/dec/port.h; sourceTree = SOURCE_ROOT; };
 		52AFA1F08C420992CAAAE648 /* ofxSlider.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxSlider.h; path = ../../../addons/ofxGui/src/ofxSlider.h; sourceTree = SOURCE_ROOT; };
 		53849B4541E31656773B5C53 /* Periodizer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Periodizer.h; path = ../../../addons/ofxEmotiBit/src/Signal/Periodizer.h; sourceTree = SOURCE_ROOT; };
 		5565E3718DB1D46F1214EBFC /* md2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = md2.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/md2.h; sourceTree = SOURCE_ROOT; };
+		557678EEFF0D0C6D692D0DEC /* DeviceFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DeviceFilter.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/DeviceFilter.h; sourceTree = SOURCE_ROOT; };
 		55E6502FFB31969C644E02C1 /* ofxBiquadFilter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBiquadFilter.cpp; path = ../../../addons/ofxBiquadFilter/src/ofxBiquadFilter.cpp; sourceTree = SOURCE_ROOT; };
+		56C67B5A6E5B16314FBD1BCA /* hash_forgetful_chain_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = hash_forgetful_chain_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/hash_forgetful_chain_inc.h; sourceTree = SOURCE_ROOT; };
 		56DAF0A34EFCF5E2A5E60386 /* rand.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rand.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rand.h; sourceTree = SOURCE_ROOT; };
 		5749F2535EC575188CD8B7EA /* md5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = md5.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/md5.h; sourceTree = SOURCE_ROOT; };
+		57E858FCDF1AB73089F1A9F0 /* HiddenFileFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = HiddenFileFilter.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/HiddenFileFilter.h; sourceTree = SOURCE_ROOT; };
+		5C84BB54778F48E7898E8BC9 /* Thread.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Thread.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/Thread.h; sourceTree = SOURCE_ROOT; };
 		5CAABABC5D465FF3E4FDBAA0 /* ssl2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ssl2.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ssl2.h; sourceTree = SOURCE_ROOT; };
+		5CC4516F27183BD1973BBE37 /* compress_fragment.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = compress_fragment.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/compress_fragment.c; sourceTree = SOURCE_ROOT; };
 		5D05C2B0CBAFC3F9F2F693AF /* tls1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tls1.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/tls1.h; sourceTree = SOURCE_ROOT; };
+		5D4C9D17E0C3F84DDB888544 /* ByteBufferUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ByteBufferUtils.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ByteBufferUtils.h; sourceTree = SOURCE_ROOT; };
+		5E37E8C926990E781B1E9E26 /* static_dict.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = static_dict.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/static_dict.h; sourceTree = SOURCE_ROOT; };
+		5F4C4A383F1167DA24A5C88A /* ThreadChannel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ThreadChannel.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ThreadChannel.h; sourceTree = SOURCE_ROOT; };
+		60F63F5C68476F0C9095B247 /* URIEncoding.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = URIEncoding.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/URIEncoding.cpp; sourceTree = SOURCE_ROOT; };
+		6103A267643600648210B5B5 /* PollingThread.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = PollingThread.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/PollingThread.h; sourceTree = SOURCE_ROOT; };
+		610E50019572215015A4B6DF /* BackoffStrategy.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = BackoffStrategy.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/BackoffStrategy.h; sourceTree = SOURCE_ROOT; };
 		61A673E0354F5DD23699802A /* ebcdic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ebcdic.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ebcdic.h; sourceTree = SOURCE_ROOT; };
 		61CC1A2E0CC17BE6CE4A68F7 /* conf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = conf.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/conf.h; sourceTree = SOURCE_ROOT; };
 		64D45D3FC56C30943AC64D5E /* aes.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = aes.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/aes.h; sourceTree = SOURCE_ROOT; };
+		64F728D0405D9777ECF43CD9 /* Base64Encoding.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Base64Encoding.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/Base64Encoding.h; sourceTree = SOURCE_ROOT; };
+		65072C0AF3E535DFF565F967 /* FilteredStreams.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = FilteredStreams.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/FilteredStreams.h; sourceTree = SOURCE_ROOT; };
+		65DC6B9109EFA2E2C8C4BCA8 /* encode_parallel.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = encode_parallel.cc; path = ../../../addons/ofxIO/libs/brotli/src/enc/encode_parallel.cc; sourceTree = SOURCE_ROOT; };
 		67AD080A2A62A398BC832D7A /* evp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = evp.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/evp.h; sourceTree = SOURCE_ROOT; };
+		67B9F66F8197CB04B450E465 /* SLIPEncoding.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SLIPEncoding.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/SLIPEncoding.h; sourceTree = SOURCE_ROOT; };
+		6AFE6A7EBB34624E3F77554E /* LRUStrategy.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = LRUStrategy.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/LRUStrategy.h; sourceTree = SOURCE_ROOT; };
 		6B4197F8EF581E2F00041258 /* hmac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = hmac.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/hmac.h; sourceTree = SOURCE_ROOT; };
+		6BD291FB03292C6D352C26FE /* FileExtensionFilter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = FileExtensionFilter.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/FileExtensionFilter.cpp; sourceTree = SOURCE_ROOT; };
+		6D2A056D5D95C22910B771AB /* literal_cost.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = literal_cost.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/literal_cost.c; sourceTree = SOURCE_ROOT; };
+		6D6C4E1EAB3146AB043AAE52 /* JSONUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = JSONUtils.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/JSONUtils.cpp; sourceTree = SOURCE_ROOT; };
+		6DA59BC6575BEE6E0F2E24A6 /* hash_longest_match_quickly_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = hash_longest_match_quickly_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/hash_longest_match_quickly_inc.h; sourceTree = SOURCE_ROOT; };
+		6FA24233D84E87A91BDEB0E6 /* v8stdint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = v8stdint.h; path = ../../../addons/ofxSerial/libs/serial/include/serial/v8stdint.h; sourceTree = SOURCE_ROOT; };
 		6FAF79F4AD0DC48C239A0E3E /* idea.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = idea.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/idea.h; sourceTree = SOURCE_ROOT; };
 		7200EB1EC64977ED08AC0111 /* ofxXmlPoco.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxXmlPoco.h; path = ../../../addons/ofxPoco/src/ofxXmlPoco.h; sourceTree = SOURCE_ROOT; };
+		72804EF074677512091594C2 /* snappy.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = snappy.h; path = ../../../addons/ofxIO/libs/snappy/src/snappy.h; sourceTree = SOURCE_ROOT; };
+		7362D621E1B9A92F5F4AC73B /* snappy.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = snappy.cc; path = ../../../addons/ofxIO/libs/snappy/src/snappy.cc; sourceTree = SOURCE_ROOT; };
+		7561705030EF5A13E97BE7C0 /* serial.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = serial.h; path = ../../../addons/ofxSerial/libs/serial/include/serial/serial.h; sourceTree = SOURCE_ROOT; };
+		756EF7DFFF01E1326111F7FB /* encode_parallel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = encode_parallel.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/encode_parallel.h; sourceTree = SOURCE_ROOT; };
+		75BF994040F1E2AC038E6792 /* ImageUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ImageUtils.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ImageUtils.h; sourceTree = SOURCE_ROOT; };
 		773AA38F169F9C1E793528DC /* lhash.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lhash.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/lhash.h; sourceTree = SOURCE_ROOT; };
+		7767880A5DCD9314A3F9683E /* unix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = unix.h; path = ../../../addons/ofxSerial/libs/serial/include/serial/impl/unix.h; sourceTree = SOURCE_ROOT; };
+		784C0DB32ADDBDBF29DB5910 /* dictionary.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = dictionary.c; path = ../../../addons/ofxIO/libs/brotli/src/common/dictionary.c; sourceTree = SOURCE_ROOT; };
+		785B725E48E5E34D33F92ECE /* block_splitter_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = block_splitter_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/block_splitter_inc.h; sourceTree = SOURCE_ROOT; };
 		78D67A00EB899FAC09430597 /* ofxLabel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxLabel.cpp; path = ../../../addons/ofxGui/src/ofxLabel.cpp; sourceTree = SOURCE_ROOT; };
+		7913239832BBBF6B56ED2600 /* lz4.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = lz4.c; path = ../../../addons/ofxIO/libs/lz4/src/lz4.c; sourceTree = SOURCE_ROOT; };
+		79F1B32CBD205754ECBE956E /* list_ports_win.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = list_ports_win.cc; path = ../../../addons/ofxSerial/libs/serial/src/impl/list_ports/list_ports_win.cc; sourceTree = SOURCE_ROOT; };
 		7A6C877B8EC4F7438DED9FB4 /* ecdh.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ecdh.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ecdh.h; sourceTree = SOURCE_ROOT; };
 		7A8815F94AF8B1A79DAF932B /* EmotiBitTestingHelper.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = EmotiBitTestingHelper.cpp; path = ../../../addons/ofxEmotiBit/src/EmotiBitTestingHelper.cpp; sourceTree = SOURCE_ROOT; };
+		7B8F262E90F842B6011F0935 /* SerialDevice.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SerialDevice.cpp; path = ../../../addons/ofxSerial/libs/ofxSerial/src/SerialDevice.cpp; sourceTree = SOURCE_ROOT; };
 		7D3A8C6EA022F43F7B57C119 /* pkcs12.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = pkcs12.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/pkcs12.h; sourceTree = SOURCE_ROOT; };
+		7DBD4311D51383233476A246 /* decode.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = decode.c; path = ../../../addons/ofxIO/libs/brotli/src/dec/decode.c; sourceTree = SOURCE_ROOT; };
+		7E25FB5473A2AF9C1578BDB6 /* find_match_length.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = find_match_length.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/find_match_length.h; sourceTree = SOURCE_ROOT; };
+		800D9CCA0F0B3D70CF25C2FF /* ofxSerial.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxSerial.h; path = ../../../addons/ofxSerial/src/ofxSerial.h; sourceTree = SOURCE_ROOT; };
 		802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxSliderGroup.cpp; path = ../../../addons/ofxGui/src/ofxSliderGroup.cpp; sourceTree = SOURCE_ROOT; };
 		832BDC407620CDBA568B713D /* tinyxmlerror.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = tinyxmlerror.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlerror.cpp; sourceTree = SOURCE_ROOT; };
+		838AF229C2183CBDCC150342 /* static_dict.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = static_dict.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/static_dict.c; sourceTree = SOURCE_ROOT; };
+		857A942126908B1806B67CE6 /* list_ports_osx.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = list_ports_osx.cc; path = ../../../addons/ofxSerial/libs/serial/src/impl/list_ports/list_ports_osx.cc; sourceTree = SOURCE_ROOT; };
+		85B399C99F9879F6C78EDE1B /* snappy-stubs-public.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "snappy-stubs-public.h"; path = "../../../addons/ofxIO/libs/snappy/src/snappy-stubs-public.h"; sourceTree = SOURCE_ROOT; };
+		85D108916A5D4F9CE91D826C /* compress_fragment.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = compress_fragment.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/compress_fragment.h; sourceTree = SOURCE_ROOT; };
+		863E9634DCC98853BF984072 /* brotli_bit_stream.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = brotli_bit_stream.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/brotli_bit_stream.c; sourceTree = SOURCE_ROOT; };
 		87F26B4B24CBD428AD9EEBAA /* ofxBaseGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxBaseGui.h; path = ../../../addons/ofxGui/src/ofxBaseGui.h; sourceTree = SOURCE_ROOT; };
 		89449E3044D456F7DE7BEA14 /* ofxPanel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxPanel.h; path = ../../../addons/ofxGui/src/ofxPanel.h; sourceTree = SOURCE_ROOT; };
+		89B60FB247E1F64013C716DC /* AbstractTypes.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AbstractTypes.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/AbstractTypes.h; sourceTree = SOURCE_ROOT; };
+		89C3F44627E5AE0F3A04E1BB /* prefix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = prefix.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/prefix.h; sourceTree = SOURCE_ROOT; };
 		8A1254FD4FD7284078EEE55E /* x509.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = x509.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/x509.h; sourceTree = SOURCE_ROOT; };
 		8B1E1E0F1F7DF006BF6F4E80 /* dsa.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = dsa.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/dsa.h; sourceTree = SOURCE_ROOT; };
 		8CA65A234F6CABD350A1BA57 /* Periodizer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Periodizer.cpp; path = ../../../addons/ofxEmotiBit/src/Signal/Periodizer.cpp; sourceTree = SOURCE_ROOT; };
+		8CA7F50B0134479FADEBC335 /* SerialEvents.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SerialEvents.h; path = ../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO/SerialEvents.h; sourceTree = SOURCE_ROOT; };
+		8D2178E97885D60A7552A030 /* FilteredStreams.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = FilteredStreams.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/FilteredStreams.cpp; sourceTree = SOURCE_ROOT; };
+		8D76B424A6DF4D70AACCDBAE /* SearchPath.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SearchPath.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/SearchPath.cpp; sourceTree = SOURCE_ROOT; };
+		8DCD8ACB4BC032E3F12F5AC8 /* compress_fragment_two_pass.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = compress_fragment_two_pass.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/compress_fragment_two_pass.c; sourceTree = SOURCE_ROOT; };
 		8F225C97B6ECA8B22FFB4B76 /* rc5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc5.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rc5.h; sourceTree = SOURCE_ROOT; };
 		907C5B5E104864A2D3A25745 /* ofxToggle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxToggle.cpp; path = ../../../addons/ofxGui/src/ofxToggle.cpp; sourceTree = SOURCE_ROOT; };
-		9480A40527F23D5F0065570B /* EmotiBitPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitPacket.h; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitPacket.h; sourceTree = "<group>"; };
-		9480A40627F23D5F0065570B /* EmotiBitPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitPacket.cpp; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitPacket.cpp; sourceTree = "<group>"; };
-		9480A40727F23D5F0065570B /* EmotiBitEdaCalibration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitEdaCalibration.cpp; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitEdaCalibration.cpp; sourceTree = "<group>"; };
-		9480A40827F23D5F0065570B /* DigitalFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DigitalFilter.h; path = ../../../../../EmotiBit_XPlat_Utils/src/DigitalFilter.h; sourceTree = "<group>"; };
-		9480A40927F23D5F0065570B /* EmotiBitFactoryTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitFactoryTest.cpp; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitFactoryTest.cpp; sourceTree = "<group>"; };
-		9480A40A27F23D5F0065570B /* EmotiBitComms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitComms.h; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitComms.h; sourceTree = "<group>"; };
-		9480A40B27F23D5F0065570B /* EmotiBitEdaCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitEdaCalibration.h; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitEdaCalibration.h; sourceTree = "<group>"; };
-		9480A40C27F23D5F0065570B /* EmotiBitFactoryTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitFactoryTest.h; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitFactoryTest.h; sourceTree = "<group>"; };
-		9480A40D27F23D5F0065570B /* EmotiBitVariants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitVariants.cpp; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitVariants.cpp; sourceTree = "<group>"; };
-		9480A40E27F23D5F0065570B /* EmotiBitVariants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitVariants.h; path = ../../../../../EmotiBit_XPlat_Utils/src/EmotiBitVariants.h; sourceTree = "<group>"; };
-		9480A40F27F23D5F0065570B /* DigitalFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DigitalFilter.cpp; path = ../../../../../EmotiBit_XPlat_Utils/src/DigitalFilter.cpp; sourceTree = "<group>"; };
-		9480A41527F23EE50065570B /* instructions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = instructions; path = bin/data/instructions; sourceTree = "<group>"; };
-		9480A41727F23F030065570B /* bossac */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = bossac; path = bin/data/bossac; sourceTree = "<group>"; };
-		9480A41827F23F030065570B /* verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdana.ttf; path = bin/data/verdana.ttf; sourceTree = "<group>"; };
-		9480A41927F23F030065570B /* verdanab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdanab.ttf; path = bin/data/verdanab.ttf; sourceTree = "<group>"; };
-		9480A41A27F23F030065570B /* EmotiBit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmotiBit.png; path = bin/data/EmotiBit.png; sourceTree = "<group>"; };
-		9480A41B27F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = EmotiBit_stock_firmware.ino.feather_m0.bin; path = bin/data/EmotiBit_stock_firmware.ino.feather_m0.bin; sourceTree = "<group>"; };
-		9480A41C27F23F030065570B /* WINC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WINC; path = bin/data/WINC; sourceTree = "<group>"; };
-		94E22CB4287F4C5500C8F3C0 /* exec */ = {isa = PBXFileReference; lastKnownFileType = folder; name = exec; path = bin/data/exec; sourceTree = "<group>"; };
+		93384835C77BD4299F8A7F90 /* ByteBuffer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ByteBuffer.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/ByteBuffer.cpp; sourceTree = SOURCE_ROOT; };
+		93E26814A54A32C6C2B713FE /* state.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = state.c; path = ../../../addons/ofxIO/libs/brotli/src/dec/state.c; sourceTree = SOURCE_ROOT; };
+		94519B019B0E47223B31FB5B /* context.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = context.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/context.h; sourceTree = SOURCE_ROOT; };
+		94E22CF72882062400C8F3C0 /* EmotiBitPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitPacket.cpp; path = ../../EmotiBit_XPlat_Utils/src/EmotiBitPacket.cpp; sourceTree = "<group>"; };
+		94E22CF82882062400C8F3C0 /* EmotiBitPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitPacket.h; path = ../../EmotiBit_XPlat_Utils/src/EmotiBitPacket.h; sourceTree = "<group>"; };
+		94E22CFA2882070B00C8F3C0 /* exec */ = {isa = PBXFileReference; lastKnownFileType = folder; name = exec; path = bin/data/exec; sourceTree = "<group>"; };
+		94E22CFB2882070B00C8F3C0 /* verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdana.ttf; path = bin/data/verdana.ttf; sourceTree = "<group>"; };
+		94E22CFC2882070C00C8F3C0 /* instructions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = instructions; path = bin/data/instructions; sourceTree = "<group>"; };
+		94E22CFD2882070C00C8F3C0 /* EmotiBit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmotiBit.png; path = bin/data/EmotiBit.png; sourceTree = "<group>"; };
+		94E22CFE2882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = EmotiBit_stock_firmware.ino.feather_m0.bin; path = bin/data/EmotiBit_stock_firmware.ino.feather_m0.bin; sourceTree = "<group>"; };
+		94E22CFF2882070C00C8F3C0 /* verdanab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdanab.ttf; path = bin/data/verdanab.ttf; sourceTree = "<group>"; };
+		94E22D002882070C00C8F3C0 /* WINC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WINC; path = bin/data/WINC; sourceTree = "<group>"; };
+		94E22D012882070C00C8F3C0 /* bossac */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = bossac; path = bin/data/bossac; sourceTree = "<group>"; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
+		9634FA545F1B9E5582A31E4D /* static_dict_lut.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = static_dict_lut.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/static_dict_lut.h; sourceTree = SOURCE_ROOT; };
+		964894707DA74D07D5296965 /* StreamFilters.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = StreamFilters.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/StreamFilters.cpp; sourceTree = SOURCE_ROOT; };
 		974B6F6CECCC45548FC1A608 /* EmotiBitTestingHelper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = EmotiBitTestingHelper.h; path = ../../../addons/ofxEmotiBit/src/EmotiBitTestingHelper.h; sourceTree = SOURCE_ROOT; };
 		98B916CABFC10AC9836EB352 /* cast.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cast.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/cast.h; sourceTree = SOURCE_ROOT; };
 		9938519AF7D3E0C48586F0C1 /* ofxEmotiBitVersion.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxEmotiBitVersion.h; path = ../../../addons/ofxEmotiBit/src/ofxEmotiBitVersion.h; sourceTree = SOURCE_ROOT; };
 		9A00A37CC5D4BF1FD1883438 /* pem2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = pem2.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/pem2.h; sourceTree = SOURCE_ROOT; };
+		9A430D6BD10DC31AE2D07DA0 /* snappy-sinksource.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = "snappy-sinksource.cc"; path = "../../../addons/ofxIO/libs/snappy/src/snappy-sinksource.cc"; sourceTree = SOURCE_ROOT; };
+		9A967D1FAFA98A7CBBFA4F55 /* DirectoryUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DirectoryUtils.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/DirectoryUtils.cpp; sourceTree = SOURCE_ROOT; };
+		9C8C341C57EF4257DA1AB53A /* entropy_encode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = entropy_encode.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/entropy_encode.h; sourceTree = SOURCE_ROOT; };
+		9D639BA31583580D80CFE15D /* Base64Encoding.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Base64Encoding.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/Base64Encoding.cpp; sourceTree = SOURCE_ROOT; };
 		9D907A98D6FF2E95AE4FCFBE /* opensslv.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = opensslv.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/opensslv.h; sourceTree = SOURCE_ROOT; };
+		9E2A709AC0FDCAC46BEC3DB4 /* RecursiveDirectoryIterator.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = RecursiveDirectoryIterator.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/RecursiveDirectoryIterator.h; sourceTree = SOURCE_ROOT; };
 		9E41B5C932654328664C3743 /* ocsp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ocsp.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ocsp.h; sourceTree = SOURCE_ROOT; };
 		9E67C420F0790C0E12C99190 /* ts.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ts.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ts.h; sourceTree = SOURCE_ROOT; };
 		9F76D6604BBFA486BAD0F8BA /* ThreadedSystemCall.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ThreadedSystemCall.cpp; path = src/ThreadedSystemCall.cpp; sourceTree = SOURCE_ROOT; };
+		A1B1C6600DF0DF1D2A02FB77 /* StreamFilters.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = StreamFilters.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/StreamFilters.h; sourceTree = SOURCE_ROOT; };
+		A28F98E9F26E32A14FAE918C /* SerialDeviceUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SerialDeviceUtils.cpp; path = ../../../addons/ofxSerial/libs/ofxSerial/src/SerialDeviceUtils.cpp; sourceTree = SOURCE_ROOT; };
+		A5DD24B2E308C4FBAFAFAF56 /* transform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = transform.h; path = ../../../addons/ofxIO/libs/brotli/src/dec/transform.h; sourceTree = SOURCE_ROOT; };
 		A635ED74FA38F1EFA4AD206C /* err.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = err.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/err.h; sourceTree = SOURCE_ROOT; };
+		A7233FE746DDE6D234D84452 /* cluster.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cluster.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/cluster.h; sourceTree = SOURCE_ROOT; };
+		A7271D59E999D051862CAF03 /* JSONUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = JSONUtils.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/JSONUtils.h; sourceTree = SOURCE_ROOT; };
+		A845B79AD3787E21EA8DFEDD /* compressor.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = compressor.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/compressor.h; sourceTree = SOURCE_ROOT; };
+		A8C2DABE3DA33A6F3DC4A7C4 /* ThreadsafeLoggerChannel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ThreadsafeLoggerChannel.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/ThreadsafeLoggerChannel.cpp; sourceTree = SOURCE_ROOT; };
+		A959274BEDC34E590C25B3EA /* snappy-c.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = "snappy-c.cc"; path = "../../../addons/ofxIO/libs/snappy/src/snappy-c.cc"; sourceTree = SOURCE_ROOT; };
 		A9AA9F290280E04944C1CEEE /* srp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = srp.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/srp.h; sourceTree = SOURCE_ROOT; };
+		A9ABBF4A56F7A5AAB5A5DC5D /* snappy-sinksource.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "snappy-sinksource.h"; path = "../../../addons/ofxIO/libs/snappy/src/snappy-sinksource.h"; sourceTree = SOURCE_ROOT; };
 		AA136346D730CE2FC0EC85CD /* e_os2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = e_os2.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/e_os2.h; sourceTree = SOURCE_ROOT; };
+		ABF95295416CA5F04F3FC570 /* version.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = version.h; path = ../../../addons/ofxIO/libs/brotli/src/tools/version.h; sourceTree = SOURCE_ROOT; };
+		ADC45E383B2885CD8ED44C32 /* memory.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = memory.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/memory.c; sourceTree = SOURCE_ROOT; };
 		AE30B18B42BAF0E92CB140E5 /* ofxNetworkUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxNetworkUtils.cpp; path = ../../../addons/ofxNetwork/src/ofxNetworkUtils.cpp; sourceTree = SOURCE_ROOT; };
 		AE68B54581BE4A1DAE853180 /* ofxInputField.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxInputField.h; path = ../../../addons/ofxGui/src/ofxInputField.h; sourceTree = SOURCE_ROOT; };
+		AF2EFC111D54B546BA67C5F8 /* compressor.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = compressor.cc; path = ../../../addons/ofxIO/libs/brotli/src/enc/compressor.cc; sourceTree = SOURCE_ROOT; };
 		AF53C1FCB4DC2DA249C71CE4 /* asn1t.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = asn1t.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/asn1t.h; sourceTree = SOURCE_ROOT; };
 		AFB59BF33EDC27D6AF2CC50B /* ArduinoString.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ArduinoString.h; path = ../../../addons/ofxEmotiBit/src/ArduinoString.h; sourceTree = SOURCE_ROOT; };
 		B1CC96657896D2F948104F3D /* seed.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = seed.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/seed.h; sourceTree = SOURCE_ROOT; };
@@ -188,32 +368,71 @@
 		B37D59256BC5BDEB408A0B4B /* DoubleBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DoubleBuffer.h; path = ../../../addons/ofxEmotiBit/src/DoubleBuffer.h; sourceTree = SOURCE_ROOT; };
 		B3F27E813E1250126AA46F39 /* stack.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stack.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/stack.h; sourceTree = SOURCE_ROOT; };
 		B400F6AD48F06E02F44FD05F /* safestack.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = safestack.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/safestack.h; sourceTree = SOURCE_ROOT; };
+		B4D955289FDAE0CE64CFE409 /* metablock_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = metablock_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/metablock_inc.h; sourceTree = SOURCE_ROOT; };
 		B4F3FCB1CEE7B5D701F79122 /* crypto.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = crypto.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/crypto.h; sourceTree = SOURCE_ROOT; };
+		B608BB92EA071BC82EB9F62F /* RecursiveDirectoryIteratorImpl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = RecursiveDirectoryIteratorImpl.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/RecursiveDirectoryIteratorImpl.h; sourceTree = SOURCE_ROOT; };
 		B62DC455BB791E69D877D3B6 /* blowfish.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = blowfish.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/blowfish.h; sourceTree = SOURCE_ROOT; };
 		B65483D96A9E876D46C93373 /* srtp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = srtp.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/srtp.h; sourceTree = SOURCE_ROOT; };
+		B7182D29B327B20E36803E53 /* entropy_encode_static.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = entropy_encode_static.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/entropy_encode_static.h; sourceTree = SOURCE_ROOT; };
+		B81392DD7D58DEEDA83783B0 /* Thread.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Thread.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/Thread.cpp; sourceTree = SOURCE_ROOT; };
 		B87C60311EC1FE841C1ECD89 /* ofxLabel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxLabel.h; path = ../../../addons/ofxGui/src/ofxLabel.h; sourceTree = SOURCE_ROOT; };
+		B915DF2E03885E5462A1D867 /* brotli_bit_stream.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = brotli_bit_stream.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/brotli_bit_stream.h; sourceTree = SOURCE_ROOT; };
+		B958A9EA0CCC23B12812A232 /* PollingThread.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = PollingThread.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/PollingThread.cpp; sourceTree = SOURCE_ROOT; };
 		BA274EC7A169D538BD43A5D8 /* ofxGuiUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxGuiUtils.h; path = ../../../addons/ofxGui/src/ofxGuiUtils.h; sourceTree = SOURCE_ROOT; };
+		BE10E456A9066BE3516AD23E /* encode.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = encode.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/encode.c; sourceTree = SOURCE_ROOT; };
+		BEFFAA5B8275E0AE066FC2E3 /* DirectoryWatcherManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DirectoryWatcherManager.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/DirectoryWatcherManager.h; sourceTree = SOURCE_ROOT; };
+		BF0BB2F28A4522316B1563A5 /* COBSEncoding.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = COBSEncoding.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/COBSEncoding.h; sourceTree = SOURCE_ROOT; };
 		BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxTCPClient.cpp; path = ../../../addons/ofxNetwork/src/ofxTCPClient.cpp; sourceTree = SOURCE_ROOT; };
 		C04436216C2B8A5144183E83 /* dtls1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = dtls1.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/dtls1.h; sourceTree = SOURCE_ROOT; };
+		C11115BCD18AB012DE4B9911 /* block_splitter.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = block_splitter.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/block_splitter.c; sourceTree = SOURCE_ROOT; };
 		C287B861CB748483403CAEAE /* EmotiBitWiFiHost.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = EmotiBitWiFiHost.h; path = ../../../addons/ofxEmotiBit/src/EmotiBitWiFiHost.h; sourceTree = SOURCE_ROOT; };
+		C3556B2A7A1CEBA6A9A1FF3A /* backward_references_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = backward_references_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/backward_references_inc.h; sourceTree = SOURCE_ROOT; };
+		C36063CD39D292AF0CEB0E49 /* fast_log.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = fast_log.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/fast_log.h; sourceTree = SOURCE_ROOT; };
 		C373CBF6422737D147BA8B70 /* objects.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = objects.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/objects.h; sourceTree = SOURCE_ROOT; };
 		C388FEB5AAE4ED4271BE782D /* ecdsa.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ecdsa.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ecdsa.h; sourceTree = SOURCE_ROOT; };
 		C4CA054A26838033180F5EE5 /* camellia.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = camellia.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/camellia.h; sourceTree = SOURCE_ROOT; };
+		C4D2E84034752C8DDB2D67B2 /* ImageUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImageUtils.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/ImageUtils.cpp; sourceTree = SOURCE_ROOT; };
+		C6C68D431AF8FD1A9E2DCFF2 /* ByteBufferStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ByteBufferStream.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/ByteBufferStream.cpp; sourceTree = SOURCE_ROOT; };
 		C70D8946940288799E82131E /* ofxSliderGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxSliderGroup.h; path = ../../../addons/ofxGui/src/ofxSliderGroup.h; sourceTree = SOURCE_ROOT; };
+		C7F5BBFD733EDFD4D54B3903 /* encode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = encode.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/encode.h; sourceTree = SOURCE_ROOT; };
 		C88333E71C9457E441C33474 /* ofxButton.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxButton.cpp; path = ../../../addons/ofxGui/src/ofxButton.cpp; sourceTree = SOURCE_ROOT; };
 		C8C9B823D7872F9CBF03A813 /* ofxTCPClient.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxTCPClient.h; path = ../../../addons/ofxNetwork/src/ofxTCPClient.h; sourceTree = SOURCE_ROOT; };
+		C8F2762F4CCE12D7C1022DAA /* Compression.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Compression.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/Compression.h; sourceTree = SOURCE_ROOT; };
+		C9BE77ADAEF79E623523E9D9 /* ByteBufferWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ByteBufferWriter.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/ByteBufferWriter.cpp; sourceTree = SOURCE_ROOT; };
 		C9FE1E8D2E9BC8B7F5D308C8 /* asn1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = asn1.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/asn1.h; sourceTree = SOURCE_ROOT; };
 		CA32618C6484394941477500 /* ofxThreadedLogger.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxThreadedLogger.h; path = ../../../addons/ofxThreadedLogger/src/ofxThreadedLogger.h; sourceTree = SOURCE_ROOT; };
+		CA68874B4EA8C0D647FA49C8 /* entropy_encode.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = entropy_encode.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/entropy_encode.c; sourceTree = SOURCE_ROOT; };
+		CB977F55D4B0D819421437AD /* histogram.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = histogram.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/histogram.c; sourceTree = SOURCE_ROOT; };
+		CBFC3084D8F4BE08DBD30DB2 /* streams.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = streams.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/streams.h; sourceTree = SOURCE_ROOT; };
+		CECE089D24F272DB22504892 /* DirectoryFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DirectoryFilter.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/DirectoryFilter.h; sourceTree = SOURCE_ROOT; };
+		D1601ADE8CA2F71810BBCC84 /* snappy-c.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "snappy-c.h"; path = "../../../addons/ofxIO/libs/snappy/src/snappy-c.h"; sourceTree = SOURCE_ROOT; };
+		D1616DA13ECD5FC9DB4D5714 /* SLIPEncoding.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SLIPEncoding.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/SLIPEncoding.cpp; sourceTree = SOURCE_ROOT; };
+		D1845E7B199B61C2A89A95DD /* cluster.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = cluster.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/cluster.c; sourceTree = SOURCE_ROOT; };
+		D1B098B33ACA6D5EF0DE53FB /* win.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = win.cc; path = ../../../addons/ofxSerial/libs/serial/src/impl/win.cc; sourceTree = SOURCE_ROOT; };
 		D1F2D509F3D753BBF52DAA19 /* rc4.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc4.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rc4.h; sourceTree = SOURCE_ROOT; };
+		D1F82A94BD80BDC78E0B1922 /* DirectoryUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DirectoryUtils.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/DirectoryUtils.h; sourceTree = SOURCE_ROOT; };
+		D2071B2317B3E021307099D0 /* SerialDeviceUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SerialDeviceUtils.h; path = ../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO/SerialDeviceUtils.h; sourceTree = SOURCE_ROOT; };
+		D2388420E859BBA28ED2B4EE /* PacketSerialDevice.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = PacketSerialDevice.h; path = ../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO/PacketSerialDevice.h; sourceTree = SOURCE_ROOT; };
 		D315839A1D24D10046025C0C /* asn1_mac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = asn1_mac.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/asn1_mac.h; sourceTree = SOURCE_ROOT; };
+		D5D4C03F38EE3F12B6391564 /* metablock.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = metablock.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/metablock.h; sourceTree = SOURCE_ROOT; };
 		D67FE8EDE92985070F3FD992 /* ofxUDPSettings.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxUDPSettings.h; path = ../../../addons/ofxNetwork/src/ofxUDPSettings.h; sourceTree = SOURCE_ROOT; };
 		D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxThreadedLogger.cpp; path = ../../../addons/ofxThreadedLogger/src/ofxThreadedLogger.cpp; sourceTree = SOURCE_ROOT; };
 		D7D04840334F3A7A5E0022ED /* obj_mac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = obj_mac.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/obj_mac.h; sourceTree = SOURCE_ROOT; };
 		D9A29C9DD4DFDF38F00ECF27 /* pem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = pem.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/pem.h; sourceTree = SOURCE_ROOT; };
 		DB8E8A3E7DBD341637059A64 /* dh.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = dh.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/dh.h; sourceTree = SOURCE_ROOT; };
+		DC48CABDC405B2D0BECF5C2B /* compress_fragment_two_pass.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = compress_fragment_two_pass.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/compress_fragment_two_pass.h; sourceTree = SOURCE_ROOT; };
+		DE22FF0057C30D5DDC12B349 /* AbstractCache.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AbstractCache.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/AbstractCache.h; sourceTree = SOURCE_ROOT; };
 		DE72DC98030465018D130E67 /* md4.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = md4.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/md4.h; sourceTree = SOURCE_ROOT; };
+		DE95F05F5EC909D2167369E6 /* memory.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = memory.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/memory.h; sourceTree = SOURCE_ROOT; };
+		DF94455EC11AD40A5D4EC9CB /* ObjectPool.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ObjectPool.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/ObjectPool.h; sourceTree = SOURCE_ROOT; };
+		DFDFD6F8619819B10AB9F44C /* utf8_util.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = utf8_util.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/utf8_util.c; sourceTree = SOURCE_ROOT; };
 		E07EAAF2349F618F25388C86 /* ofxBiquadFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxBiquadFilter.h; path = ../../../addons/ofxBiquadFilter/src/ofxBiquadFilter.h; sourceTree = SOURCE_ROOT; };
+		E095C2EA5FC7D19E05B8EC63 /* histogram_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = histogram_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/histogram_inc.h; sourceTree = SOURCE_ROOT; };
+		E101D2F61DA6A9D35B4C53CE /* cluster_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cluster_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/cluster_inc.h; sourceTree = SOURCE_ROOT; };
 		E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxPanel.cpp; path = ../../../addons/ofxGui/src/ofxPanel.cpp; sourceTree = SOURCE_ROOT; };
+		E1FF0798EE6FABE32B7D08E3 /* hash.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = hash.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/hash.h; sourceTree = SOURCE_ROOT; };
+		E33245F4A84B5ECC7F2DD52A /* bit_cost.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = bit_cost.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/bit_cost.c; sourceTree = SOURCE_ROOT; };
+		E362E12547978AB05ABA9C57 /* DirectoryFilter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DirectoryFilter.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/DirectoryFilter.cpp; sourceTree = SOURCE_ROOT; };
 		E42962AC2163EDD300A6A9E2 /* ofCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ofCamera.cpp; path = ../../../libs/openFrameworks/3d/ofCamera.cpp; sourceTree = SOURCE_ROOT; };
 		E42962AD2163EDD300A6A9E2 /* ofMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofMesh.h; path = ../../../libs/openFrameworks/3d/ofMesh.h; sourceTree = SOURCE_ROOT; };
 		E42962AE2163EDD300A6A9E2 /* ofNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofNode.h; path = ../../../libs/openFrameworks/3d/ofNode.h; sourceTree = SOURCE_ROOT; };
@@ -389,24 +608,48 @@
 		E42963712163EDD300A6A9E2 /* ofFmodSoundPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofFmodSoundPlayer.h; path = ../../../libs/openFrameworks/sound/ofFmodSoundPlayer.h; sourceTree = SOURCE_ROOT; };
 		E42963722163EDD300A6A9E2 /* ofSoundBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ofSoundBuffer.cpp; path = ../../../libs/openFrameworks/sound/ofSoundBuffer.cpp; sourceTree = SOURCE_ROOT; };
 		E42963732163EDD300A6A9E2 /* ofSoundBaseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofSoundBaseTypes.h; path = ../../../libs/openFrameworks/sound/ofSoundBaseTypes.h; sourceTree = SOURCE_ROOT; };
+		E436310BA5432B5E3611BCAE /* context.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = context.h; path = ../../../addons/ofxIO/libs/brotli/src/dec/context.h; sourceTree = SOURCE_ROOT; };
 		E4B69B5B0A3A1756003C02F2 /* EmotiBitFirmwareInstallerDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmotiBitFirmwareInstallerDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
 		E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		E4F6F31D084699BAD89878B9 /* unix.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = unix.cc; path = ../../../addons/ofxSerial/libs/serial/src/impl/unix.cc; sourceTree = SOURCE_ROOT; };
+		E6E19CEC51E173F45D67514F /* utf8_util.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = utf8_util.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/utf8_util.h; sourceTree = SOURCE_ROOT; };
 		E78FB8975C07248217E531FA /* kdf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = kdf.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/kdf.h; sourceTree = SOURCE_ROOT; };
+		E7BC10205FF4B36CBFFAECF3 /* ByteBufferParser.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ByteBufferParser.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ByteBufferParser.h; sourceTree = SOURCE_ROOT; };
 		E811E52684D14AA533F8D72B /* whrlpool.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = whrlpool.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/whrlpool.h; sourceTree = SOURCE_ROOT; };
+		E8AF8381484827A10A418B26 /* SearchPath.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SearchPath.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/SearchPath.h; sourceTree = SOURCE_ROOT; };
+		E95C4518AEDCDBEA357754B0 /* RecursiveDirectoryIterator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = RecursiveDirectoryIterator.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/RecursiveDirectoryIterator.cpp; sourceTree = SOURCE_ROOT; };
 		E9998694E5001F9CF0B13BF0 /* ofxXmlPoco.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxXmlPoco.cpp; path = ../../../addons/ofxPoco/src/ofxXmlPoco.cpp; sourceTree = SOURCE_ROOT; };
+		E9C5B07A729BFBB0FF0F4406 /* prefix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = prefix.h; path = ../../../addons/ofxIO/libs/brotli/src/dec/prefix.h; sourceTree = SOURCE_ROOT; };
+		EBECBB67C55635D1B4871A42 /* snappy-internal.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "snappy-internal.h"; path = "../../../addons/ofxIO/libs/snappy/src/snappy-internal.h"; sourceTree = SOURCE_ROOT; };
 		ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxGuiGroup.cpp; path = ../../../addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
+		ED9910FC34FB8D7833B6F04C /* ringbuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ringbuffer.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/ringbuffer.h; sourceTree = SOURCE_ROOT; };
 		EEC2734565C1EDDDE6616883 /* ripemd.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ripemd.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ripemd.h; sourceTree = SOURCE_ROOT; };
 		F0B21373033A0907CFFFD055 /* des.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = des.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/des.h; sourceTree = SOURCE_ROOT; };
+		F0B7B8B3CBC6603E4EBB50CB /* list_ports_linux.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = list_ports_linux.cc; path = ../../../addons/ofxSerial/libs/serial/src/impl/list_ports/list_ports_linux.cc; sourceTree = SOURCE_ROOT; };
+		F0F87B444C101B92DBC3AE0D /* bit_cost_inc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bit_cost_inc.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/bit_cost_inc.h; sourceTree = SOURCE_ROOT; };
+		F27637AABA89A235C5974D56 /* RecursiveDirectoryIteratorStategies.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = RecursiveDirectoryIteratorStategies.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/RecursiveDirectoryIteratorStategies.cpp; sourceTree = SOURCE_ROOT; };
 		F32C175B3E53B0864752B5D7 /* ofxBiquadFilterInstance.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBiquadFilterInstance.cpp; path = ../../../addons/ofxBiquadFilter/src/ofxBiquadFilterInstance.cpp; sourceTree = SOURCE_ROOT; };
 		F399B91E98DC31CDA6DDACB4 /* ofxTCPManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxTCPManager.cpp; path = ../../../addons/ofxNetwork/src/ofxTCPManager.cpp; sourceTree = SOURCE_ROOT; };
+		F4030B6B8EDE26878C8D74F1 /* ByteBufferWriter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ByteBufferWriter.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/ByteBufferWriter.h; sourceTree = SOURCE_ROOT; };
+		F57139F864890F6358112C25 /* win.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = win.h; path = ../../../addons/ofxSerial/libs/serial/include/serial/impl/win.h; sourceTree = SOURCE_ROOT; };
+		F5E31A831B4A68051A87AB3F /* lz4.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = lz4.h; path = ../../../addons/ofxIO/libs/lz4/src/lz4.h; sourceTree = SOURCE_ROOT; };
 		F66993296A3AEEC70FD444F5 /* ofxNetwork.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxNetwork.h; path = ../../../addons/ofxNetwork/src/ofxNetwork.h; sourceTree = SOURCE_ROOT; };
+		F6A8A6F386993F7C4710ACE5 /* block_splitter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = block_splitter.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/block_splitter.h; sourceTree = SOURCE_ROOT; };
+		F6CE5F63C4EA95C35B48EC0C /* decode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = decode.h; path = ../../../addons/ofxIO/libs/brotli/src/dec/decode.h; sourceTree = SOURCE_ROOT; };
+		FB0997B62B97D7513CD396A2 /* BufferedSerialDevice.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = BufferedSerialDevice.h; path = ../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO/BufferedSerialDevice.h; sourceTree = SOURCE_ROOT; };
 		FC5DA1C87211D4F6377DA719 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = tinyxmlparser.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlparser.cpp; sourceTree = SOURCE_ROOT; };
+		FCAF85B857266C511DB50341 /* HiddenFileFilter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = HiddenFileFilter.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/HiddenFileFilter.cpp; sourceTree = SOURCE_ROOT; };
+		FD35DEC21FE06BF7F1516022 /* RegexPathFilter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = RegexPathFilter.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/RegexPathFilter.h; sourceTree = SOURCE_ROOT; };
+		FD704D8B846AF9B45BA670ED /* port.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = port.h; path = ../../../addons/ofxIO/libs/brotli/src/common/port.h; sourceTree = SOURCE_ROOT; };
 		FDB04DA12ABAFBA5FFE217C9 /* opensslconf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = opensslconf.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/opensslconf.h; sourceTree = SOURCE_ROOT; };
+		FDB137BD0187E28CD8B59874 /* BufferedSerialDevice.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BufferedSerialDevice.cpp; path = ../../../addons/ofxSerial/libs/ofxSerial/src/BufferedSerialDevice.cpp; sourceTree = SOURCE_ROOT; };
 		FDC037DF46F0D26E4621F89B /* ossl_typ.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ossl_typ.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/ossl_typ.h; sourceTree = SOURCE_ROOT; };
+		FE5B3B19544657B6F9CCCA03 /* ByteBufferUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ByteBufferUtils.cpp; path = ../../../addons/ofxIO/libs/ofxIO/src/ByteBufferUtils.cpp; sourceTree = SOURCE_ROOT; };
+		FF1FC9CD893EAFB39035E3C6 /* SerialEvents.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SerialEvents.cpp; path = ../../../addons/ofxSerial/libs/ofxSerial/src/SerialEvents.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -429,12 +672,30 @@
 			name = ofxPoco;
 			sourceTree = "<group>";
 		};
+		02C663A3035CB2AF8BCE07DC /* src */ = {
+			isa = PBXGroup;
+			children = (
+				7913239832BBBF6B56ED2600 /* lz4.c */,
+				F5E31A831B4A68051A87AB3F /* lz4.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
 		0B8ED02ED04845BC31B3E518 /* ofxEmotiBit */ = {
 			isa = PBXGroup;
 			children = (
 				4CD5C6EA1AEB082DFF01E7BE /* src */,
 			);
 			name = ofxEmotiBit;
+			sourceTree = "<group>";
+		};
+		0B9802A8A246D3F781E0EF07 /* impl */ = {
+			isa = PBXGroup;
+			children = (
+				7767880A5DCD9314A3F9683E /* unix.h */,
+				F57139F864890F6358112C25 /* win.h */,
+			);
+			name = impl;
 			sourceTree = "<group>";
 		};
 		0EFE45161A4E28BDE46D84D0 /* src */ = {
@@ -452,6 +713,18 @@
 				70E25EBAAB745F09329DDB44 /* openssl */,
 			);
 			name = include;
+			sourceTree = "<group>";
+		};
+		15F500C5D0A99B5F06933A4B /* IO */ = {
+			isa = PBXGroup;
+			children = (
+				FB0997B62B97D7513CD396A2 /* BufferedSerialDevice.h */,
+				D2388420E859BBA28ED2B4EE /* PacketSerialDevice.h */,
+				079299A87017EDB0524077EA /* SerialDevice.h */,
+				D2071B2317B3E021307099D0 /* SerialDeviceUtils.h */,
+				8CA7F50B0134479FADEBC335 /* SerialEvents.h */,
+			);
+			name = IO;
 			sourceTree = "<group>";
 		};
 		18240ECCE4076FB0833A8578 /* ofxNetwork */ = {
@@ -482,6 +755,18 @@
 			name = ofxXmlSettings;
 			sourceTree = "<group>";
 		};
+		1FE55F3FCBD156AC7D591F69 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				B40D93E4E6198327D6DA7BFA /* alphanum */,
+				2CAD929748AAFE515E344555 /* brotli */,
+				8FE15F6815C4A8DE40915EAE /* lz4 */,
+				92CF4367AF54E202BCF9E084 /* ofxIO */,
+				D86EF5293C3BFC96A82C8EB7 /* snappy */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
 		219374A14594D121F27FED3A /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -510,6 +795,14 @@
 			name = ofxBiquadFilter;
 			sourceTree = "<group>";
 		};
+		2CAD929748AAFE515E344555 /* brotli */ = {
+			isa = PBXGroup;
+			children = (
+				4108319DCEE43C5BF375208C /* src */,
+			);
+			name = brotli;
+			sourceTree = "<group>";
+		};
 		3286A6A80FB3354E8DF1D5B8 /* ofxThreadedLogger */ = {
 			isa = PBXGroup;
 			children = (
@@ -518,12 +811,67 @@
 			name = ofxThreadedLogger;
 			sourceTree = "<group>";
 		};
+		3F13BF933566839ED4C7CCED /* include */ = {
+			isa = PBXGroup;
+			children = (
+				D1C382A37EE661F51AA773CC /* ofx */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		4108319DCEE43C5BF375208C /* src */ = {
+			isa = PBXGroup;
+			children = (
+				622DC121CB90BECD1ED3B98B /* common */,
+				44881A9BBE0153E51931D848 /* dec */,
+				9E656A838901B53C9F9E2A48 /* enc */,
+				D9A6E6A257024CF5C1C8E0E1 /* tools */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		44881A9BBE0153E51931D848 /* dec */ = {
+			isa = PBXGroup;
+			children = (
+				435F153348292B6921D118D7 /* bit_reader.c */,
+				3D61D3B61CE158DC7238DF52 /* bit_reader.h */,
+				E436310BA5432B5E3611BCAE /* context.h */,
+				7DBD4311D51383233476A246 /* decode.c */,
+				F6CE5F63C4EA95C35B48EC0C /* decode.h */,
+				0B4469F9BB9FC42CC5B721A5 /* huffman.c */,
+				0F8127F302C54B5E807A4DEB /* huffman.h */,
+				5235265B9D62AC76B086F9D7 /* port.h */,
+				E9C5B07A729BFBB0FF0F4406 /* prefix.h */,
+				93E26814A54A32C6C2B713FE /* state.c */,
+				02CD15E418A33892225A879B /* state.h */,
+				A5DD24B2E308C4FBAFAFAF56 /* transform.h */,
+			);
+			name = dec;
+			sourceTree = "<group>";
+		};
 		480A780D8D0308AE4A368801 /* ofxGui */ = {
 			isa = PBXGroup;
 			children = (
 				A763ED608B35AE3310251DEE /* src */,
 			);
 			name = ofxGui;
+			sourceTree = "<group>";
+		};
+		4A9E9C4D593FEAC751445421 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				A959274BEDC34E590C25B3EA /* snappy-c.cc */,
+				D1601ADE8CA2F71810BBCC84 /* snappy-c.h */,
+				EBECBB67C55635D1B4871A42 /* snappy-internal.h */,
+				9A430D6BD10DC31AE2D07DA0 /* snappy-sinksource.cc */,
+				A9ABBF4A56F7A5AAB5A5DC5D /* snappy-sinksource.h */,
+				2FB74FF42B08FC378F74B2B7 /* snappy-stubs-internal.cc */,
+				2BC552B95352F479531DC424 /* snappy-stubs-internal.h */,
+				85B399C99F9879F6C78EDE1B /* snappy-stubs-public.h */,
+				7362D621E1B9A92F5F4AC73B /* snappy.cc */,
+				72804EF074677512091594C2 /* snappy.h */,
+			);
+			name = src;
 			sourceTree = "<group>";
 		};
 		4CD5C6EA1AEB082DFF01E7BE /* src */ = {
@@ -541,11 +889,40 @@
 			name = src;
 			sourceTree = "<group>";
 		};
+		622DC121CB90BECD1ED3B98B /* common */ = {
+			isa = PBXGroup;
+			children = (
+				3F20B5AB61CAC5F8BA24E3A4 /* constants.h */,
+				784C0DB32ADDBDBF29DB5910 /* dictionary.c */,
+				296E908620C8DC7216F403A6 /* dictionary.h */,
+				FD704D8B846AF9B45BA670ED /* port.h */,
+				06D50E9C290B37C024652A02 /* types.h */,
+			);
+			name = common;
+			sourceTree = "<group>";
+		};
+		671923EC06F4340D8255DA22 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4D38898647BBFEEBB89C1569 /* alphanum.hpp */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
 		6948EE371B920CB800B5AC1A /* local_addons */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = local_addons;
+			sourceTree = "<group>";
+		};
+		6B4528F898B3032BB3689FFD /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				6F72ECC5B858CCFD7BB7730D /* ofxSerial */,
+				A66804D9CE45B49AA3D91734 /* serial */,
+			);
+			name = libs;
 			sourceTree = "<group>";
 		};
 		6E54289412D2D94F45A05113 /* libs */ = {
@@ -566,6 +943,15 @@
 				01DCC0911400F9ACF5B65578 /* ofxXmlSettings.h */,
 			);
 			name = src;
+			sourceTree = "<group>";
+		};
+		6F72ECC5B858CCFD7BB7730D /* ofxSerial */ = {
+			isa = PBXGroup;
+			children = (
+				EAD170A2CC62C03AE884C98B /* include */,
+				972457A92053E129B1C252D5 /* src */,
+			);
+			name = ofxSerial;
 			sourceTree = "<group>";
 		};
 		70E25EBAAB745F09329DDB44 /* openssl */ = {
@@ -649,30 +1035,138 @@
 			name = openssl;
 			sourceTree = "<group>";
 		};
-		9480A40327F23D330065570B /* EmotiBit_XPlat_Utils */ = {
+		74E2D0CA86ACE812E0440D92 /* list_ports */ = {
 			isa = PBXGroup;
 			children = (
-				9480A40427F23D440065570B /* src */,
+				F0B7B8B3CBC6603E4EBB50CB /* list_ports_linux.cc */,
+				857A942126908B1806B67CE6 /* list_ports_osx.cc */,
+				79F1B32CBD205754ECBE956E /* list_ports_win.cc */,
 			);
-			path = EmotiBit_XPlat_Utils;
+			name = list_ports;
 			sourceTree = "<group>";
 		};
-		9480A40427F23D440065570B /* src */ = {
+		81B9E335116A816EA1D2A2FA /* IO */ = {
 			isa = PBXGroup;
 			children = (
-				9480A40F27F23D5F0065570B /* DigitalFilter.cpp */,
-				9480A40827F23D5F0065570B /* DigitalFilter.h */,
-				9480A40A27F23D5F0065570B /* EmotiBitComms.h */,
-				9480A40727F23D5F0065570B /* EmotiBitEdaCalibration.cpp */,
-				9480A40B27F23D5F0065570B /* EmotiBitEdaCalibration.h */,
-				9480A40927F23D5F0065570B /* EmotiBitFactoryTest.cpp */,
-				9480A40C27F23D5F0065570B /* EmotiBitFactoryTest.h */,
-				9480A40627F23D5F0065570B /* EmotiBitPacket.cpp */,
-				9480A40527F23D5F0065570B /* EmotiBitPacket.h */,
-				9480A40D27F23D5F0065570B /* EmotiBitVariants.cpp */,
-				9480A40E27F23D5F0065570B /* EmotiBitVariants.h */,
+				89B60FB247E1F64013C716DC /* AbstractTypes.h */,
+				610E50019572215015A4B6DF /* BackoffStrategy.h */,
+				64F728D0405D9777ECF43CD9 /* Base64Encoding.h */,
+				2D170F102215CF0511959D79 /* ByteBuffer.h */,
+				E7BC10205FF4B36CBFFAECF3 /* ByteBufferParser.h */,
+				3CFE04CCE515BDEA95DEAA71 /* ByteBufferReader.h */,
+				08401BD1A5AEF44AFF422B23 /* ByteBufferStream.h */,
+				5D4C9D17E0C3F84DDB888544 /* ByteBufferUtils.h */,
+				F4030B6B8EDE26878C8D74F1 /* ByteBufferWriter.h */,
+				BF0BB2F28A4522316B1563A5 /* COBSEncoding.h */,
+				C8F2762F4CCE12D7C1022DAA /* Compression.h */,
+				557678EEFF0D0C6D692D0DEC /* DeviceFilter.h */,
+				CECE089D24F272DB22504892 /* DirectoryFilter.h */,
+				D1F82A94BD80BDC78E0B1922 /* DirectoryUtils.h */,
+				BEFFAA5B8275E0AE066FC2E3 /* DirectoryWatcherManager.h */,
+				1C011DA756FF131FC46A2907 /* FileExtensionFilter.h */,
+				65072C0AF3E535DFF565F967 /* FilteredStreams.h */,
+				321A94B5DA29E6354C6A0717 /* Hash.h */,
+				4EAC68CB142D702F9E3FD73E /* HexBinaryEncoding.h */,
+				57E858FCDF1AB73089F1A9F0 /* HiddenFileFilter.h */,
+				75BF994040F1E2AC038E6792 /* ImageUtils.h */,
+				A7271D59E999D051862CAF03 /* JSONUtils.h */,
+				14290ED8DE68778AE3023FBC /* LinkFilter.h */,
+				32CC9FC8F28CF3D4C0E1192B /* ObjectPool.h */,
+				0FC82546C315D104CC8178D7 /* PathFilterCollection.h */,
+				6103A267643600648210B5B5 /* PollingThread.h */,
+				FD35DEC21FE06BF7F1516022 /* RegexPathFilter.h */,
+				67B9F66F8197CB04B450E465 /* SLIPEncoding.h */,
+				E8AF8381484827A10A418B26 /* SearchPath.h */,
+				A1B1C6600DF0DF1D2A02FB77 /* StreamFilters.h */,
+				5C84BB54778F48E7898E8BC9 /* Thread.h */,
+				5F4C4A383F1167DA24A5C88A /* ThreadChannel.h */,
+				20729DD0AE1CA44D2A7CBE8F /* ThreadsafeLoggerChannel.h */,
+				1E8B79D0091B95C305295952 /* URIEncoding.h */,
 			);
-			path = src;
+			name = IO;
+			sourceTree = "<group>";
+		};
+		827E879AF9EC79A81A74CC6F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				0C04DBADC786680C5A1DC457 /* BackoffStrategy.cpp */,
+				9D639BA31583580D80CFE15D /* Base64Encoding.cpp */,
+				93384835C77BD4299F8A7F90 /* ByteBuffer.cpp */,
+				021CAF811F031FFBDFB18797 /* ByteBufferReader.cpp */,
+				C6C68D431AF8FD1A9E2DCFF2 /* ByteBufferStream.cpp */,
+				FE5B3B19544657B6F9CCCA03 /* ByteBufferUtils.cpp */,
+				C9BE77ADAEF79E623523E9D9 /* ByteBufferWriter.cpp */,
+				4164C6C6CE5115889A99F42C /* COBSEncoding.cpp */,
+				2FC8E2266FE2F5545775A16D /* Compression.cpp */,
+				00F3330A5DEBD082CEE0C12C /* DeviceFilter.cpp */,
+				E362E12547978AB05ABA9C57 /* DirectoryFilter.cpp */,
+				9A967D1FAFA98A7CBBFA4F55 /* DirectoryUtils.cpp */,
+				12A42DF3BFDE28A4818C2EC4 /* DirectoryWatcher.cpp */,
+				0B6179498D0110BD2E161373 /* DirectoryWatcherManager.cpp */,
+				6BD291FB03292C6D352C26FE /* FileExtensionFilter.cpp */,
+				8D2178E97885D60A7552A030 /* FilteredStreams.cpp */,
+				3C9D49450D420BF2FA36851C /* Hash.cpp */,
+				22565CAF8FFEF25C805A438F /* HexBinaryEncoding.cpp */,
+				FCAF85B857266C511DB50341 /* HiddenFileFilter.cpp */,
+				C4D2E84034752C8DDB2D67B2 /* ImageUtils.cpp */,
+				6D6C4E1EAB3146AB043AAE52 /* JSONUtils.cpp */,
+				370DA13018950E5BFF8CF171 /* LinkFilter.cpp */,
+				5114D2AF276E4E6E9A67B342 /* PathFilterCollection.cpp */,
+				B958A9EA0CCC23B12812A232 /* PollingThread.cpp */,
+				E95C4518AEDCDBEA357754B0 /* RecursiveDirectoryIterator.cpp */,
+				F27637AABA89A235C5974D56 /* RecursiveDirectoryIteratorStategies.cpp */,
+				13D68F0C2CAE7809D621924C /* RegexPathFilter.cpp */,
+				D1616DA13ECD5FC9DB4D5714 /* SLIPEncoding.cpp */,
+				8D76B424A6DF4D70AACCDBAE /* SearchPath.cpp */,
+				964894707DA74D07D5296965 /* StreamFilters.cpp */,
+				B81392DD7D58DEEDA83783B0 /* Thread.cpp */,
+				A8C2DABE3DA33A6F3DC4A7C4 /* ThreadsafeLoggerChannel.cpp */,
+				60F63F5C68476F0C9095B247 /* URIEncoding.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		8C9A1E9FB4FA1857DA84CA9F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				EBDEF003D846994FE2BA8602 /* impl */,
+				47B9A234B65D63015C0CFEDD /* serial.cc */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		8FE15F6815C4A8DE40915EAE /* lz4 */ = {
+			isa = PBXGroup;
+			children = (
+				02C663A3035CB2AF8BCE07DC /* src */,
+			);
+			name = lz4;
+			sourceTree = "<group>";
+		};
+		92CF4367AF54E202BCF9E084 /* ofxIO */ = {
+			isa = PBXGroup;
+			children = (
+				3F13BF933566839ED4C7CCED /* include */,
+				827E879AF9EC79A81A74CC6F /* src */,
+			);
+			name = ofxIO;
+			sourceTree = "<group>";
+		};
+		94E22CF5288205EA00C8F3C0 /* EmotiBit_XPlat_Utils */ = {
+			isa = PBXGroup;
+			children = (
+				94E22CF6288205FD00C8F3C0 /* src */,
+			);
+			name = EmotiBit_XPlat_Utils;
+			sourceTree = "<group>";
+		};
+		94E22CF6288205FD00C8F3C0 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				94E22CF72882062400C8F3C0 /* EmotiBitPacket.cpp */,
+				94E22CF82882062400C8F3C0 /* EmotiBitPacket.h */,
+			);
+			name = src;
 			sourceTree = "<group>";
 		};
 		959BC13926B6C962531CEF17 /* libs */ = {
@@ -681,6 +1175,92 @@
 				B2C98B62869583DB9FE30DA7 /* openssl */,
 			);
 			name = libs;
+			sourceTree = "<group>";
+		};
+		972457A92053E129B1C252D5 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				FDB137BD0187E28CD8B59874 /* BufferedSerialDevice.cpp */,
+				7B8F262E90F842B6011F0935 /* SerialDevice.cpp */,
+				A28F98E9F26E32A14FAE918C /* SerialDeviceUtils.cpp */,
+				FF1FC9CD893EAFB39035E3C6 /* SerialEvents.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		9E656A838901B53C9F9E2A48 /* enc */ = {
+			isa = PBXGroup;
+			children = (
+				4212102D1CF2815EEEC62736 /* backward_references.c */,
+				2C49C0820819184530BC1AC8 /* backward_references.h */,
+				C3556B2A7A1CEBA6A9A1FF3A /* backward_references_inc.h */,
+				E33245F4A84B5ECC7F2DD52A /* bit_cost.c */,
+				2E1B067CF92CF6003406D36E /* bit_cost.h */,
+				F0F87B444C101B92DBC3AE0D /* bit_cost_inc.h */,
+				0A6573F26422F8DA0D7A4299 /* block_encoder_inc.h */,
+				C11115BCD18AB012DE4B9911 /* block_splitter.c */,
+				F6A8A6F386993F7C4710ACE5 /* block_splitter.h */,
+				785B725E48E5E34D33F92ECE /* block_splitter_inc.h */,
+				863E9634DCC98853BF984072 /* brotli_bit_stream.c */,
+				B915DF2E03885E5462A1D867 /* brotli_bit_stream.h */,
+				D1845E7B199B61C2A89A95DD /* cluster.c */,
+				A7233FE746DDE6D234D84452 /* cluster.h */,
+				E101D2F61DA6A9D35B4C53CE /* cluster_inc.h */,
+				3E54175A950386E293ED23C0 /* command.h */,
+				5CC4516F27183BD1973BBE37 /* compress_fragment.c */,
+				85D108916A5D4F9CE91D826C /* compress_fragment.h */,
+				8DCD8ACB4BC032E3F12F5AC8 /* compress_fragment_two_pass.c */,
+				DC48CABDC405B2D0BECF5C2B /* compress_fragment_two_pass.h */,
+				AF2EFC111D54B546BA67C5F8 /* compressor.cc */,
+				A845B79AD3787E21EA8DFEDD /* compressor.h */,
+				94519B019B0E47223B31FB5B /* context.h */,
+				13EF5AFAAD1F10B9A60863B8 /* dictionary_hash.h */,
+				BE10E456A9066BE3516AD23E /* encode.c */,
+				C7F5BBFD733EDFD4D54B3903 /* encode.h */,
+				65DC6B9109EFA2E2C8C4BCA8 /* encode_parallel.cc */,
+				756EF7DFFF01E1326111F7FB /* encode_parallel.h */,
+				CA68874B4EA8C0D647FA49C8 /* entropy_encode.c */,
+				9C8C341C57EF4257DA1AB53A /* entropy_encode.h */,
+				B7182D29B327B20E36803E53 /* entropy_encode_static.h */,
+				C36063CD39D292AF0CEB0E49 /* fast_log.h */,
+				7E25FB5473A2AF9C1578BDB6 /* find_match_length.h */,
+				E1FF0798EE6FABE32B7D08E3 /* hash.h */,
+				56C67B5A6E5B16314FBD1BCA /* hash_forgetful_chain_inc.h */,
+				5066E964AC843C201FA667AB /* hash_longest_match_inc.h */,
+				6DA59BC6575BEE6E0F2E24A6 /* hash_longest_match_quickly_inc.h */,
+				CB977F55D4B0D819421437AD /* histogram.c */,
+				329AFDF48160D0227126AD22 /* histogram.h */,
+				E095C2EA5FC7D19E05B8EC63 /* histogram_inc.h */,
+				6D2A056D5D95C22910B771AB /* literal_cost.c */,
+				08546F6696FA9F0107717C6F /* literal_cost.h */,
+				ADC45E383B2885CD8ED44C32 /* memory.c */,
+				DE95F05F5EC909D2167369E6 /* memory.h */,
+				50FC1C7AE5280445EB0FD2B8 /* metablock.c */,
+				D5D4C03F38EE3F12B6391564 /* metablock.h */,
+				B4D955289FDAE0CE64CFE409 /* metablock_inc.h */,
+				23C4AB2D5C847C1D6A7A69A8 /* port.h */,
+				89C3F44627E5AE0F3A04E1BB /* prefix.h */,
+				2A8D9C10CB2FDB071CC1639F /* quality.h */,
+				ED9910FC34FB8D7833B6F04C /* ringbuffer.h */,
+				838AF229C2183CBDCC150342 /* static_dict.c */,
+				5E37E8C926990E781B1E9E26 /* static_dict.h */,
+				9634FA545F1B9E5582A31E4D /* static_dict_lut.h */,
+				3457BE6FA2A60931AED56935 /* streams.cc */,
+				CBFC3084D8F4BE08DBD30DB2 /* streams.h */,
+				DFDFD6F8619819B10AB9F44C /* utf8_util.c */,
+				E6E19CEC51E173F45D67514F /* utf8_util.h */,
+				3740B546F5FA81F9B404F565 /* write_bits.h */,
+			);
+			name = enc;
+			sourceTree = "<group>";
+		};
+		A66804D9CE45B49AA3D91734 /* serial */ = {
+			isa = PBXGroup;
+			children = (
+				B98B12B675C8D0F9FE8A8513 /* include */,
+				8C9A1E9FB4FA1857DA84CA9F /* src */,
+			);
+			name = serial;
 			sourceTree = "<group>";
 		};
 		A763ED608B35AE3310251DEE /* src */ = {
@@ -712,6 +1292,23 @@
 			name = src;
 			sourceTree = "<group>";
 		};
+		A8792B4B23B2F70E1065D67F /* ofxIO */ = {
+			isa = PBXGroup;
+			children = (
+				1FE55F3FCBD156AC7D591F69 /* libs */,
+				D86C6322CF7554A9BE5EB8BF /* src */,
+			);
+			name = ofxIO;
+			sourceTree = "<group>";
+		};
+		AA24935388D450F0915FB614 /* ofx */ = {
+			isa = PBXGroup;
+			children = (
+				15F500C5D0A99B5F06933A4B /* IO */,
+			);
+			name = ofx;
+			sourceTree = "<group>";
+		};
 		B2C98B62869583DB9FE30DA7 /* openssl */ = {
 			isa = PBXGroup;
 			children = (
@@ -720,18 +1317,46 @@
 			name = openssl;
 			sourceTree = "<group>";
 		};
+		B40D93E4E6198327D6DA7BFA /* alphanum */ = {
+			isa = PBXGroup;
+			children = (
+				671923EC06F4340D8255DA22 /* include */,
+			);
+			name = alphanum;
+			sourceTree = "<group>";
+		};
+		B98B12B675C8D0F9FE8A8513 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				E110390D2FAB4496F3B4BE39 /* serial */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				94E22CF5288205EA00C8F3C0 /* EmotiBit_XPlat_Utils */,
 				27005CFF506A34FD3734C3CE /* ofxBiquadFilter */,
 				0B8ED02ED04845BC31B3E518 /* ofxEmotiBit */,
 				480A780D8D0308AE4A368801 /* ofxGui */,
-				18240ECCE4076FB0833A8578 /* ofxNetwork */,
 				0117D94CE0C695E5E5482BEC /* ofxPoco */,
+				A8792B4B23B2F70E1065D67F /* ofxIO */,
+				18240ECCE4076FB0833A8578 /* ofxNetwork */,
+				BDBA4E6BCE9C79945EF60873 /* ofxSerial */,
 				3286A6A80FB3354E8DF1D5B8 /* ofxThreadedLogger */,
 				1F4FB5C423662B96ADFDCC0B /* ofxXmlSettings */,
 			);
 			name = addons;
+			sourceTree = "<group>";
+		};
+		BDBA4E6BCE9C79945EF60873 /* ofxSerial */ = {
+			isa = PBXGroup;
+			children = (
+				6B4528F898B3032BB3689FFD /* libs */,
+				FF8468D5B2307E18FA22FAD0 /* src */,
+			);
+			name = ofxSerial;
 			sourceTree = "<group>";
 		};
 		D15B7CC43D038EC633AC3A25 /* Signal */ = {
@@ -743,6 +1368,22 @@
 			name = Signal;
 			sourceTree = "<group>";
 		};
+		D1C382A37EE661F51AA773CC /* ofx */ = {
+			isa = PBXGroup;
+			children = (
+				DE22FF0057C30D5DDC12B349 /* AbstractCache.h */,
+				181F02B531162F6039F6ADC2 /* DirectoryWatcher.h */,
+				81B9E335116A816EA1D2A2FA /* IO */,
+				2F6C7F53A990035EB21AC78C /* LRUCache.h */,
+				6AFE6A7EBB34624E3F77554E /* LRUStrategy.h */,
+				DF94455EC11AD40A5D4EC9CB /* ObjectPool.h */,
+				9E2A709AC0FDCAC46BEC3DB4 /* RecursiveDirectoryIterator.h */,
+				B608BB92EA071BC82EB9F62F /* RecursiveDirectoryIteratorImpl.h */,
+				469AA5350C4777BED9805BC4 /* RecursiveDirectoryIteratorStategies.h */,
+			);
+			name = ofx;
+			sourceTree = "<group>";
+		};
 		D6951A2C4225871907DE751A /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -750,6 +1391,40 @@
 				CA32618C6484394941477500 /* ofxThreadedLogger.h */,
 			);
 			name = src;
+			sourceTree = "<group>";
+		};
+		D86C6322CF7554A9BE5EB8BF /* src */ = {
+			isa = PBXGroup;
+			children = (
+				4593838C4B4BCE40284AAE07 /* ofxIO.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		D86EF5293C3BFC96A82C8EB7 /* snappy */ = {
+			isa = PBXGroup;
+			children = (
+				4A9E9C4D593FEAC751445421 /* src */,
+			);
+			name = snappy;
+			sourceTree = "<group>";
+		};
+		D9A6E6A257024CF5C1C8E0E1 /* tools */ = {
+			isa = PBXGroup;
+			children = (
+				ABF95295416CA5F04F3FC570 /* version.h */,
+			);
+			name = tools;
+			sourceTree = "<group>";
+		};
+		E110390D2FAB4496F3B4BE39 /* serial */ = {
+			isa = PBXGroup;
+			children = (
+				0B9802A8A246D3F781E0EF07 /* impl */,
+				7561705030EF5A13E97BE7C0 /* serial.h */,
+				6FA24233D84E87A91BDEB0E6 /* v8stdint.h */,
+			);
+			name = serial;
 			sourceTree = "<group>";
 		};
 		E42962AA2163EDD300A6A9E2 /* openFrameworks */ = {
@@ -1037,14 +1712,14 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
-				94E22CB4287F4C5500C8F3C0 /* exec */,
-				9480A41727F23F030065570B /* bossac */,
-				9480A41B27F23F030065570B /* EmotiBit_stock_firmware.ino.feather_m0.bin */,
-				9480A41A27F23F030065570B /* EmotiBit.png */,
-				9480A41827F23F030065570B /* verdana.ttf */,
-				9480A41927F23F030065570B /* verdanab.ttf */,
-				9480A41C27F23F030065570B /* WINC */,
-				9480A41527F23EE50065570B /* instructions */,
+				94E22D012882070C00C8F3C0 /* bossac */,
+				94E22CFE2882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin */,
+				94E22CFD2882070C00C8F3C0 /* EmotiBit.png */,
+				94E22CFA2882070B00C8F3C0 /* exec */,
+				94E22CFC2882070C00C8F3C0 /* instructions */,
+				94E22CFB2882070B00C8F3C0 /* verdana.ttf */,
+				94E22CFF2882070C00C8F3C0 /* verdanab.ttf */,
+				94E22D002882070C00C8F3C0 /* WINC */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
@@ -1058,7 +1733,6 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				9480A40327F23D330065570B /* EmotiBit_XPlat_Utils */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
@@ -1067,6 +1741,32 @@
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
+		};
+		EAD170A2CC62C03AE884C98B /* include */ = {
+			isa = PBXGroup;
+			children = (
+				AA24935388D450F0915FB614 /* ofx */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		EBDEF003D846994FE2BA8602 /* impl */ = {
+			isa = PBXGroup;
+			children = (
+				74E2D0CA86ACE812E0440D92 /* list_ports */,
+				E4F6F31D084699BAD89878B9 /* unix.cc */,
+				D1B098B33ACA6D5EF0DE53FB /* win.cc */,
+			);
+			name = impl;
+			sourceTree = "<group>";
+		};
+		FF8468D5B2307E18FA22FAD0 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				800D9CCA0F0B3D70CF25C2FF /* ofxSerial.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -1079,7 +1779,7 @@
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
 				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
-				E4C2427710CC5ABF004149E2 /* Copy Files */,
+				E4C2427710CC5ABF004149E2 /* CopyFiles */,
 				8466F1851C04CA0E00918B1C /* ShellScript */,
 			);
 			buildRules = (
@@ -1166,17 +1866,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9480A41027F23D5F0065570B /* EmotiBitPacket.cpp in Sources */,
-				9480A41327F23D5F0065570B /* EmotiBitVariants.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				BDCF478C4EBDE821E6E29C6C /* ThreadedSystemCall.cpp in Sources */,
 				D820615CFDD5F497033D7C5A /* ofxBiquadFilter.cpp in Sources */,
-				9480A41127F23D5F0065570B /* EmotiBitEdaCalibration.cpp in Sources */,
 				A7CF97A6E1DAE4A002CA6F82 /* ofxBiquadFilterInstance.cpp in Sources */,
 				5FD318D4DCF1B7169E9F1F64 /* EmotiBitTestingHelper.cpp in Sources */,
 				2CB15D77D4862C444CBAD4FA /* EmotiBitWiFiHost.cpp in Sources */,
-				9480A41427F23D5F0065570B /* DigitalFilter.cpp in Sources */,
 				02FA22EAD4CE81F39CC58EEA /* Periodizer.cpp in Sources */,
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
@@ -1188,16 +1884,87 @@
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
+				1C36947250DCB09A8A375C0C /* ofxXmlPoco.cpp in Sources */,
+				5B0B37678CB86DF7936E36E6 /* dictionary.c in Sources */,
+				52879B293457F714C2FCDE30 /* bit_reader.c in Sources */,
+				9B0C4048D6313FF975C15606 /* decode.c in Sources */,
+				827717308B7CF78FB6CC2B8A /* huffman.c in Sources */,
+				D962D295AC954F2275EC80AB /* state.c in Sources */,
+				8FCD72DD7D027102A10390B3 /* backward_references.c in Sources */,
+				B647E3FA04D0A66F8AA12D8D /* bit_cost.c in Sources */,
+				3EE0A72E3AC3DB229FCD9054 /* block_splitter.c in Sources */,
+				72BCC46DF35982704F1906BD /* brotli_bit_stream.c in Sources */,
+				332ECDD39392CEA22A8D8DF3 /* cluster.c in Sources */,
+				C9B84C2206A19C8EF7FF2FC2 /* compress_fragment.c in Sources */,
+				3942018D51482A1D54EC1669 /* compress_fragment_two_pass.c in Sources */,
+				9C1D533ACA24526D098B688F /* compressor.cc in Sources */,
+				B895E317977FEBE5F79F8B94 /* encode.c in Sources */,
+				9C3C88078AAE29F745463AA1 /* encode_parallel.cc in Sources */,
+				52E0D9D8CC9D0F3AB04182F5 /* entropy_encode.c in Sources */,
+				28A6E9BA6E8D63725FFB7D7E /* histogram.c in Sources */,
+				E44BD2C35ED1D7A0E32AD356 /* literal_cost.c in Sources */,
+				00C132F18095103B36BC4B5C /* memory.c in Sources */,
+				253050340F29FA5D8EF20BC4 /* metablock.c in Sources */,
+				79B473EA502400F08F6C420D /* static_dict.c in Sources */,
+				5AE4CDDF24D05CAD3D2863A7 /* streams.cc in Sources */,
+				39C8F5BF18E0BDE288F6F195 /* utf8_util.c in Sources */,
+				3BFC7CF50BEB0307821B90A6 /* lz4.c in Sources */,
+				2A67827653E1B5BD965D7DC7 /* BackoffStrategy.cpp in Sources */,
+				DFA0F30B1193D5DC1BB53E5E /* Base64Encoding.cpp in Sources */,
+				D932A5A24FCF08AE510A265D /* ByteBuffer.cpp in Sources */,
+				62509F39EA6197BEA0194276 /* ByteBufferReader.cpp in Sources */,
+				347D67CCF4C7C7725118DD59 /* ByteBufferStream.cpp in Sources */,
+				66A80FD312926DEB8C9FE7F6 /* ByteBufferUtils.cpp in Sources */,
+				494950167FFB212CEB9ECD0A /* ByteBufferWriter.cpp in Sources */,
+				FE9170FE54D704DF97B0E5BD /* COBSEncoding.cpp in Sources */,
+				93640C223A2F5BEAD6DA2E35 /* Compression.cpp in Sources */,
+				CDB5B1D2D12F42502906F30F /* DeviceFilter.cpp in Sources */,
+				84FED53B4CEB4C25C00E172B /* DirectoryFilter.cpp in Sources */,
+				CEFD3CCAB8B3251DFCAAA0EE /* DirectoryUtils.cpp in Sources */,
+				EB4F14C4AE3B3EFD04520383 /* DirectoryWatcher.cpp in Sources */,
+				BE177617474F11F05E9260FC /* DirectoryWatcherManager.cpp in Sources */,
+				5BB82711925A3764235C2CEB /* FileExtensionFilter.cpp in Sources */,
+				3433E2A234C5EB99BE2654F6 /* FilteredStreams.cpp in Sources */,
+				30050FAC4E27016914F7D8AE /* Hash.cpp in Sources */,
+				F953E11952BFF8C207418550 /* HexBinaryEncoding.cpp in Sources */,
+				94E22CF92882062400C8F3C0 /* EmotiBitPacket.cpp in Sources */,
+				B3E6D60405574847412D7441 /* HiddenFileFilter.cpp in Sources */,
+				2052DE964A69C81B3F68CCB0 /* ImageUtils.cpp in Sources */,
+				BC187E3BEC1C894471B93EA6 /* JSONUtils.cpp in Sources */,
+				86B56E23D787A5F24641398F /* LinkFilter.cpp in Sources */,
+				B7E0003B826CBA379A3F66E5 /* PathFilterCollection.cpp in Sources */,
+				478E5F494F2E679C6C198677 /* PollingThread.cpp in Sources */,
+				E2C54FD4C85A860582282F7C /* RecursiveDirectoryIterator.cpp in Sources */,
+				899BAF53175868463FE1B029 /* RecursiveDirectoryIteratorStategies.cpp in Sources */,
+				3C9A355A55D68A8E882FEF85 /* RegexPathFilter.cpp in Sources */,
+				B1BF03D79762719793CC9F1A /* SLIPEncoding.cpp in Sources */,
+				1CC07C1A616F29EB8EEC3D21 /* SearchPath.cpp in Sources */,
+				E4029ECB5B38A0B16AA4C898 /* StreamFilters.cpp in Sources */,
+				BFE92C3743ECA623B4D2F6A6 /* Thread.cpp in Sources */,
+				EA3F090FF2D25D87AF29F830 /* ThreadsafeLoggerChannel.cpp in Sources */,
+				790CD6606BE3D38A9AD52AF1 /* URIEncoding.cpp in Sources */,
+				3051FC0E8EA430C2E693DEBB /* snappy-c.cc in Sources */,
+				D81A435CE7FDF51B41956210 /* snappy-sinksource.cc in Sources */,
+				1298066D39CE7EC3DA60256A /* snappy-stubs-internal.cc in Sources */,
+				868BEDC19B53FD512D7E3100 /* snappy.cc in Sources */,
 				661A1991F5CE4CCC2919D8E7 /* ofxNetworkUtils.cpp in Sources */,
 				960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */,
 				125506CD3E5F428AAFE5CC65 /* ofxTCPManager.cpp in Sources */,
 				66CA411C5A9664E27326BF36 /* ofxTCPServer.cpp in Sources */,
 				E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */,
-				1C36947250DCB09A8A375C0C /* ofxXmlPoco.cpp in Sources */,
+				199E20C3CE29DBDA5F9DA16C /* BufferedSerialDevice.cpp in Sources */,
+				E47400D4565245776213FFD6 /* SerialDevice.cpp in Sources */,
+				DB1B6C56A8D6E1DF0AB8B5DA /* SerialDeviceUtils.cpp in Sources */,
+				04BC555ECE44AFF182D37D27 /* SerialEvents.cpp in Sources */,
+				7B750C170EB39967BA9AB0DA /* list_ports_linux.cc in Sources */,
+				89D1BB84C86305D9A5C34DC4 /* list_ports_osx.cc in Sources */,
+				29BCD325C314242FECC8E5B7 /* list_ports_win.cc in Sources */,
+				DABEB23B35B4884860B1A814 /* unix.cc in Sources */,
+				55DE46182F529D5E0D756503 /* win.cc in Sources */,
+				3336758D15FD0710326AAC25 /* serial.cc in Sources */,
 				9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */,
 				933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */,
 				9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */,
-				9480A41227F23D5F0065570B /* EmotiBitFactoryTest.cpp in Sources */,
 				5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */,
 				63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */,
 			);
@@ -1235,10 +2002,43 @@
 					../../../addons/ofxEmotiBit/src,
 					../../../addons/ofxEmotiBit/src/Signal,
 					../../../addons/ofxGui/src,
-					../../../addons/ofxNetwork/src,
 					../../../addons/ofxPoco/libs/poco/include,
 					../../../addons/ofxPoco/src,
 					../../../addons/ofxPoco/libs/openssl/include,
+					../../../addons/ofxIO/libs,
+					../../../addons/ofxIO/libs/alphanum,
+					../../../addons/ofxIO/libs/alphanum/include,
+					../../../addons/ofxIO/libs/brotli,
+					../../../addons/ofxIO/libs/brotli/src,
+					../../../addons/ofxIO/libs/brotli/src/common,
+					../../../addons/ofxIO/libs/brotli/src/dec,
+					../../../addons/ofxIO/libs/brotli/src/enc,
+					../../../addons/ofxIO/libs/brotli/src/tools,
+					../../../addons/ofxIO/libs/lz4,
+					../../../addons/ofxIO/libs/lz4/src,
+					../../../addons/ofxIO/libs/ofxIO,
+					../../../addons/ofxIO/libs/ofxIO/include,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx/IO,
+					../../../addons/ofxIO/libs/ofxIO/src,
+					../../../addons/ofxIO/libs/snappy,
+					../../../addons/ofxIO/libs/snappy/src,
+					../../../addons/ofxIO/src,
+					../../../addons/ofxNetwork/src,
+					../../../addons/ofxSerial/libs,
+					../../../addons/ofxSerial/libs/ofxSerial,
+					../../../addons/ofxSerial/libs/ofxSerial/include,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO,
+					../../../addons/ofxSerial/libs/ofxSerial/src,
+					../../../addons/ofxSerial/libs/serial,
+					../../../addons/ofxSerial/libs/serial/include,
+					../../../addons/ofxSerial/libs/serial/include/serial,
+					../../../addons/ofxSerial/libs/serial/include/serial/impl,
+					../../../addons/ofxSerial/libs/serial/src,
+					../../../addons/ofxSerial/libs/serial/src/impl,
+					../../../addons/ofxSerial/libs/serial/src/impl/list_ports,
+					../../../addons/ofxSerial/src,
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
@@ -1271,19 +2071,50 @@
 					../../../addons/ofxEmotiBit/src,
 					../../../addons/ofxEmotiBit/src/Signal,
 					../../../addons/ofxGui/src,
-					../../../addons/ofxNetwork/src,
 					../../../addons/ofxPoco/libs/poco/include,
 					../../../addons/ofxPoco/src,
 					../../../addons/ofxPoco/libs/openssl/include,
+					../../../addons/ofxIO/libs,
+					../../../addons/ofxIO/libs/alphanum,
+					../../../addons/ofxIO/libs/alphanum/include,
+					../../../addons/ofxIO/libs/brotli,
+					../../../addons/ofxIO/libs/brotli/src,
+					../../../addons/ofxIO/libs/brotli/src/common,
+					../../../addons/ofxIO/libs/brotli/src/dec,
+					../../../addons/ofxIO/libs/brotli/src/enc,
+					../../../addons/ofxIO/libs/brotli/src/tools,
+					../../../addons/ofxIO/libs/lz4,
+					../../../addons/ofxIO/libs/lz4/src,
+					../../../addons/ofxIO/libs/ofxIO,
+					../../../addons/ofxIO/libs/ofxIO/include,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx/IO,
+					../../../addons/ofxIO/libs/ofxIO/src,
+					../../../addons/ofxIO/libs/snappy,
+					../../../addons/ofxIO/libs/snappy/src,
+					../../../addons/ofxIO/src,
+					../../../addons/ofxNetwork/src,
+					../../../addons/ofxSerial/libs,
+					../../../addons/ofxSerial/libs/ofxSerial,
+					../../../addons/ofxSerial/libs/ofxSerial/include,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO,
+					../../../addons/ofxSerial/libs/ofxSerial/src,
+					../../../addons/ofxSerial/libs/serial,
+					../../../addons/ofxSerial/libs/serial/include,
+					../../../addons/ofxSerial/libs/serial/include/serial,
+					../../../addons/ofxSerial/libs/serial/include/serial/impl,
+					../../../addons/ofxSerial/libs/serial/src,
+					../../../addons/ofxSerial/libs/serial/src/impl,
+					../../../addons/ofxSerial/libs/serial/src/impl/list_ports,
+					../../../addons/ofxSerial/src,
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
+					../../../addons/EmotiBit_XPlat_Utils/src,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
-				ICON_FILE_PATH = ../EmotiBitIcons/macOS/;
-				ICON_NAME_DEBUG = EmotiBit.icns;
-				ICON_NAME_RELEASE = EmotiBit.icns;
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -1334,10 +2165,43 @@
 					../../../addons/ofxEmotiBit/src,
 					../../../addons/ofxEmotiBit/src/Signal,
 					../../../addons/ofxGui/src,
-					../../../addons/ofxNetwork/src,
 					../../../addons/ofxPoco/libs/poco/include,
 					../../../addons/ofxPoco/src,
 					../../../addons/ofxPoco/libs/openssl/include,
+					../../../addons/ofxIO/libs,
+					../../../addons/ofxIO/libs/alphanum,
+					../../../addons/ofxIO/libs/alphanum/include,
+					../../../addons/ofxIO/libs/brotli,
+					../../../addons/ofxIO/libs/brotli/src,
+					../../../addons/ofxIO/libs/brotli/src/common,
+					../../../addons/ofxIO/libs/brotli/src/dec,
+					../../../addons/ofxIO/libs/brotli/src/enc,
+					../../../addons/ofxIO/libs/brotli/src/tools,
+					../../../addons/ofxIO/libs/lz4,
+					../../../addons/ofxIO/libs/lz4/src,
+					../../../addons/ofxIO/libs/ofxIO,
+					../../../addons/ofxIO/libs/ofxIO/include,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx/IO,
+					../../../addons/ofxIO/libs/ofxIO/src,
+					../../../addons/ofxIO/libs/snappy,
+					../../../addons/ofxIO/libs/snappy/src,
+					../../../addons/ofxIO/src,
+					../../../addons/ofxNetwork/src,
+					../../../addons/ofxSerial/libs,
+					../../../addons/ofxSerial/libs/ofxSerial,
+					../../../addons/ofxSerial/libs/ofxSerial/include,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO,
+					../../../addons/ofxSerial/libs/ofxSerial/src,
+					../../../addons/ofxSerial/libs/serial,
+					../../../addons/ofxSerial/libs/serial/include,
+					../../../addons/ofxSerial/libs/serial/include/serial,
+					../../../addons/ofxSerial/libs/serial/include/serial/impl,
+					../../../addons/ofxSerial/libs/serial/src,
+					../../../addons/ofxSerial/libs/serial/src/impl,
+					../../../addons/ofxSerial/libs/serial/src/impl/list_ports,
+					../../../addons/ofxSerial/src,
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
@@ -1381,10 +2245,43 @@
 					../../../addons/ofxEmotiBit/src,
 					../../../addons/ofxEmotiBit/src/Signal,
 					../../../addons/ofxGui/src,
-					../../../addons/ofxNetwork/src,
 					../../../addons/ofxPoco/libs/poco/include,
 					../../../addons/ofxPoco/src,
 					../../../addons/ofxPoco/libs/openssl/include,
+					../../../addons/ofxIO/libs,
+					../../../addons/ofxIO/libs/alphanum,
+					../../../addons/ofxIO/libs/alphanum/include,
+					../../../addons/ofxIO/libs/brotli,
+					../../../addons/ofxIO/libs/brotli/src,
+					../../../addons/ofxIO/libs/brotli/src/common,
+					../../../addons/ofxIO/libs/brotli/src/dec,
+					../../../addons/ofxIO/libs/brotli/src/enc,
+					../../../addons/ofxIO/libs/brotli/src/tools,
+					../../../addons/ofxIO/libs/lz4,
+					../../../addons/ofxIO/libs/lz4/src,
+					../../../addons/ofxIO/libs/ofxIO,
+					../../../addons/ofxIO/libs/ofxIO/include,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx/IO,
+					../../../addons/ofxIO/libs/ofxIO/src,
+					../../../addons/ofxIO/libs/snappy,
+					../../../addons/ofxIO/libs/snappy/src,
+					../../../addons/ofxIO/src,
+					../../../addons/ofxNetwork/src,
+					../../../addons/ofxSerial/libs,
+					../../../addons/ofxSerial/libs/ofxSerial,
+					../../../addons/ofxSerial/libs/ofxSerial/include,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO,
+					../../../addons/ofxSerial/libs/ofxSerial/src,
+					../../../addons/ofxSerial/libs/serial,
+					../../../addons/ofxSerial/libs/serial/include,
+					../../../addons/ofxSerial/libs/serial/include/serial,
+					../../../addons/ofxSerial/libs/serial/include/serial/impl,
+					../../../addons/ofxSerial/libs/serial/src,
+					../../../addons/ofxSerial/libs/serial/src/impl,
+					../../../addons/ofxSerial/libs/serial/src/impl/list_ports,
+					../../../addons/ofxSerial/src,
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
@@ -1417,19 +2314,50 @@
 					../../../addons/ofxEmotiBit/src,
 					../../../addons/ofxEmotiBit/src/Signal,
 					../../../addons/ofxGui/src,
-					../../../addons/ofxNetwork/src,
 					../../../addons/ofxPoco/libs/poco/include,
 					../../../addons/ofxPoco/src,
 					../../../addons/ofxPoco/libs/openssl/include,
+					../../../addons/ofxIO/libs,
+					../../../addons/ofxIO/libs/alphanum,
+					../../../addons/ofxIO/libs/alphanum/include,
+					../../../addons/ofxIO/libs/brotli,
+					../../../addons/ofxIO/libs/brotli/src,
+					../../../addons/ofxIO/libs/brotli/src/common,
+					../../../addons/ofxIO/libs/brotli/src/dec,
+					../../../addons/ofxIO/libs/brotli/src/enc,
+					../../../addons/ofxIO/libs/brotli/src/tools,
+					../../../addons/ofxIO/libs/lz4,
+					../../../addons/ofxIO/libs/lz4/src,
+					../../../addons/ofxIO/libs/ofxIO,
+					../../../addons/ofxIO/libs/ofxIO/include,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx/IO,
+					../../../addons/ofxIO/libs/ofxIO/src,
+					../../../addons/ofxIO/libs/snappy,
+					../../../addons/ofxIO/libs/snappy/src,
+					../../../addons/ofxIO/src,
+					../../../addons/ofxNetwork/src,
+					../../../addons/ofxSerial/libs,
+					../../../addons/ofxSerial/libs/ofxSerial,
+					../../../addons/ofxSerial/libs/ofxSerial/include,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO,
+					../../../addons/ofxSerial/libs/ofxSerial/src,
+					../../../addons/ofxSerial/libs/serial,
+					../../../addons/ofxSerial/libs/serial/include,
+					../../../addons/ofxSerial/libs/serial/include/serial,
+					../../../addons/ofxSerial/libs/serial/include/serial/impl,
+					../../../addons/ofxSerial/libs/serial/src,
+					../../../addons/ofxSerial/libs/serial/src/impl,
+					../../../addons/ofxSerial/libs/serial/src/impl/list_ports,
+					../../../addons/ofxSerial/src,
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
+					../../../addons/EmotiBit_XPlat_Utils/src,
 				);
 				ICON = "$(ICON_NAME_DEBUG)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
-				ICON_FILE_PATH = ../EmotiBitIcons/macOS/;
-				ICON_NAME_DEBUG = EmotiBit.icns;
-				ICON_NAME_RELEASE = EmotiBit.icns;
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -1469,19 +2397,50 @@
 					../../../addons/ofxEmotiBit/src,
 					../../../addons/ofxEmotiBit/src/Signal,
 					../../../addons/ofxGui/src,
-					../../../addons/ofxNetwork/src,
 					../../../addons/ofxPoco/libs/poco/include,
 					../../../addons/ofxPoco/src,
 					../../../addons/ofxPoco/libs/openssl/include,
+					../../../addons/ofxIO/libs,
+					../../../addons/ofxIO/libs/alphanum,
+					../../../addons/ofxIO/libs/alphanum/include,
+					../../../addons/ofxIO/libs/brotli,
+					../../../addons/ofxIO/libs/brotli/src,
+					../../../addons/ofxIO/libs/brotli/src/common,
+					../../../addons/ofxIO/libs/brotli/src/dec,
+					../../../addons/ofxIO/libs/brotli/src/enc,
+					../../../addons/ofxIO/libs/brotli/src/tools,
+					../../../addons/ofxIO/libs/lz4,
+					../../../addons/ofxIO/libs/lz4/src,
+					../../../addons/ofxIO/libs/ofxIO,
+					../../../addons/ofxIO/libs/ofxIO/include,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx,
+					../../../addons/ofxIO/libs/ofxIO/include/ofx/IO,
+					../../../addons/ofxIO/libs/ofxIO/src,
+					../../../addons/ofxIO/libs/snappy,
+					../../../addons/ofxIO/libs/snappy/src,
+					../../../addons/ofxIO/src,
+					../../../addons/ofxNetwork/src,
+					../../../addons/ofxSerial/libs,
+					../../../addons/ofxSerial/libs/ofxSerial,
+					../../../addons/ofxSerial/libs/ofxSerial/include,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx,
+					../../../addons/ofxSerial/libs/ofxSerial/include/ofx/IO,
+					../../../addons/ofxSerial/libs/ofxSerial/src,
+					../../../addons/ofxSerial/libs/serial,
+					../../../addons/ofxSerial/libs/serial/include,
+					../../../addons/ofxSerial/libs/serial/include/serial,
+					../../../addons/ofxSerial/libs/serial/include/serial/impl,
+					../../../addons/ofxSerial/libs/serial/src,
+					../../../addons/ofxSerial/libs/serial/src/impl,
+					../../../addons/ofxSerial/libs/serial/src/impl/list_ports,
+					../../../addons/ofxSerial/src,
 					../../../addons/ofxThreadedLogger/src,
 					../../../addons/ofxXmlSettings/libs,
 					../../../addons/ofxXmlSettings/src,
+					../../../addons/EmotiBit_XPlat_Utils/src,
 				);
-				ICON = "$(ICON_NAME_DEBUG)";
+				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
-				ICON_FILE_PATH = ../EmotiBitIcons/macOS/;
-				ICON_NAME_DEBUG = EmotiBit.icns;
-				ICON_NAME_RELEASE = EmotiBit.icns;
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";

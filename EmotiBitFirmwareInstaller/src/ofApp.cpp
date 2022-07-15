@@ -103,16 +103,14 @@ void ofApp::update(){
 			if (numDevicesDetected == 1)
 			{
 				// Feather Detected!
-				if (std::find(boardComList[Board::FEATHER_M0].begin(), boardComList[Board::FEATHER_M0].end(), featherPort) != boardComList[Board::FEATHER_M0].end())
+                if (getBoard() == Board::FEATHER_M0)
 				{
-					setBoard(Board::FEATHER_M0);
 					// progress to next state;
 					progressToNextState();
 				}
-				else if (std::find(boardComList[Board::FEATHER_ESP_32].begin(), boardComList[Board::FEATHER_ESP_32].end(), featherPort) != boardComList[Board::FEATHER_ESP_32].end())
+                else if (getBoard() == Board::FEATHER_ESP_32)
 				{
-					setBoard(Board::FEATHER_ESP_32);
-					// progress to next state;
+					// progress to flashing FW;
 					progressToNextState((int)State::UPLOAD_EMOTIBIT_FW);
 				}
 			}
@@ -472,6 +470,14 @@ int ofApp::detectFeatherPlugin()
 			if (newComPort.compare(COM_PORT_NONE) != 0)
 			{
 				featherPort = newComPort;
+                if (std::find(boardComList[Board::FEATHER_M0].begin(), boardComList[Board::FEATHER_M0].end(), featherPort) != boardComList[Board::FEATHER_M0].end())
+                {
+                    setBoard(Board::FEATHER_M0);
+                }
+                else if (std::find(boardComList[Board::FEATHER_ESP_32].begin(), boardComList[Board::FEATHER_ESP_32].end(), featherPort) != boardComList[Board::FEATHER_ESP_32].end())
+                {
+                    setBoard(Board::FEATHER_ESP_32);
+                }
 				return currentComList.size() - comListOnStartup.size();
 			}
 		}
@@ -489,7 +495,7 @@ void ofApp::setBoard(ofApp::Board board)
 	_board = board;
 }
 
-void ofApp::assignComPortToBoard(Board board, std::string comPort)
+void ofApp::assignComPortToBoard(ofApp::Board board, std::string comPort)
 {
 	// add com port to board list if it does not already exist
 	if (std::find(boardComList[board].begin(), boardComList[board].end(), comPort) == boardComList[board].end())
@@ -503,23 +509,11 @@ std::vector<std::string> ofApp::getComListFromDeviceList(ofxIO::SerialDeviceInfo
 	std::vector<std::string> comPortList;
 	for (int i = 0; i < deviceList.size(); i++)
 	{
-		bool isValidComPort = false;
-#ifdef TARGET_OSX
-		if (deviceList[i].port.find("/dev/tty") != std::string::npos)
-		{
-			comPortList.push_back(deviceList[i].getPort());
-			isValidComPort = true;
-		}
-#else
-		comPortList.push_back(deviceList[i].getPort());
-		isValidComPort = true;
-#endif
-		if (isValidComPort)
-		{
-			Board b;
-			b = getBoardFromDeviceInfo(deviceList[i]);
-			assignComPortToBoard(b, deviceList[i].getPort());
-		}
+        // ToDo: needs a filter for /dev/cu.SLAB_USBtoUART. Looks like an artifact of SLABS drivers
+        comPortList.push_back(deviceList[i].port());
+        Board b;
+        b = getBoardFromDeviceInfo(deviceList[i]);
+        assignComPortToBoard(b, deviceList[i].port());
 	}
 	// sort the list
 	std::sort(comPortList.begin(), comPortList.end());
@@ -534,10 +528,11 @@ ofxIO::SerialDeviceInfo::DeviceList ofApp::getDeviceList()
 ofApp::DeviceInfo ofApp::parseDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 {
 	ofApp::DeviceInfo info;
-	info.desc = deviceInfo.getDescription();
-	info.port = deviceInfo.getPort();
+	info.desc = deviceInfo.description();
+	info.port = deviceInfo.port();
 	// get hw info
-	std::string temp = deviceInfo.getHardwareId();
+	std::string temp = deviceInfo.hardwareId();
+#ifdef TARGET_WIN32
 	// get required substring
 	std::string hwinfo = temp.substr(temp.find("VID"));
 	// split into parameter pairs
@@ -549,17 +544,39 @@ ofApp::DeviceInfo ofApp::parseDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 		std::vector<std::string> idSegment = ofSplitString(hwIdSplit.at(i), "_");  // https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/hidclass-hardware-ids-for-top-level-collections#special-purpose-hardware-id
 		if (idSegment.at(0).compare("VID") == 0)
 		{
-			info.vid = idSegment.at(1);
+            std::string vid = idSegment.at(1);
+			info.vid = transform(vid.begin(), vid.end(), vid.begin(), ::toupper);
 		}
 		else if (idSegment.at(0).compare("PID") == 0)
 		{
-			info.pid = idSegment.at(1);
+            std::string pid = idSegment.at(1);
+			info.pid = transform(pid.begin(), pid.end(), pid.begin(), ::toupper);
 		}
 		else
 		{
 			// ToDo: extract other information if necessary
 		}
 	}
+#elif defined TARGET_OSX
+    // example hardware id: /dev/cu.usbmodem14301, Adafruit Feather M0, USB VID:PID=239a:800b SNR=6A04F4CF50533336372E3120FF09280F
+    std::vector<std::string> splitHwinfo = ofSplitString(temp, " ");
+    for(int i=0;i<splitHwinfo.size();i++)
+    {
+        std::string s = splitHwinfo.at(i);
+        if(s.find("VID") != std::string::npos)
+        {
+            std::string ids = ofSplitString(s, "=").back();
+            std::string vid = ofSplitString(ids, ":").front();
+            std::string pid = ofSplitString(ids,":").back();
+            transform(vid.begin(), vid.end(), vid.begin(), ::toupper);
+            transform(pid.begin(), pid.end(), pid.begin(), ::toupper);
+            info.vid = vid;
+            info.pid = pid;
+        }
+    }
+#else
+    // for linux
+#endif
 	return info;
 }
 
@@ -581,7 +598,8 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 	else
 	{
 		// perform a check for ESP useing device description
-		std::string espDescIdentifier = "CP210x";
+        // ToDo: Find a better way to detect ESP32. This approach is not "robust"
+		std::string espDescIdentifier = "Silicon";
 		if (info.desc.find(espDescIdentifier) != std::string::npos)
 		{
 			// It is ESP!

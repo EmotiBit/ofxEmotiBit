@@ -19,6 +19,7 @@
 #include "ofxGui.h"
 #include "unordered_map"
 #include <iostream>
+#include <algorithm>
 #include <stdexcept>
 #include <stdio.h>
 #include <string>
@@ -44,8 +45,18 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		enum class Board;
-		struct DeviceInfo;
+        struct DeviceInfo {
+            std::string vid = "";  //!< Vendor ID
+            std::string pid = "";  //!< Product ID
+            std::string port = "";
+            std::string desc = "";
+        };
+    
+        enum Board {
+            NONE = 0,
+            FEATHER_M0,
+            FEATHER_ESP_32
+        };
 
 		/*!
 			@brief Function to parse device hardware info. from string
@@ -180,19 +191,6 @@ class ofApp : public ofBaseApp{
 		std::string findNewComPort(std::vector<std::string> oldList, std::vector<std::string> newList);
 		
 		void raiseError(std::string additionalMessage = "");
-		
-		struct DeviceInfo {
-			std::string vid = "";  //!< Vendor ID
-			std::string pid = "";  //!< Product ID
-			std::string port = "";
-			std::string desc = "";
-		};
-
-		enum class Board {
-			NONE = 0,
-			FEATHER_M0,
-			FEATHER_ESP_32
-		};
 
 		// This order shold not be changed. The Feather port is updated in WAIT_FOR_FEATHER and RUN_WINC_UPDATER
 		// that feather port is then used in the next sequential step
@@ -208,7 +206,7 @@ class ofApp : public ofBaseApp{
 			INSTALLER_ERROR,
 			LENGTH
 		}_state;
-		unordered_map<Board, std::vector<std::string>> boardComList;
+		unordered_map<int, std::vector<std::string>> boardComList;
 		// refer: https://github.com/adafruit/ArduinoCore-samd/blob/bd2a9cdbe7433ec88701591c49b1224c8686e940/boards.txt#L29-L35
 		const std::vector<std::string> ADARUIT_VID_LIST = { "239A" };
 		const std::vector<std::string> ADARUIT_PID_LIST = { "800B", "000B", "0015" };
