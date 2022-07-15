@@ -1,8 +1,9 @@
-EmotiBit_XPlat_Utils
 ofxBiquadFilter
 ofxEmotiBit
 ofxGui
-ofxNetwork
 ofxPoco
+ofxIO
+ofxNetwork
+ofxSerial
 ofxThreadedLogger
 ofxXmlSettings

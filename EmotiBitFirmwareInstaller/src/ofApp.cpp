@@ -48,7 +48,7 @@ void ofApp::setup(){
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::START;
 	ofLogNotice("Step") << "Running ESP driver installer";
-	installEspDrivers();
+	//installEspDrivers();
 	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
@@ -70,6 +70,8 @@ void ofApp::setup(){
     {
         ofLogNotice() << "Title Font loaded correctly";
     }
+	boardComList[Board::FEATHER_M0];
+	boardComList[Board::FEATHER_ESP_32];
 }
 
 //--------------------------------------------------------------
@@ -101,8 +103,18 @@ void ofApp::update(){
 			if (numDevicesDetected == 1)
 			{
 				// Feather Detected!
-				// progress to next state;
-				progressToNextState();
+				if (std::find(boardComList[Board::FEATHER_M0].begin(), boardComList[Board::FEATHER_M0].end(), featherPort) != boardComList[Board::FEATHER_M0].end())
+				{
+					setBoard(Board::FEATHER_M0);
+					// progress to next state;
+					progressToNextState();
+				}
+				else if (std::find(boardComList[Board::FEATHER_ESP_32].begin(), boardComList[Board::FEATHER_ESP_32].end(), featherPort) != boardComList[Board::FEATHER_ESP_32].end())
+				{
+					setBoard(Board::FEATHER_ESP_32);
+					// progress to next state;
+					progressToNextState((int)State::UPLOAD_EMOTIBIT_FW);
+				}
 			}
 			else if (numDevicesDetected > 1)
 			{
@@ -216,11 +228,18 @@ void ofApp::raiseError(std::string additionalMessage)
 	pingProgTryCount = 0;
 }
 
-void ofApp::progressToNextState()
+void ofApp::progressToNextState(int state)
 {
 	stateStartTime = ofGetElapsedTimeMillis();
 	// ToDo: verify behavior if states dont have a continuous emnumeration
-	_state = State((int)_state + 1);
+	if (state == -1)
+	{
+		_state = State((int)_state + 1);
+	}
+	else
+	{
+		_state = (State)state;
+	}
 	ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));
 	onScreenInstruction = onScreenInstruction + "\n" + onScreenInstructionList[_state];
 	onScreenInstructionImage.clear();
@@ -460,26 +479,127 @@ int ofApp::detectFeatherPlugin()
 	return currentComList.size() - comListOnStartup.size();
 }
 
+ofApp::Board ofApp::getBoard()
+{
+	return _board;
+}
+
+void ofApp::setBoard(ofApp::Board board)
+{
+	_board = board;
+}
+
+void ofApp::assignComPortToBoard(Board board, std::string comPort)
+{
+	// add com port to board list if it does not already exist
+	if (std::find(boardComList[board].begin(), boardComList[board].end(), comPort) == boardComList[board].end())
+	{
+		boardComList[board].push_back(comPort);
+	}
+}
+
+std::vector<std::string> ofApp::getComListFromDeviceList(ofxIO::SerialDeviceInfo::DeviceList deviceList)
+{
+	std::vector<std::string> comPortList;
+	for (int i = 0; i < deviceList.size(); i++)
+	{
+		bool isValidComPort = false;
+#ifdef TARGET_OSX
+		if (deviceList[i].port.find("/dev/tty") != std::string::npos)
+		{
+			comPortList.push_back(deviceList[i].getPort());
+			isValidComPort = true;
+		}
+#else
+		comPortList.push_back(deviceList[i].getPort());
+		isValidComPort = true;
+#endif
+		if (isValidComPort)
+		{
+			Board b;
+			b = getBoardFromDeviceInfo(deviceList[i]);
+			assignComPortToBoard(b, deviceList[i].getPort());
+		}
+	}
+	// sort the list
+	std::sort(comPortList.begin(), comPortList.end());
+	return comPortList;
+}
+
+ofxIO::SerialDeviceInfo::DeviceList ofApp::getDeviceList()
+{
+	return ofxIO::SerialDeviceUtils::listDevices();
+}
+
+ofApp::DeviceInfo ofApp::parseDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
+{
+	ofApp::DeviceInfo info;
+	info.desc = deviceInfo.getDescription();
+	info.port = deviceInfo.getPort();
+	// get hw info
+	std::string temp = deviceInfo.getHardwareId();
+	// get required substring
+	std::string hwinfo = temp.substr(temp.find("VID"));
+	// split into parameter pairs
+	std::vector<std::string> hwIdSplit = ofSplitString(hwinfo, "&");
+	// logic to parse hwId
+	// Ex: USB\VID_239A&PID_800B&REV_0100&MI_00
+	for (int i = 0; i < hwIdSplit.size(); i++)
+	{
+		std::vector<std::string> idSegment = ofSplitString(hwIdSplit.at(i), "_");  // https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/hidclass-hardware-ids-for-top-level-collections#special-purpose-hardware-id
+		if (idSegment.at(0).compare("VID") == 0)
+		{
+			info.vid = idSegment.at(1);
+		}
+		else if (idSegment.at(0).compare("PID") == 0)
+		{
+			info.pid = idSegment.at(1);
+		}
+		else
+		{
+			// ToDo: extract other information if necessary
+		}
+	}
+	return info;
+}
+
+ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
+{
+	ofApp::DeviceInfo info;
+	info = parseDeviceInfo(deviceInfo);
+	bool isFeatherM0 = false;
+	
+	if (std::find(ADARUIT_VID_LIST.begin(), ADARUIT_VID_LIST.end(), info.vid) != ADARUIT_VID_LIST.end())
+	{
+		// Device vendor detected as Adafruit
+		if (std::find(ADARUIT_PID_LIST.begin(), ADARUIT_PID_LIST.end(), info.pid) != ADARUIT_PID_LIST.end())
+		{
+			// Device detected as Feather M0
+			return Board::FEATHER_M0;
+		}
+	}
+	else
+	{
+		// perform a check for ESP useing device description
+		std::string espDescIdentifier = "CP210x";
+		if (info.desc.find(espDescIdentifier) != std::string::npos)
+		{
+			// It is ESP!
+			return Board::FEATHER_ESP_32;
+		}
+	}
+	return Board::NONE;
+}
+
 std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 {
 	ofSerial serial;
 	std::vector<std::string> comPortList;
-	// get list of com ports
-	vector <ofSerialDeviceInfo> initDeviceList = serial.getDeviceList();
-	// convert device list into COM ports
-	for (int i = 0; i < initDeviceList.size(); i++)
-	{
-#ifdef TARGET_OSX
-        if(initDeviceList.at(i).getDevicePath().find("/dev/tty") != std::string::npos)
-        {
-            comPortList.push_back(initDeviceList.at(i).getDevicePath());
-        }
-#else
-        comPortList.push_back(initDeviceList.at(i).getDevicePath());
-#endif
-	}
-	// sort the list
-	std::sort(comPortList.begin(), comPortList.end());
+	// get device list
+	ofxIO::SerialDeviceInfo::DeviceList deviceList = getDeviceList();
+	
+	// get list of COM ports
+	comPortList = getComListFromDeviceList(deviceList);	
 	
 	// print available COM ports on console
 	if (printOnConsole)
@@ -613,6 +733,11 @@ bool ofApp::checkSystemCallResponse()
 	}
 }
 
+bool ofApp::updateUsingEspTool(std::string filename)
+{
+	return true;
+}
+
 bool ofApp::updateUsingBossa(std::string filePath)
 {
 	// Set error state. It is set to None when Bossac is completed successfully
@@ -708,7 +833,15 @@ bool ofApp::runWincUpdater()
 
 bool ofApp::uploadEmotiBitFw()
 {
-    return updateUsingBossa(ofToDataPath("EmotiBit_stock_firmware.ino.feather_m0.bin"));
+	if (getBoard() == Board::FEATHER_M0)
+	{
+		return updateUsingBossa(ofToDataPath("EmotiBit_stock_firmware.ino.feather_m0.bin"));
+	}
+	else
+	{
+		return updateUsingEspTool("EmotiBit_stock_firmware.ino.feather_esp32.bin");
+
+	}
 }
 
 void ofApp::installEspDrivers()
