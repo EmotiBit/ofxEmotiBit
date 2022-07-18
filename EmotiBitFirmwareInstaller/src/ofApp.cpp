@@ -545,12 +545,14 @@ ofApp::DeviceInfo ofApp::parseDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 		if (idSegment.at(0).compare("VID") == 0)
 		{
             std::string vid = idSegment.at(1);
-			info.vid = transform(vid.begin(), vid.end(), vid.begin(), ::toupper);
+			transform(vid.begin(), vid.end(), vid.begin(), ::toupper);
+			info.vid = vid;
 		}
 		else if (idSegment.at(0).compare("PID") == 0)
 		{
             std::string pid = idSegment.at(1);
-			info.pid = transform(pid.begin(), pid.end(), pid.begin(), ::toupper);
+			transform(pid.begin(), pid.end(), pid.begin(), ::toupper);
+			info.pid = pid;
 		}
 		else
 		{
