@@ -395,10 +395,10 @@ void ofApp::setupInstructionList()
 	onScreenInstructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
 													   "\n2. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
 													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
-														"\n3. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)"
+														"\n3. Make sure EmotiBit is not plugged to the computer."
 														"\n4. Press space-bar to continue";
 	
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "5. Press Reset button on the Feather (as shown below)";
+	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "5. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)";
 	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "\nDO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS\n"
 																	"\n>>> Uploading WINC firmware updater sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = ">>> Updating WINC FW";
@@ -410,8 +410,8 @@ void ofApp::setupInstructionList()
 	// If you want to add any image to be displayed, just add the image name to the list
 	//ToDo: There is currently no bounds on images goinging outside the window, if too many images have been added to the list
 	instructionImages[State::START];
-	instructionImages[State::DISPLAY_INSTRUCTION] = std::vector<std::string>{ "correctHibernateSwitch.jpg", "plugInEmotiBit.jpg" };
-	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{ "pressResetButton.jpg" };
+	instructionImages[State::DISPLAY_INSTRUCTION] = std::vector<std::string>{ "correctHibernateSwitch.jpg" };
+	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{ "plugInEmotiBit.jpg" };
 	instructionImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];
 	instructionImages[State::RUN_WINC_UPDATER];
 	instructionImages[State::UPLOAD_EMOTIBIT_FW];
@@ -534,29 +534,32 @@ ofApp::DeviceInfo ofApp::parseDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 	std::string temp = deviceInfo.hardwareId();
 #ifdef TARGET_WIN32
 	// get required substring
-	std::string hwinfo = temp.substr(temp.find("VID"));
-	// split into parameter pairs
-	std::vector<std::string> hwIdSplit = ofSplitString(hwinfo, "&");
-	// logic to parse hwId
-	// Ex: USB\VID_239A&PID_800B&REV_0100&MI_00
-	for (int i = 0; i < hwIdSplit.size(); i++)
+	if (temp.find("VID") != std::string::npos)
 	{
-		std::vector<std::string> idSegment = ofSplitString(hwIdSplit.at(i), "_");  // https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/hidclass-hardware-ids-for-top-level-collections#special-purpose-hardware-id
-		if (idSegment.at(0).compare("VID") == 0)
+		std::string hwinfo = temp.substr(temp.find("VID"));
+		// split into parameter pairs
+		std::vector<std::string> hwIdSplit = ofSplitString(hwinfo, "&");
+		// logic to parse hwId
+		// Ex: USB\VID_239A&PID_800B&REV_0100&MI_00
+		for (int i = 0; i < hwIdSplit.size(); i++)
 		{
-            std::string vid = idSegment.at(1);
-			transform(vid.begin(), vid.end(), vid.begin(), ::toupper);
-			info.vid = vid;
-		}
-		else if (idSegment.at(0).compare("PID") == 0)
-		{
-            std::string pid = idSegment.at(1);
-			transform(pid.begin(), pid.end(), pid.begin(), ::toupper);
-			info.pid = pid;
-		}
-		else
-		{
-			// ToDo: extract other information if necessary
+			std::vector<std::string> idSegment = ofSplitString(hwIdSplit.at(i), "_");  // https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/hidclass-hardware-ids-for-top-level-collections#special-purpose-hardware-id
+			if (idSegment.at(0).compare("VID") == 0)
+			{
+				std::string vid = idSegment.at(1);
+				transform(vid.begin(), vid.end(), vid.begin(), ::toupper);
+				info.vid = vid;
+			}
+			else if (idSegment.at(0).compare("PID") == 0)
+			{
+				std::string pid = idSegment.at(1);
+				transform(pid.begin(), pid.end(), pid.begin(), ::toupper);
+				info.pid = pid;
+			}
+			else
+			{
+				// ToDo: extract other information if necessary
+			}
 		}
 	}
 #elif defined TARGET_OSX
@@ -755,7 +758,49 @@ bool ofApp::checkSystemCallResponse()
 
 bool ofApp::updateUsingEspTool(std::string filename)
 {
-	return true;
+	std::string command;
+	if (!systemCommandExecuted)
+	{
+		ofLog(OF_LOG_NOTICE, "uploading FW on ESP");
+#if defined(TARGET_LINUX) || defined(TARGET_OSX)
+		ofLog(OF_LOG_NOTICE, "waiting to flash with bossa");
+		ofSleepMillis(5000);
+		command = "bossac";
+		command = ofToDataPath(command);
+#else
+		command = "esptool.exe";
+		command = ofToDataPath(command);
+#endif
+		command = command + " " + "--chip esp32 --port " + featherPort +
+			" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 4MB" +
+			" 0x1000" + " " + ofToDataPath("EmotiBit_stock_firmware.ino.bootloader.bin") +
+			" 0x8000" + " " + ofToDataPath("EmotiBit_stock_firmware.partitions.bin") +
+			" 0xe000" + " " + ofToDataPath("boot_app0.bin") +
+			" 0x10000" + " " + filename;
+		ofLogNotice("Running: ") << command;
+		//system(command.c_str());
+		threadedSystemCall.setup(command, "Hash of data verified"); // the target response string is captured from observed output
+		threadedSystemCall.startThread();
+		systemCommandExecuted = true;
+		return false;
+	}
+	else
+	{
+		// check for system response
+		bool status = checkSystemCallResponse();
+		// if command exe is complete but bossac failed
+		if (!status && !systemCommandExecuted)
+		{
+			// try for MAX_NUM times
+			bossacTryCount++;
+			if (bossacTryCount < MAX_NUM_TRIES_BOSSAC)
+			{
+				// reset trying to enter prog mode
+				pingProgTryCount = 0;
+			}
+		}
+		return status;
+	}
 }
 
 bool ofApp::updateUsingBossa(std::string filePath)
@@ -859,7 +904,7 @@ bool ofApp::uploadEmotiBitFw()
 	}
 	else
 	{
-		return updateUsingEspTool("EmotiBit_stock_firmware.ino.feather_esp32.bin");
+		return updateUsingEspTool(ofToDataPath("EmotiBit_stock_firmware.ino.feather_esp32.bin"));
 
 	}
 }
