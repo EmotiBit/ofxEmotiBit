@@ -469,14 +469,21 @@ int ofApp::detectFeatherPlugin()
 
 			if (newComPort.compare(COM_PORT_NONE) != 0)
 			{
-				featherPort = newComPort;
-                if (std::find(boardComList[Board::FEATHER_M0].begin(), boardComList[Board::FEATHER_M0].end(), featherPort) != boardComList[Board::FEATHER_M0].end())
+                if (std::find(boardComList[Board::FEATHER_M0].begin(), boardComList[Board::FEATHER_M0].end(), newComPort) != boardComList[Board::FEATHER_M0].end())
                 {
                     setBoard(Board::FEATHER_M0);
                 }
-                else if (std::find(boardComList[Board::FEATHER_ESP_32].begin(), boardComList[Board::FEATHER_ESP_32].end(), featherPort) != boardComList[Board::FEATHER_ESP_32].end())
+                else if (std::find(boardComList[Board::FEATHER_ESP_32].begin(), boardComList[Board::FEATHER_ESP_32].end(), newComPort) != boardComList[Board::FEATHER_ESP_32].end())
                 {
                     setBoard(Board::FEATHER_ESP_32);
+                }
+                if(getBoard() != Board::NONE)
+                {
+                    featherPort = newComPort;
+                }
+                else
+                {
+                    comListOnStartup = currentComList;
                 }
 				return currentComList.size() - comListOnStartup.size();
 			}
@@ -605,7 +612,9 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 		// perform a check for ESP useing device description
         // ToDo: Find a better way to detect ESP32. This approach is not "robust"
 		std::string espDescIdentifier = "Silicon";
-		if (info.desc.find(espDescIdentifier) != std::string::npos)
+        std::string espSlabIdentifier = "SLAB";
+        // if descriptions says silicon labs and port is not SLAB_USBtoUART
+        if (info.desc.find(espDescIdentifier) != std::string::npos && info.port.find(espSlabIdentifier) == std::string::npos)
 		{
 			// It is ESP!
 			return Board::FEATHER_ESP_32;
@@ -763,9 +772,8 @@ bool ofApp::updateUsingEspTool(std::string filename)
 	{
 		ofLog(OF_LOG_NOTICE, "uploading FW on ESP");
 #if defined(TARGET_LINUX) || defined(TARGET_OSX)
-		ofLog(OF_LOG_NOTICE, "waiting to flash with bossa");
 		ofSleepMillis(5000);
-		command = "bossac";
+		command = "esptool";
 		command = ofToDataPath(command);
 #else
 		command = "esptool.exe";
