@@ -139,10 +139,10 @@ class ofApp : public ofBaseApp{
 
 		/*!
 			@brief Function to run bossa to upload sketch(bin) to feather
-			@param filePath relative path of the bin file of the sketch
+			@param filename name of the FW binary
 			@return true if sketch was uploaded correctly
 		*/
-		bool updateUsingBossa(std::string filePath);
+		bool updateUsingBossa(std::string filename);
 
 		/*!
 			@brief Function to check progress on the separate thread executing system calls

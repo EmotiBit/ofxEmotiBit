@@ -768,23 +768,32 @@ bool ofApp::checkSystemCallResponse()
 bool ofApp::updateUsingEspTool(std::string filename)
 {
 	std::string command;
+	std::string filepath = "exec";
 	if (!systemCommandExecuted)
 	{
 		ofLog(OF_LOG_NOTICE, "uploading FW on ESP");
-#if defined(TARGET_LINUX) || defined(TARGET_OSX)
-		ofSleepMillis(5000);
-		command = "esptool";
+#if defined(TARGET_OSX)
+		ofSleepMillis(1000);
+		command = ofFilePath::join(filepath, "mac");
+		command = ofFilePath::join(command, "esptool");
+		command = ofToDataPath(command);
+#elif defined(TARGET_LINUX)
+		// for linux
+		ofSleepMillis(1000);
+		command = ofFilePath::join(filepath, "linux");
+		command = ofFilePath::join(command, "esptool");
 		command = ofToDataPath(command);
 #else
-		command = "esptool.exe";
+		command = ofFilePath::join(filepath, "win");
+		command = ofFilePath::join(command, "esptool.exe");
 		command = ofToDataPath(command);
 #endif
 		command = command + " " + "--chip esp32 --port " + featherPort +
 			" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 4MB" +
-			" 0x1000" + " " + ofToDataPath("EmotiBit_stock_firmware.ino.bootloader.bin") +
-			" 0x8000" + " " + ofToDataPath("EmotiBit_stock_firmware.partitions.bin") +
-			" 0xe000" + " " + ofToDataPath("boot_app0.bin") +
-			" 0x10000" + " " + filename;
+			" 0x1000" + " " + ofToDataPath(ofFilePath::join("esp32","EmotiBit_stock_firmware.ino.bootloader.bin")) +
+			" 0x8000" + " " + ofToDataPath(ofFilePath::join("esp32", "EmotiBit_stock_firmware.partitions.bin")) +
+			" 0xe000" + " " + ofToDataPath(ofFilePath::join("esp32", "boot_app0.bin")) +
+			" 0x10000" + " " + ofToDataPath(filename);
 		ofLogNotice("Running: ") << command;
 		//system(command.c_str());
 		threadedSystemCall.setup(command, "Hash of data verified"); // the target response string is captured from observed output
@@ -811,7 +820,7 @@ bool ofApp::updateUsingEspTool(std::string filename)
 	}
 }
 
-bool ofApp::updateUsingBossa(std::string filePath)
+bool ofApp::updateUsingBossa(std::string filename)
 {
 	// Set error state. It is set to None when Bossac is completed successfully
 	std::string programmerPort;
@@ -828,11 +837,11 @@ bool ofApp::updateUsingBossa(std::string filePath)
             ofSleepMillis(5000);
 			command = "bossac";
             command = ofToDataPath(command);
-            command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
+            command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + ofToDataPath(filename);
 #else
 			command = "bossac.exe";
             command = ofToDataPath(command);
-            command = command + " " + "-i -d " + "--port=" + programmerPort + " -U true -i -e -w -v" + " " + filePath + " -R";
+            command = command + " " + "-i -d " + "--port=" + programmerPort + " -U true -i -e -w -v" + " " + ofToDataPath(filename) + " -R";
 #endif
 			ofLogNotice("Running: ") << command;
 			//system(command.c_str());
@@ -908,11 +917,11 @@ bool ofApp::uploadEmotiBitFw()
 {
 	if (getBoard() == Board::FEATHER_M0)
 	{
-		return updateUsingBossa(ofToDataPath("EmotiBit_stock_firmware.ino.feather_m0.bin"));
+		return updateUsingBossa("EmotiBit_stock_firmware.ino.feather_m0.bin");
 	}
 	else
 	{
-		return updateUsingEspTool(ofToDataPath("EmotiBit_stock_firmware.ino.feather_esp32.bin"));
+		return updateUsingEspTool("EmotiBit_stock_firmware.ino.feather_esp32.bin");
 
 	}
 }
