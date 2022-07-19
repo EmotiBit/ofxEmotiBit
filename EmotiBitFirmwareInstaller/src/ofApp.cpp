@@ -614,7 +614,7 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 		std::string espDescIdentifier = "Silicon";
         std::string espSlabIdentifier = "SLAB";
         // if descriptions says silicon labs and port is not SLAB_USBtoUART
-        if (info.desc.find(espDescIdentifier) != std::string::npos && info.port.find(espSlabIdentifier) == std::string::npos)
+        if (info.desc.find(espDescIdentifier) != std::string::npos && info.port.find(espSlabIdentifier) != std::string::npos)
 		{
 			// It is ESP!
 			return Board::FEATHER_ESP_32;
