@@ -72,13 +72,18 @@
 		94D8E5BF288751EB0071C7AF /* EmotiBit_stock_firmware.partitions.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5BC288751EB0071C7AF /* EmotiBit_stock_firmware.partitions.bin */; };
 		94D8E5C0288751EB0071C7AF /* boot_app0.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5BD288751EB0071C7AF /* boot_app0.bin */; };
 		94D8E5C32887522A0071C7AF /* esptool in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5C22887522A0071C7AF /* esptool */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		94D8E5C8288753D70071C7AF /* plugInEmotiBit.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5C5288753D70071C7AF /* plugInEmotiBit.jpg */; };
+		94D8E5C9288753D70071C7AF /* correctHibernateSwitch.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5C6288753D70071C7AF /* correctHibernateSwitch.jpg */; };
+		94D8E5CA288753D70071C7AF /* pressResetButton.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5C7288753D70071C7AF /* pressResetButton.jpg */; };
+		94D8E5D02887543B0071C7AF /* FirmwareUploader in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5CC2887543A0071C7AF /* FirmwareUploader */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		94D8E5D12887543B0071C7AF /* FirmwareUpdater.ino.feather_m0.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5CD2887543A0071C7AF /* FirmwareUpdater.ino.feather_m0.bin */; };
+		94D8E5D22887543B0071C7AF /* m2m_aio_3a0.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5CE2887543A0071C7AF /* m2m_aio_3a0.bin */; };
+		94D8E5D32887543B0071C7AF /* LICENSE.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5CF2887543A0071C7AF /* LICENSE.txt */; };
 		94E22CF92882062400C8F3C0 /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94E22CF72882062400C8F3C0 /* EmotiBitPacket.cpp */; };
 		94E22D032882070C00C8F3C0 /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFB2882070B00C8F3C0 /* verdana.ttf */; };
-		94E22D042882070C00C8F3C0 /* instructions in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFC2882070C00C8F3C0 /* instructions */; };
 		94E22D052882070C00C8F3C0 /* EmotiBit.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFD2882070C00C8F3C0 /* EmotiBit.png */; };
 		94E22D062882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFE2882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin */; };
 		94E22D072882070C00C8F3C0 /* verdanab.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFF2882070C00C8F3C0 /* verdanab.ttf */; };
-		94E22D082882070C00C8F3C0 /* WINC in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22D002882070C00C8F3C0 /* WINC */; };
 		94E22D092882070C00C8F3C0 /* bossac in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22D012882070C00C8F3C0 /* bossac */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		960D20B191346612D5C05A6A /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
 		9B0C4048D6313FF975C15606 /* decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 7DBD4311D51383233476A246 /* decode.c */; };
@@ -145,6 +150,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		94D8E5C4288753AC0071C7AF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = instructions;
+			dstSubfolderSpec = 7;
+			files = (
+				94D8E5C8288753D70071C7AF /* plugInEmotiBit.jpg in CopyFiles */,
+				94D8E5C9288753D70071C7AF /* correctHibernateSwitch.jpg in CopyFiles */,
+				94D8E5CA288753D70071C7AF /* pressResetButton.jpg in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94D8E5CB288754070071C7AF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = WINC;
+			dstSubfolderSpec = 7;
+			files = (
+				94D8E5D02887543B0071C7AF /* FirmwareUploader in CopyFiles */,
+				94D8E5D12887543B0071C7AF /* FirmwareUpdater.ino.feather_m0.bin in CopyFiles */,
+				94D8E5D22887543B0071C7AF /* m2m_aio_3a0.bin in CopyFiles */,
+				94D8E5D32887543B0071C7AF /* LICENSE.txt in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -153,11 +183,9 @@
 			files = (
 				9491A58D288610930052D418 /* EmotiBit_stock_firmware.ino.feather_esp32.bin in CopyFiles */,
 				94E22D032882070C00C8F3C0 /* verdana.ttf in CopyFiles */,
-				94E22D042882070C00C8F3C0 /* instructions in CopyFiles */,
 				94E22D052882070C00C8F3C0 /* EmotiBit.png in CopyFiles */,
 				94E22D062882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin in CopyFiles */,
 				94E22D072882070C00C8F3C0 /* verdanab.ttf in CopyFiles */,
-				94E22D082882070C00C8F3C0 /* WINC in CopyFiles */,
 				94E22D092882070C00C8F3C0 /* bossac in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,15 +376,20 @@
 		94D8E5BC288751EB0071C7AF /* EmotiBit_stock_firmware.partitions.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = EmotiBit_stock_firmware.partitions.bin; path = bin/data/esp32/EmotiBit_stock_firmware.partitions.bin; sourceTree = "<group>"; };
 		94D8E5BD288751EB0071C7AF /* boot_app0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = boot_app0.bin; path = bin/data/esp32/boot_app0.bin; sourceTree = "<group>"; };
 		94D8E5C22887522A0071C7AF /* esptool */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = esptool; path = bin/data/exec/mac/esptool; sourceTree = "<group>"; };
+		94D8E5C5288753D70071C7AF /* plugInEmotiBit.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = plugInEmotiBit.jpg; path = bin/data/instructions/plugInEmotiBit.jpg; sourceTree = "<group>"; };
+		94D8E5C6288753D70071C7AF /* correctHibernateSwitch.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = correctHibernateSwitch.jpg; path = bin/data/instructions/correctHibernateSwitch.jpg; sourceTree = "<group>"; };
+		94D8E5C7288753D70071C7AF /* pressResetButton.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = pressResetButton.jpg; path = bin/data/instructions/pressResetButton.jpg; sourceTree = "<group>"; };
+		94D8E5CC2887543A0071C7AF /* FirmwareUploader */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = FirmwareUploader; path = bin/data/WINC/FirmwareUploader; sourceTree = "<group>"; };
+		94D8E5CD2887543A0071C7AF /* FirmwareUpdater.ino.feather_m0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = FirmwareUpdater.ino.feather_m0.bin; path = bin/data/WINC/FirmwareUpdater.ino.feather_m0.bin; sourceTree = "<group>"; };
+		94D8E5CE2887543A0071C7AF /* m2m_aio_3a0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = m2m_aio_3a0.bin; path = bin/data/WINC/m2m_aio_3a0.bin; sourceTree = "<group>"; };
+		94D8E5CF2887543A0071C7AF /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE.txt; path = bin/data/WINC/LICENSE.txt; sourceTree = "<group>"; };
 		94E22CF72882062400C8F3C0 /* EmotiBitPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitPacket.cpp; path = ../../EmotiBit_XPlat_Utils/src/EmotiBitPacket.cpp; sourceTree = "<group>"; };
 		94E22CF82882062400C8F3C0 /* EmotiBitPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitPacket.h; path = ../../EmotiBit_XPlat_Utils/src/EmotiBitPacket.h; sourceTree = "<group>"; };
 		94E22CFA2882070B00C8F3C0 /* exec */ = {isa = PBXFileReference; lastKnownFileType = folder; name = exec; path = bin/data/exec; sourceTree = "<group>"; };
 		94E22CFB2882070B00C8F3C0 /* verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdana.ttf; path = bin/data/verdana.ttf; sourceTree = "<group>"; };
-		94E22CFC2882070C00C8F3C0 /* instructions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = instructions; path = bin/data/instructions; sourceTree = "<group>"; };
 		94E22CFD2882070C00C8F3C0 /* EmotiBit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EmotiBit.png; path = bin/data/EmotiBit.png; sourceTree = "<group>"; };
 		94E22CFE2882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = EmotiBit_stock_firmware.ino.feather_m0.bin; path = bin/data/EmotiBit_stock_firmware.ino.feather_m0.bin; sourceTree = "<group>"; };
 		94E22CFF2882070C00C8F3C0 /* verdanab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdanab.ttf; path = bin/data/verdanab.ttf; sourceTree = "<group>"; };
-		94E22D002882070C00C8F3C0 /* WINC */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WINC; path = bin/data/WINC; sourceTree = "<group>"; };
 		94E22D012882070C00C8F3C0 /* bossac */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = bossac; path = bin/data/bossac; sourceTree = "<group>"; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
 		9634FA545F1B9E5582A31E4D /* static_dict_lut.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = static_dict_lut.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/static_dict_lut.h; sourceTree = SOURCE_ROOT; };
@@ -1743,6 +1776,13 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				94D8E5CD2887543A0071C7AF /* FirmwareUpdater.ino.feather_m0.bin */,
+				94D8E5CC2887543A0071C7AF /* FirmwareUploader */,
+				94D8E5CF2887543A0071C7AF /* LICENSE.txt */,
+				94D8E5CE2887543A0071C7AF /* m2m_aio_3a0.bin */,
+				94D8E5C6288753D70071C7AF /* correctHibernateSwitch.jpg */,
+				94D8E5C5288753D70071C7AF /* plugInEmotiBit.jpg */,
+				94D8E5C7288753D70071C7AF /* pressResetButton.jpg */,
 				94D8E5C22887522A0071C7AF /* esptool */,
 				94D8E5BD288751EB0071C7AF /* boot_app0.bin */,
 				94D8E5BB288751EB0071C7AF /* EmotiBit_stock_firmware.ino.bootloader.bin */,
@@ -1752,10 +1792,8 @@
 				94E22CFE2882070C00C8F3C0 /* EmotiBit_stock_firmware.ino.feather_m0.bin */,
 				94E22CFD2882070C00C8F3C0 /* EmotiBit.png */,
 				94E22CFA2882070B00C8F3C0 /* exec */,
-				94E22CFC2882070C00C8F3C0 /* instructions */,
 				94E22CFB2882070B00C8F3C0 /* verdana.ttf */,
 				94E22CFF2882070C00C8F3C0 /* verdanab.ttf */,
-				94E22D002882070C00C8F3C0 /* WINC */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
@@ -1816,9 +1854,11 @@
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
 				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
 				E4C2427710CC5ABF004149E2 /* CopyFiles */,
-				8466F1851C04CA0E00918B1C /* ShellScript */,
+				94D8E5CB288754070071C7AF /* CopyFiles */,
+				94D8E5C4288753AC0071C7AF /* CopyFiles */,
 				94D8E5BA2887519A0071C7AF /* CopyFiles */,
 				94D8E5C1288751EF0071C7AF /* CopyFiles */,
+				8466F1851C04CA0E00918B1C /* ShellScript */,
 			);
 			buildRules = (
 			);
