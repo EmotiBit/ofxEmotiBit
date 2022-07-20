@@ -55,9 +55,18 @@ void ofApp::setup() {
 	}
 }
 
+size_t ofApp::getMaxLoggerSize() {
+	size_t out = 0;
+	for (auto it = loggers.cbegin(); it != loggers.cend(); ++it) {
+		std::max(out, it->second->size(LoggerThread::LoggerQueue::PUSH));
+		std::max(out, it->second->size(LoggerThread::LoggerQueue::POP));
+	}
+	return out;
+}
 
 //--------------------------------------------------------------
 void ofApp::startProcessing(bool & processing) {
+
 	if (processing) {
 		bool fileLoadedGUI = false;
 		string filePathGUI;
@@ -155,6 +164,14 @@ void ofApp::startProcessing(bool & processing) {
 
 //--------------------------------------------------------------
 void ofApp::update() {
+	// Give time clear the buffers if >1K lines of data in queue
+	//if (getMaxLoggerSize() > 1000) {
+	//	while (getMaxLoggerSize() > 0) {
+	//		ofSleepMillis(10);
+	//		cout << "*";
+	//	}
+	//}
+
 	if (currentState != State::WARNING_INSUFFICIENT_TIMESYNCS &&inFile.is_open()) {
 		int lines = 0;
 		while (lines < linesPerLoop) {
@@ -1049,7 +1066,9 @@ void ofApp::parseDataLine(string packet) {
 				if (loggerPtr == loggers.end()) {	// we don't have a logger already
 					string outFilePath = inFileDir + inFileBase + "_" + fileTypeModifier + fileExt;
 					cout << "Creating file: " << outFilePath << endl;
-					loggers.emplace(fileTypeModifier, new LoggerThread("", outFilePath));
+					LoggerThread* newLogger = new LoggerThread("", outFilePath);
+					newLogger->setPushThrottlingSize(1000); // Set logger.push() to throttle after falling behind more than 1K lines
+					loggers.emplace(fileTypeModifier, newLogger);
 					loggerPtr = loggers.find(fileTypeModifier);
 					loggerPtr->second->startThread();
 					std::string headerString = "";

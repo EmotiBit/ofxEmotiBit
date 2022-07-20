@@ -263,4 +263,10 @@ public:
 		@brief safely closes all the logger files after writing data
 	*/
 	void closeLoggers();
+
+	/*!
+		@brief returns the size of the largest logger
+		@return size of the largest logger
+	*/
+	size_t getMaxLoggerSize();
 };
