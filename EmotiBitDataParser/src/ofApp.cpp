@@ -6,6 +6,7 @@
 //--------------------------------------------------------------
 void ofApp::setup() {
 	ofLogToConsole();
+	ofSetLogLevel(OF_LOG_VERBOSE);
 #ifdef TARGET_MAC_OS
     ofSetDataPathRoot("../Resources/");
     cout<<"Changed the data pathroot for Release"<<endl;
@@ -146,10 +147,7 @@ void ofApp::startProcessing(bool & processing) {
 		if (inFile.is_open()) {
 			inFile.close();
 		}
-		for (auto it = loggers.cbegin(); it != loggers.cend(); ++it) {
-			delete it->second;
-		}
-		loggers.clear();
+		closeLoggers();
 		currentState = State::IDLE;
 	}
 }
@@ -254,6 +252,7 @@ void ofApp::update() {
 		}
 		else
 		{
+			closeLoggers();
 			processStatus.getParameter().fromString(GUI_STATUS_IDLE);
 		}
 	}
@@ -762,13 +761,27 @@ void ofApp::draw() {
 }
 
 //--------------------------------------------------------------
-void ofApp::exit() {
-	printf("exit()");
+void  ofApp::closeLoggers() {
 	for (auto it = loggers.cbegin(); it != loggers.cend(); ++it) {
+		ofLog(OF_LOG_VERBOSE, it->first
+			+ " push: " + ofToString(it->second->size(LoggerThread::LoggerQueue::PUSH))
+			+ ", pop: " + ofToString(it->second->size(LoggerThread::LoggerQueue::POP)));
+
+		it->second->stopThread();
+
+		ofLog(OF_LOG_VERBOSE, it->first
+			+ " push: " + ofToString(it->second->size(LoggerThread::LoggerQueue::PUSH))
+			+ ", pop: " + ofToString(it->second->size(LoggerThread::LoggerQueue::POP)));
 		delete it->second;
 	}
+
 	loggers.clear();
-	//recordingStatus.removeListener(this, &ofApp::recordButtonPressed);
+}
+
+//--------------------------------------------------------------
+void ofApp::exit() {
+	printf("exit()");
+	closeLoggers();
 }
 
 //--------------------------------------------------------------

@@ -259,4 +259,8 @@ public:
 	double GetMedian(double daArray[], int iSize);
 	bool timestampDataCompare(pair<int, TimestampData> i, pair<int, TimestampData> j);
 	long double linterp(long double x, long double x0, long double x1, long double y0, long double y1);
+	/*!
+		@brief safely closes all the logger files after writing data
+	*/
+	void closeLoggers();
 };
