@@ -384,7 +384,7 @@ void ofApp::setupGuiElementPositions()
 	guiElementPositions["Instructions"] = GuiElementPos{ 30, 300 };
 	guiElementPositions["Progress"] = GuiElementPos{ 30, 290 };
 	//guiElementPositions["InstructionImage"] = GuiElementPos{ 724, 316 };
-	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 460 };
+	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 500 };
 	guiElementPositions["ErrorImage"] = GuiElementPos{ 30, 460 };
 }
 
@@ -398,7 +398,8 @@ void ofApp::setupInstructionList()
 														"\n3. Make sure EmotiBit is not plugged to the computer."
 														"\n4. Press space-bar to continue";
 	
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "5. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)";
+	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "\n5. Press Reset Button on the Feather"
+		"\n6. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)";
 	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "\nDO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS\n"
 																	"\n>>> Uploading WINC firmware updater sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = ">>> Updating WINC FW";
@@ -410,8 +411,8 @@ void ofApp::setupInstructionList()
 	// If you want to add any image to be displayed, just add the image name to the list
 	//ToDo: There is currently no bounds on images goinging outside the window, if too many images have been added to the list
 	instructionImages[State::START];
-	instructionImages[State::DISPLAY_INSTRUCTION] = std::vector<std::string>{ "correctHibernateSwitch.jpg" };
-	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{ "plugInEmotiBit.jpg" };
+	instructionImages[State::DISPLAY_INSTRUCTION] = std::vector<std::string>{ "correctHibernateSwitch.jpg", "un-plugInEmotiBit.jpg" };
+	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{ "pressResetButton.jpg", "plugInEmotiBit.jpg" };
 	instructionImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];
 	instructionImages[State::RUN_WINC_UPDATER];
 	instructionImages[State::UPLOAD_EMOTIBIT_FW];
