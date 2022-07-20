@@ -763,15 +763,19 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void  ofApp::closeLoggers() {
 	for (auto it = loggers.cbegin(); it != loggers.cend(); ++it) {
-		ofLog(OF_LOG_VERBOSE, it->first
+		string out = "";
+		out +=it->first
 			+ " push: " + ofToString(it->second->size(LoggerThread::LoggerQueue::PUSH))
-			+ ", pop: " + ofToString(it->second->size(LoggerThread::LoggerQueue::POP)));
+			+ ", pop: " + ofToString(it->second->size(LoggerThread::LoggerQueue::POP));
 
+		out += ", stopThread()";
 		it->second->stopThread();
 
-		ofLog(OF_LOG_VERBOSE, it->first
-			+ " push: " + ofToString(it->second->size(LoggerThread::LoggerQueue::PUSH))
-			+ ", pop: " + ofToString(it->second->size(LoggerThread::LoggerQueue::POP)));
+		out += 
+			", push: " + ofToString(it->second->size(LoggerThread::LoggerQueue::PUSH))
+			+ ", pop: " + ofToString(it->second->size(LoggerThread::LoggerQueue::POP));
+
+		ofLog(OF_LOG_VERBOSE, out);
 		delete it->second;
 	}
 
@@ -780,7 +784,7 @@ void  ofApp::closeLoggers() {
 
 //--------------------------------------------------------------
 void ofApp::exit() {
-	printf("exit()");
+	ofLog(OF_LOG_NOTICE, "exit()");
 	closeLoggers();
 }
 
