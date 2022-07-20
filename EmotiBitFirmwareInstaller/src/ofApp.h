@@ -98,15 +98,6 @@ class ofApp : public ofBaseApp{
 			@return list of devices plugged into the system
 		*/
 		ofxIO::SerialDeviceInfo::DeviceList getDeviceList();
-		
-		/*!
-            @brief Function to call and wait while system call is being executed
-         */
-        void makeSyncSystemCall(std::string command, std::string echoMsg = "executing system command");
-		/*!
-			@brief Function to run system commands to install drivers for ESP32
-		*/
-		void installEspDrivers();
 
 		/*!
 			@brief Setup the locations where the GUI elements are going to be drawn

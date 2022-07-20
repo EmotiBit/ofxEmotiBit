@@ -48,7 +48,6 @@ void ofApp::setup(){
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::START;
 	ofLogNotice("Step") << "Running ESP driver installer";
-	//installEspDrivers();
 	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
@@ -610,16 +609,24 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 	}
 	else
 	{
-		// perform a check for ESP useing device description
+		// perform a check for ESP using device description
         // ToDo: Find a better way to detect ESP32. This approach is not "robust"
 		std::string espDescIdentifier = "Silicon";
         std::string espSlabIdentifier = "SLAB";
+#ifdef TARGET_WIN32
+		if (info.desc.find(espDescIdentifier) != std::string::npos)
+		{
+			// It is ESP!
+			return Board::FEATHER_ESP_32;
+		}
+#elif defined TARGET_OSX
         // if descriptions says silicon labs and port is not SLAB_USBtoUART
         if (info.desc.find(espDescIdentifier) != std::string::npos && info.port.find(espSlabIdentifier) != std::string::npos)
 		{
 			// It is ESP!
 			return Board::FEATHER_ESP_32;
 		}
+#endif
 	}
 	return Board::NONE;
 }
@@ -927,51 +934,3 @@ bool ofApp::uploadEmotiBitFw()
 	}
 }
 
-void ofApp::installEspDrivers()
-{
-	std::string command = "";
-	std::string osDir = "";
-	std::string appName = "";
-    std::string appPath;
-#ifdef TARGET_WIN32
-	osDir = "win";
-	appName = "CP210xVCPInstaller_x64.exe";
-    appPath = ofFilePath::join("exec", osDir);
-    command += ofToDataPath(ofFilePath::join(appPath, appName));
-    makeSyncSystemCall(command, "installing drivers");
-#elif defined TARGET_OSX
-    osDir = "macOS";
-    std::string ext = ".dmg";
-    appName = "SiLabsUSBDriverDisk";
-    // mount dmg package
-    command = "hdiutil attach ";
-    appPath = ofFilePath::join("exec", osDir);
-    appPath = ofToDataPath(ofFilePath::join(appPath, appName));
-    command += (appPath + ext);
-    makeSyncSystemCall(command, "mounting driver img");
-    // install package from
-    command = "cp -R \"/Volumes/Silicon Labs VCP Driver Install Disk/Install CP210x VCP Driver.app\" /Applications";
-    makeSyncSystemCall(command, "installing drivers");
-    // Run driver installer
-    command = "open -a \"Install CP210x VCP Driver\"";
-    makeSyncSystemCall(command);
-    // Unmount driver disk image
-    command = "hdiutil detach \"/Volumes/Silicon Labs VCP Driver Install Disk\"";
-    makeSyncSystemCall(command);
-#endif
-	
-}
-
-void ofApp::makeSyncSystemCall(std::string command, std::string echoMsg)
-{
-    ofLogNotice("Executing command") << command;
-    threadedSystemCall.setup(command);
-    threadedSystemCall.startThread();
-    systemCommandExecuted = true;
-    
-    while (!checkSystemCallResponse())
-    {
-        ofLog(OF_LOG_NOTICE, echoMsg);
-        ofSleepMillis(2000);
-    }
-}
