@@ -20,6 +20,9 @@ If you want to modify the code(or build the tools in Linux), below are the requi
   - liblsl64.lib should always be linked to in under _solution properties->linker->general->additional library directories_ and _solution properties->linker->input-> additional dependencies_
   - both of these libs are handled properly by default, but should be considered if deviating from release code
 - The project is built on a 64-bit architecture. Make sure you are on a machine that support `x64` build platform.
+- Required to build EmotiBit FirmwareInstaller
+  - ofxSerial - https://github.com/bakercp/ofxSerial
+  - ofxIO - https://github.com/bakercp/ofxIO
 ## macOS Issues resolution
 - **Adding paths to Library search paths**
   - Check if the directory paths for the files `liblsl64-static.a` and `liblslboost.a` are already present in the `project` > `Build Settings` > `Library Search Paths`. If they are not present, follow the below steps:  
