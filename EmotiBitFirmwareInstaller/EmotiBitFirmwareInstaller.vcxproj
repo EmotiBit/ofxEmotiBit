@@ -24,7 +24,7 @@
     <TargetPlatformVersion>$(WindowsTargetPlatformVersion)</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
+    <ProjectGuid>{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>EmotiBitFirmwareInstaller</RootNamespace>
   </PropertyGroup>
