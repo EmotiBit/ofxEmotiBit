@@ -47,7 +47,6 @@ void ofApp::setup(){
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::START;
-	ofLogNotice("Step") << "Running ESP driver installer";
 	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
