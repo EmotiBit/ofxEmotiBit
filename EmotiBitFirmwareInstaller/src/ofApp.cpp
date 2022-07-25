@@ -45,6 +45,12 @@ void ofApp::setup(){
 #endif
 	ofSetWindowTitle("EmotiBit Firmware Installer (v" + ofxEmotiBitVersion + ")");
 	ofLogToConsole();
+#ifdef TARGET_LINUX
+	ofLogNotice() << "To install firmware on linux, please follow instructions at https://github.com/EmotiBit/EmotiBit_Docs/blob/master/Getting_Started.md#for-linux-and-advanced-users";
+	ofSleepMillis(5000);
+	ofExit(0);
+	return;
+#endif
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::START;
 	setupGuiElementPositions();
