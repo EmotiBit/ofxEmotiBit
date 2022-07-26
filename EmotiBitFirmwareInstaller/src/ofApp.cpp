@@ -399,7 +399,7 @@ void ofApp::setupInstructionList()
 	onScreenInstructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
 													   "\n2. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
 													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
-														"\n3. Make sure EmotiBit is not plugged to the computer."
+														"\n3. Make sure EmotiBit is NOT PLUGGED to the computer."
 														"\n4. Press space-bar to continue";
 	
 	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "\n5. Press Reset Button on the Feather"
