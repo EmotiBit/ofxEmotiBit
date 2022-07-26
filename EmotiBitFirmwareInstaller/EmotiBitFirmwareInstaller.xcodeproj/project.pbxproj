@@ -2192,7 +2192,10 @@
 					../../../addons/EmotiBit_XPlat_Utils/src,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
-				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
+				ICON_FILE = ../EmotiBitIcons/macOS/;
+				ICON_FILE_PATH = ../EmotiBitIcons/macOS/;
+				ICON_NAME_DEBUG = EmotiBit.icns;
+				ICON_NAME_RELEASE = EmotiBit.icns;
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -2435,7 +2438,10 @@
 					../../../addons/EmotiBit_XPlat_Utils/src,
 				);
 				ICON = "$(ICON_NAME_DEBUG)";
-				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
+				ICON_FILE = ../EmotiBitIcons/macOS/;
+				ICON_FILE_PATH = ../EmotiBitIcons/macOS/;
+				ICON_NAME_DEBUG = EmotiBit.icns;
+				ICON_NAME_RELEASE = EmotiBit.icns;
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -2518,7 +2524,10 @@
 					../../../addons/EmotiBit_XPlat_Utils/src,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
-				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
+				ICON_FILE = ../EmotiBitIcons/macOS/;
+				ICON_FILE_PATH = ../EmotiBitIcons/macOS/;
+				ICON_NAME_DEBUG = EmotiBit.icns;
+				ICON_NAME_RELEASE = EmotiBit.icns;
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
