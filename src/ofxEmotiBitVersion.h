@@ -2,7 +2,7 @@
 //#include <string>
 #include "ofMain.h"
 
-const std::string ofxEmotiBitVersion = "1.5.4.feat-fix-defaultJsonParsing.0";
+const std::string ofxEmotiBitVersion = "1.5.4.feat-fix-defaultJsonParsing.1";
 static const char SOFTWARE_VERSION_PREFIX = 'v';
 
 static void writeOfxEmotiBitVersionFile() {
