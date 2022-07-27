@@ -231,7 +231,8 @@ public:
 	const string GUI_STRING_BATTERY_LEVEL = "Battery Level";
 	const string GUI_STRING_EMOTIBIT_SELECTED = "EmotiBit";
 	const string GUI_STRING_EMPTY_USER_NOTE = "[Add a note]";
-
+	const string JSON_SETTINGS_STRING_LSL_MARKER_INFO_NAME = "name";
+	const string JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOOURCE_ID = "sourceId";
 	//const string GUI_POWER_STATUS_MENU_NAME = "RECORD";
 	const string GUI_POWER_MODE_GROUP_NAME = "Power Mode";
 	const string GUI_STRING_NORMAL_POWER =	 "Normal         (data streaming)";

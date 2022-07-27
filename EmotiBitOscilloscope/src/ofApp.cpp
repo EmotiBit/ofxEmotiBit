@@ -1702,11 +1702,11 @@ void ofApp::drawConsole()
 		if (consoleOutput.lslMarkerCount)
 		{
 			_consoleString += EmotiBitPacket::PAYLOAD_DELIMITER;
-			std::string updateStr = " LSL markers Received (name: " + lslMarkerStreamInfo.name;
+			std::string updateStr = " LSL markers Received (" + JSON_SETTINGS_STRING_LSL_MARKER_INFO_NAME + ": " + lslMarkerStreamInfo.name;
 			if (!lslMarkerStreamInfo.srcId.empty())
 			{
 				updateStr += EmotiBitPacket::PAYLOAD_DELIMITER;
-				updateStr += " source_id: ";
+				updateStr += (" " + JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOOURCE_ID + ": ");
 				updateStr += lslMarkerStreamInfo.srcId;
 			}
 			updateStr += ("): " + ofToString(consoleOutput.lslMarkerCount));
@@ -1716,11 +1716,11 @@ void ofApp::drawConsole()
 		{
 			_consoleString += EmotiBitPacket::PAYLOAD_DELIMITER;
 			std::string updateStr = "";
-			_consoleString += (" Searching for LSL stream:: name: " + lslMarkerStreamInfo.name);
+			_consoleString += (" Searching for LSL stream:: " + JSON_SETTINGS_STRING_LSL_MARKER_INFO_NAME + ": " + lslMarkerStreamInfo.name);
 			if (!lslMarkerStreamInfo.srcId.empty())
 			{
 				updateStr += EmotiBitPacket::PAYLOAD_DELIMITER;
-				updateStr += " source_id: ";
+				updateStr += (" " + JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOOURCE_ID + ": ");
 				updateStr += lslMarkerStreamInfo.srcId;
 			}
 			_consoleString += updateStr;
@@ -1896,8 +1896,8 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 
 		emotiBitWiFi.setHostAdvertisingSettings(settings);
 		// ToDo: Add error handling for each section so that one section can fail, but the rest of the file can load properly and run.
-		lslMarkerStreamInfo.name = jsonSettings["lsl"]["marker"]["name"].asString();
-		lslMarkerStreamInfo.srcId = jsonSettings["lsl"]["marker"]["source_id"].asString();
+		lslMarkerStreamInfo.name = jsonSettings["lsl"]["marker"][JSON_SETTINGS_STRING_LSL_MARKER_INFO_NAME].asString();
+		lslMarkerStreamInfo.srcId = jsonSettings["lsl"]["marker"][JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOOURCE_ID].asString();
 		ofLog(OF_LOG_NOTICE, "Loaded " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
 	}
 	catch (exception e)
