@@ -164,14 +164,6 @@ void ofApp::startProcessing(bool & processing) {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	// Give time clear the buffers if >1K lines of data in queue
-	//if (getMaxLoggerSize() > 1000) {
-	//	while (getMaxLoggerSize() > 0) {
-	//		ofSleepMillis(10);
-	//		cout << "*";
-	//	}
-	//}
-
 	if (currentState != State::WARNING_INSUFFICIENT_TIMESYNCS &&inFile.is_open()) {
 		int lines = 0;
 		while (lines < linesPerLoop) {
@@ -788,9 +780,15 @@ void  ofApp::closeLoggers() {
 		out += ", stopThread()";
 		it->second->stopThread();
 
+		size_t pushSize = it->second->size(LoggerThread::LoggerQueue::PUSH);
+		size_t popSize = it->second->size(LoggerThread::LoggerQueue::POP);
 		out += 
-			", push: " + ofToString(it->second->size(LoggerThread::LoggerQueue::PUSH))
-			+ ", pop: " + ofToString(it->second->size(LoggerThread::LoggerQueue::POP));
+			", push: " + ofToString(pushSize)
+			+ ", pop: " + ofToString(popSize);
+
+		if (pushSize > 0 || popSize > 0) {
+			ofLog(OF_LOG_ERROR, it->first + " buffer writes incomplete. Push Queue: " + ofToString(pushSize) + ", Pop Queue: " + ofToString(popSize) );
+		}
 
 		ofLog(OF_LOG_VERBOSE, out);
 		delete it->second;
