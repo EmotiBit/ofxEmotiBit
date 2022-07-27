@@ -209,7 +209,7 @@ void ofApp::update() {
 					mFile << ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first, 6) << ","
 						<< ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second, 6) << ",";
 					// Add column headers for additional time domains read from parsed data format file
-					for (int i = 0;i <= parsedDataFormat.additionalTimestamps.size() - 1; i++)
+					for (int i = 0;i <= (int)parsedDataFormat.additionalTimestamps.size() - 1; i++)
 					{
 						auto timeDomain = parsedDataFormat.additionalTimestamps.at(i);
 						mFile << ofToString(timeSyncMap.anchorPoints[timeDomain].first, 6) << ","
