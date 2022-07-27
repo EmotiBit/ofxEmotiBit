@@ -209,7 +209,7 @@ void ofApp::update() {
 					mFile << ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first, 6) << ","
 						<< ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second, 6) << ",";
 					// Add column headers for additional time domains read from parsed data format file
-					for (int i = 0;i <= parsedDataFormat.additionalTimestamps.size() - 1; i++)
+					for (int i = 0;i <= (int)parsedDataFormat.additionalTimestamps.size() - 1; i++)
 					{
 						auto timeDomain = parsedDataFormat.additionalTimestamps.at(i);
 						mFile << ofToString(timeSyncMap.anchorPoints[timeDomain].first, 6) << ","
@@ -265,18 +265,46 @@ void ofApp::ParsedDataFormat::loadFromFile(std::string filename, bool absolute)
 	try
 	{
 		// ToDo: find a place for these settings to be stored. a struct in ofApp?
-		jsonSettings.open(ofToDataPath(filename, absolute));
-		int numEntries = jsonSettings["timestampColumns"].size();
-		for (int i = 0; i < numEntries; i++)
+		ofFile parsedDataFormatFile(ofToDataPath(filename));
+		if (parsedDataFormatFile.exists())
 		{
-			if (jsonSettings["timestampColumns"][i]["addToOutput"].asBool())
+			if (jsonSettings.open(ofToDataPath(filename, absolute)))
 			{
-				std::string colHeader = jsonSettings["timestampColumns"][i]["columnHeader"].asString();
-				parsedDataHeaders.insert(parsedDataHeaders.begin(), colHeader);
-				additionalTimestamps.push_back(jsonSettings["timestampColumns"][i]["identifier"].asString());
+				if (jsonSettings.isMember("timestampColumns"))
+				{
+					int numEntries = jsonSettings["timestampColumns"].size();
+					for (int i = 0; i < numEntries; i++)
+					{
+						if (jsonSettings["timestampColumns"][i].isMember("addToOutput"))
+						{
+							if (jsonSettings["timestampColumns"][i]["addToOutput"].asBool())
+							{
+								std::string colHeader = jsonSettings["timestampColumns"][i]["columnHeader"].asString();
+								parsedDataHeaders.insert(parsedDataHeaders.begin(), colHeader);
+								additionalTimestamps.push_back(jsonSettings["timestampColumns"][i]["identifier"].asString());
+							}
+						}
+						else
+						{
+							ofLogNotice() << "addToOutput not found";
+						}
+					}
+					ofLog(OF_LOG_NOTICE, "Loaded " + filename + ": \n" + jsonSettings.getRawString(true));
+				}
+				else
+				{
+					ofLogNotice("Timestamp column list not found") << "Parsing with EmotiBit timestamps";
+				}
+			}
+			else
+			{
+				ofLogNotice() << "Parsing with only EmotiBit timestamps";
 			}
 		}
-		ofLog(OF_LOG_NOTICE, "Loaded " + filename + ": \n" + jsonSettings.getRawString(true));
+		else
+		{
+			ofLogNotice("File not found") << filename + ".Parsing with only EmotiBit timestamps";
+		}
 	}
 	catch (exception e)
 	{

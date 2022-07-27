@@ -31,8 +31,8 @@ public:
 	*/
 	struct LslMarkerStreamInfo {
 		// For more info: https://github.com/sccn/liblsl/blob/5eded5c1d381a1a5fbbcce105edfaa53f009176a/include/lsl_cpp.h#L161
-		std::string name;  //!< marker stream inlet name for LSL
-		std::string srcId;  //!< marker stream inlet sourceId for LSL
+		std::string name = "";  //!< marker stream inlet name for LSL.
+		std::string srcId = "";  //!< marker stream inlet sourceId for LSL.
 	}lslMarkerStreamInfo;
 	void keyPressed(int key);
 	void keyReleased(int key);
@@ -232,7 +232,7 @@ public:
 	const string GUI_STRING_EMOTIBIT_SELECTED = "EmotiBit";
 	const string GUI_STRING_EMPTY_USER_NOTE = "[Add a note]";
 	const string JSON_SETTINGS_STRING_LSL_MARKER_INFO_NAME = "name";
-	const string JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOOURCE_ID = "sourceId";
+	const string JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOURCE_ID = "sourceId";
 	//const string GUI_POWER_STATUS_MENU_NAME = "RECORD";
 	const string GUI_POWER_MODE_GROUP_NAME = "Power Mode";
 	const string GUI_STRING_NORMAL_POWER =	 "Normal         (data streaming)";
