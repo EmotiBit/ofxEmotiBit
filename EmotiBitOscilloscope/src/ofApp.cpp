@@ -856,8 +856,8 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 
 	string outputName = output.getName();
 	bool selected = output.cast<bool>().get();
-
 	for (int j = 0; j < sendDataList.size(); j++) {
+		// if the Tx type is disabled, do nothing
 		if (sendDataDisabled.at(j))
 		{
 			if (selected)
@@ -883,10 +883,13 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 								<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
 								oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 							sendOsc = true;
+							
 						}
 						catch (exception e)
 						{
 							cout << "OSC output setup failed " << endl;
+							sendDataList.at(j).set(false);
+							sendOsc = false;
 						}
 					}
 					else
@@ -897,7 +900,25 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 			}
 		}
 	}
-
+	bool isSending = false;
+	// check if we are sending data out on any channel
+	for (int i = 0; i < sendDataList.size(); i++)
+	{
+		if (sendDataList.at(i).get())
+		{
+			// we are sending data on some channel
+			isSending = true;
+			break;
+		}
+	}
+	if (isSending)
+	{
+		sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, "");
+	}
+	else
+	{
+		sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, GUI_STRING_SEND_DATA_NONE);
+	}
 	return;  
 #if (0)
 	if (selected) {
@@ -1685,7 +1706,7 @@ void ofApp::drawConsole()
 			if (!lslMarkerStreamInfo.srcId.empty())
 			{
 				updateStr += EmotiBitPacket::PAYLOAD_DELIMITER;
-				updateStr += (" " + JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOOURCE_ID + ": ");
+				updateStr += (" " + JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOURCE_ID + ": ");
 				updateStr += lslMarkerStreamInfo.srcId;
 			}
 			updateStr += ("): " + ofToString(consoleOutput.lslMarkerCount));
@@ -1699,7 +1720,7 @@ void ofApp::drawConsole()
 			if (!lslMarkerStreamInfo.srcId.empty())
 			{
 				updateStr += EmotiBitPacket::PAYLOAD_DELIMITER;
-				updateStr += (" " + JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOOURCE_ID + ": ");
+				updateStr += (" " + JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOURCE_ID + ": ");
 				updateStr += lslMarkerStreamInfo.srcId;
 			}
 			_consoleString += updateStr;
@@ -1848,36 +1869,104 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 	ofxJSONElement jsonSettings;
 	try
 	{
-		// ToDo find a nice home like EmotiBitFileIO.h/cpp
-		EmotiBitWiFiHost::HostAdvertisingSettings settings;
-		jsonSettings.open(ofToDataPath(settingsFilePath, absolute));
-
-		settings.enableBroadcast = jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"].asBool();
-		settings.enableUnicast = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["enabled"].asBool();
-		settings.unicastIpRange = make_pair(
-			jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMin"].asInt(),
-			jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMax"].asInt()
-		);
-
-		int numIncludes = jsonSettings["wifi"]["network"]["includeList"].size();
-		settings.networkIncludeList.clear();
-		for (int i = 0; i < numIncludes; i++)
+		ofFile commSettingsFile(ofToDataPath(settingsFilePath));
+		if (commSettingsFile.exists())
 		{
-			settings.networkIncludeList.push_back(jsonSettings["wifi"]["network"]["includeList"][i].asString());
-		}
+			// ToDo find a nice home like EmotiBitFileIO.h/cpp
+			EmotiBitWiFiHost::HostAdvertisingSettings settings;
+			EmotiBitWiFiHost::HostAdvertisingSettings defaultSettings = emotiBitWiFi.getHostAdvertisingSettings();// if setter is not called, getter returns default values
+			if (jsonSettings.open(ofToDataPath(settingsFilePath, absolute)))
+			{
+				if (jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"].isMember("enabled"))
+				{
+					settings.enableBroadcast = jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"].asBool();
+				}
+				else
+				{
+					ofLogNotice("Broadcast settings not found in ") <<  settingsFilePath + ".Using default value";
+					settings.enableBroadcast = defaultSettings.enableBroadcast;
+				}
+				if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("enabled"))
+				{
+					settings.enableUnicast = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["enabled"].asBool();
+				}
+				else
+				{
+					ofLogNotice("Unicast enable settings not found in ") << settingsFilePath + ". Using default value";
+					settings.enableUnicast = defaultSettings.enableUnicast;
+				}
+				if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("ipMin") &&
+					jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("ipMax"))
+				{
+					settings.unicastIpRange = make_pair(
+						jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMin"].asInt(),
+						jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMax"].asInt()
+					);
+				}
+				else
+				{
+					ofLogNotice("unicast ipRange settings not found in ") << settingsFilePath + ". Using default value";
+					settings.unicastIpRange = defaultSettings.unicastIpRange;
+				}
 
-		int numExcludes = jsonSettings["wifi"]["network"]["excludeList"].size();
-		settings.networkExcludeList.clear();
-		for (int i = 0; i < numIncludes; i++)
+				if (jsonSettings["wifi"]["network"].isMember("includeList"))
+				{
+					int numIncludes = jsonSettings["wifi"]["network"]["includeList"].size();
+					settings.networkIncludeList.clear();
+					for (int i = 0; i < numIncludes; i++)
+					{
+						settings.networkIncludeList.push_back(jsonSettings["wifi"]["network"]["includeList"][i].asString());
+					}
+				}
+				else
+				{
+					ofLogNotice("networkIncludeList settings not found in ") << settingsFilePath + ". Using default value";
+					settings.networkIncludeList = defaultSettings.networkIncludeList;
+				}
+
+				if (jsonSettings["wifi"]["network"].isMember("excludeList"))
+				{
+					int numExcludes = jsonSettings["wifi"]["network"]["excludeList"].size();
+					settings.networkExcludeList.clear();
+					for (int i = 0; i < numExcludes; i++)
+					{
+						settings.networkExcludeList.push_back(jsonSettings["wifi"]["network"]["excludeList"][i].asString());
+					}
+				}
+				else
+				{
+					ofLogNotice("networkExcludeList settings not found in ") << settingsFilePath + ". Using default value";
+					settings.networkExcludeList = defaultSettings.networkExcludeList;
+				}
+
+				emotiBitWiFi.setHostAdvertisingSettings(settings);
+				
+				if (jsonSettings.isMember("lsl"))
+				{
+					if (jsonSettings["lsl"].isMember("marker"))
+					{
+						if (jsonSettings["lsl"]["marker"].isMember(JSON_SETTINGS_STRING_LSL_MARKER_INFO_NAME))
+							lslMarkerStreamInfo.name = jsonSettings["lsl"]["marker"][JSON_SETTINGS_STRING_LSL_MARKER_INFO_NAME].asString();
+						if (jsonSettings["lsl"]["marker"].isMember(JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOURCE_ID))
+							lslMarkerStreamInfo.srcId = jsonSettings["lsl"]["marker"][JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOURCE_ID].asString();
+						// Note: We don't have to include an "else" here because LSL is a very special feature, and it is not required to 
+						// crowd the console with warnings about this feature.
+					}
+				}
+				ofLog(OF_LOG_NOTICE, "Loaded " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
+			}
+			else
+			{
+				ofLog(OF_LOG_NOTICE, "Using default network parameters");
+				emotiBitWiFi.setHostAdvertisingSettings(emotiBitWiFi.getHostAdvertisingSettings()); // if setter is not called, getter returns default values
+			}
+		}
+		else
 		{
-			settings.networkExcludeList.push_back(jsonSettings["wifi"]["network"]["excludeList"][i].asString());
+			ofLogError("File does not exist at") << settingsFilePath;
+			ofLog(OF_LOG_NOTICE, "using default network parameters");
+			emotiBitWiFi.setHostAdvertisingSettings(emotiBitWiFi.getHostAdvertisingSettings()); // if setter is not called, getter returns default values
 		}
-
-		emotiBitWiFi.setHostAdvertisingSettings(settings);
-		// ToDo: Add error handling for each section so that one section can fail, but the rest of the file can load properly and run.
-		lslMarkerStreamInfo.name = jsonSettings["lsl"]["marker"][JSON_SETTINGS_STRING_LSL_MARKER_INFO_NAME].asString();
-		lslMarkerStreamInfo.srcId = jsonSettings["lsl"]["marker"][JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOOURCE_ID].asString();
-		ofLog(OF_LOG_NOTICE, "Loaded " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
 	}
 	catch (exception e)
 	{
