@@ -1193,13 +1193,16 @@ void ofApp::parseDataLine(string packet) {
 							{
 								parsedDataRow += ofToString((long double)c, 6) + ",";
 							}
-							long double newDomainTimestamp;
-							newDomainTimestamp = linterp((long double)c,
-								timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL].first,
-								timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL].second,
-								timeSyncMap.anchorPoints[newTimeDomain].first,
-								timeSyncMap.anchorPoints[newTimeDomain].second);
-							parsedDataRow = ofToString(newDomainTimestamp, 6) + "," + parsedDataRow;
+							else
+							{
+								long double newDomainTimestamp;
+								newDomainTimestamp = linterp((long double)c,
+									timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL].first,
+									timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL].second,
+									timeSyncMap.anchorPoints[newTimeDomain].first,
+									timeSyncMap.anchorPoints[newTimeDomain].second);
+								parsedDataRow = ofToString(newDomainTimestamp, 6) + "," + parsedDataRow;
+							}
 						}
 						loggerPtr->second->push(
 							parsedDataRow + ofToString(timestamp, 3) + "," +
