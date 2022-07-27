@@ -856,8 +856,8 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 
 	string outputName = output.getName();
 	bool selected = output.cast<bool>().get();
-
 	for (int j = 0; j < sendDataList.size(); j++) {
+		// if the Tx type is disabled, do nothing
 		if (sendDataDisabled.at(j))
 		{
 			if (selected)
@@ -883,10 +883,13 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 								<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
 								oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 							sendOsc = true;
+							
 						}
 						catch (exception e)
 						{
 							cout << "OSC output setup failed " << endl;
+							sendDataList.at(j).set(false);
+							sendOsc = false;
 						}
 					}
 					else
@@ -897,7 +900,25 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 			}
 		}
 	}
-
+	bool isSending = false;
+	// check if we are sending data out on any channel
+	for (int i = 0; i < sendDataList.size(); i++)
+	{
+		if (sendDataList.at(i).get())
+		{
+			// we are sending data on some channel
+			isSending = true;
+			break;
+		}
+	}
+	if (isSending)
+	{
+		sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, "");
+	}
+	else
+	{
+		sendOptionSelected.setup(GUI_STRING_SEND_DATA_VIA, GUI_STRING_SEND_DATA_NONE);
+	}
 	return;  
 #if (0)
 	if (selected) {
