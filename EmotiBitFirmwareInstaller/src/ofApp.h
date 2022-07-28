@@ -19,11 +19,13 @@
 #include "ofxGui.h"
 #include "unordered_map"
 #include <iostream>
+#include <algorithm>
 #include <stdexcept>
 #include <stdio.h>
 #include <string>
 #include "ThreadedSystemCall.h"
 #include "ofxEmotiBitVersion.h"
+#include <ofxSerial.h>
 
 class ofApp : public ofBaseApp{
 
@@ -43,7 +45,60 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
+        struct DeviceInfo {
+            std::string vid = "";  //!< Vendor ID
+            std::string pid = "";  //!< Product ID
+            std::string port = "";
+            std::string desc = "";
+        };
+    
+        enum Board {
+            NONE = 0,
+            FEATHER_M0,
+            FEATHER_ESP_32
+        };
+
+		/*!
+			@brief Function to parse device hardware info. from string
+			@param deviceHardwareInfo string containing hardware info
+			@return Returns struct conatining parsed hardware info
+		*/
+		DeviceInfo parseDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo);
+
+		/*!
+			@brief Function to convert hardware info into board type
+			@param deviceHardwareInfo string containing the hardware info
+			@return Board type
+		*/
+		Board getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo);
+
+		/*!
+			@brief get the type of Board Installer is working with
+			@return class vairable containing board type
+		*/
+		Board getBoard();
+
+		/*!
+			@brief Set the board type
+			@param boardType Type of board
+		*/
+		void setBoard(Board board);
+
+		void assignComPortToBoard(Board board, std::string comPort);
+
+		/*!
+			@brief Function to get COM port list from device list
+			@param deviceList list of connected devices 
+			@return vector of COM ports
+		*/
+		std::vector<std::string> getComListFromDeviceList(ofxIO::SerialDeviceInfo::DeviceList deviceList);
+
+		/*!
+			@breif Function to get a list of devices connected to the system
+			@return list of devices plugged into the system
+		*/
+		ofxIO::SerialDeviceInfo::DeviceList getDeviceList();
+
 		/*!
 			@brief Setup the locations where the GUI elements are going to be drawn
 		*/
@@ -61,8 +116,9 @@ class ofApp : public ofBaseApp{
 
 		/*!
 			@brief Function that progress state of the state machine
+			@param state Specify which state to progress to. By default, increments state by 1
 		*/
-		void progressToNextState();
+		void progressToNextState(int state = -1);
 
 		/*!
 			@brief Function to detect new COM port after feather is plugged in
@@ -70,12 +126,14 @@ class ofApp : public ofBaseApp{
 		*/
 		int detectFeatherPlugin();
 		
+		bool updateUsingEspTool(std::string fileName);
+
 		/*!
 			@brief Function to run bossa to upload sketch(bin) to feather
-			@param filePath relative path of the bin file of the sketch
+			@param filename name of the FW binary
 			@return true if sketch was uploaded correctly
 		*/
-		bool updateUsingBossa(std::string filePath);
+		bool updateUsingBossa(std::string filename);
 
 		/*!
 			@brief Function to check progress on the separate thread executing system calls
@@ -139,8 +197,11 @@ class ofApp : public ofBaseApp{
 			INSTALLER_ERROR,
 			LENGTH
 		}_state;
-
-
+		unordered_map<int, std::vector<std::string>> boardComList;
+		// refer: https://github.com/adafruit/ArduinoCore-samd/blob/bd2a9cdbe7433ec88701591c49b1224c8686e940/boards.txt#L29-L35
+		const std::vector<std::string> ADARUIT_VID_LIST = { "239A" };
+		const std::vector<std::string> ADARUIT_PID_LIST = { "800B", "000B", "0015" };
+		Board _board = Board::NONE;
 		bool systemCommandExecuted = false;
 		ThreadedSystemCall threadedSystemCall;
 		ofImage titleImage;

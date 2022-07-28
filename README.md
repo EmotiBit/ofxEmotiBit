@@ -20,6 +20,9 @@ If you want to modify the code(or build the tools in Linux), below are the requi
   - liblsl64.lib should always be linked to in under _solution properties->linker->general->additional library directories_ and _solution properties->linker->input-> additional dependencies_
   - both of these libs are handled properly by default, but should be considered if deviating from release code
 - The project is built on a 64-bit architecture. Make sure you are on a machine that support `x64` build platform.
+- Required to build EmotiBit FirmwareInstaller
+  - ofxSerial - https://github.com/bakercp/ofxSerial
+  - ofxIO - https://github.com/bakercp/ofxIO
 ## macOS Issues resolution
 - **Adding paths to Library search paths**
   - Check if the directory paths for the files `liblsl64-static.a` and `liblslboost.a` are already present in the `project` > `Build Settings` > `Library Search Paths`. If they are not present, follow the below steps:  
@@ -42,6 +45,8 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 - You will also require net-tools to run certain commands required by the Oscilloscope. Run `sudo apt install net-tools`
 - That's it! You now are ready to run EmotiBit Oscilloscope!
 - To run the Oscilloscope, cd to `(OF_ROOT)/addons/ofxEmotiBit/EmotiBitOscilloscope`. Run the command `make Debug` or `make` to create the release executable.
-
-
+- Note: When trying to run the EmotiBit Oscilloscope, if you get an error with the following message `cannot open shared object file: No such file or directory : liblsl-1.14.0-manylinux2010_x64`, you will have to update the `LD_LIBRARY_PATH` variable.
+  - To do so, run the following command in terminal: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/that/leads/to/EmotiBitOscilloscope/bin`
+  - replace `/path/that/leads/to/EmotiBitOscilloscope/bin` with the actual path to the bin folder in EmotiBitOscillosocpe directory
+  - Compile the source again.
 

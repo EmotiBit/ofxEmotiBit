@@ -40,16 +40,22 @@ Additional Notes:
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+#ifdef TARGET_OSX
+    ofSetDataPathRoot("../Resources/");
+#endif
 	ofSetWindowTitle("EmotiBit Firmware Installer (v" + ofxEmotiBitVersion + ")");
 	ofLogToConsole();
+#ifdef TARGET_LINUX
+	ofLogNotice() << "To install firmware on linux, please follow instructions at https://github.com/EmotiBit/EmotiBit_Docs/blob/master/Getting_Started.md#for-linux-and-advanced-users";
+	ofSleepMillis(5000);
+	ofExit(0);
+	return;
+#endif
 	ofSetLogLevel(OF_LOG_NOTICE);
 	_state = State::START;
 	setupGuiElementPositions();
 	setupErrorMessageList();
 	setupInstructionList();
-    #ifdef TARGET_OSX
-        ofSetDataPathRoot("../Resources/");
-    #endif
 	titleImage.load("EmotiBit.png");
 	titleImage.resize(300, 266); // width, height
 	ofBackground(255, 255, 255, 255);
@@ -68,6 +74,8 @@ void ofApp::setup(){
     {
         ofLogNotice() << "Title Font loaded correctly";
     }
+	boardComList[Board::FEATHER_M0];
+	boardComList[Board::FEATHER_ESP_32];
 }
 
 //--------------------------------------------------------------
@@ -99,8 +107,16 @@ void ofApp::update(){
 			if (numDevicesDetected == 1)
 			{
 				// Feather Detected!
-				// progress to next state;
-				progressToNextState();
+                if (getBoard() == Board::FEATHER_M0)
+				{
+					// progress to next state;
+					progressToNextState();
+				}
+                else if (getBoard() == Board::FEATHER_ESP_32)
+				{
+					// progress to flashing FW;
+					progressToNextState((int)State::UPLOAD_EMOTIBIT_FW);
+				}
 			}
 			else if (numDevicesDetected > 1)
 			{
@@ -214,11 +230,18 @@ void ofApp::raiseError(std::string additionalMessage)
 	pingProgTryCount = 0;
 }
 
-void ofApp::progressToNextState()
+void ofApp::progressToNextState(int state)
 {
 	stateStartTime = ofGetElapsedTimeMillis();
 	// ToDo: verify behavior if states dont have a continuous emnumeration
-	_state = State((int)_state + 1);
+	if (state == -1)
+	{
+		_state = State((int)_state + 1);
+	}
+	else
+	{
+		_state = (State)state;
+	}
 	ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));
 	onScreenInstruction = onScreenInstruction + "\n" + onScreenInstructionList[_state];
 	onScreenInstructionImage.clear();
@@ -365,7 +388,7 @@ void ofApp::setupGuiElementPositions()
 	guiElementPositions["Instructions"] = GuiElementPos{ 30, 300 };
 	guiElementPositions["Progress"] = GuiElementPos{ 30, 290 };
 	//guiElementPositions["InstructionImage"] = GuiElementPos{ 724, 316 };
-	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 460 };
+	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 500 };
 	guiElementPositions["ErrorImage"] = GuiElementPos{ 30, 460 };
 }
 
@@ -376,10 +399,11 @@ void ofApp::setupInstructionList()
 	onScreenInstructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
 													   "\n2. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
 													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
-														"\n3. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)"
+														"\n3. Make sure EmotiBit is NOT PLUGGED to the computer."
 														"\n4. Press space-bar to continue";
 	
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "5. Press Reset button on the Feather (as shown below)";
+	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "\n5. Press Reset Button on the Feather"
+		"\n6. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)";
 	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "\nDO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS\n"
 																	"\n>>> Uploading WINC firmware updater sketch";
 	onScreenInstructionList[State::RUN_WINC_UPDATER] = ">>> Updating WINC FW";
@@ -391,8 +415,8 @@ void ofApp::setupInstructionList()
 	// If you want to add any image to be displayed, just add the image name to the list
 	//ToDo: There is currently no bounds on images goinging outside the window, if too many images have been added to the list
 	instructionImages[State::START];
-	instructionImages[State::DISPLAY_INSTRUCTION] = std::vector<std::string>{ "correctHibernateSwitch.jpg", "plugInEmotiBit.jpg" };
-	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{ "pressResetButton.jpg" };
+	instructionImages[State::DISPLAY_INSTRUCTION] = std::vector<std::string>{ "correctHibernateSwitch.jpg", "un-plugInEmotiBit.jpg" };
+	instructionImages[State::WAIT_FOR_FEATHER] = std::vector<std::string>{ "pressResetButton.jpg", "plugInEmotiBit.jpg" };
 	instructionImages[State::UPLOAD_WINC_FW_UPDATER_SKETCH];
 	instructionImages[State::RUN_WINC_UPDATER];
 	instructionImages[State::UPLOAD_EMOTIBIT_FW];
@@ -450,7 +474,22 @@ int ofApp::detectFeatherPlugin()
 
 			if (newComPort.compare(COM_PORT_NONE) != 0)
 			{
-				featherPort = newComPort;
+                if (std::find(boardComList[Board::FEATHER_M0].begin(), boardComList[Board::FEATHER_M0].end(), newComPort) != boardComList[Board::FEATHER_M0].end())
+                {
+                    setBoard(Board::FEATHER_M0);
+                }
+                else if (std::find(boardComList[Board::FEATHER_ESP_32].begin(), boardComList[Board::FEATHER_ESP_32].end(), newComPort) != boardComList[Board::FEATHER_ESP_32].end())
+                {
+                    setBoard(Board::FEATHER_ESP_32);
+                }
+                if(getBoard() != Board::NONE)
+                {
+                    featherPort = newComPort;
+                }
+                else
+                {
+                    comListOnStartup = currentComList;
+                }
 				return currentComList.size() - comListOnStartup.size();
 			}
 		}
@@ -458,26 +497,154 @@ int ofApp::detectFeatherPlugin()
 	return currentComList.size() - comListOnStartup.size();
 }
 
+ofApp::Board ofApp::getBoard()
+{
+	return _board;
+}
+
+void ofApp::setBoard(ofApp::Board board)
+{
+	_board = board;
+}
+
+void ofApp::assignComPortToBoard(ofApp::Board board, std::string comPort)
+{
+	// add com port to board list if it does not already exist
+	if (std::find(boardComList[board].begin(), boardComList[board].end(), comPort) == boardComList[board].end())
+	{
+		boardComList[board].push_back(comPort);
+	}
+}
+
+std::vector<std::string> ofApp::getComListFromDeviceList(ofxIO::SerialDeviceInfo::DeviceList deviceList)
+{
+	std::vector<std::string> comPortList;
+	for (int i = 0; i < deviceList.size(); i++)
+	{
+        // ToDo: needs a filter for /dev/cu.SLAB_USBtoUART. Looks like an artifact of SLABS drivers
+        comPortList.push_back(deviceList[i].port());
+        Board b;
+        b = getBoardFromDeviceInfo(deviceList[i]);
+        assignComPortToBoard(b, deviceList[i].port());
+	}
+	// sort the list
+	std::sort(comPortList.begin(), comPortList.end());
+	return comPortList;
+}
+
+ofxIO::SerialDeviceInfo::DeviceList ofApp::getDeviceList()
+{
+	return ofxIO::SerialDeviceUtils::listDevices();
+}
+
+ofApp::DeviceInfo ofApp::parseDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
+{
+	ofApp::DeviceInfo info;
+	info.desc = deviceInfo.description();
+	info.port = deviceInfo.port();
+	// get hw info
+	std::string temp = deviceInfo.hardwareId();
+#ifdef TARGET_WIN32
+	// get required substring
+	if (temp.find("VID") != std::string::npos)
+	{
+		std::string hwinfo = temp.substr(temp.find("VID"));
+		// split into parameter pairs
+		std::vector<std::string> hwIdSplit = ofSplitString(hwinfo, "&");
+		// logic to parse hwId
+		// Ex: USB\VID_239A&PID_800B&REV_0100&MI_00
+		for (int i = 0; i < hwIdSplit.size(); i++)
+		{
+			std::vector<std::string> idSegment = ofSplitString(hwIdSplit.at(i), "_");  // https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/hidclass-hardware-ids-for-top-level-collections#special-purpose-hardware-id
+			if (idSegment.at(0).compare("VID") == 0)
+			{
+				std::string vid = idSegment.at(1);
+				transform(vid.begin(), vid.end(), vid.begin(), ::toupper);
+				info.vid = vid;
+			}
+			else if (idSegment.at(0).compare("PID") == 0)
+			{
+				std::string pid = idSegment.at(1);
+				transform(pid.begin(), pid.end(), pid.begin(), ::toupper);
+				info.pid = pid;
+			}
+			else
+			{
+				// ToDo: extract other information if necessary
+			}
+		}
+	}
+#elif defined TARGET_OSX
+    // example hardware id: /dev/cu.usbmodem14301, Adafruit Feather M0, USB VID:PID=239a:800b SNR=6A04F4CF50533336372E3120FF09280F
+    std::vector<std::string> splitHwinfo = ofSplitString(temp, " ");
+    for(int i=0;i<splitHwinfo.size();i++)
+    {
+        std::string s = splitHwinfo.at(i);
+        if(s.find("VID") != std::string::npos)
+        {
+            std::string ids = ofSplitString(s, "=").back();
+            std::string vid = ofSplitString(ids, ":").front();
+            std::string pid = ofSplitString(ids,":").back();
+            transform(vid.begin(), vid.end(), vid.begin(), ::toupper);
+            transform(pid.begin(), pid.end(), pid.begin(), ::toupper);
+            info.vid = vid;
+            info.pid = pid;
+        }
+    }
+#else
+    // for linux
+#endif
+	return info;
+}
+
+ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
+{
+	ofApp::DeviceInfo info;
+	info = parseDeviceInfo(deviceInfo);
+	bool isFeatherM0 = false;
+	
+	if (std::find(ADARUIT_VID_LIST.begin(), ADARUIT_VID_LIST.end(), info.vid) != ADARUIT_VID_LIST.end())
+	{
+		// Device vendor detected as Adafruit
+		if (std::find(ADARUIT_PID_LIST.begin(), ADARUIT_PID_LIST.end(), info.pid) != ADARUIT_PID_LIST.end())
+		{
+			// Device detected as Feather M0
+			return Board::FEATHER_M0;
+		}
+	}
+	else
+	{
+		// perform a check for ESP using device description
+        // ToDo: Find a better way to detect ESP32. This approach is not "robust"
+		std::string espDescIdentifier = "Silicon";
+        std::string espSlabIdentifier = "SLAB";
+#ifdef TARGET_WIN32
+		if (info.desc.find(espDescIdentifier) != std::string::npos)
+		{
+			// It is ESP!
+			return Board::FEATHER_ESP_32;
+		}
+#elif defined TARGET_OSX
+        // if descriptions says silicon labs and port is not SLAB_USBtoUART
+        if (info.desc.find(espDescIdentifier) != std::string::npos && info.port.find(espSlabIdentifier) != std::string::npos)
+		{
+			// It is ESP!
+			return Board::FEATHER_ESP_32;
+		}
+#endif
+	}
+	return Board::NONE;
+}
+
 std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 {
 	ofSerial serial;
 	std::vector<std::string> comPortList;
-	// get list of com ports
-	vector <ofSerialDeviceInfo> initDeviceList = serial.getDeviceList();
-	// convert device list into COM ports
-	for (int i = 0; i < initDeviceList.size(); i++)
-	{
-#ifdef TARGET_OSX
-        if(initDeviceList.at(i).getDevicePath().find("/dev/tty") != std::string::npos)
-        {
-            comPortList.push_back(initDeviceList.at(i).getDevicePath());
-        }
-#else
-        comPortList.push_back(initDeviceList.at(i).getDevicePath());
-#endif
-	}
-	// sort the list
-	std::sort(comPortList.begin(), comPortList.end());
+	// get device list
+	ofxIO::SerialDeviceInfo::DeviceList deviceList = getDeviceList();
+	
+	// get list of COM ports
+	comPortList = getComListFromDeviceList(deviceList);	
 	
 	// print available COM ports on console
 	if (printOnConsole)
@@ -611,7 +778,62 @@ bool ofApp::checkSystemCallResponse()
 	}
 }
 
-bool ofApp::updateUsingBossa(std::string filePath)
+bool ofApp::updateUsingEspTool(std::string filename)
+{
+	std::string command;
+	std::string filepath = "exec";
+	if (!systemCommandExecuted)
+	{
+		ofLog(OF_LOG_NOTICE, "uploading FW on ESP");
+#if defined(TARGET_OSX)
+		ofSleepMillis(1000);
+		command = ofFilePath::join(filepath, "mac");
+		command = ofFilePath::join(command, "esptool");
+		command = ofToDataPath(command);
+#elif defined(TARGET_LINUX)
+		// for linux
+		ofSleepMillis(1000);
+		command = ofFilePath::join(filepath, "linux");
+		command = ofFilePath::join(command, "esptool");
+		command = ofToDataPath(command);
+#else
+		command = ofFilePath::join(filepath, "win");
+		command = ofFilePath::join(command, "esptool.exe");
+		command = ofToDataPath(command);
+#endif
+		command = command + " " + "--chip esp32 --port " + featherPort +
+			" --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 4MB" +
+			" 0x1000" + " " + ofToDataPath(ofFilePath::join("esp32","EmotiBit_stock_firmware.ino.bootloader.bin")) +
+			" 0x8000" + " " + ofToDataPath(ofFilePath::join("esp32", "EmotiBit_stock_firmware.partitions.bin")) +
+			" 0xe000" + " " + ofToDataPath(ofFilePath::join("esp32", "boot_app0.bin")) +
+			" 0x10000" + " " + ofToDataPath(filename);
+		ofLogNotice("Running: ") << command;
+		//system(command.c_str());
+		threadedSystemCall.setup(command, "Hash of data verified"); // the target response string is captured from observed output
+		threadedSystemCall.startThread();
+		systemCommandExecuted = true;
+		return false;
+	}
+	else
+	{
+		// check for system response
+		bool status = checkSystemCallResponse();
+		// if command exe is complete but bossac failed
+		if (!status && !systemCommandExecuted)
+		{
+			// try for MAX_NUM times
+			bossacTryCount++;
+			if (bossacTryCount < MAX_NUM_TRIES_BOSSAC)
+			{
+				// reset trying to enter prog mode
+				pingProgTryCount = 0;
+			}
+		}
+		return status;
+	}
+}
+
+bool ofApp::updateUsingBossa(std::string filename)
 {
 	// Set error state. It is set to None when Bossac is completed successfully
 	std::string programmerPort;
@@ -628,11 +850,11 @@ bool ofApp::updateUsingBossa(std::string filePath)
             ofSleepMillis(5000);
 			command = "bossac";
             command = ofToDataPath(command);
-            command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + filePath;
+            command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + ofToDataPath(filename);
 #else
 			command = "bossac.exe";
             command = ofToDataPath(command);
-            command = command + " " + "-i -d " + "--port=" + programmerPort + " -U true -i -e -w -v" + " " + filePath + " -R";
+            command = command + " " + "-i -d " + "--port=" + programmerPort + " -U true -i -e -w -v" + " " + ofToDataPath(filename) + " -R";
 #endif
 			ofLogNotice("Running: ") << command;
 			//system(command.c_str());
@@ -706,5 +928,14 @@ bool ofApp::runWincUpdater()
 
 bool ofApp::uploadEmotiBitFw()
 {
-    return updateUsingBossa(ofToDataPath("EmotiBit_stock_firmware.ino.feather_m0.bin"));
+	if (getBoard() == Board::FEATHER_M0)
+	{
+		return updateUsingBossa("EmotiBit_stock_firmware.ino.feather_m0.bin");
+	}
+	else
+	{
+		return updateUsingEspTool("EmotiBit_stock_firmware.ino.feather_esp32.bin");
+
+	}
 }
+
