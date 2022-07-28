@@ -79,6 +79,7 @@
 		94D8E5D12887543B0071C7AF /* FirmwareUpdater.ino.feather_m0.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5CD2887543A0071C7AF /* FirmwareUpdater.ino.feather_m0.bin */; };
 		94D8E5D22887543B0071C7AF /* m2m_aio_3a0.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5CE2887543A0071C7AF /* m2m_aio_3a0.bin */; };
 		94D8E5D32887543B0071C7AF /* LICENSE.txt in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5CF2887543A0071C7AF /* LICENSE.txt */; };
+		94D8E5D528931E780071C7AF /* un-plugInEmotiBit.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D8E5D428931E780071C7AF /* un-plugInEmotiBit.jpg */; };
 		94E22CF92882062400C8F3C0 /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94E22CF72882062400C8F3C0 /* EmotiBitPacket.cpp */; };
 		94E22D032882070C00C8F3C0 /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFB2882070B00C8F3C0 /* verdana.ttf */; };
 		94E22D052882070C00C8F3C0 /* EmotiBit.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E22CFD2882070C00C8F3C0 /* EmotiBit.png */; };
@@ -156,6 +157,7 @@
 			dstPath = instructions;
 			dstSubfolderSpec = 7;
 			files = (
+				94D8E5D528931E780071C7AF /* un-plugInEmotiBit.jpg in CopyFiles */,
 				94D8E5C8288753D70071C7AF /* plugInEmotiBit.jpg in CopyFiles */,
 				94D8E5C9288753D70071C7AF /* correctHibernateSwitch.jpg in CopyFiles */,
 				94D8E5CA288753D70071C7AF /* pressResetButton.jpg in CopyFiles */,
@@ -383,6 +385,7 @@
 		94D8E5CD2887543A0071C7AF /* FirmwareUpdater.ino.feather_m0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = FirmwareUpdater.ino.feather_m0.bin; path = bin/data/WINC/FirmwareUpdater.ino.feather_m0.bin; sourceTree = "<group>"; };
 		94D8E5CE2887543A0071C7AF /* m2m_aio_3a0.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = m2m_aio_3a0.bin; path = bin/data/WINC/m2m_aio_3a0.bin; sourceTree = "<group>"; };
 		94D8E5CF2887543A0071C7AF /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE.txt; path = bin/data/WINC/LICENSE.txt; sourceTree = "<group>"; };
+		94D8E5D428931E780071C7AF /* un-plugInEmotiBit.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "un-plugInEmotiBit.jpg"; path = "bin/data/instructions/un-plugInEmotiBit.jpg"; sourceTree = "<group>"; };
 		94E22CF72882062400C8F3C0 /* EmotiBitPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitPacket.cpp; path = ../../EmotiBit_XPlat_Utils/src/EmotiBitPacket.cpp; sourceTree = "<group>"; };
 		94E22CF82882062400C8F3C0 /* EmotiBitPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitPacket.h; path = ../../EmotiBit_XPlat_Utils/src/EmotiBitPacket.h; sourceTree = "<group>"; };
 		94E22CFA2882070B00C8F3C0 /* exec */ = {isa = PBXFileReference; lastKnownFileType = folder; name = exec; path = bin/data/exec; sourceTree = "<group>"; };
@@ -1776,6 +1779,7 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				94D8E5D428931E780071C7AF /* un-plugInEmotiBit.jpg */,
 				94D8E5CD2887543A0071C7AF /* FirmwareUpdater.ino.feather_m0.bin */,
 				94D8E5CC2887543A0071C7AF /* FirmwareUploader */,
 				94D8E5CF2887543A0071C7AF /* LICENSE.txt */,
