@@ -45,6 +45,8 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 - You will also require net-tools to run certain commands required by the Oscilloscope. Run `sudo apt install net-tools`
 - That's it! You now are ready to run EmotiBit Oscilloscope!
 - To run the Oscilloscope, cd to `(OF_ROOT)/addons/ofxEmotiBit/EmotiBitOscilloscope`. Run the command `make Debug` or `make` to create the release executable.
-
-
+- Note: When trying to run the EmotiBit Oscilloscope, if you get an error with the following message `cannot open shared object file: No such file or directory : liblsl-1.14.0-manylinux2010_x64`, you will have to update the `LD_LIBRARY_PATH` variable.
+  - To do so, run the following command in terminal: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/that/leads/to/EmotiBitOscilloscope/bin`
+  - replace `/path/that/leads/to/EmotiBitOscilloscope/bin` with the actual path to the bin folder in EmotiBitOscillosocpe directory
+  - Compile the source again.
 
