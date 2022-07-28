@@ -121,7 +121,7 @@ void ofApp::update(){
 			else if (numDevicesDetected > 1)
 			{
 				// multiple devices detected
-				raiseError("Multiple Devices Detected");
+				raiseError("Multiple Devices Detected\n");
 			}
 		}
 	}
@@ -462,10 +462,26 @@ int ofApp::detectFeatherPlugin()
 	}
 	else if (currentComList.size() > comListOnStartup.size())
 	{
-		if (currentComList.size() - comListOnStartup.size() > 1)
+        if (currentComList.size() - comListOnStartup.size() > 2)
+        {
+            // found multiple new com ports
+            ofLog(OF_LOG_NOTICE, "Multiple Ports detected ");
+        }
+        else if (currentComList.size() - comListOnStartup.size() == 2)
 		{
-			// found multiple new com ports
-			ofLog(OF_LOG_NOTICE, "More than one Port ");
+			// Exactly 2 ports detected. Might be artifact of SiLabs driver for ESP32. Check if a COM port was lebelled as ESP32 port
+            if(boardComList[Board::FEATHER_ESP_32].size())
+            {
+                ofLogNotice() << "Feather ESP32 detected on port: " + boardComList[Board::FEATHER_ESP_32].at(0);
+                // A port was detected as ESP32!
+                setBoard(Board::FEATHER_ESP_32);
+                featherPort = boardComList[Board::FEATHER_ESP_32].at(0); // return the first element of the COM list assigned to the  board
+                return 1; // return  1 to indicate Feather  found!
+            }
+            else
+            {
+                ofLog(OF_LOG_NOTICE, "2 ports detected, no board found!");
+            }
 		}
 		else
 		{
@@ -625,7 +641,7 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 			return Board::FEATHER_ESP_32;
 		}
 #elif defined TARGET_OSX
-        // if descriptions says silicon labs and port is not SLAB_USBtoUART
+        // if descriptions says silicon labs and port is SLAB_USBtoUART
         if (info.desc.find(espDescIdentifier) != std::string::npos && info.port.find(espSlabIdentifier) != std::string::npos)
 		{
 			// It is ESP!
