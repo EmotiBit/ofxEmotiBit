@@ -238,4 +238,5 @@ class ofApp : public ofBaseApp{
 			GuiElementPos(int x, int y) : x{ x }, y{ y } {}
 		};
 		unordered_map<std::string, GuiElementPos> guiElementPositions;
+		string _fwFilePath = "";
 };
