@@ -208,6 +208,7 @@ class ofApp : public ofBaseApp{
 		ofTrueTypeFont	instructionFont;
 		ofTrueTypeFont progressFont;
 		ofTrueTypeFont	titleFont;
+		ofTrueTypeFont	footnoteFont;
 		std::string progressString = "";
 		const int STATE_TIMEOUT = 120; // in secs
 		bool captureComListOnStartup = false;

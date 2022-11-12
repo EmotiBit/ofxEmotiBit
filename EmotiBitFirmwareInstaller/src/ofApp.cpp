@@ -68,12 +68,16 @@ void ofApp::setup(){
     }
 	if (progressFont.load(ofToDataPath("verdanab.ttf"), 18, true, true))
 	{
-		ofLogNotice() << "Instruction Font loaded correctly";
+		ofLogNotice() << "Progress Font loaded correctly";
 	}
 	if(titleFont.load(ofToDataPath("verdanab.ttf"), 40, true, true))
     {
         ofLogNotice() << "Title Font loaded correctly";
     }
+	if (footnoteFont.load(ofToDataPath("verdana.ttf"), 13, true, true))
+	{
+		ofLogNotice() << "Footnote Font loaded correctly";
+	}
 	boardComList[Board::FEATHER_M0];
 	boardComList[Board::FEATHER_ESP_32];
 }
@@ -269,6 +273,11 @@ void ofApp::draw(){
 	// draw Title
 	ofSetColor(0);
 	titleFont.drawString("EmotiBit Firmware Installer", guiElementPositions["TitleString"].x, guiElementPositions["TitleString"].y);
+	if (_state == State::DISPLAY_INSTRUCTION)
+	{
+		// draw footnote
+		footnoteFont.drawString("If you wish to load a custom firmware bin file, type \"L\"", guiElementPositions["FootnoteString"].x, guiElementPositions["FootnoteString"].y);
+	}
 	// draw title image
 	ofSetColor(255);
 	titleImage.draw(guiElementPositions["TitleImage"].x, guiElementPositions["TitleImage"].y);
@@ -336,7 +345,7 @@ void ofApp::keyReleased(int key){
 		// Load FW file
 		ofFileDialogResult fileLoadResult = ofSystemLoadDialog("Select a firmware .bin file (be sure it's compatible with your Feather)");
 		if (fileLoadResult.bSuccess) {
-			//_fwFilePath = "\"" + fileLoadResult.filePath + "\"";
+			_fwFilePath = "\"" + fileLoadResult.filePath + "\"";
 			//ofStringReplace(tempFilePath, "\\", "/"); // Handle Windows paths
 			ofLogNotice() << "Firmware file loaded: " << _fwFilePath << endl;
 		}
@@ -399,6 +408,7 @@ void ofApp::setupGuiElementPositions()
 	//guiElementPositions["InstructionImage"] = GuiElementPos{ 724, 316 };
 	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 500 };
 	guiElementPositions["ErrorImage"] = GuiElementPos{ 30, 460 };
+	guiElementPositions["FootnoteString"] = GuiElementPos{ 625, 725 };
 }
 
 void ofApp::setupInstructionList()
