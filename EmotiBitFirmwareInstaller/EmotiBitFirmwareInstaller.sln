@@ -8,26 +8,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openframeworksLib", "..\..\
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
-		Release|Win32 = Release|Win32
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Debug|Win32.Build.0 = Debug|Win32
 		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Debug|x64.ActiveCfg = Debug|x64
 		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Debug|x64.Build.0 = Debug|x64
-		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Release|Win32.ActiveCfg = Release|Win32
-		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Release|Win32.Build.0 = Release|Win32
 		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Release|x64.ActiveCfg = Release|x64
 		{0B6D4BB7-15D6-47D0-B356-1F878203BFDC}.Release|x64.Build.0 = Release|x64
-		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Debug|Win32.Build.0 = Debug|Win32
 		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Debug|x64.ActiveCfg = Debug|x64
 		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Debug|x64.Build.0 = Debug|x64
-		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Release|Win32.ActiveCfg = Release|Win32
-		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Release|Win32.Build.0 = Release|Win32
 		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Release|x64.ActiveCfg = Release|x64
 		{5837595D-ACA9-485C-8E76-729040CE4B0B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
