@@ -340,14 +340,18 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-	if (((char)key) == 'L')
+	// only accept key press in the first stage of display instruction
+	if (_state == State::DISPLAY_INSTRUCTION)
 	{
-		// Load FW file
-		ofFileDialogResult fileLoadResult = ofSystemLoadDialog("Select a firmware .bin file (be sure it's compatible with your Feather)");
-		if (fileLoadResult.bSuccess) {
-			_fwFilePath = "\"" + fileLoadResult.filePath + "\"";
-			//ofStringReplace(tempFilePath, "\\", "/"); // Handle Windows paths
-			ofLogNotice() << "Firmware file loaded: " << _fwFilePath << endl;
+		if (((char)key) == 'L')
+		{
+			// Load FW file
+			ofFileDialogResult fileLoadResult = ofSystemLoadDialog("Select a firmware .bin file (be sure it's compatible with your Feather)");
+			if (fileLoadResult.bSuccess) {
+				_fwFilePath = "\"" + fileLoadResult.filePath + "\"";
+				//ofStringReplace(tempFilePath, "\\", "/"); // Handle Windows paths
+				ofLogNotice() << "Firmware file loaded: " << _fwFilePath << endl;
+			}
 		}
 	}
 }
