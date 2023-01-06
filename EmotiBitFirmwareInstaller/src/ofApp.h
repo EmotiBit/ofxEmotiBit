@@ -208,6 +208,7 @@ class ofApp : public ofBaseApp{
 		ofTrueTypeFont	instructionFont;
 		ofTrueTypeFont progressFont;
 		ofTrueTypeFont	titleFont;
+		ofTrueTypeFont	footnoteFont;
 		std::string progressString = "";
 		const int STATE_TIMEOUT = 120; // in secs
 		bool captureComListOnStartup = false;
@@ -238,4 +239,5 @@ class ofApp : public ofBaseApp{
 			GuiElementPos(int x, int y) : x{ x }, y{ y } {}
 		};
 		unordered_map<std::string, GuiElementPos> guiElementPositions;
+		string _fwFilePath = "";
 };

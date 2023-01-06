@@ -68,12 +68,16 @@ void ofApp::setup(){
     }
 	if (progressFont.load(ofToDataPath("verdanab.ttf"), 18, true, true))
 	{
-		ofLogNotice() << "Instruction Font loaded correctly";
+		ofLogNotice() << "Progress Font loaded correctly";
 	}
 	if(titleFont.load(ofToDataPath("verdanab.ttf"), 40, true, true))
     {
         ofLogNotice() << "Title Font loaded correctly";
     }
+	if (footnoteFont.load(ofToDataPath("verdana.ttf"), 13, true, true))
+	{
+		ofLogNotice() << "Footnote Font loaded correctly";
+	}
 	boardComList[Board::FEATHER_M0];
 	boardComList[Board::FEATHER_ESP_32];
 }
@@ -269,6 +273,11 @@ void ofApp::draw(){
 	// draw Title
 	ofSetColor(0);
 	titleFont.drawString("EmotiBit Firmware Installer", guiElementPositions["TitleString"].x, guiElementPositions["TitleString"].y);
+	if (_state == State::DISPLAY_INSTRUCTION)
+	{
+		// draw footnote
+		footnoteFont.drawString("If you wish to load a custom firmware bin file, type \"L\"", guiElementPositions["FootnoteString"].x, guiElementPositions["FootnoteString"].y);
+	}
 	// draw title image
 	ofSetColor(255);
 	titleImage.draw(guiElementPositions["TitleImage"].x, guiElementPositions["TitleImage"].y);
@@ -331,7 +340,20 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+	// only accept key press in the first stage of display instruction
+	if (_state == State::DISPLAY_INSTRUCTION)
+	{
+		if (((char)key) == 'L')
+		{
+			// Load FW file
+			ofFileDialogResult fileLoadResult = ofSystemLoadDialog("Select a firmware .bin file (be sure it's compatible with your Feather)");
+			if (fileLoadResult.bSuccess) {
+				_fwFilePath = "\"" + fileLoadResult.filePath + "\"";
+				//ofStringReplace(tempFilePath, "\\", "/"); // Handle Windows paths
+				ofLogNotice() << "Firmware file loaded: " << _fwFilePath << endl;
+			}
+		}
+	}
 }
 
 //--------------------------------------------------------------
@@ -390,6 +412,7 @@ void ofApp::setupGuiElementPositions()
 	//guiElementPositions["InstructionImage"] = GuiElementPos{ 724, 316 };
 	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 500 };
 	guiElementPositions["ErrorImage"] = GuiElementPos{ 30, 460 };
+	guiElementPositions["FootnoteString"] = GuiElementPos{ 625, 725 };
 }
 
 void ofApp::setupInstructionList()
@@ -397,12 +420,13 @@ void ofApp::setupInstructionList()
 	// Step based user instructions
 	onScreenInstructionList[State::START] = "";
 	onScreenInstructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
-													   "\n2. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
+														"\n   !!CAUTION: Excessive force can break the HIB switch. Handle with care!!!"
+													    "\n2. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
 													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
 														"\n3. Make sure EmotiBit is NOT PLUGGED to the computer."
 														"\n4. Press space-bar to continue";
 	
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "\n5. Press Reset Button on the Feather"
+	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "5. Press Reset Button on the Feather"
 		"\n6. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)";
 	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "\nDO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS\n"
 																	"\n>>> Uploading WINC firmware updater sketch";
@@ -794,7 +818,7 @@ bool ofApp::checkSystemCallResponse()
 	}
 }
 
-bool ofApp::updateUsingEspTool(std::string filename)
+bool ofApp::updateUsingEspTool(std::string fwFilePath)
 {
 	std::string command;
 	std::string filepath = "exec";
@@ -822,7 +846,7 @@ bool ofApp::updateUsingEspTool(std::string filename)
 			" 0x1000" + " " + ofToDataPath(ofFilePath::join("esp32","EmotiBit_stock_firmware.ino.bootloader.bin")) +
 			" 0x8000" + " " + ofToDataPath(ofFilePath::join("esp32", "EmotiBit_stock_firmware.partitions.bin")) +
 			" 0xe000" + " " + ofToDataPath(ofFilePath::join("esp32", "boot_app0.bin")) +
-			" 0x10000" + " " + ofToDataPath(filename);
+			" 0x10000" + " " + fwFilePath;
 		ofLogNotice("Running: ") << command;
 		//system(command.c_str());
 		threadedSystemCall.setup(command, "Hash of data verified"); // the target response string is captured from observed output
@@ -849,7 +873,7 @@ bool ofApp::updateUsingEspTool(std::string filename)
 	}
 }
 
-bool ofApp::updateUsingBossa(std::string filename)
+bool ofApp::updateUsingBossa(std::string fwFilePath)
 {
 	// Set error state. It is set to None when Bossac is completed successfully
 	std::string programmerPort;
@@ -866,11 +890,11 @@ bool ofApp::updateUsingBossa(std::string filename)
             ofSleepMillis(5000);
 			command = "bossac";
             command = ofToDataPath(command);
-            command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + ofToDataPath(filename);
+            command = command + " " + "-i -d -U true -e -w -v -R -b -p " + programmerPort + " " + fwFilePath;
 #else
 			command = "bossac.exe";
             command = ofToDataPath(command);
-            command = command + " " + "-i -d " + "--port=" + programmerPort + " -U true -i -e -w -v" + " " + ofToDataPath(filename) + " -R";
+            command = command + " " + "-i -d " + "--port=" + programmerPort + " -U true -i -e -w -v" + " " + fwFilePath + " -R";
 #endif
 			ofLogNotice("Running: ") << command;
 			//system(command.c_str());
@@ -946,12 +970,24 @@ bool ofApp::uploadEmotiBitFw()
 {
 	if (getBoard() == Board::FEATHER_M0)
 	{
-		return updateUsingBossa("EmotiBit_stock_firmware.ino.feather_m0.bin");
+		if (_fwFilePath.empty())
+		{
+			return updateUsingBossa(ofToDataPath("EmotiBit_stock_firmware.ino.feather_m0.bin"));
+		}
+		else
+		{
+			return updateUsingBossa(_fwFilePath);
+		}
 	}
 	else
 	{
-		return updateUsingEspTool("EmotiBit_stock_firmware.ino.feather_esp32.bin");
-
+		if (_fwFilePath.empty())
+		{
+			return updateUsingEspTool(ofToDataPath("EmotiBit_stock_firmware.ino.feather_esp32.bin"));
+		}
+		{
+			return updateUsingEspTool(_fwFilePath);
+		}
 	}
 }
 
