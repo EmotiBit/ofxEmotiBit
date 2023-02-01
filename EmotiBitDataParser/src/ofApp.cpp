@@ -728,6 +728,7 @@ std::time_t ofApp::getEpochTime(const std::wstring& dateTime)
 
 	// Create a tm object to store the parsed date and time.
 	std::tm dt;
+	dt.tm_isdst = 0;  // more information: https://en.cppreference.com/w/cpp/chrono/c/tm
 
 	// Now we read from buffer using get_time manipulator
 	// and formatting the input appropriately.
