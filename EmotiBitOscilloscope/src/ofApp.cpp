@@ -46,20 +46,14 @@ void ofApp::setup() {
 			lslMarkerStream = std::make_shared<ofxLSL::Receiver<string>>(lslMarkerStreamInfo.name);
 		}
 	}
-	ofSetLogLevel(OF_LOG_VERBOSE);
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
-	//ofSetLogLevel(OF_LOG_FATAL_ERROR);
+	ofSetLogLevel(OF_LOG_FATAL_ERROR);
+	//ofSetLogLevel(OF_LOG_VERBOSE);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	//static uint64_t updateTime = ofGetElapsedTimeMillis();
-	//ofLog(OF_LOG_VERBOSE) << "update(): " << ofGetElapsedTimeMillis() - updateTime << endl;
-	//updateTime = ofGetElapsedTimeMillis();
 
-	//vector<string> infoPackets;
-	//emotiBitWiFi.processAdvertising(infoPackets);
-	// ToDo: Query info packets with mode change information
 	if (!lslMarkerStreamInfo.name.empty())
 	{
 		updateLsl();
