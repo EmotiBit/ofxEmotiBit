@@ -127,12 +127,9 @@ void EmotiBitWiFiHost::sendAdvertising() {
 	static bool emotibitsFound = false;
 	static bool startNewSend = true;
 	static bool sendInProgress = true;
-	static int network = 0;
-	static int hostId = _hostAdvSettings.unicastIpRange.first;
-
-	string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0); 
-	string broadcastIp;
-	string unicastIp;
+	static int unicastNetwork = 0;
+	static int broadcastNetwork = 0;
+	static int hostId = _hostAdvSettings.unicastIpRange.first; 
 
 	static uint64_t sendAdvertisingTimer = ofGetElapsedTimeMillis();
 	uint64_t sendAdvertisingTime = ofGetElapsedTimeMillis() - sendAdvertisingTimer;
@@ -151,28 +148,43 @@ void EmotiBitWiFiHost::sendAdvertising() {
 		emotibitsFound = true;
 	}
 
-	if (emotibitsFound)
+	if (!emotibitsFound && startNewSend)
 	{
-		broadcastIp = emotibitNetworks.at(0) + "." + ofToString(255);
-	}
-	else
-	{
-		if (startNewSend)
-		{
-			getAvailableNetworks(); // Check if new network appeared after oscilloscope was open (e.g. a mobile hotspot)
-		}
-		broadcastIp = availableNetworks.at(network) + "." + ofToString(255);
+		getAvailableNetworks(); // Check if new network appeared after oscilloscope was open (e.g. a mobile hotspot)
 	}
 
 	// **** Handle advertising sends ****
 	// Handle broadcast advertising
 	if (_hostAdvSettings.enableBroadcast && startNewSend) {
+		string broadcastIp;
+
+		if (emotibitsFound)
+		{
+			broadcastIp = emotibitNetworks.at(0) + "." + ofToString(255);
+		}
+		else
+		{
+			broadcastIp = availableNetworks.at(broadcastNetwork) + "." + ofToString(255);
+		}
 		ofLog(OF_LOG_VERBOSE) << "Sending advertising broadcast: " << sendAdvertisingTime;
 		ofLog(OF_LOG_VERBOSE) << broadcastIp;
 		startNewSend = false;
+		string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0);
 		advertisingCxn.SetEnableBroadcast(true);
 		advertisingCxn.Connect(broadcastIp.c_str(), advertisingPort);
 		advertisingCxn.Send(packet.c_str(), packet.length());
+
+		if (!emotibitsFound)
+		{
+			broadcastNetwork++;
+			if (broadcastNetwork >= availableNetworks.size())
+			{
+				broadcastNetwork = 0;
+			}
+		}
+
+		// skip unicast when broadcast sent to avoid network spam
+		return;
 	}
 	// Handle unicast advertising
 	if (_hostAdvSettings.enableUnicast && sendInProgress)
@@ -183,23 +195,25 @@ void EmotiBitWiFiHost::sendAdvertising() {
 		if (unicastLoopTime >= _hostAdvSettings.unicastMinLoopDelay)
 		{
 			unicastLoopTimer = ofGetElapsedTimeMillis();
-
 			ofLog(OF_LOG_VERBOSE) << "Sending advertising unicast: " << unicastLoopTime;
 
 			for (uint32_t i = 0; i < _hostAdvSettings.nUnicastIpsPerLoop; i++)
 			{
+				string unicastIp;
+
 				if (emotibitsFound)
 				{
 					unicastIp = emotibitNetworks.at(0) + "." + ofToString(hostId);
 				}
 				else
 				{
-					unicastIp = availableNetworks.at(network) + "." + ofToString(hostId);
+					unicastIp = availableNetworks.at(unicastNetwork) + "." + ofToString(hostId);
 				}
 
 				if (_hostAdvSettings.enableUnicast && sendInProgress)
 				{
 					ofLog(OF_LOG_VERBOSE) << unicastIp;
+					string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0);
 					advertisingCxn.SetEnableBroadcast(false);
 					advertisingCxn.Connect(unicastIp.c_str(), advertisingPort);
 					advertisingCxn.Send(packet.c_str(), packet.length());
@@ -221,15 +235,12 @@ void EmotiBitWiFiHost::sendAdvertising() {
 					}
 					else
 					{
-						if (network + 1 < availableNetworks.size())
-						{
-							network++;
-						}
-						else
+						unicastNetwork++;
+						if (unicastNetwork >= availableNetworks.size())
 						{
 							// finished a send of all IPs
 							sendInProgress = false;
-							network = 0;
+							unicastNetwork = 0;
 						}
 					}
 				}
@@ -278,8 +289,8 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 	uint64_t checkAdvertisingTime = ofGetElapsedTimeMillis() - checkAdvertisingTimer;
 	if (checkAdvertisingTime >= _hostAdvSettings.checkAdvertisingInterval)
 	{
-		ofLog(OF_LOG_VERBOSE) << "checkAdvertising: " << checkAdvertisingTime;
 		checkAdvertisingTimer = ofGetElapsedTimeMillis();
+		ofLog(OF_LOG_VERBOSE) << "checkAdvertising: " << checkAdvertisingTime;
 
 		// Receive advertising messages
 		static char udpMessage[maxSize];

@@ -34,11 +34,11 @@ public:
 
 	struct HostAdvertisingSettings {
 		bool enableBroadcast = true;
-		bool enableUnicast = false;
-		int sendAdvertisingInterval = 500;
+		bool enableUnicast = true;
+		int sendAdvertisingInterval = 1000;
 		int checkAdvertisingInterval = 100;
 		int nUnicastIpsPerLoop = 1;
-		int unicastMinLoopDelay = 1;
+		int unicastMinLoopDelay = 3;
 
 		pair<int, int> unicastIpRange = { 2, 254 };
 
