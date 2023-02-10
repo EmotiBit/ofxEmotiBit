@@ -1934,7 +1934,7 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 					ofLogNotice("nUnicastIpsPerLoop settings not found in ") << settingsFilePath + ". Using default value";
 					settings.nUnicastIpsPerLoop = defaultSettings.nUnicastIpsPerLoop;
 				}
-				if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("unicastMinLoopDelay"))
+				if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("unicastMinLoopDelay_msec"))
 				{
 					settings.unicastMinLoopDelay = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["unicastMinLoopDelay_msec"].asInt();
 				}

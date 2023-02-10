@@ -167,7 +167,8 @@ void EmotiBitWiFiHost::sendAdvertising() {
 	// **** Handle advertising sends ****
 	// Handle broadcast advertising
 	if (_hostAdvSettings.enableBroadcast && startNewSend) {
-		ofLog(OF_LOG_VERBOSE) << "Sending advertising broadcast " << sendAdvertisingTime << " : " << broadcastIp << endl;
+		ofLog(OF_LOG_VERBOSE) << "Sending advertising broadcast: " << sendAdvertisingTime;
+		ofLog(OF_LOG_VERBOSE) << broadcastIp;
 		startNewSend = false;
 		advertisingCxn.SetEnableBroadcast(true);
 		advertisingCxn.Connect(broadcastIp.c_str(), advertisingPort);
@@ -183,7 +184,7 @@ void EmotiBitWiFiHost::sendAdvertising() {
 		{
 			unicastLoopTimer = ofGetElapsedTimeMillis();
 
-			ofLog(OF_LOG_VERBOSE) << "Sending advertising unicast:" << unicastLoopTime;
+			ofLog(OF_LOG_VERBOSE) << "Sending advertising unicast: " << unicastLoopTime;
 
 			for (uint32_t i = 0; i < _hostAdvSettings.nUnicastIpsPerLoop; i++)
 			{
@@ -198,7 +199,7 @@ void EmotiBitWiFiHost::sendAdvertising() {
 
 				if (_hostAdvSettings.enableUnicast && sendInProgress)
 				{
-					ofLog(OF_LOG_VERBOSE) << unicastIp << ", ";
+					ofLog(OF_LOG_VERBOSE) << unicastIp;
 					advertisingCxn.SetEnableBroadcast(false);
 					advertisingCxn.Connect(unicastIp.c_str(), advertisingPort);
 					advertisingCxn.Send(packet.c_str(), packet.length());
@@ -277,6 +278,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 	uint64_t checkAdvertisingTime = ofGetElapsedTimeMillis() - checkAdvertisingTimer;
 	if (checkAdvertisingTime >= _hostAdvSettings.checkAdvertisingInterval)
 	{
+		ofLog(OF_LOG_VERBOSE) << "checkAdvertising: " << checkAdvertisingTime;
 		checkAdvertisingTimer = ofGetElapsedTimeMillis();
 
 		// Receive advertising messages
