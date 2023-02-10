@@ -1,14 +1,18 @@
 {
   "wifi": {
     "advertising": {
+			"sendAdvertisingInterval_msec": 500,
+			"checkAdvertisingInterval_msec": 100,
       "transmission": {
         "broadcast": {
           "enabled": true
         },
         "unicast": {
-          "enabled": false,
+          "enabled": true,
           "ipMax": 254,
-          "ipMin": 2
+          "ipMin": 100,
+					"nUnicastIpsPerLoop": 1,
+					"unicastMinLoopDelay_msec": 1
         }
       }
     },

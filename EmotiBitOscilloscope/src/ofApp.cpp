@@ -46,15 +46,20 @@ void ofApp::setup() {
 			lslMarkerStream = std::make_shared<ofxLSL::Receiver<string>>(lslMarkerStreamInfo.name);
 		}
 	}
+	ofSetLogLevel(OF_LOG_VERBOSE);
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
-	ofSetLogLevel(OF_LOG_FATAL_ERROR);
+	//ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	vector<string> infoPackets;
-	emotiBitWiFi.processAdvertising(infoPackets);
-	// ToDo: Handle info packets with mode change information
+	//static uint64_t updateTime = ofGetElapsedTimeMillis();
+	//ofLog(OF_LOG_VERBOSE) << "update(): " << ofGetElapsedTimeMillis() - updateTime << endl;
+	//updateTime = ofGetElapsedTimeMillis();
+
+	//vector<string> infoPackets;
+	//emotiBitWiFi.processAdvertising(infoPackets);
+	// ToDo: Query info packets with mode change information
 	if (!lslMarkerStreamInfo.name.empty())
 	{
 		updateLsl();
@@ -1877,6 +1882,24 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 			EmotiBitWiFiHost::HostAdvertisingSettings defaultSettings = emotiBitWiFi.getHostAdvertisingSettings();// if setter is not called, getter returns default values
 			if (jsonSettings.open(ofToDataPath(settingsFilePath, absolute)))
 			{
+				if (jsonSettings["wifi"]["advertising"].isMember("sendAdvertisingInterval_msec"))
+				{
+					settings.sendAdvertisingInterval = jsonSettings["wifi"]["advertising"]["sendAdvertisingInterval_msec"].asInt();
+				}
+				else
+				{
+					ofLogNotice("sendAdvertisingInterval_msec settings not found in ") << settingsFilePath + ". Using default value";
+					settings.enableBroadcast = defaultSettings.sendAdvertisingInterval;
+				}
+				if (jsonSettings["wifi"]["advertising"].isMember("checkAdvertisingInterval_msec"))
+				{
+					settings.checkAdvertisingInterval = jsonSettings["wifi"]["advertising"]["checkAdvertisingInterval_msec"].asInt();
+				}
+				else
+				{
+					ofLogNotice("checkAdvertisingInterval_msec settings not found in ") << settingsFilePath + ". Using default value";
+					settings.enableBroadcast = defaultSettings.checkAdvertisingInterval;
+				}
 				if (jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"].isMember("enabled"))
 				{
 					settings.enableBroadcast = jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"].asBool();
@@ -1907,6 +1930,24 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 				{
 					ofLogNotice("unicast ipRange settings not found in ") << settingsFilePath + ". Using default value";
 					settings.unicastIpRange = defaultSettings.unicastIpRange;
+				}
+				if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("nUnicastIpsPerLoop"))
+				{
+					settings.nUnicastIpsPerLoop = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["nUnicastIpsPerLoop"].asInt();
+				}
+				else
+				{
+					ofLogNotice("nUnicastIpsPerLoop settings not found in ") << settingsFilePath + ". Using default value";
+					settings.nUnicastIpsPerLoop = defaultSettings.nUnicastIpsPerLoop;
+				}
+				if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("unicastMinLoopDelay"))
+				{
+					settings.unicastMinLoopDelay = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["unicastMinLoopDelay_msec"].asInt();
+				}
+				else
+				{
+					ofLogNotice("unicastMinLoopDelay_msec settings not found in ") << settingsFilePath + ". Using default value";
+					settings.unicastMinLoopDelay = defaultSettings.unicastMinLoopDelay;
 				}
 
 				if (jsonSettings["wifi"]["network"].isMember("includeList"))
