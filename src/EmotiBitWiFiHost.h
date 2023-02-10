@@ -33,14 +33,14 @@ class EmotiBitWiFiHost
 public:
 
 	struct HostAdvertisingSettings {
-		bool enableBroadcast = true;
-		bool enableUnicast = true;
 		int sendAdvertisingInterval = 1000;
 		int checkAdvertisingInterval = 100;
+		bool enableBroadcast = true;
+
+		bool enableUnicast = true;
+		pair<int, int> unicastIpRange = { 2, 254 };
 		int nUnicastIpsPerLoop = 1;
 		int unicastMinLoopDelay = 3;
-
-		pair<int, int> unicastIpRange = { 2, 254 };
 
 		vector<string> networkIncludeList = { "*.*.*.*" };
 		vector<string> networkExcludeList = { "" };
@@ -144,10 +144,6 @@ public:
 	@return true if ipAddress is in networkList
 	*/
 	bool isInNetworkList(string ipAddress, vector<string> networkList);
-
-	//void setAdvertTransSettings(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange, );
-	//void setNetworkIncludeList(vector<string> networkIncludeList);
-	//void setNetworkExcludeList(vector<string> networkExcludeList);
 
 	/*!
 	@brief Sets EmotiBit host advertising settings

@@ -881,23 +881,6 @@ bool EmotiBitWiFiHost::isConnected()
 	return _isConnected;
 }
 
-
-//void EmotiBitWiFiHost::setAdvertTransSettings(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange) {
-//	_hostAdvSettings.enableBroadcast = enableBroadcast;
-//	_hostAdvSettings.enableUnicast = enableUnicast;
-//	_hostAdvSettings.unicastIpRange = unicastIpRange;
-//	_hostAdvSettings.unicastIpRange = unicastIpRange;
-//	_hostAdvSettings.unicastIpRange = unicastIpRange;
-//}
-//
-//void EmotiBitWiFiHost::setNetworkIncludeList(vector<string> networkIncludeList) {
-//	_hostAdvSettings.networkIncludeList = networkIncludeList;
-//}
-//
-//void EmotiBitWiFiHost::setNetworkExcludeList(vector<string> networkExcludeList) {
-//	_hostAdvSettings.networkExcludeList = networkExcludeList;
-//}
-
 void EmotiBitWiFiHost::setHostAdvertisingSettings(HostAdvertisingSettings settings)
 {
 	_hostAdvSettings = settings;
