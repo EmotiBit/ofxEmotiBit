@@ -1,7 +1,7 @@
 {
   "wifi": {
     "advertising": {
-			"sendAdvertisingInterval_msec": 500,
+			"sendAdvertisingInterval_msec": 1000,
 			"checkAdvertisingInterval_msec": 100,
       "transmission": {
         "broadcast": {
@@ -12,7 +12,7 @@
           "ipMax": 254,
           "ipMin": 2,
 					"nUnicastIpsPerLoop": 1,
-					"unicastMinLoopDelay_msec": 1
+					"unicastMinLoopDelay_msec": 3
         }
       }
     },
