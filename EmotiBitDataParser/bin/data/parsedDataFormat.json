@@ -3,7 +3,7 @@
     {
       "identifier": "TL",
       "columnHeader": "LocalTimestamp",
-      "addToOutput": false
+      "addToOutput": true
     },
     {
       "identifier": "LC",
@@ -13,7 +13,7 @@
     {
       "identifier": "LM",
       "columnHeader": "LslMarkerSourceTimestamp",
-      "addToOutput": true
+      "addToOutput": false
     }
   ]
 }

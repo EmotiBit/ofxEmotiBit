@@ -10,7 +10,7 @@
         "unicast": {
           "enabled": true,
           "ipMax": 254,
-          "ipMin": 100,
+          "ipMin": 2,
 					"nUnicastIpsPerLoop": 1,
 					"unicastMinLoopDelay_msec": 1
         }
