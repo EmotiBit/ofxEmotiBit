@@ -301,10 +301,14 @@ public:
 	};
 	PowerMode _powerMode = PowerMode::LOW_POWER;
 
+	// ToDo: generalize patchboard management
 	Patchboard oscPatchboard;
 	ofxOscSender oscSender;
 	bool sendOsc = false; // ToDo: generalize sendOsc to sendData
-	
+
+	Patchboard udpPatchboard;
+	ofxUDPManager udpSender;
+	bool sendUdp = false; // ToDo: generalize sendOsc to sendData
 	
 };
 
