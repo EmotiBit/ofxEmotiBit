@@ -565,7 +565,7 @@ void ofApp::keyReleased(int key) {
 				oscSender.clear();
 				try
 				{
-					ofLog(OF_LOG_NOTICE) << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"] 
+					cout << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"] 
 						<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
 					oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 					sendOsc = true;
@@ -576,7 +576,7 @@ void ofApp::keyReleased(int key) {
 				udpPatchboard.loadFile(ofToDataPath(patchboardFile));
 				try
 				{
-					ofLog(OF_LOG_NOTICE) << "Starting UDP: " << udpPatchboard.settings.output["ipAddress"]
+					cout << "Starting UDP: " << udpPatchboard.settings.output["ipAddress"]
 						<< "," << ofToInt(udpPatchboard.settings.output["port"]) << endl;
 					ofxUDPSettings settings;
 					settings.sendTo(udpPatchboard.settings.output["ipAddress"].c_str(), ofToInt(udpPatchboard.settings.output["port"]));
