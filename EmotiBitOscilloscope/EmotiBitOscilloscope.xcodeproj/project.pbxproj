@@ -35,6 +35,7 @@
 		853E0BA2F448076739446874 /* ofxColorPicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 181D363B6DD54D1FA6309C43 /* ofxColorPicker.cpp */; };
 		856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9604B925D32EE39065747725 /* ofxBaseGui.cpp */; };
 		879A251454401BC0B6E4F238 /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9BFFBBF4CC43DEE890B3C3E /* OscTypes.cpp */; };
+		8E012CDE29A5B157009FB530 /* udpOutputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E012CDD29A5B157009FB530 /* udpOutputSettings.xml */; };
 		8E016F642832CAFE005D7C65 /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F612832CAFE005D7C65 /* ofxJSONElement.cpp */; };
 		8E016F6E2832CB73005D7C65 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F6D2832CB73005D7C65 /* jsoncpp.cpp */; };
 		8E016F7C2832CE28005D7C65 /* EmotiBitVariants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F722832CE28005D7C65 /* EmotiBitVariants.cpp */; };
@@ -78,6 +79,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				8E012CDE29A5B157009FB530 /* udpOutputSettings.xml in CopyFiles */,
 				8E016F862832D594005D7C65 /* emotibitCommSettings.json in CopyFiles */,
 				8E6079EA27C978BE00959DDB /* inputSettings.xml in CopyFiles */,
 				8E6079EB27C978BE00959DDB /* ofxOscilloscopeSettings.xml in CopyFiles */,
@@ -184,6 +186,7 @@
 		8B1E1E0F1F7DF006BF6F4E80 /* dsa.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = dsa.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/dsa.h; sourceTree = SOURCE_ROOT; };
 		8B30E93FD3D3475EED522A0E /* ofxOscBundle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxOscBundle.h; path = ../../../addons/ofxOsc/src/ofxOscBundle.h; sourceTree = SOURCE_ROOT; };
 		8C75AFC8774A62495DD53464 /* ofxOscReceiver.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxOscReceiver.h; path = ../../../addons/ofxOsc/src/ofxOscReceiver.h; sourceTree = SOURCE_ROOT; };
+		8E012CDD29A5B157009FB530 /* udpOutputSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = udpOutputSettings.xml; path = bin/data/udpOutputSettings.xml; sourceTree = "<group>"; };
 		8E016F612832CAFE005D7C65 /* ofxJSONElement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxJSONElement.cpp; path = ../../ofxJSON/src/ofxJSONElement.cpp; sourceTree = "<group>"; };
 		8E016F622832CAFE005D7C65 /* ofxJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxJSON.h; path = ../../ofxJSON/src/ofxJSON.h; sourceTree = "<group>"; };
 		8E016F632832CAFE005D7C65 /* ofxJSONElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxJSONElement.h; path = ../../ofxJSON/src/ofxJSONElement.h; sourceTree = "<group>"; };
@@ -1376,6 +1379,7 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				8E012CDD29A5B157009FB530 /* udpOutputSettings.xml */,
 				8E016F852832D594005D7C65 /* emotibitCommSettings.json */,
 				8E6079E827C978BE00959DDB /* inputSettings.xml */,
 				8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */,

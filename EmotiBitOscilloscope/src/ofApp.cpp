@@ -557,7 +557,10 @@ void ofApp::keyReleased(int key) {
 			}
 			else if (key == 'P')
 			{
-				string patchboardFile = "oscOutputSettings.xml";
+				// ToDo: generalize patchboard management
+				string patchboardFile;
+
+				patchboardFile = "oscOutputSettings.xml";
 				oscPatchboard.loadFile(ofToDataPath(patchboardFile));
 				oscSender.clear();
 				try
@@ -566,6 +569,20 @@ void ofApp::keyReleased(int key) {
 						<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
 					oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 					sendOsc = true;
+				}
+				catch (exception e) {}
+
+				patchboardFile = "udpOutputSettings.xml";
+				udpPatchboard.loadFile(ofToDataPath(patchboardFile));
+				try
+				{
+					cout << "Starting UDP: " << udpPatchboard.settings.output["ipAddress"]
+						<< "," << ofToInt(udpPatchboard.settings.output["port"]) << endl;
+					ofxUDPSettings settings;
+					settings.sendTo(udpPatchboard.settings.output["ipAddress"].c_str(), ofToInt(udpPatchboard.settings.output["port"]));
+					settings.blocking = false;
+					udpSender.Setup(settings);
+					sendUdp = true;
 				}
 				catch (exception e) {}
 			}
@@ -872,6 +889,7 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 		{
 			if (outputName.compare(sendDataOptions.at(j)) == 0)
 			{
+				// ToDo: Generalize output management
 				if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
 				{
 					if (selected)
@@ -882,7 +900,7 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 							try
 						{
 							cout << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"]
-								<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
+								<< ", " << ofToInt(oscPatchboard.settings.output["port"]) << endl;
 								oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 							sendOsc = true;
 							
@@ -897,6 +915,34 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 					else
 					{
 						sendOsc = false;
+					}
+				}
+				if (GUI_STRING_SEND_DATA_UDP.compare(sendDataOptions.at(j)) == 0)
+				{
+					if (selected)
+					{
+						string patchboardFile = "udpOutputSettings.xml";
+						udpPatchboard.loadFile(ofToDataPath(patchboardFile));
+						try
+						{
+							cout << "Starting UDP: " << udpPatchboard.settings.output["ipAddress"]
+								<< ", " << ofToInt(udpPatchboard.settings.output["port"]) << endl;
+							ofxUDPSettings settings;
+							settings.sendTo(udpPatchboard.settings.output["ipAddress"].c_str(), ofToInt(udpPatchboard.settings.output["port"]));
+							settings.blocking = false;
+							udpSender.Setup(settings);
+							sendUdp = true;
+						}
+						catch (exception e) 
+						{
+							cout << "UDP output setup failed " << endl;
+							sendDataList.at(j).set(false);
+							sendUdp = false;
+						}
+					}
+					else
+					{
+						sendUdp = false;
 					}
 				}
 			}
@@ -997,6 +1043,10 @@ void ofApp::processAperiodicData(std::string signalId, std::vector<float> data)
 }
 
 void ofApp::processSlowResponseMessage(string packet) {
+	if (sendUdp) // Handle sending data to outputs
+	{
+		udpSender.Send(packet.c_str(), packet.length());
+	}
 	vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
 	processSlowResponseMessage(splitPacket);
 }
@@ -1314,7 +1364,8 @@ void ofApp::setupGui()
 		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
 		guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
 		// Disable outputs until supporting code written
-		if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
+		if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0 
+			|| GUI_STRING_SEND_DATA_UDP.compare(sendDataOptions.at(j)) == 0)
 		{
 			sendDataDisabled.push_back(false);
 			guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(deviceAvailableColor);

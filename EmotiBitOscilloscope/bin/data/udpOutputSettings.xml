@@ -1,0 +1,14 @@
+<patchboard>
+	<settings>
+		<input>
+			<type>EmotiBit</type>
+		</input>
+		<output>
+			<type>UDP</type>
+			<ipAddress>localhost</ipAddress>
+			<port>12346</port>
+		</output>
+	</settings>
+  <patchcords>
+  </patchcords>
+</patchboard>	
