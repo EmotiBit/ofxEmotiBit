@@ -23,10 +23,14 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 - Required to build EmotiBit FirmwareInstaller
   - ofxSerial - https://github.com/bakercp/ofxSerial
   - ofxIO - https://github.com/bakercp/ofxIO
-## macOS Issues resolution
+## macOS 
+### Note on using M1 macs (apple silicon)
+- If you are using the new M1 macs, then make sure to use Rosetta installed in xcode.
+- EmotiBit software has not been officially tested on M1/M2 macs. If you are building on these systems, please let the community know on the [forum](http://forum.emotibit.com) about any additional steps you had to take get the source to build!
+### Setting up xcode project
 - **Adding paths to Library search paths**
   - Check if the directory paths for the files `liblsl64-static.a` and `liblslboost.a` are already present in the `project` > `Build Settings` > `Library Search Paths`. If they are not present, follow the below steps:  
-  - Select your project in the **Target group**(in xcode project navigator), go to **Build Settings** tab, and add the following path in the **Library Search Paths** section: `../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx`
+    - Select your project in the **Target group**(in xcode project navigator), go to **Build Settings** tab, and add the following path in the **Library Search Paths** section: `../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx`
 
 ## Developing on Linux
 - You will require a version of gcc on your linux machine. Depending on the version, we need to install the appropriate OpenFrameworks code base. You can check the gcc verison on you system using the following command: `gcc --verison`.

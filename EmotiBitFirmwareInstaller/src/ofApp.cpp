@@ -340,14 +340,18 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-	if (((char)key) == 'L')
+	// only accept key press in the first stage of display instruction
+	if (_state == State::DISPLAY_INSTRUCTION)
 	{
-		// Load FW file
-		ofFileDialogResult fileLoadResult = ofSystemLoadDialog("Select a firmware .bin file (be sure it's compatible with your Feather)");
-		if (fileLoadResult.bSuccess) {
-			_fwFilePath = "\"" + fileLoadResult.filePath + "\"";
-			//ofStringReplace(tempFilePath, "\\", "/"); // Handle Windows paths
-			ofLogNotice() << "Firmware file loaded: " << _fwFilePath << endl;
+		if (((char)key) == 'L')
+		{
+			// Load FW file
+			ofFileDialogResult fileLoadResult = ofSystemLoadDialog("Select a firmware .bin file (be sure it's compatible with your Feather)");
+			if (fileLoadResult.bSuccess) {
+				_fwFilePath = "\"" + fileLoadResult.filePath + "\"";
+				//ofStringReplace(tempFilePath, "\\", "/"); // Handle Windows paths
+				ofLogNotice() << "Firmware file loaded: " << _fwFilePath << endl;
+			}
 		}
 	}
 }
@@ -416,12 +420,13 @@ void ofApp::setupInstructionList()
 	// Step based user instructions
 	onScreenInstructionList[State::START] = "";
 	onScreenInstructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
-													   "\n2. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
+														"\n   !!CAUTION: Excessive force can break the HIB switch. Handle with care!!!"
+													    "\n2. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
 													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
 														"\n3. Make sure EmotiBit is NOT PLUGGED to the computer."
 														"\n4. Press space-bar to continue";
 	
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "\n5. Press Reset Button on the Feather"
+	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "5. Press Reset Button on the Feather"
 		"\n6. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)";
 	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "\nDO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS\n"
 																	"\n>>> Uploading WINC firmware updater sketch";
