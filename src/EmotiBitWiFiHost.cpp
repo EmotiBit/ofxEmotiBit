@@ -243,6 +243,7 @@ void EmotiBitWiFiHost::sendAdvertising() {
 							unicastNetwork = 0;
 						}
 					}
+					break; // Finished a send of all IPs on a subnet. Break out of for.
 				}
 			}
 		}
