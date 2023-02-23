@@ -33,10 +33,14 @@ class EmotiBitWiFiHost
 public:
 
 	struct HostAdvertisingSettings {
+		int sendAdvertisingInterval = 1000;
+		int checkAdvertisingInterval = 100;
 		bool enableBroadcast = true;
-		bool enableUnicast = false;
 
+		bool enableUnicast = true;
 		pair<int, int> unicastIpRange = { 2, 254 };
+		int nUnicastIpsPerLoop = 1;
+		int unicastMinLoopDelay = 3;
 
 		vector<string> networkIncludeList = { "*.*.*.*" };
 		vector<string> networkExcludeList = { "" };
@@ -53,6 +57,7 @@ public:
 	ofxTCPServer controlCxn;
 
 	std::thread* dataThread;
+	std::thread* advertisingThread;
 
 	std::mutex controlCxnMutex;
 	std::mutex dataCxnMutex;
@@ -87,13 +92,14 @@ public:
 	uint16_t availabilityTimeout = 5000;
 	uint16_t ipPurgeTimeout = 15000;
 
-    atomic_bool stopDataThread = {false};
+  atomic_bool stopDataThread = {false};
+	atomic_bool stopAdvertisingThread = { false };
 	uint16_t receivedDataPacketNumber = 60000;	// Tracks packet numbers (for multi-send). Starts at arbitrary large number.
 
 	~EmotiBitWiFiHost();
 	int8_t begin();
 	void getAvailableNetworks();
-	void pingAvailableNetworks();
+	void sendAdvertising();
 	void updateAdvertisingIpList(string ip); 
 	int8_t processAdvertising(vector<string> &infoPackets);
 	int8_t connect(string ip);
@@ -107,6 +113,7 @@ public:
 	int8_t sendData(const string& packet);
 	void processRequestData(const string& packet, int16_t dataStartChar);
 	void updateDataThread();
+	void processAdvertisingThread();
 	int8_t flushData();
 	//int8_t sendUdp(WiFiUDP& udp, const String& message, const IPAddress& ip, const uint16_t& port);
 	unordered_map<string, EmotiBitStatus> getEmotiBitIPs();	// <IP address, availability to connect>
@@ -137,10 +144,6 @@ public:
 	@return true if ipAddress is in networkList
 	*/
 	bool isInNetworkList(string ipAddress, vector<string> networkList);
-
-	void setAdvertTransSettings(bool enableBroadcast, bool enableUnicast, pair<int, int> unicastIpRange);
-	void setNetworkIncludeList(vector<string> networkIncludeList);
-	void setNetworkExcludeList(vector<string> networkExcludeList);
 
 	/*!
 	@brief Sets EmotiBit host advertising settings

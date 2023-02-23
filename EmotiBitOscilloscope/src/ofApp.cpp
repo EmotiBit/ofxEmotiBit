@@ -48,13 +48,15 @@ void ofApp::setup() {
 	}
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
 	ofSetLogLevel(OF_LOG_FATAL_ERROR);
+	//ofSetLogLevel(OF_LOG_VERBOSE);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	vector<string> infoPackets;
-	emotiBitWiFi.processAdvertising(infoPackets);
-	// ToDo: Handle info packets with mode change information
+	static uint64_t updateTimer = ofGetElapsedTimeMillis();
+	ofLog(OF_LOG_VERBOSE) << "update(): " << ofGetElapsedTimeMillis() - updateTimer;
+	updateTimer = ofGetElapsedTimeMillis();
+
 	if (!lslMarkerStreamInfo.name.empty())
 	{
 		updateLsl();
@@ -555,7 +557,10 @@ void ofApp::keyReleased(int key) {
 			}
 			else if (key == 'P')
 			{
-				string patchboardFile = "oscOutputSettings.xml";
+				// ToDo: generalize patchboard management
+				string patchboardFile;
+
+				patchboardFile = "oscOutputSettings.xml";
 				oscPatchboard.loadFile(ofToDataPath(patchboardFile));
 				oscSender.clear();
 				try
@@ -564,6 +569,20 @@ void ofApp::keyReleased(int key) {
 						<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
 					oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 					sendOsc = true;
+				}
+				catch (exception e) {}
+
+				patchboardFile = "udpOutputSettings.xml";
+				udpPatchboard.loadFile(ofToDataPath(patchboardFile));
+				try
+				{
+					cout << "Starting UDP: " << udpPatchboard.settings.output["ipAddress"]
+						<< "," << ofToInt(udpPatchboard.settings.output["port"]) << endl;
+					ofxUDPSettings settings;
+					settings.sendTo(udpPatchboard.settings.output["ipAddress"].c_str(), ofToInt(udpPatchboard.settings.output["port"]));
+					settings.blocking = false;
+					udpSender.Setup(settings);
+					sendUdp = true;
 				}
 				catch (exception e) {}
 			}
@@ -870,6 +889,7 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 		{
 			if (outputName.compare(sendDataOptions.at(j)) == 0)
 			{
+				// ToDo: Generalize output management
 				if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
 				{
 					if (selected)
@@ -880,7 +900,7 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 							try
 						{
 							cout << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"]
-								<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
+								<< ", " << ofToInt(oscPatchboard.settings.output["port"]) << endl;
 								oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 							sendOsc = true;
 							
@@ -895,6 +915,34 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 					else
 					{
 						sendOsc = false;
+					}
+				}
+				if (GUI_STRING_SEND_DATA_UDP.compare(sendDataOptions.at(j)) == 0)
+				{
+					if (selected)
+					{
+						string patchboardFile = "udpOutputSettings.xml";
+						udpPatchboard.loadFile(ofToDataPath(patchboardFile));
+						try
+						{
+							cout << "Starting UDP: " << udpPatchboard.settings.output["ipAddress"]
+								<< ", " << ofToInt(udpPatchboard.settings.output["port"]) << endl;
+							ofxUDPSettings settings;
+							settings.sendTo(udpPatchboard.settings.output["ipAddress"].c_str(), ofToInt(udpPatchboard.settings.output["port"]));
+							settings.blocking = false;
+							udpSender.Setup(settings);
+							sendUdp = true;
+						}
+						catch (exception e) 
+						{
+							cout << "UDP output setup failed " << endl;
+							sendDataList.at(j).set(false);
+							sendUdp = false;
+						}
+					}
+					else
+					{
+						sendUdp = false;
 					}
 				}
 			}
@@ -995,6 +1043,10 @@ void ofApp::processAperiodicData(std::string signalId, std::vector<float> data)
 }
 
 void ofApp::processSlowResponseMessage(string packet) {
+	if (sendUdp) // Handle sending data to outputs
+	{
+		udpSender.Send(packet.c_str(), packet.length());
+	}
 	vector<string> splitPacket = ofSplitString(packet, ",");	// split data into separate value pairs
 	processSlowResponseMessage(splitPacket);
 }
@@ -1312,7 +1364,8 @@ void ofApp::setupGui()
 		//sendDataGroup.add(sendDataList.at(sendDataList.size() - 1));
 		guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
 		// Disable outputs until supporting code written
-		if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0)
+		if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0 
+			|| GUI_STRING_SEND_DATA_UDP.compare(sendDataOptions.at(j)) == 0)
 		{
 			sendDataDisabled.push_back(false);
 			guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(deviceAvailableColor);
@@ -1877,6 +1930,24 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 			EmotiBitWiFiHost::HostAdvertisingSettings defaultSettings = emotiBitWiFi.getHostAdvertisingSettings();// if setter is not called, getter returns default values
 			if (jsonSettings.open(ofToDataPath(settingsFilePath, absolute)))
 			{
+				if (jsonSettings["wifi"]["advertising"].isMember("sendAdvertisingInterval_msec"))
+				{
+					settings.sendAdvertisingInterval = jsonSettings["wifi"]["advertising"]["sendAdvertisingInterval_msec"].asInt();
+				}
+				else
+				{
+					ofLogNotice("sendAdvertisingInterval_msec settings not found in ") << settingsFilePath + ". Using default value";
+					settings.enableBroadcast = defaultSettings.sendAdvertisingInterval;
+				}
+				if (jsonSettings["wifi"]["advertising"].isMember("checkAdvertisingInterval_msec"))
+				{
+					settings.checkAdvertisingInterval = jsonSettings["wifi"]["advertising"]["checkAdvertisingInterval_msec"].asInt();
+				}
+				else
+				{
+					ofLogNotice("checkAdvertisingInterval_msec settings not found in ") << settingsFilePath + ". Using default value";
+					settings.enableBroadcast = defaultSettings.checkAdvertisingInterval;
+				}
 				if (jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"].isMember("enabled"))
 				{
 					settings.enableBroadcast = jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"].asBool();
@@ -1907,6 +1978,24 @@ void ofApp::loadEmotiBitCommSettings(string settingsFilePath, bool absolute)
 				{
 					ofLogNotice("unicast ipRange settings not found in ") << settingsFilePath + ". Using default value";
 					settings.unicastIpRange = defaultSettings.unicastIpRange;
+				}
+				if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("nUnicastIpsPerLoop"))
+				{
+					settings.nUnicastIpsPerLoop = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["nUnicastIpsPerLoop"].asInt();
+				}
+				else
+				{
+					ofLogNotice("nUnicastIpsPerLoop settings not found in ") << settingsFilePath + ". Using default value";
+					settings.nUnicastIpsPerLoop = defaultSettings.nUnicastIpsPerLoop;
+				}
+				if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("unicastMinLoopDelay_msec"))
+				{
+					settings.unicastMinLoopDelay = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["unicastMinLoopDelay_msec"].asInt();
+				}
+				else
+				{
+					ofLogNotice("unicastMinLoopDelay_msec settings not found in ") << settingsFilePath + ". Using default value";
+					settings.unicastMinLoopDelay = defaultSettings.unicastMinLoopDelay;
 				}
 
 				if (jsonSettings["wifi"]["network"].isMember("includeList"))
