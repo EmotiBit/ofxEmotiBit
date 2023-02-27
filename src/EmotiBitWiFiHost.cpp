@@ -239,7 +239,9 @@ void EmotiBitWiFiHost::sendAdvertising() {
 						if (unicastNetwork >= availableNetworks.size())
 						{
 							// finished a send of all IPs. Start from beginning of available network list
+							sendInProgress = false;
 							unicastNetwork = 0;
+							break;
 						}
 					}
 				}
