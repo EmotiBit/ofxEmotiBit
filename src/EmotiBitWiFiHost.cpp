@@ -238,12 +238,10 @@ void EmotiBitWiFiHost::sendAdvertising() {
 						unicastNetwork++;
 						if (unicastNetwork >= availableNetworks.size())
 						{
-							// finished a send of all IPs
-							sendInProgress = false;
+							// finished a send of all IPs. Start from beginning of available network list
 							unicastNetwork = 0;
 						}
 					}
-					break; // Finished a send of all IPs on a subnet. Break out of for.
 				}
 			}
 		}
