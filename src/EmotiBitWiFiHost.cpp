@@ -232,13 +232,14 @@ void EmotiBitWiFiHost::sendAdvertising() {
 					{
 						// finished a send of all IPs
 						sendInProgress = false;
+						break;
 					}
 					else
 					{
 						unicastNetwork++;
 						if (unicastNetwork >= availableNetworks.size())
 						{
-							// finished a send of all IPs. Start from beginning of available network list
+							// reached end of unicastIpRange for the last known network in list
 							sendInProgress = false;
 							unicastNetwork = 0;
 							break;
