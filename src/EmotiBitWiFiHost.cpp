@@ -232,18 +232,19 @@ void EmotiBitWiFiHost::sendAdvertising() {
 					{
 						// finished a send of all IPs
 						sendInProgress = false;
+						break;
 					}
 					else
 					{
 						unicastNetwork++;
 						if (unicastNetwork >= availableNetworks.size())
 						{
-							// finished a send of all IPs
+							// reached end of unicastIpRange for the last known network in list
 							sendInProgress = false;
 							unicastNetwork = 0;
+							break;
 						}
 					}
-					break; // Finished a send of all IPs on a subnet. Break out of for.
 				}
 			}
 		}
