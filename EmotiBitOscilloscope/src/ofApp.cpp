@@ -251,9 +251,13 @@ void ofApp::setTypeTagPlotAttributes()
 
 void ofApp::resetScopePlot(int w, int s)
 {
+	// store the last set timeWindow before resetting
+	float lastTimeWindow = scopeWins.at(w).scopes.at(s).getTimeWindow();
 	scopeWins.at(w).scopes.at(s).clearData();
 	scopeWins.at(w).scopes.at(s).setup(timeWindowOnSetup, samplingFreqs.at(w).at(s), plotNames.at(w).at(s), plotColors.at(w).at(s),
 		0, 1);
+	// reset timeWindow to last set value
+	scopeWins.at(w).scopes.at(s).setTimeWindow(lastTimeWindow);
 }
 
 void ofApp::initMetaDataBuffers()
