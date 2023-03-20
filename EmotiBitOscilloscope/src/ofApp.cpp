@@ -48,7 +48,7 @@ void ofApp::setup() {
 	}
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
 	ofSetLogLevel(OF_LOG_FATAL_ERROR);
-	//ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_VERBOSE);
 }
 
 //--------------------------------------------------------------
@@ -687,12 +687,13 @@ void ofApp::updateDeviceList()
 	for (auto it = emotibitIps.begin(); it != emotibitIps.end(); it++)
 	{
 		string ip = it->first;
-		bool available = it->second.isAvailable;
+		string deviceId = it->second.first;
+		bool available = it->second.second.isAvailable;
 		bool found = false;
 		// Search the GUI list to see if we're missing any EmotiBits
 		for (auto device = deviceList.begin(); device != deviceList.end(); device++)
 		{
-			if (ip.compare(device->getName()) == 0)
+			if (deviceId.compare(device->getName()) == 0)
 			{
 				found = true;
 				break;
@@ -700,7 +701,13 @@ void ofApp::updateDeviceList()
 		}
 		if (!found)
 		{
-			deviceList.emplace_back(ip, false);	// Add a new device (unchecked)
+			deviceList.emplace_back(deviceId, false);	// Add a new device (unchecked)
+			auto iter = deviceIdToIp.emplace(deviceId, ip); // add mapping of deviceId to IP
+			if (!iter.second)
+			{
+				// if a deviceId already exists, change its IP to the latest IP set in WiFi host
+				deviceIdToIp[deviceId] = ip;
+			}
 			//deviceList.at(deviceList.size() - 1).addListener(this, &ofApp::deviceSelection);	// Attach a listener
 			guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_NAME).add(deviceList.at(deviceList.size() - 1));
 			if (emotibitIps.size() == 1 && deviceList.size() == 1)  // This is the first device in the list
@@ -726,9 +733,10 @@ void ofApp::updateDeviceList()
 	for (auto device = deviceList.begin(); device != deviceList.end(); device++)
 	{
 		// Update availability color
-		string ip = device->getName();
+		string deviceId = device->getName();
+		string ip = deviceIdToIp[deviceId];
 		bool available = false;
-		try { available = emotibitIps.at(ip).isAvailable; }
+		try { available = emotibitIps.at(ip).second.isAvailable; }
 		catch (const std::out_of_range& oor) { oor; } // ignore exception
 		ofColor textColor;
 		if (available || ip.compare(emotiBitWiFi.connectedEmotibitIp) == 0)
@@ -739,7 +747,7 @@ void ofApp::updateDeviceList()
 		{
 			textColor = notAvailableColor;
 		}
-		guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_NAME).getControl(ip)->setTextColor(textColor);
+		guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_NAME).getControl(deviceId)->setTextColor(textColor);
 
 		// Update device connection status checkbox
 		bool selected = device->get();
@@ -823,14 +831,15 @@ void ofApp::powerModeSelection(ofAbstractParameter& mode)
 
 void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 {
-	string ip = device.getName();
+	string deviceId = device.getName();
+	string ip = deviceIdToIp[deviceId];
 	bool selected = device.cast<bool>().get();
 	if (selected)
 	{
 		// device selected
 		auto emotibitIps = emotiBitWiFi.getEmotiBitIPs();
 		bool available = false;
-		try	{	available = emotibitIps.at(ip).isAvailable;	}
+		try	{	available = emotibitIps.at(ip).second.isAvailable;	}
 		catch (const std::out_of_range& oor) { oor; } // ignore exception
 		if (available)
 		{

@@ -191,6 +191,7 @@ public:
 	//ofParameter<string> deviceSelected;
 	ofxLabel deviceSelected;
 	vector<ofParameter<bool>> deviceList;
+	unordered_map<string, string> deviceIdToIp;
 	ofParameterGroup deviceGroup;
 	// ToDo: encapsulate sendData variables to be more portable/usable
 	vector<string> sendDataOptions;

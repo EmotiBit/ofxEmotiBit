@@ -317,17 +317,30 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 					{
 						// HELLO_HOST
 						string value;
+						string emotibitDeviceId = "";
 						int16_t valuePos = EmotiBitPacket::getPacketKeyedValue(packet, EmotiBitPacket::PayloadLabel::DATA_PORT, value, dataStartChar);
 						if (valuePos > -1)
 						{
 							updateAdvertisingIpList(ip);
-							ofLogVerbose() << "EmotiBit: " << ip << ":" << port;
-							// Add ip address to our list
-							auto it = _emotibitIps.emplace(ip, EmotiBitStatus(ofToInt(value) == EmotiBitComms::EMOTIBIT_AVAILABLE));
+							ofLogVerbose() << "EmotiBit ip: " << ip << ":" << port;
+							int16_t deviceIdPos = -1;
+							deviceIdPos = EmotiBitPacket::getPacketKeyedValue(packet, EmotiBitPacket::PayloadLabel::DEVICE_ID, emotibitDeviceId, dataStartChar);
+							if (deviceIdPos > -1)
+							{
+								// found EmotiBitSrNum in HELLO_HOST message
+								// do nothing. emotibitDeviceid already updated.
+								ofLogVerbose() << "EmotiBit DeviceId: " << emotibitDeviceId;
+							}
+							else
+							{
+								ofLogVerbose() << "EmotiBit DeviceId: " << "DeviceIdNotTx";
+								// Add ip address to our list
+							}
+							auto it = _emotibitIps.emplace(ip, std::make_pair(emotibitDeviceId,EmotiBitStatus(ofToInt(value) == EmotiBitComms::EMOTIBIT_AVAILABLE)));
 							if (!it.second)
 							{
 								// if it's not a new ip address, update the status
-								it.first->second = EmotiBitStatus(ofToInt(value) == EmotiBitComms::EMOTIBIT_AVAILABLE);
+								it.first->second.second = EmotiBitStatus(ofToInt(value) == EmotiBitComms::EMOTIBIT_AVAILABLE);
 							}
 						}
 					}
@@ -430,9 +443,9 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 	// Check to see if EmotiBit availability is stale or needs purging
 	for (auto it = _emotibitIps.begin(); it != _emotibitIps.end(); it++)
 	{
-		if (ofGetElapsedTimeMillis() - it->second.lastSeen > availabilityTimeout)
+		if (ofGetElapsedTimeMillis() - it->second.second.lastSeen > availabilityTimeout)
 		{
-			it->second.isAvailable = false;
+			it->second.second.isAvailable = false;
 		}
 
 		//if (ofGetElapsedTimeMillis() - it->second.lastSeen > ipPurgeTimeout)
@@ -752,7 +765,7 @@ int8_t EmotiBitWiFiHost::connect(string ip)
 		emotibitIpsMutex.lock();
 		try
 		{
-			if (ip.compare("") != 0 && _emotibitIps.at(ip).isAvailable)	// If the ip is on our list and available
+			if (ip.compare("") != 0 && _emotibitIps.at(ip).second.isAvailable)	// If the ip is on our list and available
 			{
 				connectedEmotibitIp = ip;
 				isStartingConnection = true;
@@ -783,7 +796,7 @@ int8_t EmotiBitWiFiHost::connect(uint8_t i)
 	return FAIL;
 }
 
-unordered_map<string, EmotiBitStatus> EmotiBitWiFiHost::getEmotiBitIPs()
+unordered_map<string, std::pair<string,EmotiBitStatus>> EmotiBitWiFiHost::getEmotiBitIPs()
 {
 	//emotibitIpsMutex.lock();
 	//unordered_map<string, bool> output;
