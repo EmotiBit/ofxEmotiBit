@@ -121,7 +121,7 @@ public:
 	void processAdvertisingThread();
 	int8_t flushData();
 	//int8_t sendUdp(WiFiUDP& udp, const String& message, const IPAddress& ip, const uint16_t& port);
-	unordered_map<string, EmotibitInfo> getdiscoveredEmotibits();	// <IP address, availability to connect>
+	unordered_map<string, EmotibitInfo> getdiscoveredEmotibits();	// <device ID, device Information>
 	vector<string> getLocalIPs();
 	//string createPacket(string typeTag, string data = "", uint16_t dataLength = 0, uint8_t protocolVersion = 1, uint8_t dataReliability = 100);
 	//string createPacket(string typeTag, vector<string> data, uint8_t protocolVersion = 1, uint8_t dataReliability = 100);
