@@ -683,12 +683,12 @@ void ofApp::updateDeviceList()
 {
 	// Update add any missing EmotiBits on network to the device list
 	// ToDo: consider subtraction of EmotiBits that are stale
-	auto emotibitIps = emotiBitWiFi.getEmotiBitIPs();
-	for (auto it = emotibitIps.begin(); it != emotibitIps.end(); it++)
+	auto discoveredEmotibits = emotiBitWiFi.getdiscoveredEmotibits();
+	for (auto it = discoveredEmotibits.begin(); it != discoveredEmotibits.end(); it++)
 	{
-		string ip = it->first;
-		string deviceId = it->second.first;
-		bool available = it->second.second.isAvailable;
+		string deviceId = it->first;
+		string ip = it->second.ip;
+		bool available = it->second.isAvailable;
 		bool found = false;
 		// Search the GUI list to see if we're missing any EmotiBits
 		for (auto device = deviceList.begin(); device != deviceList.end(); device++)
@@ -702,15 +702,9 @@ void ofApp::updateDeviceList()
 		if (!found)
 		{
 			deviceList.emplace_back(deviceId, false);	// Add a new device (unchecked)
-			auto iter = deviceIdToIp.emplace(deviceId, ip); // add mapping of deviceId to IP
-			if (!iter.second)
-			{
-				// if a deviceId already exists, change its IP to the latest IP set in WiFi host
-				deviceIdToIp[deviceId] = ip;
-			}
 			//deviceList.at(deviceList.size() - 1).addListener(this, &ofApp::deviceSelection);	// Attach a listener
 			guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_NAME).add(deviceList.at(deviceList.size() - 1));
-			if (emotibitIps.size() == 1 && deviceList.size() == 1)  // This is the first device in the list
+			if (discoveredEmotibits.size() == 1 && deviceList.size() == 1)  // This is the first device in the list
 			{
 				// There is one device on the network and it's the first device in the list
 				// connect
@@ -722,7 +716,8 @@ void ofApp::updateDeviceList()
 	// Update selected device
 	if (emotiBitWiFi.isConnected())
 	{
-		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, emotiBitWiFi.connectedEmotibitIp);
+		// ToDo: Think about how to make the displayed text scalable to cover other info. about selected EmotiBit
+		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, emotiBitWiFi.connectedEmotibitIdentifier);
 	}
 	else
 	{
@@ -734,9 +729,9 @@ void ofApp::updateDeviceList()
 	{
 		// Update availability color
 		string deviceId = device->getName();
-		string ip = deviceIdToIp[deviceId];
+		string ip = discoveredEmotibits[deviceId].ip;
 		bool available = false;
-		try { available = emotibitIps.at(ip).second.isAvailable; }
+		try { available = discoveredEmotibits.at(deviceId).isAvailable; }
 		catch (const std::out_of_range& oor) { oor; } // ignore exception
 		ofColor textColor;
 		if (available || ip.compare(emotiBitWiFi.connectedEmotibitIp) == 0)
@@ -832,14 +827,14 @@ void ofApp::powerModeSelection(ofAbstractParameter& mode)
 void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 {
 	string deviceId = device.getName();
-	string ip = deviceIdToIp[deviceId];
+	auto discoveredEmotibits = emotiBitWiFi.getdiscoveredEmotibits();
+	string ip = discoveredEmotibits[deviceId].ip;
 	bool selected = device.cast<bool>().get();
 	if (selected)
 	{
 		// device selected
-		auto emotibitIps = emotiBitWiFi.getEmotiBitIPs();
-		bool available = false;
-		try	{	available = emotibitIps.at(ip).second.isAvailable;	}
+				bool available = false;
+		try	{	available = discoveredEmotibits.at(deviceId).isAvailable;	}
 		catch (const std::out_of_range& oor) { oor; } // ignore exception
 		if (available)
 		{
@@ -861,7 +856,7 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 					clearOscilloscopes(true);
 				}
 				// ToDo: consider if we need a delay here
-				emotiBitWiFi.connect(ip);
+				emotiBitWiFi.connect(deviceId);
 				_powerMode = PowerMode::LOW_POWER;
 				clearOscilloscopes(true);
 			}

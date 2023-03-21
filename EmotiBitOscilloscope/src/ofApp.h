@@ -127,7 +127,6 @@ public:
 	ofTrueTypeFont subLegendFont;
 
 	EmotiBitWiFiHost emotiBitWiFi;
-	unordered_map<string, EmotiBitStatus> emotibitIps;
 	//struct EmotibitPacketHeader_V1 {
 	//	uint32_t timestamp;  // milliseconds since EmotiBit bootup
 	//	uint16_t packetCount;
@@ -191,7 +190,6 @@ public:
 	//ofParameter<string> deviceSelected;
 	ofxLabel deviceSelected;
 	vector<ofParameter<bool>> deviceList;
-	unordered_map<string, string> deviceIdToIp;
 	ofParameterGroup deviceGroup;
 	// ToDo: encapsulate sendData variables to be more portable/usable
 	vector<string> sendDataOptions;
