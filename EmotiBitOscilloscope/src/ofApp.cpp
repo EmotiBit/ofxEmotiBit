@@ -687,7 +687,6 @@ void ofApp::updateDeviceList()
 	for (auto it = discoveredEmotibits.begin(); it != discoveredEmotibits.end(); it++)
 	{
 		string deviceId = it->first;
-		string ip = it->second.ip;
 		bool available = it->second.isAvailable;
 		bool found = false;
 		// Search the GUI list to see if we're missing any EmotiBits
@@ -729,12 +728,11 @@ void ofApp::updateDeviceList()
 	{
 		// Update availability color
 		string deviceId = device->getName();
-		string ip = discoveredEmotibits[deviceId].ip;
 		bool available = false;
 		try { available = discoveredEmotibits.at(deviceId).isAvailable; }
 		catch (const std::out_of_range& oor) { oor; } // ignore exception
 		ofColor textColor;
-		if (available || ip.compare(emotiBitWiFi.connectedEmotibitIp) == 0)
+		if (available || deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) == 0)
 		{
 			textColor = deviceAvailableColor;
 		}
@@ -746,14 +744,14 @@ void ofApp::updateDeviceList()
 
 		// Update device connection status checkbox
 		bool selected = device->get();
-		if (ip.compare(emotiBitWiFi.connectedEmotibitIp) == 0 && !selected)
+		if (deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) == 0 && !selected)
 		{
 			// Connected to device -- checkbox needs to be checked
 			ofRemoveListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
 			device->set(true);
 			ofAddListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
 		}
-		else if (ip.compare(emotiBitWiFi.connectedEmotibitIp) != 0 && selected)
+		else if (deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) != 0 && selected)
 		{
 			// Not connected to device -- checkbox needs to be unchecked
 			ofRemoveListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
@@ -828,7 +826,6 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 {
 	string deviceId = device.getName();
 	auto discoveredEmotibits = emotiBitWiFi.getdiscoveredEmotibits();
-	string ip = discoveredEmotibits[deviceId].ip;
 	bool selected = device.cast<bool>().get();
 	if (selected)
 	{
@@ -839,9 +836,9 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 		if (available)
 		{
 			// Only respond to available selections
-			if (ip.compare(emotiBitWiFi.connectedEmotibitIp) == 0)
+			if (deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) == 0)
 			{
-				// We're already connected to the selected IP, so enjoy a cold beer
+				// We're already connected to the selected device, so enjoy a cold beer
 			}
 			else
 			{
@@ -865,7 +862,7 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 	else	
 	{
 		// device unselected
-		if (emotiBitWiFi.connectedEmotibitIp.compare(ip) == 0)
+		if (emotiBitWiFi.connectedEmotibitIdentifier.compare(deviceId) == 0)
 		{
 			// The device we're connected to has been unchecked... disconnect
 			emotiBitWiFi.disconnect();
