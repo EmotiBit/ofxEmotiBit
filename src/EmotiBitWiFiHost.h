@@ -19,13 +19,15 @@
 
 using namespace EmotiBit;
 
-class EmotiBitStatus
+class EmotibitInfo
 {
 public:
-	EmotiBitStatus(bool isAvailable = false, uint64_t lastSeen = ofGetElapsedTimeMillis()) :
-		isAvailable(isAvailable), lastSeen(lastSeen) {}
+	EmotibitInfo(string ip = "", bool isAvailable = false, uint64_t lastSeen = ofGetElapsedTimeMillis()) :
+		ip(ip), isAvailable(isAvailable), lastSeen(lastSeen) {}
+	string ip;
 	bool isAvailable;
 	uint64_t lastSeen;
+	// Additional parameters like Name, Fs etc can be stored in this struct
 };
 
 class EmotiBitWiFiHost
@@ -73,8 +75,11 @@ public:
 	bool enableBroadcast = false; 
 	uint64_t advertizingTimer;
 
-	unordered_map<string, EmotiBitStatus> _emotibitIps;	// list of EmotiBit IP addresses
+	unordered_map<string, EmotibitInfo> _discoveredEmotibits;	// list of EmotiBit IP addresses
 	string connectedEmotibitIp;
+	// ToDo: Find a scalable solution to store connected EmotiBit details.
+	// Ex. If we want to change the selected emotibit name to be displayed, instead of ID
+	string connectedEmotibitIdentifier;  //!< stores the ID of the connected EmotiBit 
 	bool _isConnected;
 	bool isStartingConnection;
 	uint16_t startCxnTimeout = 5000;	// milliseconds
@@ -102,7 +107,7 @@ public:
 	void sendAdvertising();
 	void updateAdvertisingIpList(string ip); 
 	int8_t processAdvertising(vector<string> &infoPackets);
-	int8_t connect(string ip);
+	int8_t connect(string deviceId);
 	int8_t connect(uint8_t i);
 	int8_t disconnect();
 	int8_t sendControl(const string& packet);
@@ -116,7 +121,7 @@ public:
 	void processAdvertisingThread();
 	int8_t flushData();
 	//int8_t sendUdp(WiFiUDP& udp, const String& message, const IPAddress& ip, const uint16_t& port);
-	unordered_map<string, EmotiBitStatus> getEmotiBitIPs();	// <IP address, availability to connect>
+	unordered_map<string, EmotibitInfo> getdiscoveredEmotibits();	// <device ID, device Information>
 	vector<string> getLocalIPs();
 	//string createPacket(string typeTag, string data = "", uint16_t dataLength = 0, uint8_t protocolVersion = 1, uint8_t dataReliability = 100);
 	//string createPacket(string typeTag, vector<string> data, uint8_t protocolVersion = 1, uint8_t dataReliability = 100);

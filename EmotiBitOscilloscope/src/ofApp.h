@@ -127,7 +127,6 @@ public:
 	ofTrueTypeFont subLegendFont;
 
 	EmotiBitWiFiHost emotiBitWiFi;
-	unordered_map<string, EmotiBitStatus> emotibitIps;
 	//struct EmotibitPacketHeader_V1 {
 	//	uint32_t timestamp;  // milliseconds since EmotiBit bootup
 	//	uint16_t packetCount;

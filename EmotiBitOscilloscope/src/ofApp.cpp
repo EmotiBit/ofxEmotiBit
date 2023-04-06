@@ -48,7 +48,7 @@ void ofApp::setup() {
 	}
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
 	ofSetLogLevel(OF_LOG_FATAL_ERROR);
-	//ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_VERBOSE);
 }
 
 //--------------------------------------------------------------
@@ -683,16 +683,16 @@ void ofApp::updateDeviceList()
 {
 	// Update add any missing EmotiBits on network to the device list
 	// ToDo: consider subtraction of EmotiBits that are stale
-	auto emotibitIps = emotiBitWiFi.getEmotiBitIPs();
-	for (auto it = emotibitIps.begin(); it != emotibitIps.end(); it++)
+	auto discoveredEmotibits = emotiBitWiFi.getdiscoveredEmotibits();
+	for (auto it = discoveredEmotibits.begin(); it != discoveredEmotibits.end(); it++)
 	{
-		string ip = it->first;
+		string deviceId = it->first;
 		bool available = it->second.isAvailable;
 		bool found = false;
 		// Search the GUI list to see if we're missing any EmotiBits
 		for (auto device = deviceList.begin(); device != deviceList.end(); device++)
 		{
-			if (ip.compare(device->getName()) == 0)
+			if (deviceId.compare(device->getName()) == 0)
 			{
 				found = true;
 				break;
@@ -700,10 +700,10 @@ void ofApp::updateDeviceList()
 		}
 		if (!found)
 		{
-			deviceList.emplace_back(ip, false);	// Add a new device (unchecked)
+			deviceList.emplace_back(deviceId, false);	// Add a new device (unchecked)
 			//deviceList.at(deviceList.size() - 1).addListener(this, &ofApp::deviceSelection);	// Attach a listener
 			guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_NAME).add(deviceList.at(deviceList.size() - 1));
-			if (emotibitIps.size() == 1 && deviceList.size() == 1)  // This is the first device in the list
+			if (discoveredEmotibits.size() == 1 && deviceList.size() == 1)  // This is the first device in the list
 			{
 				// There is one device on the network and it's the first device in the list
 				// connect
@@ -715,7 +715,8 @@ void ofApp::updateDeviceList()
 	// Update selected device
 	if (emotiBitWiFi.isConnected())
 	{
-		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, emotiBitWiFi.connectedEmotibitIp);
+		// ToDo: Think about how to make the displayed text scalable to cover other info. about selected EmotiBit
+		deviceSelected.setup(GUI_STRING_EMOTIBIT_SELECTED, emotiBitWiFi.connectedEmotibitIdentifier);
 	}
 	else
 	{
@@ -726,12 +727,12 @@ void ofApp::updateDeviceList()
 	for (auto device = deviceList.begin(); device != deviceList.end(); device++)
 	{
 		// Update availability color
-		string ip = device->getName();
+		string deviceId = device->getName();
 		bool available = false;
-		try { available = emotibitIps.at(ip).isAvailable; }
+		try { available = discoveredEmotibits.at(deviceId).isAvailable; }
 		catch (const std::out_of_range& oor) { oor; } // ignore exception
 		ofColor textColor;
-		if (available || ip.compare(emotiBitWiFi.connectedEmotibitIp) == 0)
+		if (available || deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) == 0)
 		{
 			textColor = deviceAvailableColor;
 		}
@@ -739,18 +740,18 @@ void ofApp::updateDeviceList()
 		{
 			textColor = notAvailableColor;
 		}
-		guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_NAME).getControl(ip)->setTextColor(textColor);
+		guiPanels.at(guiPanelDevice).getGroup(GUI_DEVICE_GROUP_NAME).getControl(deviceId)->setTextColor(textColor);
 
 		// Update device connection status checkbox
 		bool selected = device->get();
-		if (ip.compare(emotiBitWiFi.connectedEmotibitIp) == 0 && !selected)
+		if (deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) == 0 && !selected)
 		{
 			// Connected to device -- checkbox needs to be checked
 			ofRemoveListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
 			device->set(true);
 			ofAddListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
 		}
-		else if (ip.compare(emotiBitWiFi.connectedEmotibitIp) != 0 && selected)
+		else if (deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) != 0 && selected)
 		{
 			// Not connected to device -- checkbox needs to be unchecked
 			ofRemoveListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
@@ -823,21 +824,21 @@ void ofApp::powerModeSelection(ofAbstractParameter& mode)
 
 void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 {
-	string ip = device.getName();
+	string deviceId = device.getName();
+	auto discoveredEmotibits = emotiBitWiFi.getdiscoveredEmotibits();
 	bool selected = device.cast<bool>().get();
 	if (selected)
 	{
 		// device selected
-		auto emotibitIps = emotiBitWiFi.getEmotiBitIPs();
-		bool available = false;
-		try	{	available = emotibitIps.at(ip).isAvailable;	}
+				bool available = false;
+		try	{	available = discoveredEmotibits.at(deviceId).isAvailable;	}
 		catch (const std::out_of_range& oor) { oor; } // ignore exception
 		if (available)
 		{
 			// Only respond to available selections
-			if (ip.compare(emotiBitWiFi.connectedEmotibitIp) == 0)
+			if (deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) == 0)
 			{
-				// We're already connected to the selected IP, so enjoy a cold beer
+				// We're already connected to the selected device, so enjoy a cold beer
 			}
 			else
 			{
@@ -852,7 +853,7 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 					clearOscilloscopes(true);
 				}
 				// ToDo: consider if we need a delay here
-				emotiBitWiFi.connect(ip);
+				emotiBitWiFi.connect(deviceId);
 				_powerMode = PowerMode::LOW_POWER;
 				clearOscilloscopes(true);
 			}
@@ -861,7 +862,7 @@ void ofApp::deviceGroupSelection(ofAbstractParameter& device)
 	else	
 	{
 		// device unselected
-		if (emotiBitWiFi.connectedEmotibitIp.compare(ip) == 0)
+		if (emotiBitWiFi.connectedEmotibitIdentifier.compare(deviceId) == 0)
 		{
 			// The device we're connected to has been unchecked... disconnect
 			emotiBitWiFi.disconnect();
