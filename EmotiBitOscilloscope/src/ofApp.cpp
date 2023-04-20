@@ -81,7 +81,7 @@ void ofApp::checkLatestSwVersion()
 	bool isNetworkAvailable = false;
 	// -n specifies number of tries. we are going to try to detect internet connection by sending 1 packet
 	// -w specifies timeout period in mS. We are going to wait for a maximum of 3 seconds for a ping response.
-	// the IP 8.8.8.8 is google's public DNS. We are using ping with a specific IP as that removes undefined wait periods associated with DNS resolution.
+	// the IP 8.8.8.8 is google's public DNS. We are using ping with a specific IP as that removes undefined wait periods associated with DNS resolution. More details: https://developers.google.com/speed/public-dns
 	std::string command = "ping -n 1 -w 3000 8.8.8.8";
 	std::string pingResponse = "";
 	char buffer[200];
@@ -146,6 +146,7 @@ void ofApp::checkLatestSwVersion()
 		// system call to curl
 		std::string latestReleaseUrl = "https://github.com/EmotiBit/ofxEmotiBit/releases/latest";
 		std::string latestReleaseApiRequest = "https://api.github.com/repos/EmotiBit/ofxEmotiBit/releases/latest";
+		// Calling curl with a 3 second timeout. Timeout tested working with curl version v8.0.1. Older versions of curl have shown a "disregard" for the timeout.
 		std::string command = "curl --connect-timeout 3 " + latestReleaseApiRequest;
 		std::string response = "";
 		char buffer[200];
