@@ -84,7 +84,7 @@ void ofApp::checkLatestSwVersion()
 	std::string command = "ping -n 1 -w 3000 8.8.8.8";
 	std::string pingResponse = "";
 	char buffer[200];
-	ofLogNotice() << "Trying to dtect internet access";
+	ofLogNotice() << "Trying to detect internet access";
 	try
 	{
 #if defined (TARGET_OSX) || defined (TARGET_LINUX)
