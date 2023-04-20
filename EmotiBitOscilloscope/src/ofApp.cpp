@@ -13,7 +13,6 @@ void ofApp::setup() {
 	ofBackground(255, 255, 255);
 	checkLatestSwVersion();
 	ofSetLogLevel(OF_LOG_NOTICE);
-	writeOfxEmotiBitVersionFile();
 	setTypeTagPlotAttributes();
 	//saveEmotiBitCommSettings();
 	loadEmotiBitCommSettings();
