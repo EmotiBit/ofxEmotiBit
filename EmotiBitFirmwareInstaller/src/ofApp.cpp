@@ -27,6 +27,8 @@
 
 /*
 Additional Notes:
+
+RE Feather M0:
 1. The FirmwareUpdater.ino.feather_m0.bin was created using Arduino by modifying the arduino Example as directed here: https://learn.adafruit.com/adafruit-atwinc1500-wifi-module-breakout/updating-firmware
 2. The WINC FW m2m_aio_3a0.bin was obtained by following the guide here: http://ww1.microchip.com/downloads/en/DeviceDoc/ATWINC15x0%20Software%20Release%20Notes_9%20Aug%202018.pdf
   1. The firmware binary was extracted from the ASF package using atme studio 7.
@@ -34,6 +36,10 @@ Additional Notes:
 4. Details about BOSSA can be found here: http://manpages.ubuntu.com/manpages/bionic/man1/bossac.1.html
   1. The executables were obtained from the release page
 5. The WINC uploader can be found here: https://github.com/arduino/FirmwareUploader/releases
+
+RE: Feather ESP32:
+1. The Feather ESP32 requires esptool executable/binary to flash firmware. We are using esptool v3.3, which can found on espressif's release page: https://github.com/espressif/esptool/releases/tag/v3.3
+2. esptool requries additional bin files to run, "boot_app0.bin", "EmotiBit_stock_firmware.ino.bootloader.bin" and "EmotiBit_stock_firmware.partitions.bin" were all acquired from visual micro's build+upload steps
 */
 
 #include "ofApp.h"
@@ -54,6 +60,7 @@ void ofApp::setup() {
 	ofSetLogLevel(OF_LOG_NOTICE);
 	//old OF default is 96 - but this results in fonts looking larger than in other programs.
 	ofTrueTypeFont::setGlobalDpi(72);
+	// ToDo: Handle the case if a font file is missing
 	if (instructionFont.load(ofToDataPath("verdana.ttf"), 20, true, true))
 	{
 		ofLogNotice() << "Instruction Font loaded correctly";
@@ -236,16 +243,16 @@ void ofApp::update(){
 		timeSinceLastProgressIndicatorUpdate = ofGetElapsedTimeMillis();
 	}
 
+	// Update any changes to the loaded fw file path
 	fwPathGuiString = _fwFilePath;
-	if (fwPathGuiString.length() > 200)
+	if (fwPathGuiString.length() > 200)  // we display a max of 200 characters on the screen for file path
 	{
-		// keep the last 197 characters of the path
+		// If path is longer than 200 characters, 
+		// keep the last 197 characters of the path (to fit on screen)
 		fwPathGuiString = fwPathGuiString.substr(fwPathGuiString.length() - 197);
 		fwPathGuiString = "..." + fwPathGuiString;
 	}
-
-	// Update any changes to the loaded fw file path
-	// split long path into substrings
+	// fold long path into multi-line string to fit on screen without overflow
 	const int charPerLine = 50;
 	std::string foldedFilePath = "";
 	int subStrEnd = 0;
@@ -261,18 +268,21 @@ void ofApp::update(){
 void ofApp::raiseError(std::string additionalMessage)
 {
 	progressString = "";
+	// clear existing GUI element lists
 	textElementlist.clear();
+	imageElementList.clear();
+	
+	// load text elements to be displayed
 	GuiElement::Location startLoc = guiElementPositions["Instructions"];
 	textElementlist.push_back(GuiTextElement(startLoc, ofColor(255,0,0),instructionList[State::INSTALLER_ERROR]));
 	int cursorXLoc = startLoc.x;
 	int cursorYLoc = startLoc.y + instructionFont.stringHeight(instructionList[State::INSTALLER_ERROR]) + 5;
-	//onScreenInstructionImage.clear();
-	imageElementList.clear();
 	// set the Error string according to the current state
 	std::string errorMessage = additionalMessage + errorMessageList[_state];
 	textElementlist.push_back(GuiTextElement(GuiElement::Location(cursorXLoc, cursorYLoc), ofColor(255, 0, 0), errorMessage));
-
 	cursorYLoc += instructionFont.stringHeight(errorMessage);
+
+	// Load image elements to be displayed
 	std::vector<std::string> images = errorImages[_state];
 	for (int i = 0; i < images.size(); i++)
 	{
@@ -281,7 +291,7 @@ void ofApp::raiseError(std::string additionalMessage)
 		img.resize(resizedImgDim, resizedImgDim);
 		//disaplyedErrorImage.push_back(img);
 		imageElementList.push_back(GuiImageElement(GuiElement::Location(cursorXLoc, cursorYLoc), ofColor(255), img));
-		cursorXLoc += (resizedImgDim + 10);
+		cursorXLoc += (resizedImgDim + 10); // aditional 10 pixel to add distance between images displayed
 	}
 	_state = State::INSTALLER_ERROR;
 	pingProgTryCount = 0;
@@ -300,6 +310,12 @@ void ofApp::progressToNextState(int state)
 		_state = (State)state;
 	}
 	ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));
+	
+	// clear text and image GUi element lists
+	textElementlist.clear();
+	imageElementList.clear();
+
+	// move already displayed messages to "old" stack
 	if (newMessage != "")
 	{
 		// there exists a message on the screen
@@ -307,9 +323,8 @@ void ofApp::progressToNextState(int state)
 		oldMessage += "\n";
 	}
 	newMessage = instructionList[_state];
-	textElementlist.clear();
-	imageElementList.clear();
-	//onScreenInstruction = onScreenInstruction + "\n" + instructionList[_state];
+
+	// Load text GUI elements
 	GuiElement::Location instructionStartLoc = guiElementPositions["Instructions"];
 	// Add warning if flashing firmware
 	if ((int)_state > (int)State::WAIT_FOR_FEATHER && (int)_state < (int)State::COMPLETED)
@@ -317,16 +332,12 @@ void ofApp::progressToNextState(int state)
 		textElementlist.push_back(GuiTextElement(instructionStartLoc, ofColor(255, 128, 0), S_WARNING));
 	}
 	int cursorYLocation = instructionStartLoc.y;
-	// moving cursor location to adjust WARNING
-	cursorYLocation += warningFont.stringHeight(S_WARNING) + 5;
+	cursorYLocation += warningFont.stringHeight(S_WARNING) + 5; // update cursor location
 	
-	// add messages to be displayed into the text list
 	// add old message in gray
 	textElementlist.push_back(GuiTextElement(GuiElement::Location(instructionStartLoc.x,cursorYLocation),
 		ofColor(160), oldMessage ));
-	// update cursor location
-	cursorYLocation += instructionFont.stringHeight(oldMessage);
-	
+	cursorYLocation += instructionFont.stringHeight(oldMessage);  // update cursor location
 	if (_state == State::COMPLETED)
 	{
 		// Add "success" statement in GREEN
@@ -340,33 +351,25 @@ void ofApp::progressToNextState(int state)
 			ofColor(0), newMessage));
 	}
 	cursorYLocation += instructionFont.stringHeight(newMessage);
+
+	// Find where the progress "....." string will be added
 	std::size_t lastnewLine = newMessage.find_last_of("\n");
 	progressStringLocation.x = instructionStartLoc.x + instructionFont.stringWidth(newMessage.substr(lastnewLine + 1)) + 8;
 	progressStringLocation.y = cursorYLocation - instructionFont.stringHeight("sample_text");
-	//onScreenInstructionImage.clear();
+
+	// Load image GUI elements
 	std::vector<std::string> imageList = instructionImages[_state];
-	int imgYLoc = cursorYLocation;
-	int imgXLoc = instructionStartLoc.x;
+	int cursorXLocation = instructionStartLoc.x;
 	for (int i = 0; i < imageList.size(); i++)
 	{
 		ofImage img;
 		img.load(ofToDataPath(ofFilePath::join("instructions", imageList.at(i))));
 		img.resize(resizedImgDim, resizedImgDim);
-		GuiImageElement imgEle(GuiElement::Location(imgXLoc, imgYLoc), ofColor(255), img);
-		//onScreenInstructionImage.push_back(img);
+		GuiImageElement imgEle(GuiElement::Location(cursorXLocation, cursorYLocation), ofColor(255), img);
 		imageElementList.push_back(imgEle);
-		imgXLoc += (resizedImgDim + 10);
+		cursorXLocation += (resizedImgDim + 10);
 	}
-	/*
-	if (_state > State::WAIT_FOR_FEATHER && _state < State::COMPLETED)
-	{
-		progressString = "UPDATING";
-	}
-	else
-	{
-		progressString = "";
-	}
-	*/
+
 	progressString = "";
 	pingProgTryCount = 0;
 }
@@ -378,40 +381,22 @@ void ofApp::draw(){
 	ofSetColor(0);
 	titleFont.drawString("EmotiBit Firmware Installer", guiElementPositions["TitleString"].x, guiElementPositions["TitleString"].y);
 	
+	// draw title image
+	ofSetColor(255);
+	titleImage.draw(guiElementPositions["TitleImage"].x, guiElementPositions["TitleImage"].y);
+	
+	// draw footnote
 	if (_state == State::DISPLAY_INSTRUCTION)
 	{
 		GuiElement::Location loc = guiElementPositions["FootnoteString"];
-		// draw footnote
 		footnoteFont.drawString(footnoteString, loc.x, loc.y);
 		int cursorYLoc = loc.y + footnoteFont.stringHeight(footnoteString);
 		ofSetColor(128);
 		footnoteFont.drawString(fwPathGuiString, loc.x, cursorYLoc);
 	}
-	// draw title image
-	ofSetColor(255);
-	titleImage.draw(guiElementPositions["TitleImage"].x, guiElementPositions["TitleImage"].y);
-	
-	/*
-	// set color of instruction
-	if (_state == State::DONE)
-	{
-		// Make text green if Installer was successful
-		ofSetColor(37, 190, 80);
-	}
-	else if (_state == State::INSTALLER_ERROR)
-	{
-		// Make text red if installer Failed
-		ofSetColor(234, 42, 11);
-	}
-	else
-	{
-		ofSetColor(0);
-	}
-	*/
-
+		
 	// draw text
-	//instructionFont.drawString(onScreenInstruction + "\n" + displayedErrorMessage, guiElementPositions["Instructions"].x, guiElementPositions["Instructions"].y);
-	for (int i = 0; i < textElementlist.size(); i++)
+		for (int i = 0; i < textElementlist.size(); i++)
 	{
 		ofSetColor(textElementlist.at(i).color);
 		auto loc = textElementlist.at(i).location;
@@ -422,36 +407,13 @@ void ofApp::draw(){
 	ofSetColor(0);
 	instructionFont.drawString(progressString, progressStringLocation.x, progressStringLocation.y);
 
-	// draw image
-	/*
-	ofSetColor(255);
-	if (onScreenInstructionImage.size() > 0)
-	{
-		for (int i = 0, offset_x = 0; i < onScreenInstructionImage.size(); i++)
-		{
-			onScreenInstructionImage.at(i).draw(guiElementPositions["InstructionImage"].x + offset_x, guiElementPositions["InstructionImage"].y);
-			offset_x = offset_x + 20 + resizedImgDim;
-		}
-	}
-	*/
+	// draw error image
 	for (int i = 0; i < imageElementList.size(); i++)
 	{
 		ofSetColor(imageElementList.at(i).color);
 		auto loc = imageElementList.at(i).location;
 		imageElementList.at(i).image.draw(loc.x, loc.y);
 	}
-
-	/*
-	// draw error image
-	if (disaplyedErrorImage.size() > 0)
-	{
-		for (int i = 0, offset_x = 0; i < disaplyedErrorImage.size(); i++)
-		{
-			disaplyedErrorImage.at(i).draw(guiElementPositions["ErrorImage"].x + offset_x, guiElementPositions["ErrorImage"].y);
-			offset_x = offset_x + 20 + resizedImgDim;
-		}
-	}
-	*/
 }
 
 //--------------------------------------------------------------
@@ -466,7 +428,7 @@ void ofApp::keyPressed(int key){
 			progressToNextState();
 		}
 	}
-
+#ifdef EMOTIBIT_FW_INST_DEBUG
 	/*
 	 * key	ascii	State
 	 * 0	48		START
@@ -484,6 +446,8 @@ void ofApp::keyPressed(int key){
 		_state = State::START;
 		clearGuiElements();
 	}
+
+	// press "f" oreceeded by a state aboe to jump to the failure screen for the state
 	if (key == 'f')
 	{
 		if (guiTestMode)
@@ -491,31 +455,7 @@ void ofApp::keyPressed(int key){
 			guiTestState = (int)State::INSTALLER_ERROR;
 		}
 	}
-	/*
-	if (key == 0x30)
-	{
-		// do nothing
-		ofLogNotice() << "do nothing";
-		cout << key;
-		validOption = true;
-	}
-	else if (key == 1)
-	{
-		guiTestMode = true;
-		guiTestState = (int)State::DISPLAY_INSTRUCTION;
-		validOption = true;
-	}
-	else if (key == 2)
-	{
-		guiTestMode = true;
-		guiTestState = (int)State::WAIT_FOR_FEATHER;
-		validOption = true;
-	}
-	*/
-	else
-	{
-		// do something
-	}
+#endif
 }
 
 //--------------------------------------------------------------
@@ -587,11 +527,7 @@ void ofApp::setupGuiElementPositions()
 	// The Gui element locations were chosen based on subjective aesthetics.
 	guiElementPositions["TitleString"] = GuiElement::Location{ 10, 150 + int(titleFont.getLineHeight() / 2) };
 	guiElementPositions["TitleImage"] = GuiElement::Location{ 724, 30 };
-	guiElementPositions["Instructions"] = GuiElement::Location{ 30, 270 };
-	//guiElementPositions["Progress"] = GuiElementPos{ 30, 290 };
-	//guiElementPositions["InstructionImage"] = GuiElementPos{ 724, 316 };
-	//guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 500 };
-	//guiElementPositions["ErrorImage"] = GuiElementPos{ 30, 460 };
+	guiElementPositions["Instructions"] = GuiElement::Location{ 30, 270 };  //!< State update messages are drawn relative to this location
 	int footnoteStringHeight = footnoteFont.stringHeight(footnoteString);
 	int yLoc = 768 - (6 * footnoteStringHeight);
 	guiElementPositions["FootnoteString"] = GuiElement::Location{ 625, yLoc };

@@ -232,17 +232,20 @@ class ofApp : public ofBaseApp{
 		int bossacTryCount = 0;
 		uint32_t stateStartTime;
 		/*!
-		 * @brief base class to hold location and color of GUI elements
+		 * @brief base class to hold location and color for GUI elements
 		 */
 		class GuiElement {
 		public:
+			/*
+			 * @brief Stores the on-screen location as a (x,y) pair
+			 */
 			struct Location {
 				int x = 0;
 				int y = 0;
 				Location() {}
 				Location(int x, int y) : x{ x }, y{ y } {}
-			}location;
-			ofColor color;
+			}location; 
+			ofColor color;  //!< Stores the color of the GUI element
 			GuiElement() {}
 			GuiElement(Location location, ofColor color): 
 				location{ location }, color{ color } {}
@@ -253,7 +256,7 @@ class ofApp : public ofBaseApp{
 		 */
 		class GuiTextElement : public GuiElement {
 		public:
-			std::string text;
+			std::string text;  //!< string assigned to the text element
 			GuiTextElement() {}
 			GuiTextElement(Location loc, ofColor color, std::string text):
 				GuiElement{ loc , color }, text{ text } {}
@@ -264,24 +267,21 @@ class ofApp : public ofBaseApp{
 		 */
 		class GuiImageElement : public GuiElement {
 		public:
-			ofImage image;
+			ofImage image;  //!< Image assigned to the GUI element
 			GuiImageElement() {}
 			GuiImageElement(Location loc, ofColor color, ofImage img):
 				GuiElement{ loc, color }, image{ img } {}
 		};
-		unordered_map<std::string, GuiElement::Location> guiElementPositions;
-		GuiImageElement titleImage_1;
-		GuiTextElement titleText_1;
-		std::vector<GuiTextElement> textElementlist;
-		std::vector<GuiImageElement> imageElementList;
-		const int MAX_WIDTH_FW_PATH = 100;
-		GuiElement::Location progressStringLocation;
-		bool guiTestMode = false;
-		string _fwFilePath = "";
-		std::string oldMessage = "";
-		std::string newMessage = "";
-		std::string S_WARNING = "";
-		int guiTestState = -1;
-		std::string footnoteString = "";
-		std::string fwPathGuiString = "";
+		unordered_map<std::string, GuiElement::Location> guiElementPositions;  //< Stores the location data for primary GUI elements
+		std::vector<GuiTextElement> textElementlist;  //!< List of all text elements on the screen
+		std::vector<GuiImageElement> imageElementList;  //!< List of all image elements on the screen
+		GuiElement::Location progressStringLocation;  //!< On-screen location where progress indicator will be drawn
+		bool guiTestMode = false;  //!< bool to toggle Gui test mode in debug
+		string _fwFilePath = "";  //!< Stores the path to the installed firmware
+		std::string oldMessage = "";  //!< Tracks previously displayed screen messages
+		std::string newMessage = "";  //!< Tracks the newly added screen message
+		std::string S_WARNING = "";  //!< Warning message notifying users not to unplug feather while update in progress
+		int guiTestState = -1;  //!< Stores the installer state currently under test (GUI) by user
+		std::string footnoteString = "";  //!< Note displayed at the base of the Installer sharing additional functionality
+		std::string fwPathGuiString = "";  //!< String to be drawn on screen indicating chosen external firmware binary
 };
