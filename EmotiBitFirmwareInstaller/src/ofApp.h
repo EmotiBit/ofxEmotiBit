@@ -224,14 +224,10 @@ class ofApp : public ofBaseApp{
 		const std::string DELIMITER = ",";
 		const std::string COM_PORT_NONE = "COMX";
 		unordered_map<int, std::string> errorMessageList;
-		unordered_map<int, std::string> onScreenInstructionList;
+		unordered_map<int, std::string> instructionList;
 		unordered_map<int, std::vector<std::string>> instructionImages;
 		unordered_map<int, std::vector<std::string>> errorImages;
 		const int resizedImgDim = 250; // w = h
-		//std::string displayedErrorMessage;
-		//std::string onScreenInstruction;
-		//std::vector<ofImage>onScreenInstructionImage;
-		//std::vector<ofImage> disaplyedErrorImage;
 		int pingProgTryCount = 0;
 		int bossacTryCount = 0;
 		uint32_t stateStartTime;
@@ -250,8 +246,6 @@ class ofApp : public ofBaseApp{
 			GuiElement() {}
 			GuiElement(Location location, ofColor color): 
 				location{ location }, color{ color } {}
-			//GuiElementPos() {}
-			//GuiElementPos(int x, int y) : x{ x }, y{ y } {}
 		};
 
 		/*
@@ -280,15 +274,14 @@ class ofApp : public ofBaseApp{
 		GuiTextElement titleText_1;
 		std::vector<GuiTextElement> textElementlist;
 		std::vector<GuiImageElement> imageElementList;
-		//const GuiElement::Location TEXT_START_LOC = GuiElement::Location(30, 300);
-		//const GuiElement::Location LOAD_FILE_LOC = GuiElement::Location(625, 725);
-		const int MAX_WIDTH_LOAD_FILE_NAME = 100;
+		const int MAX_WIDTH_FW_PATH = 100;
 		GuiElement::Location progressStringLocation;
 		bool guiTestMode = false;
 		string _fwFilePath = "";
 		std::string oldMessage = "";
 		std::string newMessage = "";
 		std::string S_WARNING = "";
-		ofRectangle rect{ 100, 100, 200, 200 };
 		int guiTestState = -1;
+		std::string footnoteString = "";
+		std::string fwPathGuiString = "";
 };
