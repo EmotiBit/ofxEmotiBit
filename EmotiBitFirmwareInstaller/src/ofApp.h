@@ -183,6 +183,8 @@ class ofApp : public ofBaseApp{
 		
 		void raiseError(std::string additionalMessage = "");
 
+		void clearGuiElements();
+		
 		// This order shold not be changed. The Feather port is updated in WAIT_FOR_FEATHER and RUN_WINC_UPDATER
 		// that feather port is then used in the next sequential step
 		enum State {
@@ -209,6 +211,7 @@ class ofApp : public ofBaseApp{
 		ofTrueTypeFont progressFont;
 		ofTrueTypeFont	titleFont;
 		ofTrueTypeFont	footnoteFont;
+		ofTrueTypeFont warningFont;
 		std::string progressString = "";
 		const int STATE_TIMEOUT = 120; // in secs
 		bool captureComListOnStartup = false;
@@ -225,19 +228,67 @@ class ofApp : public ofBaseApp{
 		unordered_map<int, std::vector<std::string>> instructionImages;
 		unordered_map<int, std::vector<std::string>> errorImages;
 		const int resizedImgDim = 250; // w = h
-		std::string displayedErrorMessage;
-		std::string onScreenInstruction;
-		std::vector<ofImage>onScreenInstructionImage;
-		std::vector<ofImage> disaplyedErrorImage;
+		//std::string displayedErrorMessage;
+		//std::string onScreenInstruction;
+		//std::vector<ofImage>onScreenInstructionImage;
+		//std::vector<ofImage> disaplyedErrorImage;
 		int pingProgTryCount = 0;
 		int bossacTryCount = 0;
 		uint32_t stateStartTime;
-		struct GuiElementPos {
-			int x = 0;
-			int y = 0;
-			GuiElementPos() {}
-			GuiElementPos(int x, int y) : x{ x }, y{ y } {}
+		/*!
+		 * @brief base class to hold location and color of GUI elements
+		 */
+		class GuiElement {
+		public:
+			struct Location {
+				int x = 0;
+				int y = 0;
+				Location() {}
+				Location(int x, int y) : x{ x }, y{ y } {}
+			}location;
+			ofColor color;
+			GuiElement() {}
+			GuiElement(Location location, ofColor color): 
+				location{ location }, color{ color } {}
+			//GuiElementPos() {}
+			//GuiElementPos(int x, int y) : x{ x }, y{ y } {}
 		};
-		unordered_map<std::string, GuiElementPos> guiElementPositions;
+
+		/*
+		 * @brief class extends GuiElement base class for text
+		 */
+		class GuiTextElement : public GuiElement {
+		public:
+			std::string text;
+			GuiTextElement() {}
+			GuiTextElement(Location loc, ofColor color, std::string text):
+				GuiElement{ loc , color }, text{ text } {}
+		};
+
+		/*
+		 * @brief class extends GuiElement base class for images
+		 */
+		class GuiImageElement : public GuiElement {
+		public:
+			ofImage image;
+			GuiImageElement() {}
+			GuiImageElement(Location loc, ofColor color, ofImage img):
+				GuiElement{ loc, color }, image{ img } {}
+		};
+		unordered_map<std::string, GuiElement::Location> guiElementPositions;
+		GuiImageElement titleImage_1;
+		GuiTextElement titleText_1;
+		std::vector<GuiTextElement> textElementlist;
+		std::vector<GuiImageElement> imageElementList;
+		//const GuiElement::Location TEXT_START_LOC = GuiElement::Location(30, 300);
+		//const GuiElement::Location LOAD_FILE_LOC = GuiElement::Location(625, 725);
+		const int MAX_WIDTH_LOAD_FILE_NAME = 100;
+		GuiElement::Location progressStringLocation;
+		bool guiTestMode = false;
 		string _fwFilePath = "";
+		std::string oldMessage = "";
+		std::string newMessage = "";
+		std::string S_WARNING = "";
+		ofRectangle rect{ 100, 100, 200, 200 };
+		int guiTestState = -1;
 };
