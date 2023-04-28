@@ -37,7 +37,7 @@ RE Feather M0:
   1. The executables were obtained from the release page
 5. The WINC uploader can be found here: https://github.com/arduino/FirmwareUploader/releases
 
-RE: Feather ESP32:
+RE Feather ESP32:
 1. The Feather ESP32 requires esptool executable/binary to flash firmware. We are using esptool v3.3, which can found on espressif's release page: https://github.com/espressif/esptool/releases/tag/v3.3
 2. esptool requries additional bin files to run, "boot_app0.bin", "EmotiBit_stock_firmware.ino.bootloader.bin" and "EmotiBit_stock_firmware.partitions.bin" were all acquired from visual micro's build+upload steps
 */
@@ -389,6 +389,7 @@ void ofApp::draw(){
 	if (_state == State::DISPLAY_INSTRUCTION)
 	{
 		GuiElement::Location loc = guiElementPositions["FootnoteString"];
+		ofSetColor(0);
 		footnoteFont.drawString(footnoteString, loc.x, loc.y);
 		int cursorYLoc = loc.y + footnoteFont.stringHeight(footnoteString);
 		ofSetColor(128);
@@ -407,7 +408,7 @@ void ofApp::draw(){
 	ofSetColor(0);
 	instructionFont.drawString(progressString, progressStringLocation.x, progressStringLocation.y);
 
-	// draw error image
+	// draw image
 	for (int i = 0; i < imageElementList.size(); i++)
 	{
 		ofSetColor(imageElementList.at(i).color);
@@ -547,7 +548,7 @@ void ofApp::setupInstructionList()
 	
 	instructionList[State::WAIT_FOR_FEATHER] = "5. Press Reset Button on the Feather"
 		"\n6. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)"
-		"\n   Detecting Feather plug-in";
+		"\n>>> Detecting Feather plug-in";
 	instructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = ">>> Uploading WINC firmware updater sketch";
 	instructionList[State::RUN_WINC_UPDATER] = ">>> Updating WINC FW";
 	instructionList[State::UPLOAD_EMOTIBIT_FW] = ">>> Updating EmotiBit firmware";
