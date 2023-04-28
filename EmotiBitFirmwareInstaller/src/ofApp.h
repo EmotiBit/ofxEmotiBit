@@ -183,7 +183,15 @@ class ofApp : public ofBaseApp{
 		
 		void raiseError(std::string additionalMessage = "");
 
+		/*!
+		 * @brief function to clear class variables in debug GUI mode 
+		 */
 		void clearGuiElements();
+		
+		/*!
+		 * @brief Adjusts line spacing between adjacent lines for GUI strings
+		 */
+		void adjustGuiTextLinespace(int &currentYPos);
 		
 		// This order shold not be changed. The Feather port is updated in WAIT_FOR_FEATHER and RUN_WINC_UPDATER
 		// that feather port is then used in the next sequential step
@@ -198,7 +206,7 @@ class ofApp : public ofBaseApp{
 			DONE,
 			INSTALLER_ERROR,
 			LENGTH
-		}_state;
+		}_state, _lastState;
 		unordered_map<int, std::vector<std::string>> boardComList;
 		// refer: https://github.com/adafruit/ArduinoCore-samd/blob/bd2a9cdbe7433ec88701591c49b1224c8686e940/boards.txt#L29-L35
 		const std::vector<std::string> ADARUIT_VID_LIST = { "239A" };
@@ -211,7 +219,6 @@ class ofApp : public ofBaseApp{
 		ofTrueTypeFont progressFont;
 		ofTrueTypeFont	titleFont;
 		ofTrueTypeFont	footnoteFont;
-		ofTrueTypeFont warningFont;
 		std::string progressString = "";
 		const int STATE_TIMEOUT = 120; // in secs
 		bool captureComListOnStartup = false;
@@ -280,7 +287,8 @@ class ofApp : public ofBaseApp{
 		string _fwFilePath = "";  //!< Stores the path to the installed firmware
 		std::string oldMessage = "";  //!< Tracks previously displayed screen messages
 		std::string newMessage = "";  //!< Tracks the newly added screen message
-		std::string S_WARNING = "";  //!< Warning message notifying users not to unplug feather while update in progress
+		
+		std::string warningString = "";  //!< Warning message notifying users not to unplug feather while update in progress
 		int guiTestState = -1;  //!< Stores the installer state currently under test (GUI) by user
 		std::string footnoteString = "";  //!< Note displayed at the base of the Installer sharing additional functionality
 		std::string fwPathGuiString = "";  //!< String to be drawn on screen indicating chosen external firmware binary

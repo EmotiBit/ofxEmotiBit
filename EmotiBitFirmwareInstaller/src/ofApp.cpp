@@ -73,10 +73,7 @@ void ofApp::setup() {
 	{
 		ofLogNotice() << "Footnote Font loaded correctly";
 	}
-	if (warningFont.load(ofToDataPath("verdanab.ttf"), 21, true, true))
-	{
-		ofLogNotice() << "Warning Font loaded correctly";
-	}
+
 
 	_state = State::START;
 	setupErrorMessageList();
@@ -228,7 +225,7 @@ void ofApp::update(){
 	// update progressIndicatorString
 	if (ofGetElapsedTimeMillis() - timeSinceLastProgressIndicatorUpdate > 500)
 	{
-		if (_state >= State::WAIT_FOR_FEATHER && _state < State::COMPLETED)
+		if (_state > State::WAIT_FOR_FEATHER && _state < State::COMPLETED)
 		{
 			// stop the progress string from going out of bounds
 			if (progressString.size() > 40)
@@ -276,11 +273,13 @@ void ofApp::raiseError(std::string additionalMessage)
 	GuiElement::Location startLoc = guiElementPositions["Instructions"];
 	textElementlist.push_back(GuiTextElement(startLoc, ofColor(255,0,0),instructionList[State::INSTALLER_ERROR]));
 	int cursorXLoc = startLoc.x;
-	int cursorYLoc = startLoc.y + instructionFont.stringHeight(instructionList[State::INSTALLER_ERROR]) + 5;
+	int cursorYLoc = startLoc.y + instructionFont.stringHeight(instructionList[State::INSTALLER_ERROR]);
+	adjustGuiTextLinespace(cursorYLoc);
 	// set the Error string according to the current state
 	std::string errorMessage = additionalMessage + errorMessageList[_state];
 	textElementlist.push_back(GuiTextElement(GuiElement::Location(cursorXLoc, cursorYLoc), ofColor(255, 0, 0), errorMessage));
 	cursorYLoc += instructionFont.stringHeight(errorMessage);
+	adjustGuiTextLinespace(cursorYLoc);
 
 	// Load image elements to be displayed
 	std::vector<std::string> images = errorImages[_state];
@@ -300,6 +299,7 @@ void ofApp::raiseError(std::string additionalMessage)
 void ofApp::progressToNextState(int state)
 {
 	stateStartTime = ofGetElapsedTimeMillis();
+	_lastState = _state;
 	// ToDo: verify behavior if states dont have a continuous emnumeration
 	if (state == -1)
 	{
@@ -326,22 +326,39 @@ void ofApp::progressToNextState(int state)
 		oldMessage += newMessage;
 		oldMessage += "\n";
 	}
+	
 	newMessage = instructionList[_state];
+	if ((int)_state == ((int)State::WAIT_FOR_FEATHER))
+	{
+		newMessage += "\n";
+		// calculate placement for warning
+		GuiElement::Location tempLoc = guiElementPositions["Instructions"];
+		int yAdjust = instructionFont.stringHeight(oldMessage) + instructionFont.stringHeight(newMessage);
+		guiElementPositions["Warning"] = GuiElement::Location{ tempLoc.x, tempLoc.y + yAdjust + 13 };
+	}
 
 	// Load text GUI elements
 	GuiElement::Location instructionStartLoc = guiElementPositions["Instructions"];
+	// add old message in gray
+	textElementlist.push_back(GuiTextElement(instructionStartLoc, ofColor(160), oldMessage));
+	int cursorYLocation = instructionStartLoc.y;
+	cursorYLocation += instructionFont.stringHeight(oldMessage);  // update cursor location after old message
+	adjustGuiTextLinespace(cursorYLocation);
+	
 	// Add warning if flashing firmware
 	if ((int)_state > (int)State::WAIT_FOR_FEATHER && (int)_state < (int)State::COMPLETED)
 	{
-		textElementlist.push_back(GuiTextElement(instructionStartLoc, ofColor(255, 128, 0), S_WARNING));
+		// add text in orange
+		textElementlist.push_back(GuiTextElement(guiElementPositions["Warning"], ofColor(255, 128, 0), warningString));
+		// increment cursor position if this is the first "flashing step"
+		// For M0, consecutive "update" messages are updated automatically by new line character
+		if (_lastState == State::WAIT_FOR_FEATHER)
+		{
+			cursorYLocation += instructionFont.stringHeight(warningString) + 5; // update cursor location
+			adjustGuiTextLinespace(cursorYLocation);
+		}
 	}
-	int cursorYLocation = instructionStartLoc.y;
-	cursorYLocation += warningFont.stringHeight(S_WARNING) + 5; // update cursor location
-	
-	// add old message in gray
-	textElementlist.push_back(GuiTextElement(GuiElement::Location(instructionStartLoc.x,cursorYLocation),
-		ofColor(160), oldMessage ));
-	cursorYLocation += instructionFont.stringHeight(oldMessage);  // update cursor location
+
 	if (_state == State::COMPLETED)
 	{
 		// Add "success" statement in GREEN
@@ -355,11 +372,12 @@ void ofApp::progressToNextState(int state)
 			ofColor(0), newMessage));
 	}
 	cursorYLocation += instructionFont.stringHeight(newMessage);
-
+	adjustGuiTextLinespace(cursorYLocation);
+	
 	// Find where the progress "....." string will be added
 	std::size_t lastnewLine = newMessage.find_last_of("\n");
-	progressStringLocation.x = instructionStartLoc.x + instructionFont.stringWidth(newMessage.substr(lastnewLine + 1)) + 8;
-	progressStringLocation.y = cursorYLocation - instructionFont.stringHeight("sample_text");
+	progressStringLocation.x = instructionStartLoc.x + instructionFont.stringWidth(newMessage.substr(lastnewLine + 1)) + 5;
+	progressStringLocation.y = cursorYLocation - instructionFont.stringHeight("sample_text") - 5;
 
 	// Load image GUI elements
 	std::vector<std::string> imageList = instructionImages[_state];
@@ -532,11 +550,11 @@ void ofApp::setupGuiElementPositions()
 	// The Gui element locations were chosen based on subjective aesthetics.
 	guiElementPositions["TitleString"] = GuiElement::Location{ 10, 150 + int(titleFont.getLineHeight() / 2) };
 	guiElementPositions["TitleImage"] = GuiElement::Location{ 724, 30 };
-	guiElementPositions["Instructions"] = GuiElement::Location{ 30, 270 };  //!< State update messages are drawn relative to this location
+	guiElementPositions["Instructions"] = GuiElement::Location{ 30, 280 };  //!< State update messages are drawn relative to this location
 	int footnoteStringHeight = footnoteFont.stringHeight(footnoteString);
 	int yLoc = 768 - (6 * footnoteStringHeight);
 	guiElementPositions["FootnoteString"] = GuiElement::Location{ 625, yLoc };
-	
+	guiElementPositions["Warning"] = GuiElement::Location{ 0, 0 }; // random location. Gets updated on runtime
 }
 
 void ofApp::setupInstructionList()
@@ -551,8 +569,7 @@ void ofApp::setupInstructionList()
 														"\n4. Press space-bar to continue";
 	
 	instructionList[State::WAIT_FOR_FEATHER] = "5. Press Reset Button on the Feather"
-		"\n6. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)"
-		"\n>>> Detecting Feather plug-in";
+		"\n6. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)";
 	instructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = ">>> Uploading WINC firmware updater sketch";
 	instructionList[State::RUN_WINC_UPDATER] = ">>> Updating WINC FW";
 	instructionList[State::UPLOAD_EMOTIBIT_FW] = ">>> Updating EmotiBit firmware";
@@ -572,7 +589,7 @@ void ofApp::setupInstructionList()
 	instructionImages[State::INSTALLER_ERROR];
 
 	// WARNING message
-	S_WARNING = "DO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS";
+	warningString = "DO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS";
 	// footnote string
 	footnoteString = "If you wish to load a custom firmware bin file, type \"L\"";
 }
@@ -1126,4 +1143,11 @@ void ofApp::clearGuiElements()
 	newMessage = "";
 	textElementlist.clear();
 	imageElementList.clear();
+}
+
+void ofApp::adjustGuiTextLinespace(int &currentPos)
+{
+	// ToDo: This linespace probably changes for different fonts.
+	// Verify and fix for extensible use
+	currentPos += 5;
 }
