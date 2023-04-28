@@ -602,7 +602,7 @@ void ofApp::setupErrorMessageList()
                                                 "\n1. Make sure the  Feather is connected to your computer using a data-capable USB cable"
                                                 "\n2. Make sure the EmotiBit Hibernate switch is not set to HIB";
 	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch\nRe-run EmotiBit Installer";
-	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run";
+	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run\nRe-run EmotiBit Installer";
 	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit FW update failed\nRe-run EmotiBit Installer";
 	
 	// Error Image
