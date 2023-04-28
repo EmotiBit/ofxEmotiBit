@@ -331,7 +331,7 @@ void ofApp::progressToNextState(int state)
 	if ((int)_state == ((int)State::WAIT_FOR_FEATHER))
 	{
 		newMessage += "\n";
-		// calculate placement for warning
+		// calculate placement for warning message
 		GuiElement::Location tempLoc = guiElementPositions["Instructions"];
 		int yAdjust = instructionFont.stringHeight(oldMessage) + instructionFont.stringHeight(newMessage);
 		guiElementPositions["Warning"] = GuiElement::Location{ tempLoc.x, tempLoc.y + yAdjust + 13 };
@@ -351,7 +351,7 @@ void ofApp::progressToNextState(int state)
 		// add text in orange
 		textElementlist.push_back(GuiTextElement(guiElementPositions["Warning"], ofColor(255, 128, 0), warningString));
 		// increment cursor position if this is the first "flashing step"
-		// For M0, consecutive "update" messages are updated automatically by new line character
+		// For M0, consecutive "update" message locations are updated automatically by "new line character"
 		if (_lastState == State::WAIT_FOR_FEATHER)
 		{
 			cursorYLocation += instructionFont.stringHeight(warningString) + 5; // update cursor location
