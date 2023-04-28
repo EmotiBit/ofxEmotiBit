@@ -310,6 +310,10 @@ void ofApp::progressToNextState(int state)
 		_state = (State)state;
 	}
 	ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));
+	if (_state == State::DONE)
+	{
+		return;
+	}
 	
 	// clear text and image GUi element lists
 	textElementlist.clear();
