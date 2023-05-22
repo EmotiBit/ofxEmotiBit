@@ -35,8 +35,10 @@ cd "$dataDir"
 files="";
 if $reRun
 then
+  # Process through [dirName]/[dirName].csv
   files=$(eval "ls -d */")
 else
+  # Process through all ./*.csv 
   files=$(eval "ls *.csv")
 fi
 
