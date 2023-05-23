@@ -2,7 +2,7 @@
 
 exePath=$(pwd)
 dataDir=$(pwd)
-reRun=false
+reParse=false
 getHelp=false
 
 echo -e "";
@@ -15,7 +15,7 @@ do
     case "${flag}" in
         x) exePath=${OPTARG};;
         d) dataDir=${OPTARG};;
-        r) reRun=${OPTARG};;
+        r) reParse=${OPTARG};;
     esac
 done
 
@@ -25,7 +25,7 @@ dataDir="${dataDir//\\//}"
 
 echo "[-x] exePath: $exePath";
 echo "[-d] dataDir: $dataDir";
-echo "[-r] reRun: $reRun";
+echo "[-r] reParse: $reParse";
 
 currDir=$(pwd);
 echo -e "\npwd: $currDir"
@@ -33,7 +33,7 @@ echo -e "\npwd: $currDir"
 cd "$dataDir"
 
 files="";
-if $reRun
+if $reParse
 then
   # Process through [dirName]/[dirName].csv
   files=$(eval "ls -d */")
@@ -46,7 +46,7 @@ for file in $files
 do
 	echo -e "\nprocessing: $file"
 	subDirName=$(basename $file .csv)
-  if ! $reRun
+  if ! $reParse
   then
     echo "mkdir: $subDirName"
     mkdir $subDirName
