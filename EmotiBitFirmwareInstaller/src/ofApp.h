@@ -60,7 +60,7 @@ class ofApp : public ofBaseApp{
 
 		/*!
 			@brief Function to parse device hardware info. from string
-			@param deviceHardwareInfo string containing hardware info
+			@param deviceInfo string containing hardware info
 			@return Returns struct conatining parsed hardware info
 		*/
 		DeviceInfo parseDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo);
