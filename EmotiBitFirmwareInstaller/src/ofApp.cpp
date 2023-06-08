@@ -499,10 +499,11 @@ int ofApp::detectFeatherPlugin()
         }
         else if (currentComList.size() - comListOnStartup.size() == 2)
 		{
-			// Exactly 2 ports detected. Might be artifact of SiLabs driver for ESP32. Check if a COM port was labelled as ESP32 port
+			// Exactly 2 ports detected. Might be artifact of SiLabs driver for ESP32.
+			// Only the port with name SLAB_USBtoUART was added to the boardComList. Check function getBoardFromDeviceInfo.
             if(boardComList[Board::FEATHER_ESP_32].size())
             {
-                ofLogNotice() << "Feather ESP32 detected on port: " + boardComList[Board::FEATHER_ESP_32].at(0);
+                ofLogNotice() << "2 ports added simultaneously. Considering Feather ESP port as: " + boardComList[Board::FEATHER_ESP_32].at(0);
                 // A port was detected as ESP32!
                 setBoard(Board::FEATHER_ESP_32);
                 featherPort = boardComList[Board::FEATHER_ESP_32].at(0); // return the first element of the COM list assigned to the  board
@@ -673,8 +674,8 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 			return Board::FEATHER_ESP_32;
 		}
 #elif defined TARGET_OSX
-        // if descriptions says silicon labs and port is SLAB_USBtoUART
-        if (info.desc.find(espDescIdentifier) != std::string::npos && info.port.find(espSlabIdentifier) != std::string::npos)
+        // if port is SLAB_USBtoUART
+        if (info.port.find(espSlabIdentifier) != std::string::npos) 
 		{
 			// It is ESP!
 			ofLogNotice("Board Detected") << "Feather ESP";
@@ -697,7 +698,7 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 	comPortList = getComListFromDeviceList(deviceList);	
 	
 	// print available COM ports on console
-	if (printOnConsole)
+	/*if (printOnConsole)
 	{
 		std::string comPorts;
 		for (int i = 0; i < comPortList.size(); i++)
@@ -705,7 +706,7 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 			comPorts += comPortList.at(i) + DELIMITER;
 		}
 		//ofLog(OF_LOG_NOTICE, "Available COM ports: " + comPorts);
-	}
+	}*/
 	return comPortList;
 }
 
