@@ -3,7 +3,7 @@
 #include "ofMain.h"
 
 
-const std::string ofxEmotiBitVersion = "1.8.3";
+const std::string ofxEmotiBitVersion = "1.8.3.fix-firmwareInstallerAppleSiliconFix.1";
 
 static const char SOFTWARE_VERSION_PREFIX = 'v';
 
