@@ -183,6 +183,16 @@ class ofApp : public ofBaseApp{
 		
 		void raiseError(std::string additionalMessage = "");
 
+		/*!
+		 * @brief function to clear class variables in debug GUI mode 
+		 */
+		void clearGuiElements();
+		
+		/*!
+		 * @brief Adjusts line spacing between adjacent lines for GUI strings
+		 */
+		void adjustGuiTextLinespace(int &currentYPos);
+		
 		// This order shold not be changed. The Feather port is updated in WAIT_FOR_FEATHER and RUN_WINC_UPDATER
 		// that feather port is then used in the next sequential step
 		enum State {
@@ -196,7 +206,7 @@ class ofApp : public ofBaseApp{
 			DONE,
 			INSTALLER_ERROR,
 			LENGTH
-		}_state;
+		}_state, _lastState;
 		unordered_map<int, std::vector<std::string>> boardComList;
 		// refer: https://github.com/adafruit/ArduinoCore-samd/blob/bd2a9cdbe7433ec88701591c49b1224c8686e940/boards.txt#L29-L35
 		const std::vector<std::string> ADARUIT_VID_LIST = { "239A" };
@@ -221,23 +231,65 @@ class ofApp : public ofBaseApp{
 		const std::string DELIMITER = ",";
 		const std::string COM_PORT_NONE = "COMX";
 		unordered_map<int, std::string> errorMessageList;
-		unordered_map<int, std::string> onScreenInstructionList;
+		unordered_map<int, std::string> instructionList;
 		unordered_map<int, std::vector<std::string>> instructionImages;
 		unordered_map<int, std::vector<std::string>> errorImages;
 		const int resizedImgDim = 250; // w = h
-		std::string displayedErrorMessage;
-		std::string onScreenInstruction;
-		std::vector<ofImage>onScreenInstructionImage;
-		std::vector<ofImage> disaplyedErrorImage;
 		int pingProgTryCount = 0;
 		int bossacTryCount = 0;
 		uint32_t stateStartTime;
-		struct GuiElementPos {
-			int x = 0;
-			int y = 0;
-			GuiElementPos() {}
-			GuiElementPos(int x, int y) : x{ x }, y{ y } {}
+		/*!
+		 * @brief base class to hold location and color for GUI elements
+		 */
+		class GuiElement {
+		public:
+			/*
+			 * @brief Stores the on-screen location as a (x,y) pair
+			 */
+			struct Location {
+				int x = 0;
+				int y = 0;
+				Location() {}
+				Location(int x, int y) : x{ x }, y{ y } {}
+			}location; 
+			ofColor color;  //!< Stores the color of the GUI element
+			GuiElement() {}
+			GuiElement(Location location, ofColor color): 
+				location{ location }, color{ color } {}
 		};
-		unordered_map<std::string, GuiElementPos> guiElementPositions;
-		string _fwFilePath = "";
+
+		/*
+		 * @brief class extends GuiElement base class for text
+		 */
+		class GuiTextElement : public GuiElement {
+		public:
+			std::string text;  //!< string assigned to the text element
+			GuiTextElement() {}
+			GuiTextElement(Location loc, ofColor color, std::string text):
+				GuiElement{ loc , color }, text{ text } {}
+		};
+
+		/*
+		 * @brief class extends GuiElement base class for images
+		 */
+		class GuiImageElement : public GuiElement {
+		public:
+			ofImage image;  //!< Image assigned to the GUI element
+			GuiImageElement() {}
+			GuiImageElement(Location loc, ofColor color, ofImage img):
+				GuiElement{ loc, color }, image{ img } {}
+		};
+		unordered_map<std::string, GuiElement::Location> guiElementPositions;  //< Stores the location data for primary GUI elements
+		std::vector<GuiTextElement> textElementlist;  //!< List of all text elements on the screen
+		std::vector<GuiImageElement> imageElementList;  //!< List of all image elements on the screen
+		GuiElement::Location progressStringLocation;  //!< On-screen location where progress indicator will be drawn
+		bool guiTestMode = false;  //!< bool to toggle Gui test mode in debug
+		string _fwFilePath = "";  //!< Stores the path to the installed firmware
+		std::string oldMessage = "";  //!< Tracks previously displayed screen messages
+		std::string newMessage = "";  //!< Tracks the newly added screen message
+		
+		std::string warningString = "";  //!< Warning message notifying users not to unplug feather while update in progress
+		int guiTestState = -1;  //!< Stores the installer state currently under test (GUI) by user
+		std::string footnoteString = "";  //!< Note displayed at the base of the Installer sharing additional functionality
+		std::string fwPathGuiString = "";  //!< String to be drawn on screen indicating chosen external firmware binary
 };
