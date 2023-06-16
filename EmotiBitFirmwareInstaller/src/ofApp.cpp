@@ -13,7 +13,7 @@
 		EmotiBit invests time and resources providing this open source code,
 	please support EmotiBit and open-source hardware by purchasing
 	products from EmotiBit!
- 
+
 
 	@section author Author
 
@@ -27,6 +27,8 @@
 
 /*
 Additional Notes:
+
+RE Feather M0:
 1. The FirmwareUpdater.ino.feather_m0.bin was created using Arduino by modifying the arduino Example as directed here: https://learn.adafruit.com/adafruit-atwinc1500-wifi-module-breakout/updating-firmware
 2. The WINC FW m2m_aio_3a0.bin was obtained by following the guide here: http://ww1.microchip.com/downloads/en/DeviceDoc/ATWINC15x0%20Software%20Release%20Notes_9%20Aug%202018.pdf
   1. The firmware binary was extracted from the ASF package using atme studio 7.
@@ -34,14 +36,18 @@ Additional Notes:
 4. Details about BOSSA can be found here: http://manpages.ubuntu.com/manpages/bionic/man1/bossac.1.html
   1. The executables were obtained from the release page
 5. The WINC uploader can be found here: https://github.com/arduino/FirmwareUploader/releases
+
+RE Feather ESP32:
+1. The Feather ESP32 requires esptool executable/binary to flash firmware. We are using esptool v3.3, which can found on espressif's release page: https://github.com/espressif/esptool/releases/tag/v3.3
+2. esptool requries additional bin files to run, "boot_app0.bin", "EmotiBit_stock_firmware.ino.bootloader.bin" and "EmotiBit_stock_firmware.partitions.bin" were all acquired from visual micro's build+upload steps
 */
 
 #include "ofApp.h"
 
 //--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::setup() {
 #ifdef TARGET_OSX
-    ofSetDataPathRoot("../Resources/");
+	ofSetDataPathRoot("../Resources/");
 #endif
 	ofSetWindowTitle("EmotiBit Firmware Installer (v" + ofxEmotiBitVersion + ")");
 	ofLogToConsole();
@@ -52,32 +58,31 @@ void ofApp::setup(){
 	return;
 #endif
 	ofSetLogLevel(OF_LOG_NOTICE);
-	_state = State::START;
-	setupGuiElementPositions();
-	setupErrorMessageList();
-	setupInstructionList();
-	titleImage.load("EmotiBit.png");
-	titleImage.resize(300, 266); // width, height
-	ofBackground(255, 255, 255, 255);
 	//old OF default is 96 - but this results in fonts looking larger than in other programs.
 	ofTrueTypeFont::setGlobalDpi(72);
-
-	if(instructionFont.load(ofToDataPath("verdana.ttf"), 20, true, true))
-    {
-        ofLogNotice() << "Instruction Font loaded correctly";
-    }
-	if (progressFont.load(ofToDataPath("verdanab.ttf"), 18, true, true))
+	// ToDo: Handle the case if a font file is missing
+	if (instructionFont.load(ofToDataPath("verdana.ttf"), 20, true, true))
 	{
-		ofLogNotice() << "Progress Font loaded correctly";
+		ofLogNotice() << "Instruction Font loaded correctly";
 	}
-	if(titleFont.load(ofToDataPath("verdanab.ttf"), 40, true, true))
-    {
-        ofLogNotice() << "Title Font loaded correctly";
-    }
+	if (titleFont.load(ofToDataPath("verdanab.ttf"), 40, true, true))
+	{
+		ofLogNotice() << "Title Font loaded correctly";
+	}
 	if (footnoteFont.load(ofToDataPath("verdana.ttf"), 13, true, true))
 	{
 		ofLogNotice() << "Footnote Font loaded correctly";
 	}
+
+
+	_state = State::START;
+	setupErrorMessageList();
+	setupInstructionList();
+	setupGuiElementPositions();
+	titleImage.load("EmotiBit.png");
+	titleImage.resize(300, 266); // width, height
+	ofBackground(255, 255, 255, 255);
+
 	boardComList[Board::FEATHER_M0];
 	boardComList[Board::FEATHER_ESP_32];
 }
@@ -87,124 +92,145 @@ void ofApp::update(){
 	// Used for updating "progress string" in the GUI
 	static uint32_t timeSinceLastProgressIndicatorUpdate = ofGetElapsedTimeMillis();
 
-	if (_state == State::START)
+	if (guiTestMode)
 	{
-		progressToNextState();
-	}
-	else if (_state == State::DISPLAY_INSTRUCTION)
-	{
-		// wait for sapce-bar key press
-		// progress to next state by pressing space-bar
-
-	}
-	else if (_state == State::WAIT_FOR_FEATHER)
-	{
-		// If no feather detected within timeout, raise Error
-		if (ofGetElapsedTimef() > STATE_TIMEOUT)
+		if ((int)_state < guiTestState)
 		{
-			// Feather not detected before TIMEOUT
-			raiseError();
+			if (guiTestState == (int)State::INSTALLER_ERROR)
+			{
+				raiseError();
+			}
+			else
+			{
+				progressToNextState();
+			}
 		}
 		else
 		{
-			int numDevicesDetected = detectFeatherPlugin();
-			if (numDevicesDetected == 1)
+			// we are at the state we want to test. Check GUI output.
+		}
+	}
+	else
+	{
+		if (_state == State::START)
+		{
+			clearGuiElements();
+			progressToNextState();
+		}
+		else if (_state == State::DISPLAY_INSTRUCTION)
+		{
+			// wait for sapce-bar key press
+			// progress to next state by pressing space-bar
+
+		}
+		else if (_state == State::WAIT_FOR_FEATHER)
+		{
+			// If no feather detected within timeout, raise Error
+			if (ofGetElapsedTimef() > STATE_TIMEOUT)
 			{
-				// Feather Detected!
-                if (getBoard() == Board::FEATHER_M0)
+				// Feather not detected before TIMEOUT
+				raiseError();
+			}
+			else
+			{
+				int numDevicesDetected = detectFeatherPlugin();
+				if (numDevicesDetected == 1)
 				{
-					// progress to next state;
-					progressToNextState();
+					// Feather Detected!
+					if (getBoard() == Board::FEATHER_M0)
+					{
+						// progress to next state;
+						progressToNextState();
+					}
+					else if (getBoard() == Board::FEATHER_ESP_32)
+					{
+						// progress to flashing FW;
+						progressToNextState((int)State::UPLOAD_EMOTIBIT_FW);
+					}
 				}
-                else if (getBoard() == Board::FEATHER_ESP_32)
+				else if (numDevicesDetected > 1)
 				{
-					// progress to flashing FW;
-					progressToNextState((int)State::UPLOAD_EMOTIBIT_FW);
+					// multiple devices detected
+					raiseError("Multiple Devices Detected\n");
 				}
 			}
-			else if (numDevicesDetected > 1)
+		}
+		else if (_state == State::UPLOAD_WINC_FW_UPDATER_SKETCH)
+		{
+
+			// check if the upload was completed successfully
+			if (uploadWincUpdaterSketch())
 			{
-				// multiple devices detected
-				raiseError("Multiple Devices Detected\n");
+				// progress to next state;
+				progressToNextState();
+			}
+
+			if (!systemCommandExecuted && pingProgTryCount == MAX_NUM_TRIES_PING_1200)
+			{
+				// If BOSSA was unsuccesfull and we tried max times
+				raiseError();
+			}
+
+			// if bossac has been executed and it has been 90 secs(way longer than any expected delay)
+			if (systemCommandExecuted && ofGetElapsedTimeMillis() - stateStartTime > 90000)
+			{
+				raiseError();
 			}
 		}
-	}
-	else if (_state == State::UPLOAD_WINC_FW_UPDATER_SKETCH)
-	{
-
-        // check if the upload was completed successfully
-        if (uploadWincUpdaterSketch())
-        {
-            // progress to next state;
-            progressToNextState();
-        }
-
-		if (!systemCommandExecuted && pingProgTryCount == MAX_NUM_TRIES_PING_1200)
+		else if (_state == State::RUN_WINC_UPDATER)
 		{
-			// If BOSSA was unsuccesfull and we tried max times
-			raiseError();
+			// ToDo: How to catch a fail for the Winc Updater? 
+			if (runWincUpdater())
+			{
+				// progress to next state;
+				progressToNextState();
+			}
 		}
-
-		// if bossac has been executed and it has been 90 secs(way longer than any expected delay)
-		if (systemCommandExecuted && ofGetElapsedTimeMillis() - stateStartTime > 90000)
+		else if (_state == State::UPLOAD_EMOTIBIT_FW)
 		{
-			raiseError();
+			if (uploadEmotiBitFw())
+			{
+				// progress to next state;
+				progressToNextState();
+			}
+
+			if (!systemCommandExecuted && pingProgTryCount == MAX_NUM_TRIES_PING_1200)
+			{
+				// If BOSSA was unsuccesfull and we tried max times
+				raiseError();
+			}
+
+			// if bossac has been executed and it has been 90 secs(way longer than any expected delay)
+			if (systemCommandExecuted && ofGetElapsedTimeMillis() - stateStartTime > 90000)
+			{
+				raiseError();
+			}
 		}
-	}
-	else if (_state == State::RUN_WINC_UPDATER)
-	{
-		// ToDo: How to catch a fail for the Winc Updater? 
-        if (runWincUpdater())
-        {
-            // progress to next state;
-            progressToNextState();
-        }
-	}
-	else if (_state == State::UPLOAD_EMOTIBIT_FW)
-	{
-        if (uploadEmotiBitFw())
-        {
-            // progress to next state;
-            progressToNextState();
-        }
-
-        if (!systemCommandExecuted && pingProgTryCount == MAX_NUM_TRIES_PING_1200)
+		else if (_state == State::COMPLETED)
 		{
-			// If BOSSA was unsuccesfull and we tried max times
-			raiseError();
+			// Update message on the GUI
+			ofLog(OF_LOG_NOTICE, instructionList[State::COMPLETED]);
+			//resetStateTimer();
+			progressToNextState();
 		}
-
-		// if bossac has been executed and it has been 90 secs(way longer than any expected delay)
-		if (systemCommandExecuted && ofGetElapsedTimeMillis() - stateStartTime > 90000)
+		else if (_state == State::DONE)
 		{
-			raiseError();
+			// do nothing
+		}
+		else if (_state == State::INSTALLER_ERROR)
+		{
+			// do nothing. The GUI Messages have already been updated in raiseError()
 		}
 	}
-	else if (_state == State::COMPLETED)
-	{
-		// Update message on the GUI
-		ofLog(OF_LOG_NOTICE, onScreenInstructionList[State::COMPLETED]);
-		//resetStateTimer();
-		progressToNextState();
-	}
-	else if (_state == State::DONE)
-	{
-		// do nothing
-	}
-	else if (_state == State::INSTALLER_ERROR)
-	{
-		// do nothing. The GUI Messages have already been updated in raiseError()
-	}
-
 	// update progressIndicatorString
 	if (ofGetElapsedTimeMillis() - timeSinceLastProgressIndicatorUpdate > 500)
 	{
-		if (_state > State::WAIT_FOR_FEATHER && _state <= State::COMPLETED)
+		if (_state > State::WAIT_FOR_FEATHER && _state < State::COMPLETED)
 		{
 			// stop the progress string from going out of bounds
 			if (progressString.size() > 40)
 			{
-				progressString = "UPDATING";
+				progressString = "";
 			}
 			else
 			{
@@ -213,22 +239,58 @@ void ofApp::update(){
 		}
 		timeSinceLastProgressIndicatorUpdate = ofGetElapsedTimeMillis();
 	}
+
+	// Update any changes to the loaded fw file path
+	fwPathGuiString = _fwFilePath;
+	if (fwPathGuiString.length() > 200)  // we display a max of 200 characters on the screen for file path
+	{
+		// If path is longer than 200 characters, 
+		// keep the last 197 characters of the path (to fit on screen)
+		fwPathGuiString = fwPathGuiString.substr(fwPathGuiString.length() - 197);
+		fwPathGuiString = "..." + fwPathGuiString;
+	}
+	// fold long path into multi-line string to fit on screen without overflow
+	const int charPerLine = 50;
+	std::string foldedFilePath = "";
+	int subStrEnd = 0;
+	while (subStrEnd <= fwPathGuiString.length())
+	{
+		foldedFilePath += fwPathGuiString.substr(subStrEnd, charPerLine);
+		foldedFilePath += "\n";
+		subStrEnd += charPerLine;
+	}
+	fwPathGuiString = foldedFilePath;
 }
 
 void ofApp::raiseError(std::string additionalMessage)
 {
 	progressString = "";
-	onScreenInstruction = onScreenInstructionList[State::INSTALLER_ERROR];
-	onScreenInstructionImage.clear();
+	// clear existing GUI element lists
+	textElementlist.clear();
+	imageElementList.clear();
+	
+	// load text elements to be displayed
+	GuiElement::Location startLoc = guiElementPositions["Instructions"];
+	textElementlist.push_back(GuiTextElement(startLoc, ofColor(255,0,0),instructionList[State::INSTALLER_ERROR]));
+	int cursorXLoc = startLoc.x;
+	int cursorYLoc = startLoc.y + instructionFont.stringHeight(instructionList[State::INSTALLER_ERROR]);
+	adjustGuiTextLinespace(cursorYLoc);
 	// set the Error string according to the current state
-	displayedErrorMessage = additionalMessage + errorMessageList[_state];
-	std::vector<std::string> disaplyedErrorImageList = errorImages[_state];
-	for (int i = 0; i < disaplyedErrorImageList.size(); i++)
+	std::string errorMessage = additionalMessage + errorMessageList[_state];
+	textElementlist.push_back(GuiTextElement(GuiElement::Location(cursorXLoc, cursorYLoc), ofColor(255, 0, 0), errorMessage));
+	cursorYLoc += instructionFont.stringHeight(errorMessage);
+	adjustGuiTextLinespace(cursorYLoc);
+
+	// Load image elements to be displayed
+	std::vector<std::string> images = errorImages[_state];
+	for (int i = 0; i < images.size(); i++)
 	{
-		ofImage temp;
-		temp.load(ofToDataPath(ofFilePath::join("instructions", disaplyedErrorImageList.at(i))));
-		temp.resize(resizedImgDim, resizedImgDim);
-		disaplyedErrorImage.push_back(temp);
+		ofImage img;
+		img.load(ofToDataPath(ofFilePath::join("instructions", images.at(i))));
+		img.resize(resizedImgDim, resizedImgDim);
+		//disaplyedErrorImage.push_back(img);
+		imageElementList.push_back(GuiImageElement(GuiElement::Location(cursorXLoc, cursorYLoc), ofColor(255), img));
+		cursorXLoc += (resizedImgDim + 10); // aditional 10 pixel to add distance between images displayed
 	}
 	_state = State::INSTALLER_ERROR;
 	pingProgTryCount = 0;
@@ -237,6 +299,7 @@ void ofApp::raiseError(std::string additionalMessage)
 void ofApp::progressToNextState(int state)
 {
 	stateStartTime = ofGetElapsedTimeMillis();
+	_lastState = _state;
 	// ToDo: verify behavior if states dont have a continuous emnumeration
 	if (state == -1)
 	{
@@ -247,80 +310,132 @@ void ofApp::progressToNextState(int state)
 		_state = (State)state;
 	}
 	ofLog(OF_LOG_NOTICE, "State: " + ofToString(_state));
-	onScreenInstruction = onScreenInstruction + "\n" + onScreenInstructionList[_state];
-	onScreenInstructionImage.clear();
-	std::vector<std::string> onScreenInstructionImageList = instructionImages[_state];
-	for (int i = 0; i < onScreenInstructionImageList.size(); i++)
+	if (_state == State::DONE)
 	{
-		ofImage temp;
-		temp.load(ofToDataPath(ofFilePath::join("instructions", onScreenInstructionImageList.at(i))));
-		temp.resize(resizedImgDim, resizedImgDim);
-		onScreenInstructionImage.push_back(temp);
+		return;
 	}
-	if (_state > State::WAIT_FOR_FEATHER && _state < State::COMPLETED)
+	
+	// clear text and image GUi element lists
+	textElementlist.clear();
+	imageElementList.clear();
+
+	// move already displayed messages to "old" stack
+	if (newMessage != "")
 	{
-		progressString = "UPDATING";
+		// there exists a message on the screen
+		oldMessage += newMessage;
+		oldMessage += "\n";
+	}
+	
+	newMessage = instructionList[_state];
+	if ((int)_state == ((int)State::WAIT_FOR_FEATHER))
+	{
+		newMessage += "\n";
+		// calculate placement for warning message
+		GuiElement::Location tempLoc = guiElementPositions["Instructions"];
+		int yAdjust = instructionFont.stringHeight(oldMessage) + instructionFont.stringHeight(newMessage);
+		guiElementPositions["Warning"] = GuiElement::Location{ tempLoc.x, tempLoc.y + yAdjust + 13 };
+	}
+
+	// Load text GUI elements
+	GuiElement::Location instructionStartLoc = guiElementPositions["Instructions"];
+	// add old message in gray
+	textElementlist.push_back(GuiTextElement(instructionStartLoc, ofColor(160), oldMessage));
+	int cursorYLocation = instructionStartLoc.y;
+	cursorYLocation += instructionFont.stringHeight(oldMessage);  // update cursor location after old message
+	adjustGuiTextLinespace(cursorYLocation);
+	
+	// Add warning if flashing firmware
+	if ((int)_state > (int)State::WAIT_FOR_FEATHER && (int)_state < (int)State::COMPLETED)
+	{
+		// add text in orange
+		textElementlist.push_back(GuiTextElement(guiElementPositions["Warning"], ofColor(255, 128, 0), warningString));
+		// increment cursor position if this is the first "flashing step"
+		// For M0, consecutive "update" message locations are updated automatically by "new line character"
+		if (_lastState == State::WAIT_FOR_FEATHER)
+		{
+			cursorYLocation += instructionFont.stringHeight(warningString) + 5; // update cursor location
+			adjustGuiTextLinespace(cursorYLocation);
+		}
+	}
+
+	if (_state == State::COMPLETED)
+	{
+		// Add "success" statement in GREEN
+		textElementlist.push_back(GuiTextElement(GuiElement::Location(instructionStartLoc.x, cursorYLocation),
+			ofColor(0,255,0), newMessage));
 	}
 	else
 	{
-		progressString = "";
+		// add new message in black
+		textElementlist.push_back(GuiTextElement(GuiElement::Location(instructionStartLoc.x, cursorYLocation),
+			ofColor(0), newMessage));
 	}
+	cursorYLocation += instructionFont.stringHeight(newMessage);
+	adjustGuiTextLinespace(cursorYLocation);
+	
+	// Find where the progress "....." string will be added
+	std::size_t lastnewLine = newMessage.find_last_of("\n");
+	progressStringLocation.x = instructionStartLoc.x + instructionFont.stringWidth(newMessage.substr(lastnewLine + 1)) + 5;
+	progressStringLocation.y = cursorYLocation - instructionFont.stringHeight("sample_text") - 5;
+
+	// Load image GUI elements
+	std::vector<std::string> imageList = instructionImages[_state];
+	int cursorXLocation = instructionStartLoc.x;
+	for (int i = 0; i < imageList.size(); i++)
+	{
+		ofImage img;
+		img.load(ofToDataPath(ofFilePath::join("instructions", imageList.at(i))));
+		img.resize(resizedImgDim, resizedImgDim);
+		GuiImageElement imgEle(GuiElement::Location(cursorXLocation, cursorYLocation), ofColor(255), img);
+		imageElementList.push_back(imgEle);
+		cursorXLocation += (resizedImgDim + 10);
+	}
+
+	progressString = "";
 	pingProgTryCount = 0;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	
 	// draw Title
 	ofSetColor(0);
 	titleFont.drawString("EmotiBit Firmware Installer", guiElementPositions["TitleString"].x, guiElementPositions["TitleString"].y);
-	if (_state == State::DISPLAY_INSTRUCTION)
-	{
-		// draw footnote
-		footnoteFont.drawString("If you wish to load a custom firmware bin file, type \"L\"", guiElementPositions["FootnoteString"].x, guiElementPositions["FootnoteString"].y);
-	}
+	
 	// draw title image
 	ofSetColor(255);
 	titleImage.draw(guiElementPositions["TitleImage"].x, guiElementPositions["TitleImage"].y);
 	
-	// set color of instruction
-	if (_state == State::DONE)
+	// draw footnote
+	if (_state == State::DISPLAY_INSTRUCTION)
 	{
-		// Make text green if Installer was successful
-		ofSetColor(37, 190, 80);
-	}
-	else if (_state == State::INSTALLER_ERROR)
-	{
-		// Make text red if installer Failed
-		ofSetColor(234, 42, 11);
-	}
-	else
-	{
+		GuiElement::Location loc = guiElementPositions["FootnoteString"];
 		ofSetColor(0);
+		footnoteFont.drawString(footnoteString, loc.x, loc.y);
+		int cursorYLoc = loc.y + footnoteFont.stringHeight(footnoteString);
+		ofSetColor(128);
+		footnoteFont.drawString(fwPathGuiString, loc.x, cursorYLoc);
 	}
-	instructionFont.drawString(onScreenInstruction + "\n" + displayedErrorMessage, guiElementPositions["Instructions"].x, guiElementPositions["Instructions"].y);
-	
-	// color of progress string
-	ofSetColor(0, 255, 150);
-	progressFont.drawString(progressString, guiElementPositions["Progress"].x, guiElementPositions["Progress"].y);
+		
+	// draw text
+		for (int i = 0; i < textElementlist.size(); i++)
+	{
+		ofSetColor(textElementlist.at(i).color);
+		auto loc = textElementlist.at(i).location;
+		instructionFont.drawString(textElementlist.at(i).text, loc.x, loc.y);
+	}
 
-	// draw instruction image
-	ofSetColor(255);
-	if (onScreenInstructionImage.size() > 0)
+	// draw progress string
+	ofSetColor(0);
+	instructionFont.drawString(progressString, progressStringLocation.x, progressStringLocation.y);
+
+	// draw image
+	for (int i = 0; i < imageElementList.size(); i++)
 	{
-		for (int i = 0, offset_x = 0; i < onScreenInstructionImage.size(); i++)
-		{
-			onScreenInstructionImage.at(i).draw(guiElementPositions["InstructionImage"].x + offset_x, guiElementPositions["InstructionImage"].y);
-			offset_x = offset_x + 20 + resizedImgDim;
-		}
-	}
-	// draw error image
-	if (disaplyedErrorImage.size() > 0)
-	{
-		for (int i = 0, offset_x = 0; i < disaplyedErrorImage.size(); i++)
-		{
-			disaplyedErrorImage.at(i).draw(guiElementPositions["ErrorImage"].x + offset_x, guiElementPositions["ErrorImage"].y);
-			offset_x = offset_x + 20 + resizedImgDim;
-		}
+		ofSetColor(imageElementList.at(i).color);
+		auto loc = imageElementList.at(i).location;
+		imageElementList.at(i).image.draw(loc.x, loc.y);
 	}
 }
 
@@ -336,6 +451,34 @@ void ofApp::keyPressed(int key){
 			progressToNextState();
 		}
 	}
+#ifdef EMOTIBIT_FW_INST_DEBUG
+	/*
+	 * key	ascii	State
+	 * 0	48		START
+	 * 1 	49		DISPLAY_INSTRUCTION,
+	 * 2	50		WAIT_FOR_FEATHER,
+	 * 3	51		UPLOAD_WINC_FW_UPDATER_SKETCH,
+	 * 4	52		RUN_WINC_UPDATER,
+	 * 5 	53		UPLOAD_EMOTIBIT_FW,
+	 * 6	54		COMPLETED,
+	 */
+	if (key >= 48 && key <= 54)
+	{
+		guiTestMode = true;
+		guiTestState = key - 48;
+		_state = State::START;
+		clearGuiElements();
+	}
+
+	// press "f" oreceeded by a state aboe to jump to the failure screen for the state
+	if (key == 'f')
+	{
+		if (guiTestMode)
+		{
+			guiTestState = (int)State::INSTALLER_ERROR;
+		}
+	}
+#endif
 }
 
 //--------------------------------------------------------------
@@ -405,35 +548,33 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::setupGuiElementPositions()
 {
 	// The Gui element locations were chosen based on subjective aesthetics.
-	guiElementPositions["TitleString"] = GuiElementPos{ 10, 150 + int(titleFont.getLineHeight() / 2) };
-	guiElementPositions["TitleImage"] = GuiElementPos{ 724, 30 };
-	guiElementPositions["Instructions"] = GuiElementPos{ 30, 300 };
-	guiElementPositions["Progress"] = GuiElementPos{ 30, 290 };
-	//guiElementPositions["InstructionImage"] = GuiElementPos{ 724, 316 };
-	guiElementPositions["InstructionImage"] = GuiElementPos{ 30, 500 };
-	guiElementPositions["ErrorImage"] = GuiElementPos{ 30, 460 };
-	guiElementPositions["FootnoteString"] = GuiElementPos{ 625, 725 };
+	guiElementPositions["TitleString"] = GuiElement::Location{ 10, 150 + int(titleFont.getLineHeight() / 2) };
+	guiElementPositions["TitleImage"] = GuiElement::Location{ 724, 30 };
+	guiElementPositions["Instructions"] = GuiElement::Location{ 30, 280 };  //!< State update messages are drawn relative to this location
+	int footnoteStringHeight = footnoteFont.stringHeight(footnoteString);
+	int yLoc = 768 - (6 * footnoteStringHeight);
+	guiElementPositions["FootnoteString"] = GuiElement::Location{ 625, yLoc };
+	guiElementPositions["Warning"] = GuiElement::Location{ 0, 0 }; // random location. Gets updated on runtime
 }
 
 void ofApp::setupInstructionList()
 {
 	// Step based user instructions
-	onScreenInstructionList[State::START] = "";
-	onScreenInstructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
+	instructionList[State::START] = "";
+	instructionList[State::DISPLAY_INSTRUCTION] = "1. Make sure the EmotiBit Hibernate switch is NOT set to HIB"
 														"\n   !!CAUTION: Excessive force can break the HIB switch. Handle with care!!!"
 													    "\n2. Make sure EmotiBit is stacked with Feather with Battery and SD-Card inserted"
 													    "\n\t More information about stacking EmotiBit available at docs.emotibit.com"
 														"\n3. Make sure EmotiBit is NOT PLUGGED to the computer."
 														"\n4. Press space-bar to continue";
 	
-	onScreenInstructionList[State::WAIT_FOR_FEATHER] = "5. Press Reset Button on the Feather"
+	instructionList[State::WAIT_FOR_FEATHER] = "5. Press Reset Button on the Feather"
 		"\n6. Plug in the Feather using using a data-capable USB cable (as provided in the EmotiBit Kit)";
-	onScreenInstructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "\nDO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS\n"
-																	"\n>>> Uploading WINC firmware updater sketch";
-	onScreenInstructionList[State::RUN_WINC_UPDATER] = ">>> Updating WINC FW";
-	onScreenInstructionList[State::UPLOAD_EMOTIBIT_FW] = ">>> Updating EmotiBit firmware";
-	onScreenInstructionList[State::COMPLETED] = "\nFIRMWARE UPDATE COMPLETED SUCCESSFULLY!";
-	onScreenInstructionList[State::INSTALLER_ERROR] = "FAILED";
+	instructionList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = ">>> Uploading WINC firmware updater sketch";
+	instructionList[State::RUN_WINC_UPDATER] = ">>> Updating WINC FW";
+	instructionList[State::UPLOAD_EMOTIBIT_FW] = ">>> Updating EmotiBit firmware";
+	instructionList[State::COMPLETED] = "FIRMWARE UPDATE COMPLETED SUCCESSFULLY!";
+	instructionList[State::INSTALLER_ERROR] = "FAILED";
 
 	// Images to be displayed for each instruction
 	// If you want to add any image to be displayed, just add the image name to the list
@@ -446,6 +587,11 @@ void ofApp::setupInstructionList()
 	instructionImages[State::UPLOAD_EMOTIBIT_FW];
 	instructionImages[State::COMPLETED];
 	instructionImages[State::INSTALLER_ERROR];
+
+	// WARNING message
+	warningString = "DO NOT UNPLUG OR RESET EMOTIBIT WHILE UPDATE IN PROGRESS";
+	// footnote string
+	footnoteString = "If you wish to load a custom firmware bin file, type \"L\"";
 }
 
 void ofApp::setupErrorMessageList()
@@ -456,7 +602,7 @@ void ofApp::setupErrorMessageList()
                                                 "\n1. Make sure the  Feather is connected to your computer using a data-capable USB cable"
                                                 "\n2. Make sure the EmotiBit Hibernate switch is not set to HIB";
 	errorMessageList[State::UPLOAD_WINC_FW_UPDATER_SKETCH] = "Failed to Upload WINC Updater Sketch\nRe-run EmotiBit Installer";
-	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run";
+	errorMessageList[State::RUN_WINC_UPDATER] = "WINC updater executable failed to run\nRe-run EmotiBit Installer";
 	errorMessageList[State::UPLOAD_EMOTIBIT_FW] = "EmotiBit FW update failed\nRe-run EmotiBit Installer";
 	
 	// Error Image
@@ -991,3 +1137,17 @@ bool ofApp::uploadEmotiBitFw()
 	}
 }
 
+void ofApp::clearGuiElements()
+{
+	oldMessage = "";
+	newMessage = "";
+	textElementlist.clear();
+	imageElementList.clear();
+}
+
+void ofApp::adjustGuiTextLinespace(int &currentPos)
+{
+	// ToDo: This linespace probably changes for different fonts.
+	// Verify and fix for extensible use
+	currentPos += 5;
+}
