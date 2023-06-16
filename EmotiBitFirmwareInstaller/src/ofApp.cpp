@@ -795,8 +795,11 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 {
 	ofApp::DeviceInfo info;
 	info = parseDeviceInfo(deviceInfo);
-	
-	if (std::find(ADARUIT_VID_LIST.begin(), ADARUIT_VID_LIST.end(), info.vid) != ADARUIT_VID_LIST.end())
+	std::string appleSiliconM0PortName = "usbmodem";
+	// Detect Feather M0
+	// For all devices except apple silicon macs, use VID as identifier
+	// For apple silicon macs, use port name as identifier
+	if ((std::find(ADARUIT_VID_LIST.begin(), ADARUIT_VID_LIST.end(), info.vid) != ADARUIT_VID_LIST.end()) || info.port.find(appleSiliconM0PortName) != std::string::npos)
 	{
 		// Device vendor detected as Adafruit
 		if (std::find(ADARUIT_PID_LIST.begin(), ADARUIT_PID_LIST.end(), info.pid) != ADARUIT_PID_LIST.end())
@@ -808,6 +811,7 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 	}
 	else
 	{
+		// Detect Feather ESP32
 		// perform a check for ESP using device description
         // ToDo: Find a better way to detect ESP32. This approach is not "robust"
 		std::string espDescIdentifier = "Silicon";
