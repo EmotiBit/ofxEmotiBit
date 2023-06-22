@@ -15,7 +15,7 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 - ofxJSON - https://github.com/jeffcrouse/ofxJSON
 - EmotiBit_XPlat_Utils - https://github.com/EmotiBit/EmotiBit_XPlat_Utils
 - ofxLSL - https://github.com/EmotiBit/ofxLSL
-  - _**NOTE:**_ for lsl support, if developing with visual studio, code should be compiled for x64
+  - _**Note:**_ for lsl support, if developing with visual studio, code should be compiled for x64
   - liblsl64.dll should always be in the same folder as the .exe (i.e. EmotiBitOscilloscope/bin/liblsl64.dll)
   - liblsl64.lib should always be linked to in under _solution properties->linker->general->additional library directories_ and _solution properties->linker->input-> additional dependencies_
   - both of these libs are handled properly by default, but should be considered if deviating from release code
@@ -24,7 +24,8 @@ If you want to modify the code(or build the tools in Linux), below are the requi
   - ofxSerial - https://github.com/bakercp/ofxSerial
   - ofxIO - https://github.com/bakercp/ofxIO
 
-#### The following script may be run from a bash shell within your openFrameworks/addons/ directory to install ofxEmotiBit and all dependencies. Note that this requires you to have [github SSH key access set up](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
+#### The following script may be run from a bash shell within your openFrameworks/addons/ directory to install ofxEmotiBit and all dependencies. 
+_**Note:**_ this requires you to have [github SSH key access set up](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 ```
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
