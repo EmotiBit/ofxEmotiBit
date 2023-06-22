@@ -23,6 +23,32 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 - Required to build EmotiBit FirmwareInstaller
   - ofxSerial - https://github.com/bakercp/ofxSerial
   - ofxIO - https://github.com/bakercp/ofxIO
+
+#### The following script may be run from a bash shell within your openFrameworks/addons/ directory to install ofxEmotiBit and all dependencies. Note that this requires you to have [github SSH key access set up](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
+```
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+git clone git@github.com:EmotiBit/ofxEmotiBit.git
+git clone git@github.com:bakercp/ofxNetworkUtils.git
+cd ofxNetworkUtils
+git checkout stable
+cd ..
+git clone git@github.com:produceconsumerobot/ofxOscilloscope.git
+git clone git@github.com:produceconsumerobot/ofxThreadedLogger.git
+git clone git@github.com:smukkejohan/ofxBiquadFilter.git
+git clone git@github.com:jeffcrouse/ofxJSON.git
+git clone git@github.com:EmotiBit/EmotiBit_XPlat_Utils.git
+git clone git@github.com:EmotiBit/ofxLSL.git
+git clone git@github.com:bakercp/ofxSerial.git
+cd ofxSerial
+git checkout stable
+cd ..
+git clone git@github.com:bakercp/ofxIO.git
+cd ofxIO
+git checkout stable
+cd ..
+```
+
 ## macOS 
 ### Note on using M1 macs (apple silicon)
 - If you are using the new M1 macs, then make sure to use Rosetta installed in xcode.
