@@ -31,6 +31,11 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 - **Adding paths to Library search paths**
   - Check if the directory paths for the files `liblsl64-static.a` and `liblslboost.a` are already present in the `project` > `Build Settings` > `Library Search Paths`. If they are not present, follow the below steps:  
     - Select your project in the **Target group**(in xcode project navigator), go to **Build Settings** tab, and add the following path in the **Library Search Paths** section: `../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx`
+- For `EmotiBitDataParser`, if you get an error `ERROR: -NSDocumentRevisionsDebugMode does not exist, try absolute path` when compiling in `debug mode`,
+  - Choose the `build scheme` on the top left
+  - In the `Run` tab, open the `Options` tab
+  - unckeck the `Allow debugging when using document Version Browser` checkbox
+  - Try building again.
 
 ## Developing on Linux
 - You will require a version of gcc on your linux machine. Depending on the version, we need to install the appropriate OpenFrameworks code base. You can check the gcc verison on you system using the following command: `gcc --verison`.
