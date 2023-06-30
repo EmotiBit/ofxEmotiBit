@@ -24,7 +24,7 @@ void ofApp::setup() {
 	int guiYPos = 20;
 	int guiWidth = ofGetWindowWidth();
 	int guiPosInc = guiWidth + 1;
-	guiPanels.resize(1);
+	//guiPanels.resize(1); // This fails in OF v0.11.2 with "attempting to reference a deleted function" error
 	guiPanels.at(0).setDefaultWidth(guiWidth);
 	guiPanels.at(0).setup("startRecording","junk.xml", guiXPos, -guiYPos);
 	guiPanels.at(0).add(processStatus.setup("Status", GUI_STATUS_IDLE));
