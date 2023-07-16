@@ -21,7 +21,7 @@ If you want to modify the code(or build the tools in Linux), below are the requi
   - both of these libs are handled properly by default, but should be considered if deviating from release code
 - The project is built on a 64-bit architecture. Make sure you are on a machine that support `x64` build platform.
 - Required to build EmotiBit FirmwareInstaller
-  - ofxSerial - https://github.com/bakercp/ofxSerial
+  - ofxSerial - https://github.com/EmotiBit/ofxSerial
   - ofxIO - https://github.com/bakercp/ofxIO
 ## macOS 
 ### Note on using M1 macs (apple silicon)
