@@ -55,7 +55,7 @@ public:
 	//ofxButton ringButton;
 	//ofxLabel screenSize;
 
-  vector<ofxPanel> guiPanels = vector<ofxPanel>(1); // OF v0.11.2 requires vector initialization to avoid "attempting to reference a deleted function" error
+  vector<ofxPanel> guiPanels;
 
 	unordered_map<string, uint32_t> timestamps;
 	unordered_map<string, LoggerThread*> loggers;
