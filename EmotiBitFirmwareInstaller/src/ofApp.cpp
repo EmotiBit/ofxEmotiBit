@@ -133,6 +133,11 @@ void ofApp::update(){
 			}
 			else
 			{
+			const int PLUGIN_CHECK_INTERVAL = 100; // check every 100mS
+			static int lastCheckTime = ofGetElapsedTimeMillis();
+			if (ofGetElapsedTimeMillis() - lastCheckTime > PLUGIN_CHECK_INTERVAL)
+			{
+				lastCheckTime = ofGetElapsedTimeMillis();
 				int numDevicesDetected = detectFeatherPlugin();
 				if (numDevicesDetected == 1)
 				{
@@ -155,6 +160,7 @@ void ofApp::update(){
 				}
 			}
 		}
+	}
 		else if (_state == State::UPLOAD_WINC_FW_UPDATER_SKETCH)
 		{
 
@@ -639,10 +645,11 @@ int ofApp::detectFeatherPlugin()
         }
         else if (currentComList.size() - comListOnStartup.size() == 2)
 		{
-			// Exactly 2 ports detected. Might be artifact of SiLabs driver for ESP32. Check if a COM port was lebelled as ESP32 port
+			// Exactly 2 ports detected. Might be artifact of SiLabs driver for ESP32.
+			// Only the port with name SLAB_USBtoUART was added to the boardComList. Check function getBoardFromDeviceInfo.
             if(boardComList[Board::FEATHER_ESP_32].size())
             {
-                ofLogNotice() << "Feather ESP32 detected on port: " + boardComList[Board::FEATHER_ESP_32].at(0);
+                ofLogNotice() << "2 ports added simultaneously. Considering Feather ESP port as: " + boardComList[Board::FEATHER_ESP_32].at(0);
                 // A port was detected as ESP32!
                 setBoard(Board::FEATHER_ESP_32);
                 featherPort = boardComList[Board::FEATHER_ESP_32].at(0); // return the first element of the COM list assigned to the  board
@@ -780,6 +787,7 @@ ofApp::DeviceInfo ofApp::parseDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 #else
     // for linux
 #endif
+	ofLogNotice("Device details") << "Port: " + info.port + " ; " + "Desc: " + info.desc + " ; " + "VID: " + info.vid + " ; " + "PID: " + info.pid;
 	return info;
 }
 
@@ -787,19 +795,20 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 {
 	ofApp::DeviceInfo info;
 	info = parseDeviceInfo(deviceInfo);
-	bool isFeatherM0 = false;
-	
+	// Detect Feather M0 usiung VID
 	if (std::find(ADARUIT_VID_LIST.begin(), ADARUIT_VID_LIST.end(), info.vid) != ADARUIT_VID_LIST.end())
 	{
-		// Device vendor detected as Adafruit
+		// Device vendor detected as Adafruit. Check for PID
 		if (std::find(ADARUIT_PID_LIST.begin(), ADARUIT_PID_LIST.end(), info.pid) != ADARUIT_PID_LIST.end())
 		{
 			// Device detected as Feather M0
+			ofLogNotice("Board Detected") << "Feather M0";
 			return Board::FEATHER_M0;
 		}
 	}
 	else
 	{
+		// Detect Feather ESP32
 		// perform a check for ESP using device description
         // ToDo: Find a better way to detect ESP32. This approach is not "robust"
 		std::string espDescIdentifier = "Silicon";
@@ -808,13 +817,15 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 		if (info.desc.find(espDescIdentifier) != std::string::npos)
 		{
 			// It is ESP!
+			ofLogNotice("Board Detected") << "Feather ESP";
 			return Board::FEATHER_ESP_32;
 		}
 #elif defined TARGET_OSX
-        // if descriptions says silicon labs and port is SLAB_USBtoUART
-        if (info.desc.find(espDescIdentifier) != std::string::npos && info.port.find(espSlabIdentifier) != std::string::npos)
+        // if port is SLAB_USBtoUART
+        if (info.port.find(espSlabIdentifier) != std::string::npos) 
 		{
 			// It is ESP!
+			ofLogNotice("Board Detected") << "Feather ESP";
 			return Board::FEATHER_ESP_32;
 		}
 #endif
@@ -826,6 +837,7 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 {
 	ofSerial serial;
 	std::vector<std::string> comPortList;
+	ofLog(OF_LOG_NOTICE, "Available COM ports:");
 	// get device list
 	ofxIO::SerialDeviceInfo::DeviceList deviceList = getDeviceList();
 	
@@ -833,15 +845,15 @@ std::vector<std::string> ofApp::getComPortList(bool printOnConsole)
 	comPortList = getComListFromDeviceList(deviceList);	
 	
 	// print available COM ports on console
-	if (printOnConsole)
+	/*if (printOnConsole)
 	{
 		std::string comPorts;
 		for (int i = 0; i < comPortList.size(); i++)
 		{
 			comPorts += comPortList.at(i) + DELIMITER;
 		}
-		ofLog(OF_LOG_NOTICE, "Available COM ports: " + comPorts);
-	}
+		//ofLog(OF_LOG_NOTICE, "Available COM ports: " + comPorts);
+	}*/
 	return comPortList;
 }
 
