@@ -795,13 +795,10 @@ ofApp::Board ofApp::getBoardFromDeviceInfo(ofx::IO::SerialDeviceInfo deviceInfo)
 {
 	ofApp::DeviceInfo info;
 	info = parseDeviceInfo(deviceInfo);
-	// For apple silicon macs, use port name as identifier
-    //std::string appleSiliconM0PortName = "usbmodem";
-	// Detect Feather M0
-	// For all devices except apple silicon macs, use VID as identifier
+	// Detect Feather M0 usiung VID
 	if (std::find(ADARUIT_VID_LIST.begin(), ADARUIT_VID_LIST.end(), info.vid) != ADARUIT_VID_LIST.end())
 	{
-		// Device vendor detected as Adafruit
+		// Device vendor detected as Adafruit. Check for PID
 		if (std::find(ADARUIT_PID_LIST.begin(), ADARUIT_PID_LIST.end(), info.pid) != ADARUIT_PID_LIST.end())
 		{
 			// Device detected as Feather M0
