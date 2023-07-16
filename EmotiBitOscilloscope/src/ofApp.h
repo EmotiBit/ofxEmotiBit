@@ -265,7 +265,7 @@ public:
 	//ofxButton ringButton;
 	//ofxLabel screenSize;
 
-  vector<ofxPanel> guiPanels;
+	vector<ofxPanel> guiPanels = vector<ofxPanel>(6); // OF v0.11.2 requires vector initialization to avoid "attempting to reference a deleted function" error
 
 	bool plotUdpData = true;
 	bool DEBUGGING = false;
