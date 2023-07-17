@@ -105,12 +105,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7DB31082FDF54DD19CA8107DBEC9505E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8B56ED3DDA944E18BF078A2C36EBF868"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -578,26 +572,6 @@
             "TargetName" = "8:un-plugInEmotiBit.jpg"
             "Tag" = "8:"
             "Folder" = "8:_3648DB9DA1E646C19C15A08FAC0D91D3"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7DB31082FDF54DD19CA8107DBEC9505E"
-            {
-            "SourcePath" = "8:..\\..\\EmotiBitDataParser\\bin\\EmotiBitDataParser.sh"
-            "TargetName" = "8:EmotiBitDataParser.sh"
-            "Tag" = "8:"
-            "Folder" = "8:_1BD84CAF3E114DD98E922771E8E9F9E5"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
