@@ -1250,7 +1250,7 @@ void ofApp::setupGui()
 	int guiWidth = 220;
 	int guiPosInc = guiWidth + 1;
 	
-	guiPanels.resize(6);
+	//guiPanels.resize(6); // This fails in OF v0.11.2 with "attempting to reference a deleted function" error
 
 	// Device Menu
 	int p = 0;
