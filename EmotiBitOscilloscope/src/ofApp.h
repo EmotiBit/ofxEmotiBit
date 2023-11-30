@@ -84,6 +84,7 @@ public:
 	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updateTypeTagList();
 	void checkLatestSwVersion();
+	bool testPingResponse(std::string pingResponse);
 	void loadEmotiBitCommSettings(string settingsFilePath = "emotibitCommSettings.json", bool absolutePath = false);
 	void saveEmotiBitCommSettings(string settingsFilePath = "emotibitCommSettings.json", bool absolutePath = false, bool pretty = true);
 

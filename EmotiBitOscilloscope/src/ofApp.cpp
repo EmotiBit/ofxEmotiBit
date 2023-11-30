@@ -74,6 +74,99 @@ void ofApp::update() {
 	updateMenuButtons();
 }
 
+bool ofApp::testPingResponse(std::string pingResponse)
+{
+	bool isNetworkAvailable = false;
+	std::string searchKey("Ping statistics");
+#if not defined (TARGET_OSX) || defined (TARGET_LINUX)
+	searchKey = "ping statistics";  // define search key for linux/macOS
+#endif
+	int keyLoc = pingResponse.find(searchKey);
+	const char statDelimiter = '\n';
+
+	// extract statistsics from ping response
+	int statStartLoc = pingResponse.find(statDelimiter, keyLoc) + 1;
+	int statEndLoc = pingResponse.find(statDelimiter, statStartLoc) + 1;
+	std::string stats = pingResponse.substr(statStartLoc, (statEndLoc - statStartLoc));
+	const char commaDelimiter = ',';
+	int commaLoc = stats.find(commaDelimiter);
+	const char equalDelimiter = '=';  // used only in Windows parsing
+	struct ParsedStats {
+		int packetsSent = 0;
+		int packetsRec = 0;
+		bool gotSentStats = false;
+	}parsedStats;
+
+	// Parse ping response
+
+	// LINUX/MACOS
+	/* A successful ping response
+	-----------------------------
+	PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+	64 bytes from 8.8.8.8: icmp_seq=1 ttl=54 time=18.2 ms
+	64 bytes from 8.8.8.8: icmp_seq=2 ttl=54 time=25.7 ms
+	64 bytes from 8.8.8.8: icmp_seq=3 ttl=54 time=14.5 ms
+
+	--- 8.8.8.8 ping statistics ---
+	3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+	rtt min/avg/max/mdev = 14.503/19.471/25.685/4.649 ms
+	*/
+
+	// WINDOWS
+	// A successful ping response contains a sumary of round trip times. We are using that do determine if ping was successful
+	/* A successful ping response
+	------------------------------
+	Pinging 8.8.8.8 with 32 bytes of data:
+	Reply from 8.8.8.8: bytes = 32 time = 18ms TTL = 119
+
+		Ping statistics for 8.8.8.8 :
+		Packets : Sent = 1, Received = 1, Lost = 0 (0 % loss),
+		Approximate round trip times in milli - seconds :
+		Minimum = 18ms, Maximum = 18ms, Average = 18ms
+	*/
+
+	while (commaLoc != string::npos)
+	{
+#if not defined (TARGET_OSX) || defined (TARGET_LINUX)
+		std::string numExtract = stats.substr(0, stats.find("packets"));
+		if (!parsedStats.gotSentStats)
+		{	
+			parsedStats.packetsSent = atoi(numExtract.c_str());
+			parsedStats.gotSentStats = true; // extract packetsRec next
+			
+		}
+		else
+		{
+			parsedStats.packetsRec = atoi(numExtract.c_str());
+			break;
+		}
+#else
+		int equalLoc = stats.find(equalDelimiter);
+		std::string numExtract = stats.substr(equalLoc + 1, commaLoc);
+		if (parsedStats.gotSentStats == 0)
+		{
+			parsedStats.packetsSent = atoi(numExtract.c_str());
+			parsedStats.gotSentStats = true; // extract packetsRec next
+
+		}
+		else
+		{
+			parsedStats.packetsRec = atoi(numExtract.c_str());
+			parsedStats.gotSentStats = true; // extract packetsRec next
+			break;
+		}
+#endif
+		stats.erase(stats.begin(), stats.begin() + commaLoc + 1);
+		commaLoc = stats.find(commaDelimiter);
+	}
+
+	if (parsedStats.packetsSent > 0 && (parsedStats.packetsRec == parsedStats.packetsSent))
+	{
+		isNetworkAvailable = true;
+	}
+	return isNetworkAvailable;
+}
+
 void ofApp::checkLatestSwVersion()
 {
 
@@ -116,29 +209,27 @@ void ofApp::checkLatestSwVersion()
 	}
 	ofLogNotice() << pingResponse.c_str();
 	
-	// A successful ping response contains a sumary of round trip times. We are using that do determine if ping was successful
-	/* A successful ping response
-	------------------------------
-	Pinging 8.8.8.8 with 32 bytes of data:
-	Reply from 8.8.8.8: bytes = 32 time = 18ms TTL = 119
+	std::string testString =
+		"PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.\n"
+		"64 bytes from 8.8.8.8: icmp_seq = 1 ttl = 54 time = 18.2 ms\n"
+		"64 bytes from 8.8.8.8 : icmp_seq = 2 ttl = 54 time = 25.7 ms\n"
+		"64 bytes from 8.8.8.8 : icmp_seq = 3 ttl = 54 time = 14.5 ms\n"
+		"-- - 8.8.8.8 ping statistics-- -\n"
+		"3 packets transmitted, 3 received, 0 % packet loss, time 2003ms\n"
+		"rtt min / avg / max / mdev = 14.503 / 19.471 / 25.685 / 4.649 ms";
 
-		Ping statistics for 8.8.8.8 :
-		Packets : Sent = 1, Received = 1, Lost = 0 (0 % loss),
-		Approximate round trip times in milli - seconds :
-		Minimum = 18ms, Maximum = 18ms, Average = 18ms
-	*/
-	if (pingResponse.find("Approximate round trip times") != std::string::npos)
-	{
-		// substring found!
-		ofLogNotice() << "internet access detected";
-		isNetworkAvailable = true;
-	}
-	else
-	{
-		// failed
-		ofLogNotice() << "Failed to ping IP";
-	}
+	/*testString = 
+		"Pinging 8.8.8.8 with 32 bytes of data:\n"
+		"Reply from 8.8.8.8: bytes = 32 time = 20ms TTL = 54\n"
+		"Reply from 8.8.8.8 : bytes = 32 time = 17ms TTL = 54\n"
+		"Reply from 8.8.8.8 : bytes = 32 time = 15ms TTL = 54\n"
+		"Ping statistics for 8.8.8.8 :\n"
+		"Packets : Sent = 3, Received = 3, Lost = 0 (0 % loss),\n"
+		"Approximate round trip times in milli - seconds :\n"
+		"Minimum = 15ms, Maximum = 20ms, Average = 17ms";*/
 
+	isNetworkAvailable = testPingResponse(testString);
+	//isNetworkAvailable = testPingResponse(pingResponse);
 	if (isNetworkAvailable)
 	{
 		bool newVersionAvailable = false;
