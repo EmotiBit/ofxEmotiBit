@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\ofxLSL\src\ofxLSLResolver.cpp" />
     <ClCompile Include="..\..\ofxOscilloscope\src\patchboard.cpp" />
     <ClCompile Include="..\src\Signal\Periodizer.cpp" />
+    <ClCompile Include="..\src\SoftwareVersionChecker.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="..\..\ofxLSL\src\ofxLSLSender.h" />
     <ClInclude Include="..\..\ofxOscilloscope\src\patchboard.h" />
     <ClInclude Include="..\src\Signal\Periodizer.h" />
+    <ClInclude Include="..\src\SoftwareVersionChecker.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />
