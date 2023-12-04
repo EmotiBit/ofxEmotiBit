@@ -4,6 +4,15 @@
 
 namespace SoftwareVersionChecker
 {
+	/*!
+	@brief Check if a later version of EmotiBit software is available to download
+	*/
 	void checkLatestVersion();
-	bool testPingresponse(std::string pingResponse);
+
+	/*!
+	@brief Test if the response ot ping contains keywords
+	@param response received when pinging an IP
+	@return True, is network is available, else false
+	*/
+	bool testPingResponse(std::string pingResponse);
 }
