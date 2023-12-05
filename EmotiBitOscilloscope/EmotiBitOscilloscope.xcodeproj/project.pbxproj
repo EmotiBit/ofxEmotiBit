@@ -64,6 +64,7 @@
 		B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */; };
 		B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */; };
 		B65D7C8C591DF95D595E2053 /* NetworkInterfaceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44D29F961AB993B629D7C467 /* NetworkInterfaceListener.cpp */; };
+		B9C180BB2B1F690B00E35CFC /* SoftwareVersionChecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C180BA2B1F690B00E35CFC /* SoftwareVersionChecker.cpp */; };
 		C4782ECC372420ACE0615B74 /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC8881B3C8C0A1C45F042E7A /* OscPrintReceivedElements.cpp */; };
 		D820615CFDD5F497033D7C5A /* ofxBiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E6502FFB31969C644E02C1 /* ofxBiquadFilter.cpp */; };
 		E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 35BB9BB90DBABFD3B39F8DB6 /* ofxUDPManager.cpp */; };
@@ -254,6 +255,9 @@
 		B62DC455BB791E69D877D3B6 /* blowfish.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = blowfish.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/blowfish.h; sourceTree = SOURCE_ROOT; };
 		B65483D96A9E876D46C93373 /* srtp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = srtp.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/srtp.h; sourceTree = SOURCE_ROOT; };
 		B87C60311EC1FE841C1ECD89 /* ofxLabel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxLabel.h; path = ../../../addons/ofxGui/src/ofxLabel.h; sourceTree = SOURCE_ROOT; };
+		B9C180B82B1F67F900E35CFC /* SoftwareVersionChecker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SoftwareVersionChecker.h; path = ../src/SoftwareVersionChecker.h; sourceTree = "<group>"; };
+		B9C180B92B1F67F900E35CFC /* SoftwareVersionChecker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SoftwareVersionChecker.cpp; path = ../src/SoftwareVersionChecker.cpp; sourceTree = "<group>"; };
+		B9C180BA2B1F690B00E35CFC /* SoftwareVersionChecker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SoftwareVersionChecker.cpp; path = ../src/SoftwareVersionChecker.cpp; sourceTree = "<group>"; };
 		BA274EC7A169D538BD43A5D8 /* ofxGuiUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxGuiUtils.h; path = ../../../addons/ofxGui/src/ofxGuiUtils.h; sourceTree = SOURCE_ROOT; };
 		BAE45B5EDF2D519E39986297 /* ofxNetworkUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxNetworkUtils.h; path = ../../../addons/ofxNetworkUtils/src/ofxNetworkUtils.h; sourceTree = SOURCE_ROOT; };
 		BC8881B3C8C0A1C45F042E7A /* OscPrintReceivedElements.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = OscPrintReceivedElements.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscPrintReceivedElements.cpp; sourceTree = SOURCE_ROOT; };
@@ -713,6 +717,8 @@
 		4CD5C6EA1AEB082DFF01E7BE /* src */ = {
 			isa = PBXGroup;
 			children = (
+				B9C180B92B1F67F900E35CFC /* SoftwareVersionChecker.cpp */,
+				B9C180B82B1F67F900E35CFC /* SoftwareVersionChecker.h */,
 				8E016F812832CE65005D7C65 /* Signal */,
 				AFB59BF33EDC27D6AF2CC50B /* ArduinoString.h */,
 				B37D59256BC5BDEB408A0B4B /* DoubleBuffer.h */,
@@ -1379,6 +1385,7 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				B9C180BA2B1F690B00E35CFC /* SoftwareVersionChecker.cpp */,
 				8E012CDD29A5B157009FB530 /* udpOutputSettings.xml */,
 				8E016F852832D594005D7C65 /* emotibitCommSettings.json */,
 				8E6079E827C978BE00959DDB /* inputSettings.xml */,
@@ -1565,6 +1572,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9C180BB2B1F690B00E35CFC /* SoftwareVersionChecker.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				D820615CFDD5F497033D7C5A /* ofxBiquadFilter.cpp in Sources */,
@@ -1754,7 +1762,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx,
+					"../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/**",
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -1972,7 +1980,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx,
+					"../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/**",
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2052,7 +2060,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx,
+					"../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/**",
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
