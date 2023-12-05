@@ -17,6 +17,7 @@
 #include "patchboard.h"
 #include "Periodizer.h"
 #include "ofxJSON.h"
+#include "SoftwareVersionChecker.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -83,7 +84,6 @@ public:
 	void updatePlotAttributeLists(std::string settingsFile = "ofxOscilloscopeSettings.xml");
 	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updateTypeTagList();
-	void checkLatestSwVersion();
 	void loadEmotiBitCommSettings(string settingsFilePath = "emotibitCommSettings.json", bool absolutePath = false);
 	void saveEmotiBitCommSettings(string settingsFilePath = "emotibitCommSettings.json", bool absolutePath = false, bool pretty = true);
 
