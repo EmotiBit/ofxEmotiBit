@@ -7,8 +7,10 @@ void SoftwareVersionChecker::checkLatestVersion()
 	// -n specifies number of tries. we are going to try to detect internet connection by sending 1 packet
 	// -w specifies timeout period in mS. We are going to wait for a maximum of 3 seconds for a ping response.
 	// the IP 8.8.8.8 is google's public DNS. We are using ping with a specific IP as that removes undefined wait periods associated with DNS resolution. More details: https://developers.google.com/speed/public-dns
-#if defined (TARGET_OSX) || defined (TARGET_LINUX)
-	std::string command = "ping -n 1 -t 1 8.8.8.8"; // ping 1 time with a total timeout of 1 second
+#if defined (TARGET_OSX)
+    std::string command = "ping -c 1 -t 1 8.8.8.8"; // ping 1 time with a total timeout of 1 second
+#elif defined (TARGET_LINUX)
+	std::string command = "ping -c 1 -W 1 8.8.8.8"; // ping 1 time with a total timeout of 1 second
 #else
 	std::string command = "ping -n 1 -w 100 8.8.8.8"; // ping 1 time with 100ms max timeout for each try
 #endif
