@@ -1467,7 +1467,7 @@
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
 				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
 				E4C2427710CC5ABF004149E2 /* CopyFiles */,
-				8466F1851C04CA0E00918B1C /* ShellScript */,
+				8466F1851C04CA0E00918B1C /* Run Script */,
 				948E6B5A2852AA4B000A8B76 /* ShellScript */,
 			);
 			buildRules = (
@@ -1509,13 +1509,14 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8466F1851C04CA0E00918B1C /* ShellScript */ = {
+		8466F1851C04CA0E00918B1C /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1537,7 +1538,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nrsync -aved \"$OF_PATH/addons/ofxLSL/libs/labstreaminglayer/lib/osx/liblsl.1.14.0.dylib\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/\";\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\narch=$(uname -m)\nif [ $arch = \"arm64\" ] \nthen\n# link lsl bin compiled by arm mac\nrsync -aved \"$OF_PATH/addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm/liblsl.1.14.0.dylib\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/\";\nelse\n# link lsl bin compiled by intel mac\nrsync -aved \"$OF_PATH/addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64/liblsl.1.14.0.dylib\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/\";\nfi\n";
 		};
 		E42962A92163ECCD00A6A9E2 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
