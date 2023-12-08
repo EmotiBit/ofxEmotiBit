@@ -10,9 +10,9 @@ namespace SoftwareVersionChecker
 	void checkLatestVersion();
 
 	/*!
-	@brief Test if the response ot ping contains keywords
+	@brief Test if the response to ping contains keywords
 	@param response received when pinging an IP
-	@return True, is network is available, else false
+	@return True, if network is available, else false
 	*/
 	bool testPingResponse(std::string pingResponse);
 }
