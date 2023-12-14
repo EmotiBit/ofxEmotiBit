@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -106,6 +106,8 @@
     <ClCompile Include="..\..\ofxLSL\src\ofxLSLReceiver.cpp" />
     <ClCompile Include="..\..\ofxLSL\src\ofxLSLResolver.cpp" />
     <ClCompile Include="..\..\ofxOscilloscope\src\patchboard.cpp" />
+    <ClCompile Include="..\src\EmotiBitLsl.cpp" />
+    <ClCompile Include="..\src\PatchboardJson.cpp" />
     <ClCompile Include="..\src\Signal\Periodizer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -162,6 +164,8 @@
     <ClInclude Include="..\..\ofxLSL\src\ofxLSLResolver.h" />
     <ClInclude Include="..\..\ofxLSL\src\ofxLSLSender.h" />
     <ClInclude Include="..\..\ofxOscilloscope\src\patchboard.h" />
+    <ClInclude Include="..\src\EmotiBitLsl.h" />
+    <ClInclude Include="..\src\PatchboardJson.h" />
     <ClInclude Include="..\src\Signal\Periodizer.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h" />
