@@ -157,6 +157,12 @@
     <ClCompile Include="..\..\ofxLSL\src\ofxLSLResolver.cpp">
       <Filter>addons\ofxLSL\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\EmotiBitLsl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PatchboardJson.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -523,6 +529,12 @@
     </ClInclude>
     <ClInclude Include="..\..\ofxLSL\src\ofxLSLSender.h">
       <Filter>addons\ofxLSL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EmotiBitLsl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PatchboardJson.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,18 +8,12 @@
 class PatchboardJson
 {
 public:
-	//static unordered_map<string, vector<string>> extractPatchcordMap(string jsonStr);
-	//static string extractInputType(string jsonStr);
-	//static string extractOutputType(string jsonStr);
 
+	// ToDo: move ReturnCode to Patchboard.h
 	enum ReturnCode {
 		SUCCESS = 0,
-		ERROR_NO_PATHBOARD_FOUND = -1,
-		ERROR_NO_SETTINGS_FOUND = -2,
-		ERROR_NO_INPUT_TYPE_FOUND = -3,
-		ERROR_NO_OUTPUT_TYPE_FOUND = -4,
-		ERROR_NO_PATCHCORDS_FOUND = -5,
-		ERROR_PATCHBOARD_FORMAT = -6
+		ERR_TAG_NOT_FOUND = -1,
+		ERR_FORMAT_INCORRECT = -2
 	};
 
 	std::string inputType = "";
@@ -30,4 +24,7 @@ public:
 
 	ReturnCode parse(std::string jsonStr);
 	size_t getNumPatches();
+	std::string getLastErrMsg();
+
+	std::string _lastErrMsg = "";
 };

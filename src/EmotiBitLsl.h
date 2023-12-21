@@ -21,6 +21,7 @@
 #include "ofxLSL.h"
 #include "PatchboardJson.h"
 #include "EmotiBitPacket.h"
+#include <unordered_map>
 
 using namespace EmotiBit;
 
@@ -29,12 +30,11 @@ class EmotiBitLsl
 public:
 	enum ReturnCode {
 		SUCCESS = 0,
-		ERROR_LSL_TAG_NOT_FOUND = -1,
-		ERROR_MARKER_TAG_NOT_FOUND = -2,
-		ERROR_NAME_NOT_FOUND = -3,
-		ERROR_SRCID_NOT_FOUND = -4,
+		ERR_TAG_NOT_FOUND = -1,
+		ERR_FORMAT_INCORRECT = -2,
+		ERR_VALUE_MISMATCH = -3
 	};
-
+	
 	struct MarkerStreamInfo {
 		// For more info: https://github.com/sccn/liblsl/blob/5eded5c1d381a1a5fbbcce105edfaa53f009176a/include/lsl_cpp.h#L161
 		std::string name = "";  //!< marker stream inlet name for LSL.
@@ -42,27 +42,32 @@ public:
 		size_t rxCount = 0;
 		std::shared_ptr<ofxLSL::Receiver<string>> receiver;
 	};
-	vector<MarkerStreamInfo> markerInputs;
+	vector<MarkerStreamInfo> _markerInputs;
 
 	static const string MARKER_INFO_NAME_LABEL;
 	static const string MARKER_INFO_SOURCE_ID_LABEL;
 
-
-	ofxLSL::Sender();
-
-	PatchboardJson patchboard;
-
-	void update();
 	ReturnCode addMarkerInput(string jsonStr);
 	vector<string> createMarkerInputPackets(uint16_t &packetCounter);
 
-	ReturnCode addDataStreamOutputs(string jsonStr);
 	vector<MarkerStreamInfo> getMarkerStreamInfo();
-	size_t getNumDataOutputs();
 	size_t getNumMarkerInputs();
+	ReturnCode addDataStreamOutputs(string jsonStr, string sourceId);
+	bool isDataStreamOutputSource(string sourceId);
+	size_t getNumDataOutputs(string sourceId);
+	void clearDataStreamOutputs();
+	string getlastErrMsg();
 
 	// ToDo: Move to EmotiBitPacket
 	template<typename T>
 	void addToPayload(const T &element, std::stringstream &payload, uint16_t &payloadLen);
+
+	template <typename T>
+	bool addSample(const vector<T> &_values, const std::string &typeTag, const std::string &sourceId);
+
+	ofxLSL::Sender _lslSender;
+	string _lastErrMsg = "";
+	unordered_map<string, PatchboardJson> _patchboards; // <sourceId, patchboard>
+	unordered_map<pair<string, string>, string> _outChanTypeMap; // LSL channel <<sourceId, name>, type>
 
 };

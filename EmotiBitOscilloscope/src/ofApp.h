@@ -85,6 +85,9 @@ public:
 	// Settings files
 	const string commSettingsFile = "emotibitCommSettings.json";
 	const string lslOutputSettingsFile = "lslOutputSettings.json";
+	const string udpOutputSettingsFile = "udpOutputSettings.xml";
+	const string oscOutputSettingsFile = "oscOutputSettings.xml";
+	string lslSettings;
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -130,8 +133,6 @@ public:
 	//	uint8_t typeTag;
 	//	uint8_t protocolVersion
 	//}
-
-	EmotiBitLsl emotibitLsl;
 
 	struct typeTagPlotAttr {
 		std::string plotName;
@@ -304,5 +305,8 @@ public:
 	ofxUDPManager udpSender;
 	bool sendUdp = false; // ToDo: generalize sendOsc to sendData
 	
+	EmotiBitLsl emotibitLsl;
+	bool sendLsl = false;
+
 };
 

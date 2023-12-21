@@ -38,12 +38,7 @@ void ofApp::setup() {
 		consoleLogger.startThread();
 	}
 
-	// LSL setup
-	string lslSettings = loadTextFile(lslOutputSettingsFile);
-	if (!lslSettings.empty())
-	{
-		emotibitLsl.addDataStreamOutputs(lslSettings);
-	}
+	// LSL marker setup
 	if (!commSettings.empty())
 	{
 		emotibitLsl.addMarkerInput(commSettings);
@@ -759,6 +754,35 @@ void ofApp::updateDeviceList()
 			ofRemoveListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
 			device->set(true);
 			ofAddListener(deviceGroup.parameterChangedE(), this, &ofApp::deviceGroupSelection);
+			if (sendLsl)
+			{
+				// Changing devices may require LSL stream setup
+				string sourceId = emotiBitWiFi.connectedEmotibitIdentifier;
+				if (!emotibitLsl.isDataStreamOutputSource(sourceId))
+				{
+					// A new sourceId needs to be added to LSL sender
+					if (lslSettings.empty())
+					{
+						cout << "Loading LSL settings from: " << lslOutputSettingsFile << endl;
+						emotibitLsl.clearDataStreamOutputs(); // the existing stream outputs when loading settings to avoid weird conflicts
+						lslSettings = loadTextFile(lslOutputSettingsFile);
+					}
+					string sourceId = emotiBitWiFi.connectedEmotibitIdentifier;
+					if (!lslSettings.empty() && !sourceId.empty()
+						&& emotibitLsl.addDataStreamOutputs(lslSettings, sourceId) == EmotiBitLsl::ReturnCode::SUCCESS)
+					{
+						cout << "Added LSL stream source: " << sourceId << endl;
+					}
+					else
+					{
+						cout << "LSL output setup failed: " << sourceId << endl;
+						// ToDo: consider a graceful way to unmark LSL in output list
+						//sendDataList.at(j).set(false);
+						//sendLsl = false;
+					}
+				}
+				cout << "Starting LSL streaming from: " << sourceId << endl;
+			}
 		}
 		else if (deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) != 0 && selected)
 		{
@@ -908,7 +932,7 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 				{
 					if (selected)
 					{
-						string patchboardFile = "oscOutputSettings.xml";
+						string patchboardFile = oscOutputSettingsFile;
 							oscPatchboard.loadFile(ofToDataPath(patchboardFile));
 							oscSender.clear();
 							try
@@ -935,7 +959,7 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 				{
 					if (selected)
 					{
-						string patchboardFile = "udpOutputSettings.xml";
+						string patchboardFile = udpOutputSettingsFile;
 						udpPatchboard.loadFile(ofToDataPath(patchboardFile));
 						try
 						{
@@ -957,6 +981,33 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 					else
 					{
 						sendUdp = false;
+					}
+				}
+				if (GUI_STRING_SEND_DATA_LSL.compare(sendDataOptions.at(j)) == 0)
+				{
+					if (selected)
+					{
+						// Clear and reload LSL settings whenever LSL output selected
+						emotibitLsl.clearDataStreamOutputs();
+						cout << "Loading LSL settings from: " << lslOutputSettingsFile << endl;
+						lslSettings = loadTextFile(lslOutputSettingsFile);
+						string sourceId = emotiBitWiFi.connectedEmotibitIdentifier;
+						if (!lslSettings.empty() && !sourceId.empty() 
+							&& emotibitLsl.addDataStreamOutputs(lslSettings, sourceId) == EmotiBitLsl::ReturnCode::SUCCESS)
+						{
+							sendLsl = true;
+							cout << "Starting LSL streaming from: " << sourceId << endl;
+						}
+						else
+						{
+							cout << "LSL output setup failed " << endl;
+							sendDataList.at(j).set(false);
+							sendLsl = false;
+						}
+					}
+					else
+					{
+						sendLsl = false;
 					}
 				}
 			}
@@ -1109,7 +1160,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 				// ToDo: Make it possible to send data types that aren't being plotted (e.g. EL, ER)
 				oscAddresses = oscPatchboard.patchcords[packetHeader.typeTag];
 				oscMessages.resize(oscAddresses.size());
-				for (auto a = 0; a < oscAddresses.size(); a++)
+				for (int a = 0; a < oscAddresses.size(); a++)
 				{
 					oscMessages.at(a).setAddress(oscAddresses.at(a));
 				}
@@ -1122,7 +1173,7 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 
 				if (sendOsc) // Handle sending data to outputs
 				{
-					for (auto a = 0; a < oscMessages.size(); a++)
+					for (int a = 0; a < oscMessages.size(); a++)
 					{
 						oscMessages.at(a).addFloatArg(data.at(p).back());
 					}
@@ -1131,11 +1182,16 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 
 			if (sendOsc)
 			{
-				for (auto a = 0; a < oscMessages.size(); a++)
+				for (int a = 0; a < oscMessages.size(); a++)
 				{
 					// ToDo: Consider using ofxOscBundle
 					oscSender.sendMessage(oscMessages.at(a));
 				}
+			}
+
+			if (sendLsl)
+			{
+				emotibitLsl.addSample(data.at(p), packetHeader.typeTag, emotiBitWiFi.connectedEmotibitIdentifier);
 			}
 
 			if (!isPaused) {
@@ -1379,7 +1435,8 @@ void ofApp::setupGui()
 		guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).add(sendDataList.at(sendDataList.size() - 1));
 		// Disable outputs until supporting code written
 		if (GUI_STRING_SEND_DATA_OSC.compare(sendDataOptions.at(j)) == 0 
-			|| GUI_STRING_SEND_DATA_UDP.compare(sendDataOptions.at(j)) == 0)
+			|| GUI_STRING_SEND_DATA_UDP.compare(sendDataOptions.at(j)) == 0
+			|| GUI_STRING_SEND_DATA_LSL.compare(sendDataOptions.at(j)) == 0)
 		{
 			sendDataDisabled.push_back(false);
 			guiPanels.at(guiPanelSendData).getGroup(GUI_OUTPUT_GROUP_NAME).getControl(sendDataOptions.at(j))->setTextColor(deviceAvailableColor);
@@ -2012,7 +2069,8 @@ string ofApp::loadTextFile(string filePath)
 	ofFile commSettingsFile(ofToDataPath(filePath));
 	if (commSettingsFile.exists())
 	{
-		return commSettingsFile.getFileBuffer.getText();
+		ofBuffer b = commSettingsFile.readToBuffer();
+		return b.getText();
 	}
 	else
 	{

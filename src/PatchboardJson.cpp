@@ -12,62 +12,73 @@ PatchboardJson::ReturnCode PatchboardJson::parse(std::string jsonStr)
 
 	if (!patchboard.isMember("patchboard"))
 	{
-		return ReturnCode::ERROR_NO_PATHBOARD_FOUND;
+		_lastErrMsg = "[PatchboardJson::parse] JSON tag not found: patchboard";
+		return ReturnCode::ERR_TAG_NOT_FOUND;
 	}
 	if (!patchboard["patchboard"].isMember("settings"))
 	{
-		return ReturnCode::ERROR_NO_SETTINGS_FOUND;
+		_lastErrMsg = "[PatchboardJson::parse] JSON tag not found: settings";
+		return ReturnCode::ERR_TAG_NOT_FOUND;
 	}
 
 	// parse the input type
 	if (!patchboard["patchboard"]["settings"].isMember("input"))
 	{
-		return ReturnCode::ERROR_NO_INPUT_TYPE_FOUND;
+		_lastErrMsg = "[PatchboardJson::parse] JSON tag not found: settings>input";
+		return ReturnCode::ERR_TAG_NOT_FOUND;
 	}
 	if (!patchboard["patchboard"]["settings"]["input"].isMember("type"))
 	{
-		return ReturnCode::ERROR_NO_INPUT_TYPE_FOUND;
+		_lastErrMsg = "[PatchboardJson::parse] JSON tag not found: type";
+		return ReturnCode::ERR_TAG_NOT_FOUND;
 	}
 	inputType = patchboard["patchboard"]["settings"]["input"]["type"].asString();
 
 	// parse the output type
 	if (!patchboard["patchboard"]["settings"].isMember("output"))
 	{
-		return ReturnCode::ERROR_NO_OUTPUT_TYPE_FOUND;
+		_lastErrMsg = "[PatchboardJson::parse] JSON tag not found: settings>output";
+		return ReturnCode::ERR_TAG_NOT_FOUND;
 	}
 	if (!patchboard["patchboard"]["settings"]["output"].isMember("type"))
 	{
-		return ReturnCode::ERROR_NO_OUTPUT_TYPE_FOUND;
+		_lastErrMsg = "[PatchboardJson::parse] JSON tag not found: type";
+		return ReturnCode::ERR_TAG_NOT_FOUND;
 	}
 	outputType = patchboard["patchboard"]["settings"]["output"]["type"].asString();
 
 	// parse the patchcords
-	if (!patchboard["patchboard"]["settings"].isMember("patchcords"))
+	if (!patchboard["patchboard"].isMember("patchcords"))
 	{
-		return ReturnCode::ERROR_NO_PATCHCORDS_FOUND;
+		_lastErrMsg = "[PatchboardJson::parse] JSON tag not found: patchcords";
+		return ReturnCode::ERR_TAG_NOT_FOUND;
 	}
-	if (!patchboard["patchboard"]["settings"]["patchcords"].isArray())
+	if (!patchboard["patchboard"]["patchcords"].isArray())
 	{
-		return ReturnCode::ERROR_NO_PATCHCORDS_FOUND;
+		_lastErrMsg = "[PatchboardJson::parse] Incorrect JSON structure: patchcords must be an array";
+		return ReturnCode::ERR_FORMAT_INCORRECT;
 	}
-	int nPatches = patchboard["patchboard"]["settings"]["patchcords"].size();
+	int nPatches = patchboard["patchboard"]["patchcords"].size();
 	if (nPatches == 0)
 	{
-		return ReturnCode::ERROR_NO_PATCHCORDS_FOUND;
+		_lastErrMsg = "[PatchboardJson::parse] Incorrect JSON structure: patchcords must be an array ";
+		return ReturnCode::ERR_FORMAT_INCORRECT;
 	}
 	for (int p = 0; p < nPatches; p++)
 	{
-		if (!patchboard["patchboard"]["settings"]["patchcords"][p].isMember("input"))
+		if (!patchboard["patchboard"]["patchcords"][p].isMember("input"))
 		{
-			return ERROR_PATCHBOARD_FORMAT;
+			_lastErrMsg = "[PatchboardJson::parse] JSON tag not found: patchcords>input";
+			return ERR_TAG_NOT_FOUND;
 		}
-		std::string key = patchboard["patchboard"]["settings"]["patchcords"][p]["input"].asString();
+		std::string key = patchboard["patchboard"]["patchcords"][p]["input"].asString();
 
-		if (!patchboard["patchboard"]["settings"]["patchcords"][p].isMember("output"))
+		if (!patchboard["patchboard"]["patchcords"][p].isMember("output"))
 		{
-			return ERROR_PATCHBOARD_FORMAT;
+			_lastErrMsg = "[PatchboardJson::parse] JSON tag not found: patchcords>output";
+			return ERR_TAG_NOT_FOUND;
 		}
-		std::string value = patchboard["patchboard"]["settings"]["patchcords"][p]["output"].asString();
+		std::string value = patchboard["patchboard"]["patchcords"][p]["output"].asString();
 
 		std::vector<std::string> values = patchcords[key];
 		values.push_back(value);
@@ -81,4 +92,9 @@ PatchboardJson::ReturnCode PatchboardJson::parse(std::string jsonStr)
 size_t PatchboardJson::getNumPatches()
 {
 	return patchcords.size();
+}
+
+std::string PatchboardJson::getLastErrMsg()
+{
+	return _lastErrMsg;
 }
