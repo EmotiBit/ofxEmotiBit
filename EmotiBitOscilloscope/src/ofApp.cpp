@@ -62,8 +62,6 @@ void ofApp::update() {
 		{
 			emotiBitWiFi.sendControl(packet);
 		}
-
-		updateLsl();
 	}
 	vector<string> dataPackets;
 	emotiBitWiFi.readData(dataPackets);
@@ -764,24 +762,35 @@ void ofApp::updateDeviceList()
 					if (lslSettings.empty())
 					{
 						cout << "Loading LSL settings from: " << lslOutputSettingsFile << endl;
-						emotibitLsl.clearDataStreamOutputs(); // the existing stream outputs when loading settings to avoid weird conflicts
+						emotibitLsl.clearDataStreamOutputs(); // clear the existing stream outputs when loading settings to avoid weird conflicts
 						lslSettings = loadTextFile(lslOutputSettingsFile);
 					}
 					string sourceId = emotiBitWiFi.connectedEmotibitIdentifier;
-					if (!lslSettings.empty() && !sourceId.empty()
-						&& emotibitLsl.addDataStreamOutputs(lslSettings, sourceId) == EmotiBitLsl::ReturnCode::SUCCESS)
+					if (lslSettings.empty())
 					{
-						cout << "Added LSL stream source: " << sourceId << endl;
-					}
-					else
-					{
-						cout << "LSL output setup failed: " << sourceId << endl;
+						cout << "LSL settings not found: " << lslOutputSettingsFile << endl;
 						// ToDo: consider a graceful way to unmark LSL in output list
 						//sendDataList.at(j).set(false);
 						//sendLsl = false;
 					}
+					else if (sourceId.empty())
+					{
+						cout << "Select an EmotiBit to setup LSL streaming" << endl;
+					}
+					else if (!emotibitLsl.addDataStreamOutputs(lslSettings, sourceId) == EmotiBitLsl::ReturnCode::SUCCESS)
+					{
+						cout << "LSL output setup failed: " << emotibitLsl.getlastErrMsg() << endl;
+						// ToDo: consider a graceful way to unmark LSL in output list
+						//sendDataList.at(j).set(false);
+						//sendLsl = false;
+					}
+					else
+					{
+						cout << "Added LSL stream source: " << sourceId << endl;
+						cout << "Starting LSL streaming from: " << sourceId << endl;
+					}
 				}
-				cout << "Starting LSL streaming from: " << sourceId << endl;
+				else cout << "Starting LSL streaming from: " << sourceId << endl;
 			}
 		}
 		else if (deviceId.compare(emotiBitWiFi.connectedEmotibitIdentifier) != 0 && selected)
@@ -992,22 +1001,28 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 						cout << "Loading LSL settings from: " << lslOutputSettingsFile << endl;
 						lslSettings = loadTextFile(lslOutputSettingsFile);
 						string sourceId = emotiBitWiFi.connectedEmotibitIdentifier;
-						if (!lslSettings.empty() && !sourceId.empty() 
-							&& emotibitLsl.addDataStreamOutputs(lslSettings, sourceId) == EmotiBitLsl::ReturnCode::SUCCESS)
+						if (lslSettings.empty())
+						{
+							cout << "LSL settings not found: " << lslOutputSettingsFile << endl;
+							// ToDo: consider whether auto-unchecking LSL box is the best UX
+							sendDataList.at(j).set(false);
+							sendLsl = false;
+						}
+						else if (sourceId.empty())
+						{
+							cout << "Select an EmotiBit to setup LSL streaming" << endl;
+							sendLsl = true;
+						}
+						else if (!emotibitLsl.addDataStreamOutputs(lslSettings, sourceId) == EmotiBitLsl::ReturnCode::SUCCESS)
+						{
+							cout << "LSL output setup failed: " << emotibitLsl.getlastErrMsg() << endl;
+							sendLsl = false;
+						}
+						else
 						{
 							sendLsl = true;
 							cout << "Starting LSL streaming from: " << sourceId << endl;
 						}
-						else
-						{
-							cout << "LSL output setup failed " << endl;
-							sendDataList.at(j).set(false);
-							sendLsl = false;
-						}
-					}
-					else
-					{
-						sendLsl = false;
 					}
 				}
 			}
@@ -2070,7 +2085,9 @@ string ofApp::loadTextFile(string filePath)
 	if (commSettingsFile.exists())
 	{
 		ofBuffer b = commSettingsFile.readToBuffer();
-		return b.getText();
+		string s = b.getText();
+		cout << s << endl;
+		return s;
 	}
 	else
 	{

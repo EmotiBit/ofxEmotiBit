@@ -68,6 +68,6 @@ public:
 	ofxLSL::Sender _lslSender;
 	string _lastErrMsg = "";
 	unordered_map<string, PatchboardJson> _patchboards; // <sourceId, patchboard>
-	unordered_map<pair<string, string>, string> _outChanTypeMap; // LSL channel <<sourceId, name>, type>
+	unordered_map<string, string> _outChanTypeMap; // LSL channel <<sourceId, name>, type>
 
 };

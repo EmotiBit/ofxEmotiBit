@@ -1,7 +1,7 @@
 #include "EmotiBitLsl.h"
 
-static const string MARKER_INFO_NAME_LABEL = "name";
-static const string MARKER_INFO_SOURCE_ID_KEY_LABEL = "sourceId";
+const string EmotiBitLsl::MARKER_INFO_NAME_LABEL = "name";
+const string EmotiBitLsl::MARKER_INFO_SOURCE_ID_LABEL = "sourceId";
 
 EmotiBitLsl::ReturnCode EmotiBitLsl::addMarkerInput(string jsonStr)
 {
@@ -106,28 +106,29 @@ EmotiBitLsl::ReturnCode EmotiBitLsl::addDataStreamOutputs(string jsonStr, string
 	}
 	for (int i = 0; i < nChan; i++)
 	{
-		if (settings["patchboard"]["settings"]["output"]["meta-data"]["channels"][i].isMember("name"))
+		if (!settings["patchboard"]["settings"]["output"]["meta-data"]["channels"][i].isMember("name"))
 		{
-			_lastErrMsg = "[EmotiBitLsl::addDataStreamOutputs] JSON tag not found: name";
+			_lastErrMsg = "[EmotiBitLsl::addDataStreamOutputs] channels[" + ofToString(i) + "] " + "JSON tag not found: name";
 			return ReturnCode::ERR_TAG_NOT_FOUND;
 		}
-		if (settings["patchboard"]["settings"]["output"]["meta-data"]["channels"][i].isMember("type"))
+		if (!settings["patchboard"]["settings"]["output"]["meta-data"]["channels"][i].isMember("type"))
 		{
-			_lastErrMsg = "JSON tag not found: type";
+			_lastErrMsg = "[EmotiBitLsl::addDataStreamOutputs] channels[" + ofToString(i) + "] " + "JSON tag not found: type";
 			return ReturnCode::ERR_TAG_NOT_FOUND;
 		}
-		if (settings["patchboard"]["settings"]["output"]["meta-data"]["channels"][i].isMember("nominal_srate"))
+		if (!settings["patchboard"]["settings"]["output"]["meta-data"]["channels"][i].isMember("nominal_srate"))
 		{
-			_lastErrMsg = "[EmotiBitLsl::addDataStreamOutputs] JSON tag not found: nominal_srate";
+			_lastErrMsg = "[EmotiBitLsl::addDataStreamOutputs] channels[" + ofToString(i) + "] " + "JSON tag not found: nominal_srate";
 			return ReturnCode::ERR_TAG_NOT_FOUND;
 		}
 		string name = settings["patchboard"]["settings"]["output"]["meta-data"]["channels"][i]["name"].asString();
 		string type = settings["patchboard"]["settings"]["output"]["meta-data"]["channels"][i]["type"].asString();
 		double nominal_srate = settings["patchboard"]["settings"]["output"]["meta-data"]["channels"][i]["nominal_srate"].asDouble();
 		_lslSender.addStream(name, type, 1, nominal_srate, lsl::cf_float32, sourceId);
-		_outChanTypeMap[std::make_pair(sourceId, name)] = type;
+		_outChanTypeMap[sourceId + ',' + name] = type;
 	}
 	_patchboards[sourceId] = patchboard;
+	return EmotiBitLsl::SUCCESS;
 }
 
 size_t EmotiBitLsl::getNumDataOutputs(string sourceId)
@@ -208,6 +209,7 @@ vector<string> EmotiBitLsl::createMarkerInputPackets(uint16_t &packetCounter)
 			}
 		}
 	}
+	return packets;
 }
 
 template <class T>
@@ -230,31 +232,41 @@ vector<EmotiBitLsl::MarkerStreamInfo> EmotiBitLsl::getMarkerStreamInfo()
 template <class T>
 bool EmotiBitLsl::addSample(const vector<T> &_values, const std::string &typeTag, const std::string &sourceId)
 {
-	auto iterP = _patchboards.find(source_id);
-	if (iterN == _patchboards.end())
+	auto iterP = _patchboards.find(sourceId);
+	if (iterP == _patchboards.end())
 	{
 		return false;
 	}
-	Patchboard patchboard = iterN->second;
+	PatchboardJson patchboard = iterP->second;
 
-	auto iterN = patchboard.find(typeTag);
-	if (iterN == patchboard.end())
+	auto iterN = patchboard.patchcords.find(typeTag);
+	if (iterN == patchboard.patchcords.end())
 	{
 		return false;
 	}
-	string name = iterN->second;
+	vector<string> names = iterN->second;
 
-	auto iterT = _outChanTypeMap.find(make_pair(sourceId, name));
-	if (iterT == _outChanTypeMap.end())
+	for (string name : names)
 	{
-		return false;
-	}
-	string type = iterT->second;
+		auto iterT = _outChanTypeMap.find(sourceId + ',' + name);
+		if (iterT == _outChanTypeMap.end())
+		{
+			return false;
+		}
+		string type = iterT->second;
 
-	_lslSender(values, name, type, _outputSourceId);
+		_lslSender.addSample(_values, name, type, sourceId);
+	}
 
 	return true;
 }
+//bool EmotiBitLsl::addSample(const vector<T> &_values, const std::string &typeTag, const std::string &sourceId)
+template bool EmotiBitLsl::addSample(const vector<double> &_values, const std::string &typeTag, const std::string &sourceId);
+template bool EmotiBitLsl::addSample(const vector<float> &_values, const std::string &typeTag, const std::string &sourceId);
+template bool EmotiBitLsl::addSample(const vector<int> &_values, const std::string &typeTag, const std::string &sourceId);
+template bool EmotiBitLsl::addSample(const vector<string> &_values, const std::string &typeTag, const std::string &sourceId);
+//template bool EmotiBitLsl::addSample(const vector<float> &_values, const std::string &typeTag, const std::string &sourceId);
+//template void foo::do<std::string>(const std::string&);
 
 bool EmotiBitLsl::isDataStreamOutputSource(string sourceId)
 {
