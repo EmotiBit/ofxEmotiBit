@@ -1183,8 +1183,16 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 
 			for (int n = EmotiBitPacket::headerLength; n < splitPacket.size(); n++) 
 			{
-				// Data for plotting in the oscilloscope
 				data.at(p).emplace_back(ofToFloat(splitPacket.at(n))); 
+
+				if (sendLsl)
+				{
+					vector<float> lslSample(1); // data is passed into addSample as a vector of 1 datapoint/channel
+					lslSample.at(0) = data.at(p).back();
+					emotibitLsl.addSample(lslSample, packetHeader.typeTag, emotiBitWiFi.connectedEmotibitIdentifier);
+					//cout << packetHeader.typeTag << ":" << ofToString(data.at(p)) << ", ";
+				}
+				// Data for plotting in the oscilloscope
 
 				if (sendOsc) // Handle sending data to outputs
 				{
@@ -1202,11 +1210,6 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 					// ToDo: Consider using ofxOscBundle
 					oscSender.sendMessage(oscMessages.at(a));
 				}
-			}
-
-			if (sendLsl)
-			{
-				emotibitLsl.addSample(data.at(p), packetHeader.typeTag, emotiBitWiFi.connectedEmotibitIdentifier);
 			}
 
 			if (!isPaused) {

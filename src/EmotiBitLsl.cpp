@@ -255,6 +255,7 @@ bool EmotiBitLsl::addSample(const vector<T> &_values, const std::string &typeTag
 		}
 		string type = iterT->second;
 
+		//cout << name << ":" << type << ":" << sourceId << ofToString(_values) << ", ";
 		_lslSender.addSample(_values, name, type, sourceId);
 	}
 
