@@ -14,9 +14,11 @@
 #include "ofxEmotiBitVersion.h"
 #include "EmotiBitTestingHelper.h"
 #include "ofxOsc.h"
-#include "patchboard.h"
+#include "PatchboardJson.h"
+#include "PatchboardXml.h"
 #include "Periodizer.h"
 #include "ofxJSON.h"
+#include "EmotiBitLsl.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -24,16 +26,7 @@ public:
 	void update();
 	void draw();
 	void exit();
-
-	std::shared_ptr<ofxLSL::Receiver<string>> lslMarkerStream;
-	/*!
-	@brief data structure to hold LSL settings
-	*/
-	struct LslMarkerStreamInfo {
-		// For more info: https://github.com/sccn/liblsl/blob/5eded5c1d381a1a5fbbcce105edfaa53f009176a/include/lsl_cpp.h#L161
-		std::string name = "";  //!< marker stream inlet name for LSL.
-		std::string srcId = "";  //!< marker stream inlet sourceId for LSL.
-	}lslMarkerStreamInfo;
+	
 	void keyPressed(int key);
 	void keyReleased(int key);
 	void mouseMoved(int x, int y);
@@ -79,13 +72,26 @@ public:
 	void resetScopePlot(int w, int s);
 	void setTypeTagPlotAttributes();
 	void resetIndexMapping();
+
+
 	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updatePlotAttributeLists(std::string settingsFile = "ofxOscilloscopeSettings.xml");
-	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
 	void updateTypeTagList();
 	void checkLatestSwVersion();
-	void loadEmotiBitCommSettings(string settingsFilePath = "emotibitCommSettings.json", bool absolutePath = false);
-	void saveEmotiBitCommSettings(string settingsFilePath = "emotibitCommSettings.json", bool absolutePath = false, bool pretty = true);
+	// ToDo: Move loadEmotiBitCommSettings() and saveEmotiBitCommSettings() into EmotiBitWiFiHost
+	void loadEmotiBitCommSettings(string commSettingsJson, bool absolutePath = false);
+	void saveEmotiBitCommSettings(string settingsFilePath, bool absolutePath = false, bool pretty = true);
+	string loadTextFile(string filePath);
+
+	bool startOscOutput();
+	bool startUdpOutput();
+
+	// Settings files
+	const string commSettingsFile = "emotibitCommSettings.json";
+	const string lslOutputSettingsFile = "lslOutputSettings.json";
+	const string udpOutputSettingsFile = "udpOutputSettings.xml";
+	const string oscOutputSettingsFile = "oscOutputSettings.xml";
+	string lslSettings;
 
 	//ofxMultiScope scopeWin;
 	//ofxMultiScope scopeWin2;
@@ -115,10 +121,6 @@ public:
 
 	ofxUDPManager udpConnection;
 	LoggerThread dataLogger;
-	// ToDo: This will probably change when we come up with a better solution for updating status bar.
-	struct ConsoleOutput {
-		int lslMarkerCount = 0;
-	}consoleOutput;
 	LoggerThread consoleLogger;
 	bool logData;
 	bool logConsole;
@@ -142,7 +144,7 @@ public:
 		vector<int> scopeIdx;
 	};
 
-	Patchboard patchboard;
+	PatchboardXml patchboard;
 	// ToDo: change the input aperiodic and ouptut periodic typeTags when we resolve typetags for aperiodic signals
 	// NOTE: New periodizers have to be added to the list below
 	std::vector<Periodizer> periodizerList{ Periodizer( EmotiBitPacket::TypeTag::HEART_RATE, 
@@ -230,8 +232,6 @@ public:
 	const string GUI_STRING_BATTERY_LEVEL = "Battery Level";
 	const string GUI_STRING_EMOTIBIT_SELECTED = "EmotiBit";
 	const string GUI_STRING_EMPTY_USER_NOTE = "[Add a note]";
-	const string JSON_SETTINGS_STRING_LSL_MARKER_INFO_NAME = "name";
-	const string JSON_SETTINGS_STRING_LSL_MARKER_INFO_SOURCE_ID = "sourceId";
 	//const string GUI_POWER_STATUS_MENU_NAME = "RECORD";
 	const string GUI_POWER_MODE_GROUP_NAME = "Power Mode";
 	const string GUI_STRING_NORMAL_POWER =	 "Normal         (data streaming)";
@@ -301,13 +301,16 @@ public:
 	PowerMode _powerMode = PowerMode::LOW_POWER;
 
 	// ToDo: generalize patchboard management
-	Patchboard oscPatchboard;
+	PatchboardXml oscPatchboard;
 	ofxOscSender oscSender;
 	bool sendOsc = false; // ToDo: generalize sendOsc to sendData
 
-	Patchboard udpPatchboard;
+	PatchboardXml udpPatchboard;
 	ofxUDPManager udpSender;
 	bool sendUdp = false; // ToDo: generalize sendOsc to sendData
 	
+	EmotiBitLsl emotibitLsl;
+	bool sendLsl = false;
+
 };
 
