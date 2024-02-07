@@ -14,7 +14,8 @@
 #include "ofxEmotiBitVersion.h"
 #include "EmotiBitTestingHelper.h"
 #include "ofxOsc.h"
-#include "patchboard.h"
+#include "PatchboardJson.h"
+#include "PatchboardXml.h"
 #include "Periodizer.h"
 #include "ofxJSON.h"
 #include "EmotiBitLsl.h"
@@ -82,6 +83,9 @@ public:
 	void saveEmotiBitCommSettings(string settingsFilePath, bool absolutePath = false, bool pretty = true);
 	string loadTextFile(string filePath);
 
+	bool startOscOutput();
+	bool startUdpOutput();
+
 	// Settings files
 	const string commSettingsFile = "emotibitCommSettings.json";
 	const string lslOutputSettingsFile = "lslOutputSettings.json";
@@ -140,7 +144,7 @@ public:
 		vector<int> scopeIdx;
 	};
 
-	Patchboard patchboard;
+	PatchboardXml patchboard;
 	// ToDo: change the input aperiodic and ouptut periodic typeTags when we resolve typetags for aperiodic signals
 	// NOTE: New periodizers have to be added to the list below
 	std::vector<Periodizer> periodizerList{ Periodizer( EmotiBitPacket::TypeTag::HEART_RATE, 
@@ -297,11 +301,11 @@ public:
 	PowerMode _powerMode = PowerMode::LOW_POWER;
 
 	// ToDo: generalize patchboard management
-	Patchboard oscPatchboard;
+	PatchboardXml oscPatchboard;
 	ofxOscSender oscSender;
 	bool sendOsc = false; // ToDo: generalize sendOsc to sendData
 
-	Patchboard udpPatchboard;
+	PatchboardXml udpPatchboard;
 	ofxUDPManager udpSender;
 	bool sendUdp = false; // ToDo: generalize sendOsc to sendData
 	

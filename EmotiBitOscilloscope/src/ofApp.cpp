@@ -563,34 +563,16 @@ void ofApp::keyReleased(int key) {
 			}
 			else if (key == 'P')
 			{
-				// ToDo: generalize patchboard management
-				string patchboardFile;
-
-				patchboardFile = "oscOutputSettings.xml";
-				oscPatchboard.loadFile(ofToDataPath(patchboardFile));
-				oscSender.clear();
-				try
+				if (startOscOutput())
 				{
-					cout << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"] 
-						<< "," << ofToInt(oscPatchboard.settings.output["port"]) << endl;
-					oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 					sendOsc = true;
 				}
-				catch (exception e) {}
-
-				patchboardFile = "udpOutputSettings.xml";
-				udpPatchboard.loadFile(ofToDataPath(patchboardFile));
-				try
+				else
 				{
-					cout << "Starting UDP: " << udpPatchboard.settings.output["ipAddress"]
-						<< "," << ofToInt(udpPatchboard.settings.output["port"]) << endl;
-					ofxUDPSettings settings;
-					settings.sendTo(udpPatchboard.settings.output["ipAddress"].c_str(), ofToInt(udpPatchboard.settings.output["port"]));
-					settings.blocking = false;
-					udpSender.Setup(settings);
-					sendUdp = true;
+					sendOsc = false;
 				}
-				catch (exception e) {}
+
+
 			}
 		}
 	}
@@ -941,23 +923,15 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 				{
 					if (selected)
 					{
-						string patchboardFile = oscOutputSettingsFile;
-							oscPatchboard.loadFile(ofToDataPath(patchboardFile));
-							oscSender.clear();
-							try
+						if (startOscOutput())
 						{
-							cout << "Starting OSC: " << oscPatchboard.settings.output["ipAddress"]
-								<< ", " << ofToInt(oscPatchboard.settings.output["port"]) << endl;
-								oscSender.setup(oscPatchboard.settings.output["ipAddress"], ofToInt(oscPatchboard.settings.output["port"]));
 							sendOsc = true;
-							
 						}
-						catch (exception e)
+						else
 						{
-							cout << "OSC output setup failed " << endl;
 							sendDataList.at(j).set(false);
 							sendOsc = false;
-						}
+						}		
 					}
 					else
 					{
@@ -968,21 +942,12 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 				{
 					if (selected)
 					{
-						string patchboardFile = udpOutputSettingsFile;
-						udpPatchboard.loadFile(ofToDataPath(patchboardFile));
-						try
+						if (startUdpOutput())
 						{
-							cout << "Starting UDP: " << udpPatchboard.settings.output["ipAddress"]
-								<< ", " << ofToInt(udpPatchboard.settings.output["port"]) << endl;
-							ofxUDPSettings settings;
-							settings.sendTo(udpPatchboard.settings.output["ipAddress"].c_str(), ofToInt(udpPatchboard.settings.output["port"]));
-							settings.blocking = false;
-							udpSender.Setup(settings);
 							sendUdp = true;
 						}
-						catch (exception e) 
+						else
 						{
-							cout << "UDP output setup failed " << endl;
 							sendDataList.at(j).set(false);
 							sendUdp = false;
 						}
@@ -2097,4 +2062,68 @@ string ofApp::loadTextFile(string filePath)
 		ofLog(OF_LOG_ERROR, "Error: file not found - " + filePath);
 	}
 	return "";
+}
+
+bool ofApp::startOscOutput()
+{
+	oscPatchboard.loadFile(ofToDataPath(oscOutputSettingsFile));
+	oscSender.clear();
+	try
+	{
+		string xml;
+		oscPatchboard.patchboard.copyXmlToString(xml);
+		cout << xml << endl;
+		string ipAddress = oscPatchboard.patchboard.getValue("patchboard:settings:output:ipAddress", "");
+		string port = oscPatchboard.patchboard.getValue("patchboard:settings:output:port", "");
+		if (ipAddress != "" && port != "")
+		{
+			cout << "Starting OSC output: " << ipAddress << "," << ofToInt(port) << endl;
+			return oscSender.setup(ipAddress, ofToInt(port));
+		}
+		else
+		{
+			cout << "Starting OSC output failed -- ipAddress/port not valid: " << ipAddress << "/" << port << endl;
+			return false;
+		}
+	}
+	catch (exception e) 
+	{
+		cout << "OSC output setup failed" << endl;
+		return false;
+	}
+
+	return false;
+}
+
+bool ofApp::startUdpOutput()
+{
+	udpPatchboard.loadFile(ofToDataPath(udpOutputSettingsFile));
+	try
+	{
+		string xml;
+		udpPatchboard.patchboard.copyXmlToString(xml);
+		cout << xml << endl;
+		string ipAddress = oscPatchboard.patchboard.getValue("patchboard:settings:output:ipAddress", "");
+		string port = oscPatchboard.patchboard.getValue("patchboard:settings:output:port", "");
+		if (ipAddress != "" && port != "")
+		{
+			cout << "Starting UDP output: " << ipAddress << "," << ofToInt(port) << endl;
+			ofxUDPSettings settings;
+			settings.sendTo(ipAddress.c_str(), ofToInt(port));
+			settings.blocking = false;
+			return udpSender.Setup(settings);
+		}
+		else
+		{
+			cout << "Starting UDP output failed -- ipAddress/port not valid: " << ipAddress << "/" << port << endl;
+			return false;
+		}
+	}
+	catch (exception e) 
+	{
+		cout << "UDP output setup failed" << endl;
+		return false;
+	}
+
+	return false;
 }
