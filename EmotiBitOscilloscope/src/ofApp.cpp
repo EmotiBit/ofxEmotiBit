@@ -990,6 +990,11 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 							cout << "Starting LSL streaming from: " << sourceId << endl;
 						}
 					}
+					else
+					{
+						sendLsl = false;
+					}
+
 				}
 			}
 		}
