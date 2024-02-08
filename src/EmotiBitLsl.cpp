@@ -1,4 +1,5 @@
 #include "EmotiBitLsl.h"
+#include "EmotiBitOfUtils.h"
 
 const string EmotiBitLsl::MARKER_INFO_NAME_LABEL = "name";
 const string EmotiBitLsl::MARKER_INFO_SOURCE_ID_LABEL = "sourceId";
@@ -198,7 +199,7 @@ vector<string> EmotiBitLsl::createMarkerInputPackets(uint16_t &packetCounter)
 
 				// ToDo: Consider if TIMESTAMP_CROSS_TIME packet sending needs to be in a different spot
 				double lsltime = lsl::local_clock();
-				string timestampLocal = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+				string timestampLocal = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
 				payload.clear();
 				payloadLen = 0;
 				EmotiBitPacket::addToPayload(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, payload, payloadLen);

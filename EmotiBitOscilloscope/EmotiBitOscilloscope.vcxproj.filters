@@ -551,6 +551,9 @@
     <ClInclude Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardXml.h">
       <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\EmotiBitOfUtils.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

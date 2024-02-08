@@ -1,6 +1,7 @@
 #include "ofApp.h"
 #include "ofxBiquadFilter.h"
 #include <algorithm>
+#include "EmotiBitOfUtils.h"
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -616,11 +617,11 @@ void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 void ofApp::recordButtonPressed(bool & recording) {
 	if (recording) {
-		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+		string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
 		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, emotiBitWiFi.controlPacketCounter++, localTime, 1));
 	}
 	else {
-		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+		string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
 		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, emotiBitWiFi.controlPacketCounter++, localTime, 1));
 	}
 }
@@ -629,7 +630,7 @@ void ofApp::sendExperimenterNoteButton() {
 	string note = userNote.getParameter().toString();
 	if (note.compare(GUI_STRING_EMPTY_USER_NOTE) != 0 && emotiBitWiFi.isConnected()) {
 		vector<string> payload;
-		payload.push_back(ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT));
+		payload.push_back(EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT));
 		payload.push_back(note);
 		emotiBitWiFi.sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::USER_NOTE, emotiBitWiFi.controlPacketCounter++, payload));
 		userNote.getParameter().fromString(GUI_STRING_EMPTY_USER_NOTE);
@@ -806,7 +807,7 @@ void ofApp::powerModeSelection(ofAbstractParameter& mode)
 		}
 
 		string packet;
-		string localTime = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+		string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
 		if (mode.getName().compare(GUI_STRING_NORMAL_POWER) == 0)
 		{
 			_powerMode = PowerMode::NORMAL_POWER;
@@ -1036,31 +1037,6 @@ void ofApp::sendDataSelection(ofAbstractParameter& output) {
 		sendOptionSelected.set(GUI_STRING_SEND_DATA_NONE);
 	}
 #endif
-}
-
-string ofApp::ofGetTimestampString(const string& timestampFormat) {
-	std::stringstream str;
-	auto now = std::chrono::system_clock::now();
-	auto t = std::chrono::system_clock::to_time_t(now);    std::chrono::duration<double> s = now - std::chrono::system_clock::from_time_t(t);
-	int us = s.count() * 1000000;
-	auto tm = *std::localtime(&t);
-	constexpr int bufsize = 256;
-	char buf[bufsize];
-
-	// Beware! an invalid timestamp string crashes windows apps.
-	// so we have to filter out %i (which is not supported by vs)
-	// earlier.
-	auto tmpTimestampFormat = timestampFormat;
-	ofStringReplace(tmpTimestampFormat, "%i", ofToString(us/1000, 3, '0'));
-	ofStringReplace(tmpTimestampFormat, "%f", ofToString(us, 6, '0'));
-
-	if (strftime(buf, bufsize, tmpTimestampFormat.c_str(), &tm) != 0) {
-		str << buf;
-	}
-	auto ret = str.str();
-
-
-	return ret;
 }
 
 void ofApp::processAperiodicData(std::string signalId, std::vector<float> data)

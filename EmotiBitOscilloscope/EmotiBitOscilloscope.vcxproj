@@ -168,6 +168,7 @@
     <ClInclude Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardJson.h" />
     <ClInclude Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardXml.h" />
     <ClInclude Include="..\src\EmotiBitLsl.h" />
+    <ClInclude Include="..\src\EmotiBitOfUtils.h" />
     <ClInclude Include="..\src\Signal\Periodizer.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h" />
