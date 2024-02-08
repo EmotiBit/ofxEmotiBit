@@ -166,7 +166,7 @@ vector<string> EmotiBitLsl::createMarkerInputPackets(uint16_t &packetCounter)
 			// for all samples received
 			for (int i = 0; i < markerSamples.size(); i++)
 			{
-				_markerInputs.at(j).rxCount;
+				_markerInputs.at(j).rxCount++;
 				auto markerSample = markerSamples.at(i);
 				std::stringstream payload;
 				payload.precision(7);

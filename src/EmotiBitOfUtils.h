@@ -3,7 +3,13 @@
 
 namespace EmotiBit
 {
-	static string ofGetTimestampString(const string& timestampFormat) {
+	//! Returns a timestamp string in the specified format. Replaces OF
+	//! ofUtils function to add support for %f that crashes on Windows
+	//! @param timestampFormat see https://cplusplus.com/reference/ctime/strftime/
+	//!		and for milliseconds %i=int, %f=float
+	//! @return formated timestamp string
+	static string ofGetTimestampString(const string& timestampFormat)
+	{
 		std::stringstream str;
 		auto now = std::chrono::system_clock::now();
 		auto t = std::chrono::system_clock::to_time_t(now);    std::chrono::duration<double> s = now - std::chrono::system_clock::from_time_t(t);
@@ -27,4 +33,4 @@ namespace EmotiBit
 
 		return ret;
 	}
-}
+};

@@ -1707,7 +1707,11 @@ void ofApp::drawConsole()
 	}
 	else
 	{
-		if (_powerMode == PowerMode::LOW_POWER)
+		if (!emotiBitWiFi.isConnected())
+		{
+			_consoleString += "No EmotiBit selected";
+		}
+		else if (_powerMode == PowerMode::LOW_POWER)
 		{
 			_consoleString += "Low power mode";
 		}
