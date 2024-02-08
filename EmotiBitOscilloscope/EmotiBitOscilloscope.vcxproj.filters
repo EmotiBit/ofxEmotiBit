@@ -166,6 +166,9 @@
     <ClCompile Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardXml.cpp">
       <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\EmotiBitOfUtils.cpp">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">

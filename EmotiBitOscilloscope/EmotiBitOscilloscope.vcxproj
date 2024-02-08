@@ -109,6 +109,7 @@
     <ClCompile Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardJson.cpp" />
     <ClCompile Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardXml.cpp" />
     <ClCompile Include="..\src\EmotiBitLsl.cpp" />
+    <ClCompile Include="..\src\EmotiBitOfUtils.cpp" />
     <ClCompile Include="..\src\Signal\Periodizer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
