@@ -2103,8 +2103,8 @@ bool ofApp::startUdpOutput()
 		string xml;
 		udpPatchboard.patchboard.copyXmlToString(xml);
 		cout << xml << endl;
-		string ipAddress = oscPatchboard.patchboard.getValue("patchboard:settings:output:ipAddress", "");
-		string port = oscPatchboard.patchboard.getValue("patchboard:settings:output:port", "");
+		string ipAddress = udpPatchboard.patchboard.getValue("patchboard:settings:output:ipAddress", "");
+		string port = udpPatchboard.patchboard.getValue("patchboard:settings:output:port", "");
 		if (ipAddress != "" && port != "")
 		{
 			cout << "Starting UDP output: " << ipAddress << "," << ofToInt(port) << endl;
