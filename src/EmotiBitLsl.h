@@ -91,15 +91,7 @@ public:
 	//! @brief Gets the last captured error message 
 	//! @return last captured error message 
 	string getlastErrMsg();
-
-	// ToDo: Move to EmotiBitPacket
-	//! @brief Adds an element to the passed payload reference
-	//! @param element EmotiBit TypeTag or PayloadLabel to add to the payload
-	//! @param payload stringstream referemce to add payload to
-	//! @param payloadLen reference to increment payload size
-	template<typename T>
-	void addToPayload(const T &element, std::stringstream &payload, uint16_t &payloadLen);
-
+	
 	//! @brief Adds samples to the LSL output
 	//! @param _values to add. Must be a single point in time with a value for each channel of stream. 
 	//! @param typeTag EmotiBit TypeTag of associated values

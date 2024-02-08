@@ -171,16 +171,16 @@ vector<string> EmotiBitLsl::createMarkerInputPackets(uint16_t &packetCounter)
 				payload.precision(7);
 				uint16_t payloadLen = 0;
 
-				addToPayload(EmotiBitPacket::PayloadLabel::LSL_MARKER_RX_TIMESTAMP, payload, payloadLen);
-				addToPayload(markerSample->timeStamp + markerSample->timeCorrection, payload, payloadLen);
-				addToPayload(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP, payload, payloadLen);
-				addToPayload(markerSample->timeStamp, payload, payloadLen);
-				addToPayload(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, payload, payloadLen);
-				addToPayload(lsl::local_clock(), payload, payloadLen);
-				addToPayload(EmotiBitPacket::PayloadLabel::LSL_MARKER_DATA, payload, payloadLen);
+				EmotiBitPacket::addToPayload(EmotiBitPacket::PayloadLabel::LSL_MARKER_RX_TIMESTAMP, payload, payloadLen);
+				EmotiBitPacket::addToPayload(markerSample->timeStamp + markerSample->timeCorrection, payload, payloadLen);
+				EmotiBitPacket::addToPayload(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP, payload, payloadLen);
+				EmotiBitPacket::addToPayload(markerSample->timeStamp, payload, payloadLen);
+				EmotiBitPacket::addToPayload(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, payload, payloadLen);
+				EmotiBitPacket::addToPayload(lsl::local_clock(), payload, payloadLen);
+				EmotiBitPacket::addToPayload(EmotiBitPacket::PayloadLabel::LSL_MARKER_DATA, payload, payloadLen);
 				for (auto channel : markerSample->sample) 
 				{
-					addToPayload(channel, payload, payloadLen);
+					EmotiBitPacket::addToPayload(channel, payload, payloadLen);
 				}
 				packets.push_back(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::LSL_MARKER, packetCounter++, payload.str(), payloadLen));
 
@@ -189,10 +189,10 @@ vector<string> EmotiBitLsl::createMarkerInputPackets(uint16_t &packetCounter)
 				// send TX packet for LCxLM
 				payload.clear();
 				payloadLen = 0;
-				addToPayload(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, payload, payloadLen);
-				addToPayload(markerSample->timeStamp + markerSample->timeCorrection, payload, payloadLen);
-				addToPayload(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP, payload, payloadLen);
-				addToPayload(markerSample->timeStamp, payload, payloadLen);
+				EmotiBitPacket::addToPayload(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, payload, payloadLen);
+				EmotiBitPacket::addToPayload(markerSample->timeStamp + markerSample->timeCorrection, payload, payloadLen);
+				EmotiBitPacket::addToPayload(EmotiBitPacket::PayloadLabel::LSL_MARKER_SRC_TIMESTAMP, payload, payloadLen);
+				EmotiBitPacket::addToPayload(markerSample->timeStamp, payload, payloadLen);
 				packets.push_back(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, packetCounter++, payload.str(), payloadLen));
 
 
@@ -201,22 +201,15 @@ vector<string> EmotiBitLsl::createMarkerInputPackets(uint16_t &packetCounter)
 				string timestampLocal = ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
 				payload.clear();
 				payloadLen = 0;
-				addToPayload(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, payload, payloadLen);
-				addToPayload(timestampLocal, payload, payloadLen);
-				addToPayload(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, payload, payloadLen);
-				addToPayload(lsltime, payload, payloadLen);
+				EmotiBitPacket::addToPayload(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, payload, payloadLen);
+				EmotiBitPacket::addToPayload(timestampLocal, payload, payloadLen);
+				EmotiBitPacket::addToPayload(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, payload, payloadLen);
+				EmotiBitPacket::addToPayload(lsltime, payload, payloadLen);
 				packets.push_back(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::TIMESTAMP_CROSS_TIME, packetCounter++, payload.str(), payloadLen));
 			}
 		}
 	}
 	return packets;
-}
-
-template <class T>
-void EmotiBitLsl::addToPayload(const T &element, std::stringstream &payload, uint16_t &payloadLen)
-{
-	payload << element << EmotiBitPacket::PAYLOAD_DELIMITER;
-	payloadLen++;
 }
 
 string EmotiBitLsl::getlastErrMsg()
