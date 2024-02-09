@@ -129,7 +129,6 @@
     <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkInterfaceListener.cpp" />
     <ClCompile Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\src\NetworkUtils.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\patchboard.cpp" />
     <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
@@ -177,7 +176,6 @@
     <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkInterfaceListener.h" />
     <ClInclude Include="..\..\..\addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net\NetworkUtils.h" />
     <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.h" />
-    <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\patchboard.h" />
     <ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h" />
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
