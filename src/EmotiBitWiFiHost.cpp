@@ -337,12 +337,14 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 								ofLogVerbose() << "EmotiBit DeviceId: " << "DeviceId not available. using IP address as identifier";
 								// Add ip address to our list
 							}
+							discoveredEmotibitsMutex.lock();
 							auto it = _discoveredEmotibits.emplace(emotibitDeviceId, EmotibitInfo(ip, ofToInt(value) == EmotiBitComms::EMOTIBIT_AVAILABLE));
 							if (!it.second)
 							{
 								// if it's not a new ip address, update the status
 								it.first->second = EmotibitInfo(ip, ofToInt(value) == EmotiBitComms::EMOTIBIT_AVAILABLE);
 							}
+							discoveredEmotibitsMutex.unlock();
 						}
 					}
 					else if (header.typeTag.compare(EmotiBitPacket::TypeTag::PONG) == 0)
@@ -443,6 +445,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 	}
 
 	// Check to see if EmotiBit availability is stale or needs purging
+	discoveredEmotibitsMutex.lock();
 	for (auto it = _discoveredEmotibits.begin(); it != _discoveredEmotibits.end(); it++)
 	{
 		if (ofGetElapsedTimeMillis() - it->second.lastSeen > availabilityTimeout)
@@ -459,7 +462,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 		//	it++;
 		//}
 	}
-
+	discoveredEmotibitsMutex.unlock();
 	return SUCCESS;
 }
 
@@ -765,9 +768,10 @@ int8_t EmotiBitWiFiHost::connect(string deviceId)
 {
 	if (!isStartingConnection && !_isConnected)
 	{
-		emotibitIpsMutex.lock();
+		discoveredEmotibitsMutex.lock();
 		string ip = _discoveredEmotibits[deviceId].ip;
 		bool isAvailable = _discoveredEmotibits[deviceId].isAvailable;
+		discoveredEmotibitsMutex.unlock();
 		try
 		{
 			if (ip.compare("") != 0 && isAvailable)	// If the ip is on our list and available
@@ -782,32 +786,18 @@ int8_t EmotiBitWiFiHost::connect(string deviceId)
 			ofLogWarning() << "EmotiBit " << ip << " not found";
 			oor;
 		}
-		emotibitIpsMutex.unlock();
 	}
 
 	return SUCCESS;
 }
 
-int8_t EmotiBitWiFiHost::connect(uint8_t i)
-{
-	int counter = 0;
-	for (auto it = _discoveredEmotibits.begin(); it != _discoveredEmotibits.end(); it++)
-	{
-		if (counter == i)
-		{
-			return connect(it->second.ip);
-		}
-		counter++;
-	}
-	return FAIL;
-}
-
 unordered_map<string, EmotibitInfo> EmotiBitWiFiHost::getdiscoveredEmotibits()
 {
-	//emotibitIpsMutex.lock();
-	//unordered_map<string, bool> output;
-	return _discoveredEmotibits;
-	//emotibitIpsMutex.unlock();
+	discoveredEmotibitsMutex.lock();
+	auto output = _discoveredEmotibits;
+	discoveredEmotibitsMutex.unlock();
+
+	return output;
 }
 
 
