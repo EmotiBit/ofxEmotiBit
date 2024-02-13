@@ -3,6 +3,7 @@
     "advertising": {
       "sendAdvertisingInterval_msec": 1000,
       "checkAdvertisingInterval_msec": 100,
+      "threadSleep_usec": 10000,
       "transmission": {
         "broadcast": {
           "enabled": true
@@ -16,6 +17,9 @@
         }
       }
     },
+    "data": {
+      "threadSleep_usec": 100
+    },
     "network": {
       "excludeList": [ "" ],
       "includeList": [ "*.*.*.*" ]
@@ -23,9 +27,8 @@
   },
   "lsl": {
     "marker": {
-      "name": "",
-      "sourceId": ""
+      "name": "DataSyncMarker",
+      "sourceId": "12345"
     }
   }
 }
-

@@ -78,9 +78,6 @@ public:
 	void updatePlotAttributeLists(std::string settingsFile = "ofxOscilloscopeSettings.xml");
 	void updateTypeTagList();
 	void checkLatestSwVersion();
-	// ToDo: Move loadEmotiBitCommSettings() and saveEmotiBitCommSettings() into EmotiBitWiFiHost
-	void loadEmotiBitCommSettings(string commSettingsJson, bool absolutePath = false);
-	void saveEmotiBitCommSettings(string settingsFilePath, bool absolutePath = false, bool pretty = true);
 	string loadTextFile(string filePath);
 
 	bool startOscOutput();

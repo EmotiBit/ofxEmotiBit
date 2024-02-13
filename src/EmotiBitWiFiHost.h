@@ -16,6 +16,7 @@
 #include "EmotiBitPacket.h"
 #include "EmotiBitComms.h"
 #include "DoubleBuffer.h"
+#include "json/json.h"
 
 using namespace EmotiBit;
 
@@ -35,9 +36,12 @@ class EmotiBitWiFiHost
 {
 public:
 
-	struct HostAdvertisingSettings {
+	struct WifiHostSettings {
 		int sendAdvertisingInterval = 1000;
 		int checkAdvertisingInterval = 100;
+		int advertisingThreadSleep = 0;
+		int dataThreadSleep = 0;
+
 		bool enableBroadcast = true;
 
 		bool enableUnicast = true;
@@ -47,12 +51,12 @@ public:
 
 		vector<string> networkIncludeList = { "*.*.*.*" };
 		vector<string> networkExcludeList = { "" };
-	} _hostAdvSettings;
+	} _wifiHostSettings;
 
 	static const uint8_t SUCCESS = 0;
 	static const uint8_t FAIL = -1;
 
-	uint16_t advertisingInterval = 500; // Milliseconds between sending advertising messages
+	//uint16_t advertisingInterval = 500; // Milliseconds between sending advertising messages
 	uint16_t startCxnInterval = 100;
 
 	ofxUDPManager advertisingCxn;
@@ -152,16 +156,30 @@ public:
 	bool isInNetworkList(string ipAddress, vector<string> networkList);
 
 	/*!
+	@brief Parses EmotiBit host comm settings
+	@param jsonStr comm settings in JSON format
+	*/
+	void parseCommSettings(string jsonStr);
+
+	/*!
 	@brief Sets EmotiBit host advertising settings
 	@param settings
 	*/
-	void setHostAdvertisingSettings(HostAdvertisingSettings settings);
+	void setWifiHostSettings(WifiHostSettings settings);
 
 	/*!
 	@brief Gets EmotiBit host advertising settings
 	@return settings
 	*/
-	HostAdvertisingSettings getHostAdvertisingSettings();
+	WifiHostSettings getWifiHostSettings();
 
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
+
+	/*!
+	@brief Handles sleeping or yeilding the the active thread
+	@param sleepMicros <0 does nothing, ==0 yeilds, >0 sleep_for
+	*/
+	void EmotiBitWiFiHost::threadSleepFor(int sleepMicros);
 };
+
+

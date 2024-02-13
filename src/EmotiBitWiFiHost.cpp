@@ -77,13 +77,13 @@ bool EmotiBitWiFiHost::isInNetworkList(string ipAddress, vector<string> networkL
 }
 
 bool EmotiBitWiFiHost::isInNetworkExcludeList(string ipAddress) {
-	bool out = isInNetworkList(ipAddress, _hostAdvSettings.networkExcludeList);
+	bool out = isInNetworkList(ipAddress, _wifiHostSettings.networkExcludeList);
 	//cout << "Exclude " << ipAddress << ".* : " << out << endl;
 	return out;
 }
 
 bool EmotiBitWiFiHost::isInNetworkIncludeList(string ipAddress) {
-	bool out =  isInNetworkList(ipAddress, _hostAdvSettings.networkIncludeList);
+	bool out =  isInNetworkList(ipAddress, _wifiHostSettings.networkIncludeList);
 	//cout << "Include " << ipAddress << ".* : " << out << endl;
 	return out;
 }
@@ -129,11 +129,11 @@ void EmotiBitWiFiHost::sendAdvertising() {
 	static bool sendInProgress = true;
 	static int unicastNetwork = 0;
 	static int broadcastNetwork = 0;
-	static int hostId = _hostAdvSettings.unicastIpRange.first; 
+	static int hostId = _wifiHostSettings.unicastIpRange.first; 
 
 	static uint64_t sendAdvertisingTimer = ofGetElapsedTimeMillis();
 	uint64_t sendAdvertisingTime = ofGetElapsedTimeMillis() - sendAdvertisingTimer;
-	if (sendAdvertisingTime >= _hostAdvSettings.sendAdvertisingInterval)
+	if (sendAdvertisingTime >= _wifiHostSettings.sendAdvertisingInterval)
 	{
 		// Periodically start a new advertising send
 		sendAdvertisingTimer = ofGetElapsedTimeMillis();
@@ -155,7 +155,7 @@ void EmotiBitWiFiHost::sendAdvertising() {
 
 	// **** Handle advertising sends ****
 	// Handle broadcast advertising
-	if (_hostAdvSettings.enableBroadcast && startNewSend) {
+	if (_wifiHostSettings.enableBroadcast && startNewSend) {
 		string broadcastIp;
 
 		if (emotibitsFound)
@@ -187,17 +187,17 @@ void EmotiBitWiFiHost::sendAdvertising() {
 		return;
 	}
 	// Handle unicast advertising
-	if (_hostAdvSettings.enableUnicast && sendInProgress)
+	if (_wifiHostSettings.enableUnicast && sendInProgress)
 	{
 		static uint64_t unicastLoopTimer = ofGetElapsedTimeMillis();
 		uint64_t unicastLoopTime = ofGetElapsedTimeMillis() - unicastLoopTimer;
 		// Limit the rate of unicast sending
-		if (unicastLoopTime >= _hostAdvSettings.unicastMinLoopDelay)
+		if (unicastLoopTime >= _wifiHostSettings.unicastMinLoopDelay)
 		{
 			unicastLoopTimer = ofGetElapsedTimeMillis();
 			ofLog(OF_LOG_VERBOSE) << "Sending advertising unicast: " << unicastLoopTime;
 
-			for (uint32_t i = 0; i < _hostAdvSettings.nUnicastIpsPerLoop; i++)
+			for (uint32_t i = 0; i < _wifiHostSettings.nUnicastIpsPerLoop; i++)
 			{
 				string unicastIp;
 
@@ -210,7 +210,7 @@ void EmotiBitWiFiHost::sendAdvertising() {
 					unicastIp = availableNetworks.at(unicastNetwork) + "." + ofToString(hostId);
 				}
 
-				if (_hostAdvSettings.enableUnicast && sendInProgress)
+				if (_wifiHostSettings.enableUnicast && sendInProgress)
 				{
 					ofLog(OF_LOG_VERBOSE) << unicastIp;
 					string packet = EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::HELLO_EMOTIBIT, advertisingPacketCounter++, "", 0);
@@ -220,14 +220,14 @@ void EmotiBitWiFiHost::sendAdvertising() {
 				}
 
 				// Iterate IP Address
-				if (hostId < _hostAdvSettings.unicastIpRange.second)
+				if (hostId < _wifiHostSettings.unicastIpRange.second)
 				{
 					hostId++;
 				}
 				else
 				{
 					// Reached end of unicastIpRange
-					hostId = _hostAdvSettings.unicastIpRange.first; // loop hostId back to beginning of range
+					hostId = _wifiHostSettings.unicastIpRange.first; // loop hostId back to beginning of range
 					if (emotibitsFound)
 					{
 						// finished a send of all IPs
@@ -277,7 +277,7 @@ void EmotiBitWiFiHost::processAdvertisingThread()
 		vector<string> infoPackets;
 		processAdvertising(infoPackets);
 		// ToDo: Handle info packets with mode change information
-		std::this_thread::yield();
+		threadSleepFor(_wifiHostSettings.advertisingThreadSleep);
 	}
 }
 
@@ -289,7 +289,7 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 
 	static uint64_t checkAdvertisingTimer = ofGetElapsedTimeMillis();
 	uint64_t checkAdvertisingTime = ofGetElapsedTimeMillis() - checkAdvertisingTimer;
-	if (checkAdvertisingTime >= _hostAdvSettings.checkAdvertisingInterval)
+	if (checkAdvertisingTime >= _wifiHostSettings.checkAdvertisingInterval)
 	{
 		checkAdvertisingTimer = ofGetElapsedTimeMillis();
 		ofLog(OF_LOG_VERBOSE) << "checkAdvertising: " << checkAdvertisingTime;
@@ -639,7 +639,24 @@ void EmotiBitWiFiHost::updateDataThread()
 	while (!stopDataThread)
 	{
 		updateData();
+		threadSleepFor(_wifiHostSettings.dataThreadSleep);
+	}
+}
+
+void EmotiBitWiFiHost::threadSleepFor(int sleepMicros)
+{
+	if (sleepMicros < 0)
+	{
+		//	do nothing, not even yeild
+		//	WARNING: high spinlock potential
+	}
+	else if (sleepMicros == 0)
+	{
 		std::this_thread::yield();
+	}
+	else
+	{
+		std::this_thread::sleep_for(std::chrono::microseconds(sleepMicros));
 	}
 }
 
@@ -892,12 +909,199 @@ bool EmotiBitWiFiHost::isConnected()
 	return _isConnected;
 }
 
-void EmotiBitWiFiHost::setHostAdvertisingSettings(HostAdvertisingSettings settings)
+void EmotiBitWiFiHost::setWifiHostSettings(WifiHostSettings settings)
 {
-	_hostAdvSettings = settings;
+	_wifiHostSettings = settings;
 }
 
-EmotiBitWiFiHost::HostAdvertisingSettings EmotiBitWiFiHost::getHostAdvertisingSettings()
+EmotiBitWiFiHost::WifiHostSettings EmotiBitWiFiHost::getWifiHostSettings()
 {
-	return _hostAdvSettings;
+	return _wifiHostSettings;
+}
+
+//void ofApp::saveEmotiBitCommSettings(string settingsFilePath, bool absolute, bool pretty)
+//{
+//	// ToDo: find a nice home like EmotiBitFileIO.h/cpp
+//
+//	try
+//	{
+//		EmotiBitWiFiHost::WifiHostSettings settings = emotiBitWiFi.getWifiHostSettings();
+//		ofxJSONElement jsonSettings;
+//
+//		jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"] = settings.enableBroadcast;
+//		jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["enabled"] = settings.enableUnicast;
+//		jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMin"] = settings.unicastIpRange.first;
+//		jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMax"] = settings.unicastIpRange.second;
+//
+//		int numIncludes = settings.networkIncludeList.size();
+//		for (int i = 0; i < numIncludes; i++)
+//		{
+//			jsonSettings["wifi"]["network"]["includeList"][i] = settings.networkIncludeList.at(i);
+//		}
+//
+//		int numExcludes = settings.networkExcludeList.size();
+//		for (int i = 0; i < numExcludes; i++)
+//		{
+//			jsonSettings["wifi"]["network"]["excludeList"][i] = settings.networkExcludeList.at(i);
+//		}
+//
+//		jsonSettings.save(ofToDataPath(settingsFilePath, absolute), pretty);
+//		ofLog(OF_LOG_NOTICE, "Saving " + settingsFilePath + ": \n" + jsonSettings.getRawString(true));
+//	}
+//	catch (exception e)
+//	{
+//		ofLog(OF_LOG_ERROR, "ERROR: Failed to save " + settingsFilePath);
+//	}
+//}
+
+void EmotiBitWiFiHost::parseCommSettings(string jsonStr)
+{
+	Json::Reader reader;
+	Json::Value jsonSettings;
+	
+	try
+	{
+		if (reader.parse(jsonStr, jsonSettings))
+		{
+			// ToDo: Move specifics of WiFi settings into EmotiBitWiFiHost
+			EmotiBitWiFiHost::WifiHostSettings settings;
+			EmotiBitWiFiHost::WifiHostSettings defaultSettings = getWifiHostSettings();// if setter is not called, getter returns default values
+
+			if (jsonSettings["wifi"]["advertising"].isMember("sendAdvertisingInterval_msec"))
+			{
+				settings.sendAdvertisingInterval = jsonSettings["wifi"]["advertising"]["sendAdvertisingInterval_msec"].asInt();
+			}
+			else
+			{
+				ofLogNotice("sendAdvertisingInterval_msec settings not found. Using default value");
+				settings.sendAdvertisingInterval = defaultSettings.sendAdvertisingInterval;
+			}
+			if (jsonSettings["wifi"]["advertising"].isMember("checkAdvertisingInterval_msec"))
+			{
+				settings.checkAdvertisingInterval = jsonSettings["wifi"]["advertising"]["checkAdvertisingInterval_msec"].asInt();
+			}
+			else
+			{
+				ofLogNotice("checkAdvertisingInterval_msec settings not found. Using default value");
+				settings.checkAdvertisingInterval = defaultSettings.checkAdvertisingInterval;
+			}
+			if (jsonSettings["wifi"]["advertising"].isMember("threadSleep_usec"))
+			{
+				settings.advertisingThreadSleep = jsonSettings["wifi"]["advertising"]["threadSleep_usec"].asInt();
+			}
+			else
+			{
+				ofLogNotice("advertising:threadSleep_usec settings not found. Using default value");
+				settings.advertisingThreadSleep = defaultSettings.advertisingThreadSleep;
+			}
+			if (jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"].isMember("enabled"))
+			{
+				settings.enableBroadcast = jsonSettings["wifi"]["advertising"]["transmission"]["broadcast"]["enabled"].asBool();
+			}
+			else
+			{
+				ofLogNotice("Broadcast settings not found. Using default value");
+				settings.enableBroadcast = defaultSettings.enableBroadcast;
+			}
+			if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("enabled"))
+			{
+				settings.enableUnicast = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["enabled"].asBool();
+			}
+			else
+			{
+				ofLogNotice("Unicast enable settings not found in. Using default value");
+				settings.enableUnicast = defaultSettings.enableUnicast;
+			}
+			if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("ipMin") &&
+				jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("ipMax"))
+			{
+				settings.unicastIpRange = make_pair(
+					jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMin"].asInt(),
+					jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["ipMax"].asInt()
+				);
+			}
+			else
+			{
+				ofLogNotice("unicast ipRange settings not found. Using default value");
+				settings.unicastIpRange = defaultSettings.unicastIpRange;
+			}
+			if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("nUnicastIpsPerLoop"))
+			{
+				settings.nUnicastIpsPerLoop = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["nUnicastIpsPerLoop"].asInt();
+			}
+			else
+			{
+				ofLogNotice("nUnicastIpsPerLoop settings not found in. Using default value");
+				settings.nUnicastIpsPerLoop = defaultSettings.nUnicastIpsPerLoop;
+			}
+			if (jsonSettings["wifi"]["advertising"]["transmission"]["unicast"].isMember("unicastMinLoopDelay_msec"))
+			{
+				settings.unicastMinLoopDelay = jsonSettings["wifi"]["advertising"]["transmission"]["unicast"]["unicastMinLoopDelay_msec"].asInt();
+			}
+			else
+			{
+				ofLogNotice("unicastMinLoopDelay_msec settings not found. Using default value");
+				settings.unicastMinLoopDelay = defaultSettings.unicastMinLoopDelay;
+			}
+
+			if (jsonSettings["wifi"]["data"].isMember("threadSleep_usec"))
+			{
+				settings.dataThreadSleep = jsonSettings["wifi"]["data"]["threadSleep_usec"].asInt();
+			}
+			else
+			{
+				ofLogNotice("advertising:threadSleep_usec settings not found. Using default value");
+				settings.dataThreadSleep = defaultSettings.dataThreadSleep;
+			}
+
+			if (jsonSettings["wifi"]["network"].isMember("includeList"))
+			{
+				int numIncludes = jsonSettings["wifi"]["network"]["includeList"].size();
+				settings.networkIncludeList.clear();
+				for (int i = 0; i < numIncludes; i++)
+				{
+					settings.networkIncludeList.push_back(jsonSettings["wifi"]["network"]["includeList"][i].asString());
+				}
+			}
+			else
+			{
+				ofLogNotice("networkIncludeList settings not found. Using default value");
+				settings.networkIncludeList = defaultSettings.networkIncludeList;
+			}
+
+			if (jsonSettings["wifi"]["network"].isMember("excludeList"))
+			{
+				int numExcludes = jsonSettings["wifi"]["network"]["excludeList"].size();
+				settings.networkExcludeList.clear();
+				for (int i = 0; i < numExcludes; i++)
+				{
+					settings.networkExcludeList.push_back(jsonSettings["wifi"]["network"]["excludeList"][i].asString());
+				}
+			}
+			else
+			{
+				ofLogNotice("networkExcludeList settings not found. Using default value");
+				settings.networkExcludeList = defaultSettings.networkExcludeList;
+			}
+
+			setWifiHostSettings(settings);
+
+			ofLog(OF_LOG_NOTICE, "[EmotiBitWifiHost] CommSettings loaded: \n" + jsonStr);
+		}
+		else
+		{
+			ofLogError("[EmotiBitWifiHost] Failed to parse CommSettings");
+			ofLog(OF_LOG_NOTICE, "using default network parameters");
+			setWifiHostSettings(getWifiHostSettings()); // if setter is not called, getter returns default values
+			ofLog(OF_LOG_ERROR, "ERROR: Failed to load: \n" + jsonStr);
+
+		}
+	}
+	catch (exception e)
+	{
+		ofLogError("[EmotiBitWifiHost] CommSettings settings parse exception: ") << e.what();
+		ofLog(OF_LOG_NOTICE, "using default network parameters");
+		setWifiHostSettings(getWifiHostSettings()); // if setter is not called, getter returns default values
+		ofLog(OF_LOG_ERROR, "ERROR: Failed to load: \n" + jsonStr);
+	}
 }
