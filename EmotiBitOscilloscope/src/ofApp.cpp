@@ -19,8 +19,6 @@ void ofApp::setup() {
 
 	string commSettings = loadTextFile(commSettingsFile);
 	emotiBitWiFi.parseCommSettings(commSettings);
-	//loadEmotiBitCommSettings(commSettings);
-	//saveEmotiBitCommSettings();
 
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
 	timeWindowOnSetup = 10;  // set timeWindow for setup (in seconds)

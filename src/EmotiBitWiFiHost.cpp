@@ -647,7 +647,7 @@ void EmotiBitWiFiHost::threadSleepFor(int sleepMicros)
 {
 	if (sleepMicros < 0)
 	{
-		//	do nothing, not even yeild
+		//	do nothing, not even yield
 		//	WARNING: high spinlock potential
 	}
 	else if (sleepMicros == 0)
@@ -919,6 +919,8 @@ EmotiBitWiFiHost::WifiHostSettings EmotiBitWiFiHost::getWifiHostSettings()
 	return _wifiHostSettings;
 }
 
+// saveEmotiBitCommSettings no longer matches settings and may or may not be used in the future
+// Code is left here commented out in case it might be useful at a later time
 //void ofApp::saveEmotiBitCommSettings(string settingsFilePath, bool absolute, bool pretty)
 //{
 //	// ToDo: find a nice home like EmotiBitFileIO.h/cpp
