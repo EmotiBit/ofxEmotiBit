@@ -37,10 +37,10 @@ class EmotiBitWiFiHost
 public:
 
 	struct WifiHostSettings {
-		int sendAdvertisingInterval = 1000;
-		int checkAdvertisingInterval = 100;
-		int advertisingThreadSleep = 0;
-		int dataThreadSleep = 0;
+		int sendAdvertisingInterval = 1000; // msec interval between advertising blasts
+		int checkAdvertisingInterval = 100; // msec interval between checks for advertising replies
+		int advertisingThreadSleep = 0;	// usec duration to sleep between thread loops
+		int dataThreadSleep = 0;	// usec duration to sleep between thread loops
 
 		bool enableBroadcast = true;
 
