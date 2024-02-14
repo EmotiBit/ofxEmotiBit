@@ -3,7 +3,7 @@
     "advertising": {
       "sendAdvertisingInterval_msec": 1000,
       "checkAdvertisingInterval_msec": 100,
-      "threadSleep_usec": 10000,
+      "threadSleep_usec": 1000,
       "transmission": {
         "broadcast": {
           "enabled": true
