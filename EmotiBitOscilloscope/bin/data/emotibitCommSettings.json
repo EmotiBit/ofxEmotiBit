@@ -18,6 +18,7 @@
       }
     },
     "data": {
+      // WARNING data threadSleep_usec alters timesync comms. Change with caution.
       "threadSleep_usec": 100
     },
     "network": {
