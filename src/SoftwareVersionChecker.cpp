@@ -254,7 +254,7 @@ bool SoftwareVersionChecker::testPingResponse(std::string pingResponse)
 	*/
 	bool isNetworkAvailable = false;
 	
-	if (pingResponse.find("time") != std::string::npos && (pingResponse.find("TTL") != std::string::npos || pingResponse.find("ttl") != std::string::npos))
+	if (pingResponse.find("TTL") != std::string::npos || pingResponse.find("ttl") != std::string::npos)
 	{
 		// response contains the keywords
 		isNetworkAvailable = true;
