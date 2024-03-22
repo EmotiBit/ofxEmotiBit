@@ -170,6 +170,7 @@ vector<string> EmotiBitLsl::createMarkerInputPackets(uint16_t &packetCounter)
 				auto markerSample = markerSamples.at(i);
 				std::stringstream payload;
 				payload.precision(7);
+				payload.setf(std::ios::fixed, std::ios::floatfield); // see https://cplusplus.com/reference/ios/ios_base/precision/
 				uint16_t payloadLen = 0;
 
 				EmotiBitPacket::addToPayload(EmotiBitPacket::PayloadLabel::LSL_MARKER_RX_TIMESTAMP, payload, payloadLen);
@@ -188,7 +189,7 @@ vector<string> EmotiBitLsl::createMarkerInputPackets(uint16_t &packetCounter)
 				// ToDo: consider if we even need a marker sample to get cross domain points.
 				//		Can we just not do: LC = lsl::local_clock, and LM = lsl::local_clock() - timeCorretion()?
 				// send TX packet for LCxLM
-				payload.clear();
+				payload.str(std::string());	// clears the payload
 				payloadLen = 0;
 				EmotiBitPacket::addToPayload(EmotiBitPacket::PayloadLabel::LSL_LOCAL_CLOCK_TIMESTAMP, payload, payloadLen);
 				EmotiBitPacket::addToPayload(markerSample->timeStamp + markerSample->timeCorrection, payload, payloadLen);
@@ -200,7 +201,7 @@ vector<string> EmotiBitLsl::createMarkerInputPackets(uint16_t &packetCounter)
 				// ToDo: Consider if TIMESTAMP_CROSS_TIME packet sending needs to be in a different spot
 				double lsltime = lsl::local_clock();
 				string timestampLocal = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-				payload.clear();
+				payload.str(std::string());	// clears the payload
 				payloadLen = 0;
 				EmotiBitPacket::addToPayload(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, payload, payloadLen);
 				EmotiBitPacket::addToPayload(timestampLocal, payload, payloadLen);
