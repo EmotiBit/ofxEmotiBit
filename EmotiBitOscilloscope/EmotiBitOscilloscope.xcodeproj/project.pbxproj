@@ -1761,7 +1761,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/**",
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -1979,7 +1979,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/**",
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2059,7 +2059,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/**",
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
