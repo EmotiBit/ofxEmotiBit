@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0059E2448E2CB4FECB0BEF66 /* ofxOscilloscope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FF0DE1E8ABD60252EE51633 /* ofxOscilloscope.cpp */; };
 		0546D1A38E13BD319CC9755B /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9BF3AA0D4FAA89D0F8A0E545 /* OscReceivedElements.cpp */; };
-		0FB10EBE1B326A1803840371 /* patchboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F473E80055B6EE71F4E81838 /* patchboard.cpp */; };
 		125506CD3E5F428AAFE5CC65 /* ofxTCPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F399B91E98DC31CDA6DDACB4 /* ofxTCPManager.cpp */; };
 		1C36947250DCB09A8A375C0C /* ofxXmlPoco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9998694E5001F9CF0B13BF0 /* ofxXmlPoco.cpp */; };
 		1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907C5B5E104864A2D3A25745 /* ofxToggle.cpp */; };
@@ -45,6 +44,11 @@
 		8E016F802832CE28005D7C65 /* EmotiBitFactoryTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F782832CE28005D7C65 /* EmotiBitFactoryTest.cpp */; };
 		8E016F842832CE82005D7C65 /* Periodizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F832832CE82005D7C65 /* Periodizer.cpp */; };
 		8E016F862832D594005D7C65 /* emotibitCommSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E016F852832D594005D7C65 /* emotibitCommSettings.json */; };
+		8E07BBB82BAF9E3F00CDD443 /* PatchboardBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBB22BAF9E3F00CDD443 /* PatchboardBase.cpp */; };
+		8E07BBB92BAF9E3F00CDD443 /* PatchboardXml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBB32BAF9E3F00CDD443 /* PatchboardXml.cpp */; };
+		8E07BBBA2BAF9E3F00CDD443 /* PatchboardJson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBB52BAF9E3F00CDD443 /* PatchboardJson.cpp */; };
+		8E07BBBF2BAF9ED600CDD443 /* EmotiBitLsl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBBC2BAF9ED600CDD443 /* EmotiBitLsl.cpp */; };
+		8E07BBC02BAF9ED600CDD443 /* EmotiBitOfUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBBD2BAF9ED600CDD443 /* EmotiBitOfUtils.cpp */; };
 		8E6079EA27C978BE00959DDB /* inputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E827C978BE00959DDB /* inputSettings.xml */; };
 		8E6079EB27C978BE00959DDB /* ofxOscilloscopeSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */; };
 		8F5205AEF8861EF234F0651A /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81967292BFC87A0144BD32C6 /* ofxOscSender.cpp */; };
@@ -207,6 +211,16 @@
 		8E016F822832CE82005D7C65 /* Periodizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Periodizer.h; path = ../src/Signal/Periodizer.h; sourceTree = "<group>"; };
 		8E016F832832CE82005D7C65 /* Periodizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Periodizer.cpp; path = ../src/Signal/Periodizer.cpp; sourceTree = "<group>"; };
 		8E016F852832D594005D7C65 /* emotibitCommSettings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = emotibitCommSettings.json; path = bin/data/emotibitCommSettings.json; sourceTree = "<group>"; };
+		8E07BBB22BAF9E3F00CDD443 /* PatchboardBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PatchboardBase.cpp; path = ../../ofxOscilloscope/ofxPatchboard/Patchboard/src/PatchboardBase.cpp; sourceTree = "<group>"; };
+		8E07BBB32BAF9E3F00CDD443 /* PatchboardXml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PatchboardXml.cpp; path = ../../ofxOscilloscope/ofxPatchboard/Patchboard/src/PatchboardXml.cpp; sourceTree = "<group>"; };
+		8E07BBB42BAF9E3F00CDD443 /* PatchboardBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PatchboardBase.h; path = ../../ofxOscilloscope/ofxPatchboard/Patchboard/src/PatchboardBase.h; sourceTree = "<group>"; };
+		8E07BBB52BAF9E3F00CDD443 /* PatchboardJson.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PatchboardJson.cpp; path = ../../ofxOscilloscope/ofxPatchboard/Patchboard/src/PatchboardJson.cpp; sourceTree = "<group>"; };
+		8E07BBB62BAF9E3F00CDD443 /* PatchboardXml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PatchboardXml.h; path = ../../ofxOscilloscope/ofxPatchboard/Patchboard/src/PatchboardXml.h; sourceTree = "<group>"; };
+		8E07BBB72BAF9E3F00CDD443 /* PatchboardJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PatchboardJson.h; path = ../../ofxOscilloscope/ofxPatchboard/Patchboard/src/PatchboardJson.h; sourceTree = "<group>"; };
+		8E07BBBB2BAF9ED600CDD443 /* EmotiBitLsl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitLsl.h; path = ../src/EmotiBitLsl.h; sourceTree = "<group>"; };
+		8E07BBBC2BAF9ED600CDD443 /* EmotiBitLsl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitLsl.cpp; path = ../src/EmotiBitLsl.cpp; sourceTree = "<group>"; };
+		8E07BBBD2BAF9ED600CDD443 /* EmotiBitOfUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitOfUtils.cpp; path = ../src/EmotiBitOfUtils.cpp; sourceTree = "<group>"; };
+		8E07BBBE2BAF9ED600CDD443 /* EmotiBitOfUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitOfUtils.h; path = ../src/EmotiBitOfUtils.h; sourceTree = "<group>"; };
 		8E6079E827C978BE00959DDB /* inputSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = inputSettings.xml; path = bin/data/inputSettings.xml; sourceTree = "<group>"; };
 		8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = ofxOscilloscopeSettings.xml; path = bin/data/ofxOscilloscopeSettings.xml; sourceTree = "<group>"; };
 		8F225C97B6ECA8B22FFB4B76 /* rc5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc5.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rc5.h; sourceTree = SOURCE_ROOT; };
@@ -271,7 +285,6 @@
 		C8C9B823D7872F9CBF03A813 /* ofxTCPClient.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxTCPClient.h; path = ../../../addons/ofxNetwork/src/ofxTCPClient.h; sourceTree = SOURCE_ROOT; };
 		C9FE1E8D2E9BC8B7F5D308C8 /* asn1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = asn1.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/asn1.h; sourceTree = SOURCE_ROOT; };
 		CA32618C6484394941477500 /* ofxThreadedLogger.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxThreadedLogger.h; path = ../../../addons/ofxThreadedLogger/src/ofxThreadedLogger.h; sourceTree = SOURCE_ROOT; };
-		CCAB70C47210C54258BED939 /* patchboard.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = patchboard.h; path = ../../../addons/ofxOscilloscope/src/patchboard.h; sourceTree = SOURCE_ROOT; };
 		D1F2D509F3D753BBF52DAA19 /* rc4.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc4.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rc4.h; sourceTree = SOURCE_ROOT; };
 		D315839A1D24D10046025C0C /* asn1_mac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = asn1_mac.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/asn1_mac.h; sourceTree = SOURCE_ROOT; };
 		D67FE8EDE92985070F3FD992 /* ofxUDPSettings.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxUDPSettings.h; path = ../../../addons/ofxNetwork/src/ofxUDPSettings.h; sourceTree = SOURCE_ROOT; };
@@ -475,7 +488,6 @@
 		F0B21373033A0907CFFFD055 /* des.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = des.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/des.h; sourceTree = SOURCE_ROOT; };
 		F32C175B3E53B0864752B5D7 /* ofxBiquadFilterInstance.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBiquadFilterInstance.cpp; path = ../../../addons/ofxBiquadFilter/src/ofxBiquadFilterInstance.cpp; sourceTree = SOURCE_ROOT; };
 		F399B91E98DC31CDA6DDACB4 /* ofxTCPManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxTCPManager.cpp; path = ../../../addons/ofxNetwork/src/ofxTCPManager.cpp; sourceTree = SOURCE_ROOT; };
-		F473E80055B6EE71F4E81838 /* patchboard.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = patchboard.cpp; path = ../../../addons/ofxOscilloscope/src/patchboard.cpp; sourceTree = SOURCE_ROOT; };
 		F4F5B6B8BA2BD52C646ED908 /* OscException.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = OscException.h; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscException.h; sourceTree = SOURCE_ROOT; };
 		F66993296A3AEEC70FD444F5 /* ofxNetwork.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxNetwork.h; path = ../../../addons/ofxNetwork/src/ofxNetwork.h; sourceTree = SOURCE_ROOT; };
 		F7FBC56859535E597B24BB91 /* NetworkingUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = NetworkingUtils.h; path = ../../../addons/ofxOsc/libs/oscpack/src/ip/NetworkingUtils.h; sourceTree = SOURCE_ROOT; };
@@ -525,6 +537,7 @@
 		0EBED2DE642FD8C8549B2E51 /* ofxOscilloscope */ = {
 			isa = PBXGroup;
 			children = (
+				8E07BBAF2BAF9DEC00CDD443 /* ofxPatchboard */,
 				971D52EB9D61379150966B5C /* src */,
 			);
 			name = ofxOscilloscope;
@@ -714,6 +727,10 @@
 			isa = PBXGroup;
 			children = (
 				8E016F812832CE65005D7C65 /* Signal */,
+				8E07BBBC2BAF9ED600CDD443 /* EmotiBitLsl.cpp */,
+				8E07BBBB2BAF9ED600CDD443 /* EmotiBitLsl.h */,
+				8E07BBBD2BAF9ED600CDD443 /* EmotiBitOfUtils.cpp */,
+				8E07BBBE2BAF9ED600CDD443 /* EmotiBitOfUtils.h */,
 				AFB59BF33EDC27D6AF2CC50B /* ArduinoString.h */,
 				B37D59256BC5BDEB408A0B4B /* DoubleBuffer.h */,
 				7A8815F94AF8B1A79DAF932B /* EmotiBitTestingHelper.cpp */,
@@ -945,6 +962,35 @@
 			name = Signal;
 			sourceTree = "<group>";
 		};
+		8E07BBAF2BAF9DEC00CDD443 /* ofxPatchboard */ = {
+			isa = PBXGroup;
+			children = (
+				8E07BBB02BAF9E1500CDD443 /* Patchboard */,
+			);
+			name = ofxPatchboard;
+			sourceTree = "<group>";
+		};
+		8E07BBB02BAF9E1500CDD443 /* Patchboard */ = {
+			isa = PBXGroup;
+			children = (
+				8E07BBB12BAF9E2000CDD443 /* src */,
+			);
+			name = Patchboard;
+			sourceTree = "<group>";
+		};
+		8E07BBB12BAF9E2000CDD443 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				8E07BBB22BAF9E3F00CDD443 /* PatchboardBase.cpp */,
+				8E07BBB42BAF9E3F00CDD443 /* PatchboardBase.h */,
+				8E07BBB52BAF9E3F00CDD443 /* PatchboardJson.cpp */,
+				8E07BBB72BAF9E3F00CDD443 /* PatchboardJson.h */,
+				8E07BBB32BAF9E3F00CDD443 /* PatchboardXml.cpp */,
+				8E07BBB62BAF9E3F00CDD443 /* PatchboardXml.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
 		8E7E8F4E282ED7E000C2A24E /* ofxJSON */ = {
 			isa = PBXGroup;
 			children = (
@@ -975,8 +1021,6 @@
 			children = (
 				4FF0DE1E8ABD60252EE51633 /* ofxOscilloscope.cpp */,
 				981F60C92586ACCD9553A3D5 /* ofxOscilloscope.h */,
-				F473E80055B6EE71F4E81838 /* patchboard.cpp */,
-				CCAB70C47210C54258BED939 /* patchboard.h */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -1579,11 +1623,14 @@
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				853E0BA2F448076739446874 /* ofxColorPicker.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
+				8E07BBBF2BAF9ED600CDD443 /* EmotiBitLsl.cpp in Sources */,
 				852E0891794923EE7583C621 /* ofxInputField.cpp in Sources */,
 				8E016F7E2832CE28005D7C65 /* DigitalFilter.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
 				8E016F842832CE82005D7C65 /* Periodizer.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
+				8E07BBB82BAF9E3F00CDD443 /* PatchboardBase.cpp in Sources */,
+				8E07BBBA2BAF9E3F00CDD443 /* PatchboardJson.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
@@ -1599,6 +1646,7 @@
 				B65D7C8C591DF95D595E2053 /* NetworkInterfaceListener.cpp in Sources */,
 				69AF35586CA18EA57C5CFCD3 /* NetworkUtils.cpp in Sources */,
 				AEAE7BD10A06519AE832EC52 /* ofxNetworkUtils.cpp in Sources */,
+				8E07BBB92BAF9E3F00CDD443 /* PatchboardXml.cpp in Sources */,
 				ADE367465D2A8EBAD4C7A8D9 /* IpEndpointName.cpp in Sources */,
 				67FE4C7B15C2F0478C8126C2 /* NetworkingUtils.cpp in Sources */,
 				8E016F642832CAFE005D7C65 /* ofxJSONElement.cpp in Sources */,
@@ -1612,8 +1660,8 @@
 				4ADB88E2FB52E76A471065DE /* ofxOscParameterSync.cpp in Sources */,
 				640279EE111671BD026CB013 /* ofxOscReceiver.cpp in Sources */,
 				8F5205AEF8861EF234F0651A /* ofxOscSender.cpp in Sources */,
+				8E07BBC02BAF9ED600CDD443 /* EmotiBitOfUtils.cpp in Sources */,
 				0059E2448E2CB4FECB0BEF66 /* ofxOscilloscope.cpp in Sources */,
-				0FB10EBE1B326A1803840371 /* patchboard.cpp in Sources */,
 				9CA591B9A40F2386FE099328 /* ofxThreadedLogger.cpp in Sources */,
 				933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */,
 				8E016F7C2832CE28005D7C65 /* EmotiBitVariants.cpp in Sources */,

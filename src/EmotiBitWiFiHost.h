@@ -28,6 +28,7 @@ public:
 	bool isAvailable;
 	uint64_t lastSeen;
 	// Additional parameters like Name, Fs etc can be stored in this struct
+	// ToDo: Consider if a copy/assignment constructor is needed
 };
 
 class EmotiBitWiFiHost
@@ -63,7 +64,7 @@ public:
 
 	std::mutex controlCxnMutex;
 	std::mutex dataCxnMutex;
-	std::mutex emotibitIpsMutex;
+	std::mutex discoveredEmotibitsMutex;
 
 	uint16_t advertisingPort;
 	uint16_t _dataPort;
