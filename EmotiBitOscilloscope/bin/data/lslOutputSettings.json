@@ -1,0 +1,59 @@
+{
+  "patchboard":{
+    "settings":{
+      "input":{
+        "type":"EmotiBit"
+      },
+      "output":{
+        "type":"LSL",
+        "meta-data":{ 
+          // See XDF meta-data examples at https://github.com/sccn/xdf/wiki/EEG-Meta-Data
+          // source_id gathered from EmotiBit Serial Number
+          // In the future nominal_srate may be gathered from device
+          "channels":[
+            {"name":"PPG_RED", "type":"PPGRed", "nominal_srate":25.0},
+            {"name":"PPG_IR", "type":"PPGInfrared", "nominal_srate":25.0},
+            {"name":"PPG_GRN", "type":"PPGGreen", "nominal_srate":25.0},
+            {"name":"HR", "type":"HeartRate", "nominal_srate":0.0},
+            {"name":"EDA", "type":"EDA", "nominal_srate":15.0},
+            {"name":"SCR_AMP", "type":"SCRAmplitude", "nominal_srate":0.0},
+            {"name":"SCR_RIS", "type":"SCRRiseTime", "nominal_srate":0.0},
+            {"name":"SCR_FREQ", "type":"SCRFrequency", "nominal_srate":0.0},
+            {"name":"TEMP1", "type":"Temperature", "nominal_srate":7.5},
+            {"name":"THERM", "type":"Thermopile", "nominal_srate":7.5},
+            {"name":"ACC_X", "type":"AccelerometerX", "nominal_srate":25.0},
+            {"name":"ACC_Y", "type":"AccelerometerY", "nominal_srate":25.0},
+            {"name":"ACC_Z", "type":"AccelerometerZ", "nominal_srate":25.0},
+            {"name":"GYRO_X", "type":"GyroscopeX", "nominal_srate":25.0},
+            {"name":"GYRO_Y", "type":"GyroscopeY", "nominal_srate":25.0},
+            {"name":"GYRO_Z", "type":"GyroscopeZ", "nominal_srate":25.0},
+            {"name":"MAG_X", "type":"MagnetometerX", "nominal_srate":25.0},
+            {"name":"MAG_Y", "type":"MagnetometerY", "nominal_srate":25.0},
+            {"name":"MAG_Z", "type":"MagnetometerZ", "nominal_srate":25.0}
+          ]
+        }    
+      }
+    },
+    "patchcords":[
+      {"input":"PR", "output":"PPG_RED"},
+      {"input":"PI", "output":"PPG_IR"},
+      {"input":"PG", "output":"PPG_GRN"},
+      {"input":"HR", "output":"HR"},
+      {"input":"EA", "output":"EDA"},
+      {"input":"SA", "output":"SCR_AMP"},
+      {"input":"SR", "output":"SCR_RIS"},
+      {"input":"SF", "output":"SCR_FREQ"},
+      {"input":"T1", "output":"TEMP1"},
+      {"input":"TH", "output":"THERM"},
+      {"input":"AX", "output":"ACC_X"},
+      {"input":"AY", "output":"ACC_Y"},
+      {"input":"AZ", "output":"ACC_Z"},
+      {"input":"GX", "output":"GYRO_X"},
+      {"input":"GY", "output":"GYRO_Y"},
+      {"input":"GZ", "output":"GYRO_Z"},
+      {"input":"MX", "output":"MAG_X"},
+      {"input":"MY", "output":"MAG_Y"},
+      {"input":"MZ", "output":"MAG_Z"}
+    ]
+  }
+}

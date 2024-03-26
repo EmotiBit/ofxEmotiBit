@@ -139,9 +139,6 @@
     <ClCompile Include="..\..\..\addons\EmotiBit_XPlat_Utils\src\EmotiBitPacket.cpp">
       <Filter>src\EmotiBit_XPlat_Utils\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ofxOscilloscope\src\patchboard.cpp">
-      <Filter>addons\ofxOscilloscope\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Signal\Periodizer.cpp">
       <Filter>addons\ofxEmotiBit\src\Signal</Filter>
     </ClCompile>
@@ -157,7 +154,19 @@
     <ClCompile Include="..\..\ofxLSL\src\ofxLSLResolver.cpp">
       <Filter>addons\ofxLSL\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SoftwareVersionChecker.cpp">
+    <ClCompile Include="..\src\EmotiBitLsl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardBase.cpp">
+      <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardJson.cpp">
+      <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardXml.cpp">
+      <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EmotiBitOfUtils.cpp">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -308,6 +317,15 @@
     </Filter>
     <Filter Include="addons\ofxJSON\src">
       <UniqueIdentifier>{6b0a7f8d-1d97-4932-9a0b-367affb0d926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxOscilloscope\ofxPatchboard">
+      <UniqueIdentifier>{d6965733-04a1-4127-aec0-6a978a5c23a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxOscilloscope\ofxPatchboard\Patchboard">
+      <UniqueIdentifier>{3aac4f2f-d0e3-48f1-942e-f4923287bc9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxOscilloscope\ofxPatchboard\Patchboard\src">
+      <UniqueIdentifier>{c0eeea17-dad1-4908-a01d-fa0e6f331482}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -500,9 +518,6 @@
     <ClInclude Include="..\..\..\addons\EmotiBit_XPlat_Utils\src\EmotiBitPacket.h">
       <Filter>src\EmotiBit_XPlat_Utils\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ofxOscilloscope\src\patchboard.h">
-      <Filter>addons\ofxOscilloscope\src</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Signal\Periodizer.h">
       <Filter>addons\ofxEmotiBit\src\Signal</Filter>
     </ClInclude>
@@ -528,6 +543,21 @@
       <Filter>addons\ofxLSL\src</Filter>
     </ClInclude>
     <ClInclude Include="..\src\SoftwareVersionChecker.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EmotiBitLsl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardBase.h">
+      <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardJson.h">
+      <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardXml.h">
+      <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EmotiBitOfUtils.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
   </ItemGroup>
