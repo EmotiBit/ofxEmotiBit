@@ -60,6 +60,7 @@ void ofApp::update() {
 		vector<string> packets = emotibitLsl.createMarkerInputPackets(emotiBitWiFi.controlPacketCounter);
 		for (string packet : packets)
 		{
+			// cout << packet; // for debugging
 			emotiBitWiFi.sendControl(packet);
 		}
 	}
