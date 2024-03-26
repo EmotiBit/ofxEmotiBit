@@ -157,6 +157,9 @@
     <ClCompile Include="..\..\ofxLSL\src\ofxLSLResolver.cpp">
       <Filter>addons\ofxLSL\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SoftwareVersionChecker.cpp">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -523,6 +526,9 @@
     </ClInclude>
     <ClInclude Include="..\..\ofxLSL\src\ofxLSLSender.h">
       <Filter>addons\ofxLSL\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SoftwareVersionChecker.h">
+      <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

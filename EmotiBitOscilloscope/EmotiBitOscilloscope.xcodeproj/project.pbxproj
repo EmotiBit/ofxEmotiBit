@@ -45,6 +45,7 @@
 		8E016F802832CE28005D7C65 /* EmotiBitFactoryTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F782832CE28005D7C65 /* EmotiBitFactoryTest.cpp */; };
 		8E016F842832CE82005D7C65 /* Periodizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F832832CE82005D7C65 /* Periodizer.cpp */; };
 		8E016F862832D594005D7C65 /* emotibitCommSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E016F852832D594005D7C65 /* emotibitCommSettings.json */; };
+		8E07BBAD2B1F824D00CDD443 /* SoftwareVersionChecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBAB2B1F824D00CDD443 /* SoftwareVersionChecker.cpp */; };
 		8E6079EA27C978BE00959DDB /* inputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E827C978BE00959DDB /* inputSettings.xml */; };
 		8E6079EB27C978BE00959DDB /* ofxOscilloscopeSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */; };
 		8F5205AEF8861EF234F0651A /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81967292BFC87A0144BD32C6 /* ofxOscSender.cpp */; };
@@ -207,6 +208,8 @@
 		8E016F822832CE82005D7C65 /* Periodizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Periodizer.h; path = ../src/Signal/Periodizer.h; sourceTree = "<group>"; };
 		8E016F832832CE82005D7C65 /* Periodizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Periodizer.cpp; path = ../src/Signal/Periodizer.cpp; sourceTree = "<group>"; };
 		8E016F852832D594005D7C65 /* emotibitCommSettings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = emotibitCommSettings.json; path = bin/data/emotibitCommSettings.json; sourceTree = "<group>"; };
+		8E07BBAB2B1F824D00CDD443 /* SoftwareVersionChecker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SoftwareVersionChecker.cpp; path = ../src/SoftwareVersionChecker.cpp; sourceTree = "<group>"; };
+		8E07BBAC2B1F824D00CDD443 /* SoftwareVersionChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoftwareVersionChecker.h; path = ../src/SoftwareVersionChecker.h; sourceTree = "<group>"; };
 		8E6079E827C978BE00959DDB /* inputSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = inputSettings.xml; path = bin/data/inputSettings.xml; sourceTree = "<group>"; };
 		8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = ofxOscilloscopeSettings.xml; path = bin/data/ofxOscilloscopeSettings.xml; sourceTree = "<group>"; };
 		8F225C97B6ECA8B22FFB4B76 /* rc5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc5.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rc5.h; sourceTree = SOURCE_ROOT; };
@@ -713,6 +716,8 @@
 		4CD5C6EA1AEB082DFF01E7BE /* src */ = {
 			isa = PBXGroup;
 			children = (
+				8E07BBAB2B1F824D00CDD443 /* SoftwareVersionChecker.cpp */,
+				8E07BBAC2B1F824D00CDD443 /* SoftwareVersionChecker.h */,
 				8E016F812832CE65005D7C65 /* Signal */,
 				AFB59BF33EDC27D6AF2CC50B /* ArduinoString.h */,
 				B37D59256BC5BDEB408A0B4B /* DoubleBuffer.h */,
@@ -1565,6 +1570,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E07BBAD2B1F824D00CDD443 /* SoftwareVersionChecker.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				D820615CFDD5F497033D7C5A /* ofxBiquadFilter.cpp in Sources */,
