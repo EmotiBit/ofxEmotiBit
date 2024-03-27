@@ -178,7 +178,7 @@ public:
 	@brief Handles sleeping or yeilding the the active thread
 	@param sleepMicros <0 does nothing, ==0 yeilds, >0 sleep_for
 	*/
-	void EmotiBitWiFiHost::threadSleepFor(int sleepMicros);
+	void threadSleepFor(int sleepMicros);
 };
 
 
