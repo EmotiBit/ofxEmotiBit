@@ -22,15 +22,6 @@
     <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp">
       <Filter>addons\ofxBiquadFilter\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.cpp">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitWiFiHost.cpp">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\Signal\Periodizer.cpp">
-      <Filter>addons\ofxEmotiBit\src\Signal</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
@@ -336,15 +327,6 @@
     <Filter Include="addons\ofxBiquadFilter\src">
       <UniqueIdentifier>{6A1697DC-957E-5FD0-4C2B-394F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxEmotiBit">
-      <UniqueIdentifier>{D5BAEE0B-17C8-94EC-18FD-28FF}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxEmotiBit\src">
-      <UniqueIdentifier>{E6176BF7-A69F-78A5-E517-F6F5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxEmotiBit\src\Signal">
-      <UniqueIdentifier>{69D9DD3A-1669-D4F4-B2DE-7E0F}</UniqueIdentifier>
-    </Filter>
     <Filter Include="addons\ofxGui">
       <UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
     </Filter>
@@ -505,24 +487,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h">
       <Filter>addons\ofxBiquadFilter\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ArduinoString.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitWiFiHost.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ofxEmotiBitVersion.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\Signal\Periodizer.h">
-      <Filter>addons\ofxEmotiBit\src\Signal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
       <Filter>addons\ofxGui\src</Filter>
