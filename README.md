@@ -5,25 +5,29 @@ If you just want to visualize and parse data from the EmotiBit (for Windows/ mac
 If you want to modify the code(or build the tools in Linux), below are the requirements to build the project.  
 
 ## Requirements
-- OF 11 ~~https://openframeworks.cc/download/~~ NOTE: ofxEmotiBit is not yet compatible with 0.11.2. OF v0.11.0 can be downloaded here https://openframeworks.cc/versions/v0.11.0/
+
+#### openFrameworks
+
+Install openFrameworks 0.11.2 (vs2017_release) from the official [openFrameworks GitHub repository](https://github.com/openframeworks/openFrameworks/releases/tag/0.11.2).
+
 ### The following addons should be placed inside the OpenFrameworks addons folder:
-#### Note: If downloading zip instead of `git clone` be sure to remove `-master` from the folder name to avoid path discrepancies
-- ofxNetworkUtils - https://github.com/bakercp/ofxNetworkUtils
-- ofxOscilloscope - https://github.com/produceconsumerobot/ofxOscilloscope
-- ofxThreadedLogger - https://github.com/produceconsumerobot/ofxThreadedLogger
-- ofxBiquadFilter - https://github.com/mrbichel/ofxBiquadFilter
-- ofxJSON - https://github.com/jeffcrouse/ofxJSON
-- EmotiBit_XPlat_Utils - https://github.com/EmotiBit/EmotiBit_XPlat_Utils
-- ofxLSL - https://github.com/EmotiBit/ofxLSL
-  - _**Note:**_ for lsl support, if developing with visual studio, code should be compiled for x64
+#### Note: If downloading zip instead of `git clone` be sure to remove `-master`  or `-xxx-xxx` from the folder name to maintain correct path references. Move only the folder located inside each extracted add-on folder to `of_v0.11.2_vs2017_release\addons`.
+- **ofxNetworkUtils:** [GitHub repository](https://github.com/bakercp/ofxNetworkUtils)
+- **ofxOscilloscope_feat-Patchboard:** [GitHub repository](https://github.com/produceconsumerobot/ofxOscilloscope/tree/feat-PatchboardJson)
+- **ofxThreadedLogger:** [GitHub repository](https://github.com/produceconsumerobot/ofxThreadedLogger)
+- **ofxBiquadFilter:** [GitHub repository](https://github.com/mrbichel/ofxBiquadFilter)
+- **ofxJSON:** [GitHub repository](https://github.com/jeffcrouse/ofxJSON)
+- **EmotiBit_XPlat_Utils_feat-LslOutput:** [GitHub repository](https://github.com/EmotiBit/EmotiBit_XPlat_Utils/tree/feat-LslOutput)
+- **ofxLSL_feat-lslArmBin:** [GitHub repository](https://github.com/EmotiBit/ofxLSL/tree/feat-lslArmBin)
+  - _**Note:**_ for LSL support, if developing with Visual Studio, code should be compiled for x64
   - liblsl64.dll should always be in the same folder as the .exe (i.e. EmotiBitOscilloscope/bin/liblsl64.dll)
   - liblsl64.lib should always be linked to in under _solution properties->linker->general->additional library directories_ and _solution properties->linker->input-> additional dependencies_
-  - both of these libs are handled properly by default, but should be considered if deviating from release code
-- The project is built on a 64-bit architecture. Make sure you are on a machine that support `x64` build platform.
+  - both of these libs are handled properly by default but should be considered if deviating from the release code
+- The project is built on a 64-bit architecture. Ensure you are on a machine supporting the `x64` build platform.
 - Required to build EmotiBit FirmwareInstaller
-  - ofxSerial - https://github.com/EmotiBit/ofxSerial
-  - ofxIO - https://github.com/bakercp/ofxIO
-
+  - **ofxSerial:** [GitHub repository](https://github.com/EmotiBit/ofxSerial)
+  - **ofxIO:** [GitHub repository](https://github.com/bakercp/ofxIO)
+  - 
 #### The following script may be run from a bash shell within your openFrameworks/addons/ directory to install ofxEmotiBit and all dependencies. 
 _**Note:**_ this requires you to have [github SSH key access set up](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 ```
@@ -49,6 +53,42 @@ cd ofxIO
 git checkout stable
 cd ..
 ```
+
+## Setup Instructions for Windows 11 with Visual Studio 2022
+
+1. **Install Visual Studio 2022**: Download and install from [Microsoft Visual Studio](https://visualstudio.microsoft.com/vs/). If previously installed, navigate to the "Tools" tab and select "Get tools and features".
+2. During setup, select the "Desktop Development with C++" workload. Ensure the following components are installed:
+   - MSVC v143 - VS 2022 C++ x64/x86 build tools
+   - C++ ATL for latest 143 build tools
+   - Security Issue Analysis
+   - C++ Build Insights
+   - Just-In-Time debugger
+   - C++ profiling tools
+   - C++ CMake tools for Windows
+   - Test Adapter for Boost.Test
+   - Test Adapter for Google Test
+   - Live Share
+   - C++ AddressSanitizer
+   - Windows 11 SDK
+   - vcpkg manager
+   - GitHub Copilot (optional)
+3. Additionally, navigate to the “Individual components” tab and install the "MSVC v141 - VS 2017 C++ x64/x86 build tools (v14.16)".
+4. **Restart** your computer once everything is installed.
+
+### Building the Project
+
+1. Open the `EmotiBitOscilloscope` Visual Studio solution file (.sln) located in `of_v0.11.2_vs2017_release\addons\ofxEmotiBit\EmotiBitOscilloscope`.
+2. If prompted to install extra components in the solution explorer menu, click on the install button to proceed.
+3. Build and run the solution file in the debug profile once all components have been installed. If the build fails, retarget the solution to the latest version (10.0 Windows SDK version, v143 build tools).
+
+### Notes
+
+- The default components in the VS 2022 setup differ from those in the setup guide on the official [openFrameworks website](https://openframeworks.cc/setup/vs/), which uses VS 2019. Notably, the following components are specific to VS 2022 and must be included in our setup:
+   - MSVC v143 - VS 2022 C++ x64/x86 build tools
+   - Windows 11 SDK
+   - vcpkg package manager
+   - GitHub Copilot (optional)
+   - MSVC v141 - VS 2017 C++ x64/x86 build tools (v14.16), not in the default components list but necessary for our build.
 
 ## macOS 
 ### Note on using M1 macs (apple silicon)
