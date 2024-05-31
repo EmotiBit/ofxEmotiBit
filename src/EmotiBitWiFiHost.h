@@ -16,6 +16,7 @@
 #include "EmotiBitPacket.h"
 #include "EmotiBitComms.h"
 #include "DoubleBuffer.h"
+#include "json/json.h"
 
 using namespace EmotiBit;
 
@@ -28,15 +29,19 @@ public:
 	bool isAvailable;
 	uint64_t lastSeen;
 	// Additional parameters like Name, Fs etc can be stored in this struct
+	// ToDo: Consider if a copy/assignment constructor is needed
 };
 
 class EmotiBitWiFiHost
 {
 public:
 
-	struct HostAdvertisingSettings {
-		int sendAdvertisingInterval = 1000;
-		int checkAdvertisingInterval = 100;
+	struct WifiHostSettings {
+		int sendAdvertisingInterval = 1000; // msec interval between advertising blasts
+		int checkAdvertisingInterval = 100; // msec interval between checks for advertising replies
+		int advertisingThreadSleep = 0;	// usec duration to sleep between thread loops
+		int dataThreadSleep = 0;	// usec duration to sleep between thread loops
+
 		bool enableBroadcast = true;
 
 		bool enableUnicast = true;
@@ -46,12 +51,11 @@ public:
 
 		vector<string> networkIncludeList = { "*.*.*.*" };
 		vector<string> networkExcludeList = { "" };
-	} _hostAdvSettings;
+	} _wifiHostSettings;
 
 	static const uint8_t SUCCESS = 0;
 	static const uint8_t FAIL = -1;
 
-	uint16_t advertisingInterval = 500; // Milliseconds between sending advertising messages
 	uint16_t startCxnInterval = 100;
 
 	ofxUDPManager advertisingCxn;
@@ -63,7 +67,7 @@ public:
 
 	std::mutex controlCxnMutex;
 	std::mutex dataCxnMutex;
-	std::mutex emotibitIpsMutex;
+	std::mutex discoveredEmotibitsMutex;
 
 	uint16_t advertisingPort;
 	uint16_t _dataPort;
@@ -151,16 +155,30 @@ public:
 	bool isInNetworkList(string ipAddress, vector<string> networkList);
 
 	/*!
+	@brief Parses EmotiBit host comm settings
+	@param jsonStr comm settings in JSON format
+	*/
+	void parseCommSettings(string jsonStr);
+
+	/*!
 	@brief Sets EmotiBit host advertising settings
 	@param settings
 	*/
-	void setHostAdvertisingSettings(HostAdvertisingSettings settings);
+	void setWifiHostSettings(WifiHostSettings settings);
 
 	/*!
 	@brief Gets EmotiBit host advertising settings
 	@return settings
 	*/
-	HostAdvertisingSettings getHostAdvertisingSettings();
+	WifiHostSettings getWifiHostSettings();
 
 	string ofGetTimestampString(const string& timestampFormat); // Adds %f for microseconds
+
+	/*!
+	@brief Handles sleeping or yeilding the the active thread
+	@param sleepMicros <0 does nothing, ==0 yeilds, >0 sleep_for
+	*/
+	void threadSleepFor(int sleepMicros);
 };
+
+

@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_035E65D14956411FBCFB1DDC52718414"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_09DAAB9D863247E8AAEFAC04DC9CD710"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -39,8 +45,38 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_19E689DBF3E640FE8A3A5C1CA96D4F76"
+        "MsmKey" = "8:_1A6B520E65853D2D001420498E0229EF"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1DC8CF26848AA8DF3B9C7CB601221E22"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_200A86DDCAE94E3C84A6A64AECD8BF71"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_254182FC1726453A8CFE04B447FB54AD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_366FDC7AABA65191D30C50D645291177"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3AC81B4F8FBBC963A4AF164E3AF9C743"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -57,14 +93,50 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_42132035CB44FCAE68B35AD8B977331E"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_453891892B01446C8601E69FEE76E313"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_46A54CF4AD87488CE26A2AF3BA8DCBDA"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4C39C78116C63DB48E74B0E2E0259272"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4DF3059B520845ABAE777FC860C062EC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_4EE99D8BC0E13E82E89F711350CE271C"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_549AE158B4E049DCA79C34437E8BB70A"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_55CD4DA9A83C24461E927996D15BFC9C"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -87,12 +159,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_60D9F1C224534E43958F67FFD362F83B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_67D43D82DC374115A73AC1635EBCCC1D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -101,6 +167,12 @@
         {
         "MsmKey" = "8:_7C700E7CF06A4688B1FFA6EC8646FFB1"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_896DFDD2A3B6DEE0285DD7F337B5FDFB"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -123,6 +195,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_95E27684D92F8FC013AF22C06DF06233"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_9E0AFA67A7994EFF9DB146ABDA1C869B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -135,8 +213,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A1853329329D45EF91756D4A4E528C4D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_AB3747EFFBEA4F049702A22889882904"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AEB5882CD16C7B7B2C60A709C1386B19"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -147,8 +237,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_AFF8A3DAF9A745D485A5645151DEA2B3"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_B012CF43E71C26ADBAD7B23171E66667"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -183,6 +273,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C89A014D3D53E306B7F0D32603E1ED3B"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CAB42867419D981B2187B949750D1EDD"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CBD44F5B384C49ECADB878E52275966E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -191,6 +293,12 @@
         {
         "MsmKey" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CDA2D4C418906A60D5A79EBE993056F1"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -219,14 +327,44 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D9AB557BFB7D7A08FA8F944BA75F804D"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DAACD815D4A526683CEC479AC1AEFA79"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_DB3F2885C3D74A6F8319120EF35E8C1C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_DBCFDEC901C66AF6E2DB749F583FBF6D"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_DDD74DD568A7423BB753F2E589DD6BB1"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DE9C1323F981947E1A205D40F8F26FF7"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E1D27AFF5DD849DA98FB85417057D2DF"
+        "OwnerKey" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -255,7 +393,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F9684704357E411AAE96E8F605C92F7D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FA42CE2E369C43AC8AC60FB4457C851B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FA5D076B871B4215919378C57ADF7282"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -366,6 +516,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_035E65D14956411FBCFB1DDC52718414"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\fmod.dll"
+            "TargetName" = "8:fmod.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0E411FC72F5F4B86B5A20F5E76B9EC8C"
             {
             "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\lsl.dll"
@@ -406,12 +576,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_19E689DBF3E640FE8A3A5C1CA96D4F76"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1A6B520E65853D2D001420498E0229EF"
             {
-            "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\fmodex64.dll"
-            "TargetName" = "8:fmodex64.dll"
+            "SourcePath" = "8:SETUPAPI.dll"
+            "TargetName" = "8:SETUPAPI.dll"
             "Tag" = "8:"
-            "Folder" = "8:_1BD84CAF3E114DD98E922771E8E9F9E5"
+            "Folder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1DC8CF26848AA8DF3B9C7CB601221E22"
+            {
+            "SourcePath" = "8:VCRUNTIME140.dll"
+            "TargetName" = "8:VCRUNTIME140.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_200A86DDCAE94E3C84A6A64AECD8BF71"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\data\\lslOutputSettings.json"
+            "TargetName" = "8:lslOutputSettings.json"
+            "Tag" = "8:"
+            "Folder" = "8:_F64D9B09A4D2488E87CD314A5BA25F9C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -424,6 +634,66 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_254182FC1726453A8CFE04B447FB54AD"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\fmodL.dll"
+            "TargetName" = "8:fmodL.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_366FDC7AABA65191D30C50D645291177"
+            {
+            "SourcePath" = "8:MSVCP140.dll"
+            "TargetName" = "8:MSVCP140.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3AC81B4F8FBBC963A4AF164E3AF9C743"
+            {
+            "SourcePath" = "8:api-ms-win-crt-string-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-string-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_406DBE6B2FF54BBBB183D610E0E7C911"
@@ -466,6 +736,86 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_42132035CB44FCAE68B35AD8B977331E"
+            {
+            "SourcePath" = "8:WLDAP32.dll"
+            "TargetName" = "8:WLDAP32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_453891892B01446C8601E69FEE76E313"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\fmod.dll"
+            "TargetName" = "8:fmod.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_46A54CF4AD87488CE26A2AF3BA8DCBDA"
+            {
+            "SourcePath" = "8:api-ms-win-crt-locale-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-locale-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4C39C78116C63DB48E74B0E2E0259272"
+            {
+            "SourcePath" = "8:OPENGL32.dll"
+            "TargetName" = "8:OPENGL32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4DF3059B520845ABAE777FC860C062EC"
             {
             "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\instructions\\plugInEmotiBit.jpg"
@@ -484,6 +834,46 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4EE99D8BC0E13E82E89F711350CE271C"
+            {
+            "SourcePath" = "8:api-ms-win-crt-multibyte-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-multibyte-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_55CD4DA9A83C24461E927996D15BFC9C"
+            {
+            "SourcePath" = "8:api-ms-win-crt-stdio-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-stdio-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_573EDE4C81504714B07175620DA56C97"
@@ -512,26 +902,6 @@
             "TargetName" = "8:ofxOscilloscopeSettings.xml"
             "Tag" = "8:"
             "Folder" = "8:_F64D9B09A4D2488E87CD314A5BA25F9C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_60D9F1C224534E43958F67FFD362F83B"
-            {
-            "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\fmodex64.dll"
-            "TargetName" = "8:fmodex64.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -586,6 +956,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_896DFDD2A3B6DEE0285DD7F337B5FDFB"
+            {
+            "SourcePath" = "8:FreeImage.dll"
+            "TargetName" = "8:FreeImage.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8B56ED3DDA944E18BF078A2C36EBF868"
             {
             "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\data\\verdanab.ttf"
@@ -624,6 +1014,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_95E27684D92F8FC013AF22C06DF06233"
+            {
+            "SourcePath" = "8:api-ms-win-crt-time-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-time-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9E0AFA67A7994EFF9DB146ABDA1C869B"
@@ -666,6 +1076,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A1853329329D45EF91756D4A4E528C4D"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitDataParser\\bin\\fmod.dll"
+            "TargetName" = "8:fmod.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_1BD84CAF3E114DD98E922771E8E9F9E5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AEB5882CD16C7B7B2C60A709C1386B19"
+            {
+            "SourcePath" = "8:api-ms-win-crt-runtime-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-runtime-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AF1B42BB96F8425A8C0BF9D88C6EC0E7"
             {
             "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\verdanab.ttf"
@@ -686,10 +1136,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AFF8A3DAF9A745D485A5645151DEA2B3"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B012CF43E71C26ADBAD7B23171E66667"
             {
-            "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\fmodex64.dll"
-            "TargetName" = "8:fmodex64.dll"
+            "SourcePath" = "8:CRYPT32.dll"
+            "TargetName" = "8:CRYPT32.dll"
             "Tag" = "8:"
             "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
             "Condition" = "8:"
@@ -703,7 +1153,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B9C232756DB145AC85845A5F569075E5"
@@ -806,6 +1256,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C89A014D3D53E306B7F0D32603E1ED3B"
+            {
+            "SourcePath" = "8:fmod.dll"
+            "TargetName" = "8:fmod.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CAB42867419D981B2187B949750D1EDD"
+            {
+            "SourcePath" = "8:api-ms-win-crt-utility-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-utility-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CBD44F5B384C49ECADB878E52275966E"
             {
             "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\EmotiBit_stock_firmware.ino.feather_m0.bin"
@@ -844,6 +1334,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CDA2D4C418906A60D5A79EBE993056F1"
+            {
+            "SourcePath" = "8:api-ms-win-crt-convert-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-convert-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CFD096B21C324AAC94653AA781ECEB90"
@@ -926,6 +1436,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D9AB557BFB7D7A08FA8F944BA75F804D"
+            {
+            "SourcePath" = "8:api-ms-win-crt-math-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-math-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DAACD815D4A526683CEC479AC1AEFA79"
+            {
+            "SourcePath" = "8:COMDLG32.dll"
+            "TargetName" = "8:COMDLG32.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DB3F2885C3D74A6F8319120EF35E8C1C"
             {
             "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\WINC\\FirmwareUpdater.ino.feather_m0.bin"
@@ -946,6 +1496,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DBCFDEC901C66AF6E2DB749F583FBF6D"
+            {
+            "SourcePath" = "8:api-ms-win-crt-filesystem-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-filesystem-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DDD74DD568A7423BB753F2E589DD6BB1"
             {
             "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\data\\esp32\\boot_app0.bin"
@@ -964,6 +1534,46 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DE9C1323F981947E1A205D40F8F26FF7"
+            {
+            "SourcePath" = "8:api-ms-win-crt-heap-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-heap-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E1D27AFF5DD849DA98FB85417057D2DF"
+            {
+            "SourcePath" = "8:api-ms-win-crt-environment-l1-1-0.dll"
+            "TargetName" = "8:api-ms-win-crt-environment-l1-1-0.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E374BE29CA334E0A8ADEA80FAF993F5D"
@@ -1026,12 +1636,52 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F9684704357E411AAE96E8F605C92F7D"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitDataParser\\bin\\fmodL.dll"
+            "TargetName" = "8:fmodL.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_1BD84CAF3E114DD98E922771E8E9F9E5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FA42CE2E369C43AC8AC60FB4457C851B"
             {
             "SourcePath" = "8:..\\..\\EmotiBitOscilloscope\\bin\\FreeImage.dll"
             "TargetName" = "8:FreeImage.dll"
             "Tag" = "8:"
             "Folder" = "8:_D13ABFFB264C46BA9942EDB2CE4C932D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FA5D076B871B4215919378C57ADF7282"
+            {
+            "SourcePath" = "8:..\\..\\EmotiBitFirmwareInstaller\\bin\\fmodL.dll"
+            "TargetName" = "8:fmodL.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1234,15 +1884,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EmotiBit"
-        "ProductCode" = "8:{309C4494-C5B9-45BE-BD98-5E15AF155B6E}"
-        "PackageCode" = "8:{8304DB2C-5530-45F1-AD0E-3D053B37BC44}"
+        "ProductCode" = "8:{D74C278E-3E0C-40AC-B4C1-56D5A518A45D}"
+        "PackageCode" = "8:{F4BDC302-6B3A-419C-AC3F-6416E44DB1D9}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.8.4"
+        "ProductVersion" = "8:1.11.1"
         "Manufacturer" = "8:EmotiBit"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1369,6 +2019,20 @@
             "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_69F5BD394E274EA698A1BCC75616CE8D"
+            {
+            "Name" = "8:EmotiBitFirmwareInstaller"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+            "Folder" = "8:_84F262CF2C8A40EFA3BC9D4164DCC4EE"
+            "WorkingFolder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_82DFEE41B67C4D61A896006CA5E784F4"
             {
             "Name" = "8:EmotiBit DataParser"
@@ -1397,6 +2061,20 @@
             "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B51FD5F9C690426DA361E2B017739029"
+            {
+            "Name" = "8:EmotiBitFirmwareInstaller"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
+            "Folder" = "8:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
+            "WorkingFolder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CE21AE5EA4EE48A39E8F930723363413"
             {
             "Name" = "8:EmotiBit DataParser"
@@ -1408,34 +2086,6 @@
             "Target" = "8:_549AE158B4E049DCA79C34437E8BB70A"
             "Folder" = "8:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
             "WorkingFolder" = "8:_1BD84CAF3E114DD98E922771E8E9F9E5"
-            "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D7C1125FE6A244D2AEAE09D0E0E4686F"
-            {
-            "Name" = "8:EmotiBit FirmwareInstaller"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
-            "Folder" = "8:_84F262CF2C8A40EFA3BC9D4164DCC4EE"
-            "WorkingFolder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
-            "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F55EFC24351F435DA2920D4FDD191074"
-            {
-            "Name" = "8:EmotiBit FirmwareInstaller"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
-            "Folder" = "8:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
-            "WorkingFolder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
             "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }

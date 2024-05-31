@@ -85,9 +85,6 @@
     <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.cpp">
       <Filter>addons\ofxOscilloscope\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOscilloscope\src\patchboard.cpp">
-      <Filter>addons\ofxOscilloscope\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.cpp">
       <Filter>addons\ofxThreadedLogger\src</Filter>
     </ClCompile>
@@ -327,9 +324,6 @@
       <Filter>addons\ofxNetworkUtils\libs\ofxNetworkUtils\include\ofx\Net</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\ofxOscilloscope.h">
-      <Filter>addons\ofxOscilloscope\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOscilloscope\src\patchboard.h">
       <Filter>addons\ofxOscilloscope\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxThreadedLogger\src\ofxThreadedLogger.h">

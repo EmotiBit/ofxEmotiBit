@@ -110,9 +110,6 @@
     <ClCompile Include="src\ThreadedSystemCall.cpp" />
     <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.cpp" />
     <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitWiFiHost.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\Signal\Periodizer.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxColorPicker.cpp" />
@@ -217,12 +214,6 @@
     <ClInclude Include="src\ThreadedSystemCall.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ArduinoString.h" />
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h" />
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.h" />
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitWiFiHost.h" />
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ofxEmotiBitVersion.h" />
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\Signal\Periodizer.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h" />
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxColorPicker.h" />

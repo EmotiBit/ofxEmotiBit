@@ -52,8 +52,9 @@ cd ..
 
 ## macOS 
 ### Note on using M1 macs (apple silicon)
-- If you are using the new M1 macs, then make sure to use Rosetta installed in xcode.
-- EmotiBit software has not been officially tested on M1/M2 macs. If you are building on these systems, please let the community know on the [forum](http://forum.emotibit.com) about any additional steps you had to take get the source to build!
+- Building from source on Apple Silicon macs is not yet supported. 
+- We are working on compiling a list of changes required to build on Apple silicon macs and will make that patch as soon as possible.
+
 ### Setting up xcode project
 - **Adding paths to Library search paths**
   - Check if the directory paths for the files `liblsl64-static.a` and `liblslboost.a` are already present in the `project` > `Build Settings` > `Library Search Paths`. If they are not present, follow the below steps:  
