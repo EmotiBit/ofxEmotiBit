@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofmain.h"
+#include "ofMain.h"
 
 namespace EmotiBit
 {
