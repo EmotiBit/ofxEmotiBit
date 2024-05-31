@@ -1584,7 +1584,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nrsync -aved \"$OF_PATH/addons/ofxLSL/libs/labstreaminglayer/lib/osx/liblsl.1.14.0.dylib\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/\";\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nrsync -aved \"$OF_PATH/addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64/liblsl.1.14.0.dylib\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/\";\n";
 		};
 		E42962A92163ECCD00A6A9E2 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1813,7 +1813,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2031,7 +2031,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2111,7 +2111,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
