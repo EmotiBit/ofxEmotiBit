@@ -70,6 +70,75 @@
 		B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */; };
 		B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */; };
 		B65D7C8C591DF95D595E2053 /* NetworkInterfaceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44D29F961AB993B629D7C467 /* NetworkInterfaceListener.cpp */; };
+		B990E5B92C0E7A370094B63E /* SoftwareVersionChecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBAB2B1F824D00CDD443 /* SoftwareVersionChecker.cpp */; };
+		B990E5BA2C0E7A370094B63E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
+		B990E5BB2C0E7A370094B63E /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
+		B990E5BC2C0E7A370094B63E /* ofxBiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E6502FFB31969C644E02C1 /* ofxBiquadFilter.cpp */; };
+		B990E5BD2C0E7A370094B63E /* ofxBiquadFilterInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F32C175B3E53B0864752B5D7 /* ofxBiquadFilterInstance.cpp */; };
+		B990E5BE2C0E7A370094B63E /* EmotiBitFactoryTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F782832CE28005D7C65 /* EmotiBitFactoryTest.cpp */; };
+		B990E5BF2C0E7A370094B63E /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F6D2832CB73005D7C65 /* jsoncpp.cpp */; };
+		B990E5C02C0E7A370094B63E /* EmotiBitTestingHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A8815F94AF8B1A79DAF932B /* EmotiBitTestingHelper.cpp */; };
+		B990E5C12C0E7A370094B63E /* EmotiBitWiFiHost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEA793E39D386EF32CB1ADD /* EmotiBitWiFiHost.cpp */; };
+		B990E5C22C0E7A370094B63E /* EmotiBitLsl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBD02BB3B46400CDD443 /* EmotiBitLsl.cpp */; };
+		B990E5C32C0E7A370094B63E /* EmotiBitEdaCalibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F732832CE28005D7C65 /* EmotiBitEdaCalibration.cpp */; };
+		B990E5C42C0E7A370094B63E /* ofxLSLResolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 948E6B5128528CA5000A8B76 /* ofxLSLResolver.cpp */; };
+		B990E5C52C0E7A370094B63E /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9604B925D32EE39065747725 /* ofxBaseGui.cpp */; };
+		B990E5C62C0E7A370094B63E /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C88333E71C9457E441C33474 /* ofxButton.cpp */; };
+		B990E5C72C0E7A370094B63E /* PatchboardJson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBC72BB3B2BF00CDD443 /* PatchboardJson.cpp */; };
+		B990E5C82C0E7A370094B63E /* ofxColorPicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 181D363B6DD54D1FA6309C43 /* ofxColorPicker.cpp */; };
+		B990E5C92C0E7A370094B63E /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */; };
+		B990E5CA2C0E7A370094B63E /* ofxInputField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44B351490B620D04E1E7C52D /* ofxInputField.cpp */; };
+		B990E5CB2C0E7A370094B63E /* DigitalFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F752832CE28005D7C65 /* DigitalFilter.cpp */; };
+		B990E5CC2C0E7A370094B63E /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78D67A00EB899FAC09430597 /* ofxLabel.cpp */; };
+		B990E5CD2C0E7A370094B63E /* Periodizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F832832CE82005D7C65 /* Periodizer.cpp */; };
+		B990E5CE2C0E7A370094B63E /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */; };
+		B990E5CF2C0E7A370094B63E /* ofxSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15F2C6477A769C03A56D1401 /* ofxSlider.cpp */; };
+		B990E5D02C0E7A370094B63E /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */; };
+		B990E5D12C0E7A370094B63E /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907C5B5E104864A2D3A25745 /* ofxToggle.cpp */; };
+		B990E5D22C0E7A370094B63E /* ofxNetworkUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE30B18B42BAF0E92CB140E5 /* ofxNetworkUtils.cpp */; };
+		B990E5D32C0E7A370094B63E /* ofxLSLReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 948E6B4E28528CA5000A8B76 /* ofxLSLReceiver.cpp */; };
+		B990E5D42C0E7A370094B63E /* EmotiBitOfUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBD32BB3B46400CDD443 /* EmotiBitOfUtils.cpp */; };
+		B990E5D52C0E7A370094B63E /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F762832CE28005D7C65 /* EmotiBitPacket.cpp */; };
+		B990E5D62C0E7A370094B63E /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */; };
+		B990E5D72C0E7A370094B63E /* ofxTCPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F399B91E98DC31CDA6DDACB4 /* ofxTCPManager.cpp */; };
+		B990E5D82C0E7A370094B63E /* ofxTCPServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1C085E327DAB912CFA2A443D /* ofxTCPServer.cpp */; };
+		B990E5D92C0E7A370094B63E /* ofxUDPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 35BB9BB90DBABFD3B39F8DB6 /* ofxUDPManager.cpp */; };
+		B990E5DA2C0E7A370094B63E /* ofxXmlPoco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9998694E5001F9CF0B13BF0 /* ofxXmlPoco.cpp */; };
+		B990E5DB2C0E7A370094B63E /* IPAddressRange.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FA5A4362497FA77DF9B5A19 /* IPAddressRange.cpp */; };
+		B990E5DC2C0E7A370094B63E /* NetworkInterfaceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44D29F961AB993B629D7C467 /* NetworkInterfaceListener.cpp */; };
+		B990E5DD2C0E7A370094B63E /* NetworkUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B557FD8519CC0900FAB1DCA2 /* NetworkUtils.cpp */; };
+		B990E5DE2C0E7A370094B63E /* ofxNetworkUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14A43221DDD441A2AC353651 /* ofxNetworkUtils.cpp */; };
+		B990E5DF2C0E7A370094B63E /* PatchboardBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBCC2BB3B2BF00CDD443 /* PatchboardBase.cpp */; };
+		B990E5E02C0E7A370094B63E /* IpEndpointName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADD194746185E2DA11468377 /* IpEndpointName.cpp */; };
+		B990E5E12C0E7A370094B63E /* NetworkingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B361208CD4107E479F04E7B /* NetworkingUtils.cpp */; };
+		B990E5E22C0E7A370094B63E /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F612832CAFE005D7C65 /* ofxJSONElement.cpp */; };
+		B990E5E32C0E7A370094B63E /* UdpSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6DEF695B88BA5FAACEAA937 /* UdpSocket.cpp */; };
+		B990E5E42C0E7A370094B63E /* OscOutboundPacketStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 63A47AC60FFAFC3BF093EC0F /* OscOutboundPacketStream.cpp */; };
+		B990E5E52C0E7A370094B63E /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC8881B3C8C0A1C45F042E7A /* OscPrintReceivedElements.cpp */; };
+		B990E5E62C0E7A370094B63E /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9BF3AA0D4FAA89D0F8A0E545 /* OscReceivedElements.cpp */; };
+		B990E5E72C0E7A370094B63E /* PatchboardXml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBC92BB3B2BF00CDD443 /* PatchboardXml.cpp */; };
+		B990E5E82C0E7A370094B63E /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9BFFBBF4CC43DEE890B3C3E /* OscTypes.cpp */; };
+		B990E5E92C0E7A370094B63E /* ofxOscBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EEFA3DA3526E9CDD9C21F9 /* ofxOscBundle.cpp */; };
+		B990E5EA2C0E7A370094B63E /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF49D76C45D5DB505A234880 /* ofxOscMessage.cpp */; };
+		B990E5EB2C0E7A370094B63E /* ofxOscParameterSync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0AED834CE4DEC5260AF302A2 /* ofxOscParameterSync.cpp */; };
+		B990E5EC2C0E7A370094B63E /* ofxOscReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C2FAC65C491D4231379F3298 /* ofxOscReceiver.cpp */; };
+		B990E5ED2C0E7A370094B63E /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81967292BFC87A0144BD32C6 /* ofxOscSender.cpp */; };
+		B990E5EE2C0E7A370094B63E /* ofxOscilloscope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FF0DE1E8ABD60252EE51633 /* ofxOscilloscope.cpp */; };
+		B990E5EF2C0E7A370094B63E /* ofxThreadedLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6D75E57C2EB53518090D07A /* ofxThreadedLogger.cpp */; };
+		B990E5F02C0E7A370094B63E /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */; };
+		B990E5F12C0E7A370094B63E /* EmotiBitVariants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F722832CE28005D7C65 /* EmotiBitVariants.cpp */; };
+		B990E5F22C0E7A370094B63E /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832BDC407620CDBA568B713D /* tinyxmlerror.cpp */; };
+		B990E5F32C0E7A370094B63E /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC5DA1C87211D4F6377DA719 /* tinyxmlparser.cpp */; };
+		B990E5F42C0E7A370094B63E /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */; };
+		B990E5F62C0E7A370094B63E /* liblsl.1.14.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 948E6B5528528E34000A8B76 /* liblsl.1.14.0.dylib */; };
+		B990E5F92C0E7A370094B63E /* lslOutputSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E07BBD62BB3B5D200CDD443 /* lslOutputSettings.json */; };
+		B990E5FA2C0E7A370094B63E /* udpOutputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E012CDD29A5B157009FB530 /* udpOutputSettings.xml */; };
+		B990E5FB2C0E7A370094B63E /* emotibitCommSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E016F852832D594005D7C65 /* emotibitCommSettings.json */; };
+		B990E5FC2C0E7A370094B63E /* inputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E827C978BE00959DDB /* inputSettings.xml */; };
+		B990E5FD2C0E7A370094B63E /* ofxOscilloscopeSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */; };
+		B990E5FE2C0E7A370094B63E /* oscOutputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB525B8EA3200BB7E84 /* oscOutputSettings.xml */; };
+		B990E5FF2C0E7A370094B63E /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB225B8E62400BB7E84 /* verdana.ttf */; };
+		B990E6002C0E7A370094B63E /* verdanab.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB125B8E62400BB7E84 /* verdanab.ttf */; };
 		C4782ECC372420ACE0615B74 /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC8881B3C8C0A1C45F042E7A /* OscPrintReceivedElements.cpp */; };
 		D820615CFDD5F497033D7C5A /* ofxBiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E6502FFB31969C644E02C1 /* ofxBiquadFilter.cpp */; };
 		E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 35BB9BB90DBABFD3B39F8DB6 /* ofxUDPManager.cpp */; };
@@ -79,6 +148,23 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		B990E5F82C0E7A370094B63E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				B990E5F92C0E7A370094B63E /* lslOutputSettings.json in CopyFiles */,
+				B990E5FA2C0E7A370094B63E /* udpOutputSettings.xml in CopyFiles */,
+				B990E5FB2C0E7A370094B63E /* emotibitCommSettings.json in CopyFiles */,
+				B990E5FC2C0E7A370094B63E /* inputSettings.xml in CopyFiles */,
+				B990E5FD2C0E7A370094B63E /* ofxOscilloscopeSettings.xml in CopyFiles */,
+				B990E5FE2C0E7A370094B63E /* oscOutputSettings.xml in CopyFiles */,
+				B990E5FF2C0E7A370094B63E /* verdana.ttf in CopyFiles */,
+				B990E6002C0E7A370094B63E /* verdanab.ttf in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -274,6 +360,7 @@
 		B62DC455BB791E69D877D3B6 /* blowfish.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = blowfish.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/blowfish.h; sourceTree = SOURCE_ROOT; };
 		B65483D96A9E876D46C93373 /* srtp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = srtp.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/srtp.h; sourceTree = SOURCE_ROOT; };
 		B87C60311EC1FE841C1ECD89 /* ofxLabel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxLabel.h; path = ../../../addons/ofxGui/src/ofxLabel.h; sourceTree = SOURCE_ROOT; };
+		B990E6072C0E7A370094B63E /* EmotiBitOscilloscope-arm64.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EmotiBitOscilloscope-arm64.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA274EC7A169D538BD43A5D8 /* ofxGuiUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxGuiUtils.h; path = ../../../addons/ofxGui/src/ofxGuiUtils.h; sourceTree = SOURCE_ROOT; };
 		BAE45B5EDF2D519E39986297 /* ofxNetworkUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxNetworkUtils.h; path = ../../../addons/ofxNetworkUtils/src/ofxNetworkUtils.h; sourceTree = SOURCE_ROOT; };
 		BC8881B3C8C0A1C45F042E7A /* OscPrintReceivedElements.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = OscPrintReceivedElements.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscPrintReceivedElements.cpp; sourceTree = SOURCE_ROOT; };
@@ -479,7 +566,7 @@
 		E42963712163EDD300A6A9E2 /* ofFmodSoundPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofFmodSoundPlayer.h; path = ../../../libs/openFrameworks/sound/ofFmodSoundPlayer.h; sourceTree = SOURCE_ROOT; };
 		E42963722163EDD300A6A9E2 /* ofSoundBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ofSoundBuffer.cpp; path = ../../../libs/openFrameworks/sound/ofSoundBuffer.cpp; sourceTree = SOURCE_ROOT; };
 		E42963732163EDD300A6A9E2 /* ofSoundBaseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofSoundBaseTypes.h; path = ../../../libs/openFrameworks/sound/ofSoundBaseTypes.h; sourceTree = SOURCE_ROOT; };
-		E4B69B5B0A3A1756003C02F2 /* EmotiBitOscilloscope-Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EmotiBitOscilloscope-Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* EmotiBitOscilloscope-x86_64-Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EmotiBitOscilloscope-x86_64-Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
@@ -503,6 +590,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B990E5F52C0E7A370094B63E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B990E5F62C0E7A370094B63E /* liblsl.1.14.0.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4B69B590A3A1756003C02F2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1445,8 +1540,9 @@
 				E42962AA2163EDD300A6A9E2 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				6948EE371B920CB800B5AC1A /* local_addons */,
-				E4B69B5B0A3A1756003C02F2 /* EmotiBitOscilloscope-Debug.app */,
+				E4B69B5B0A3A1756003C02F2 /* EmotiBitOscilloscope-x86_64-Debug.app */,
 				948E6B5428528E33000A8B76 /* Frameworks */,
+				B990E6072C0E7A370094B63E /* EmotiBitOscilloscope-arm64.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1504,9 +1600,30 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* EmotiBitOscilloscope */ = {
+		B990E5B62C0E7A370094B63E /* EmotiBitOscilloscope-arm64 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "EmotiBitOscilloscope" */;
+			buildConfigurationList = B990E6032C0E7A370094B63E /* Build configuration list for PBXNativeTarget "EmotiBitOscilloscope-arm64" */;
+			buildPhases = (
+				B990E5B72C0E7A370094B63E /* ShellScript */,
+				B990E5B82C0E7A370094B63E /* Sources */,
+				B990E5F52C0E7A370094B63E /* Frameworks */,
+				B990E5F72C0E7A370094B63E /* ShellScript */,
+				B990E5F82C0E7A370094B63E /* CopyFiles */,
+				B990E6012C0E7A370094B63E /* ShellScript */,
+				B990E6022C0E7A370094B63E /* Run Script */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "EmotiBitOscilloscope-arm64";
+			productName = myOFApp;
+			productReference = B990E6072C0E7A370094B63E /* EmotiBitOscilloscope-arm64.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E4B69B5A0A3A1756003C02F2 /* EmotiBitOscilloscope-x86_64 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "EmotiBitOscilloscope-x86_64" */;
 			buildPhases = (
 				E42962A92163ECCD00A6A9E2 /* ShellScript */,
 				E4B69B580A3A1756003C02F2 /* Sources */,
@@ -1520,9 +1637,9 @@
 			);
 			dependencies = (
 			);
-			name = EmotiBitOscilloscope;
+			name = "EmotiBitOscilloscope-x86_64";
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* EmotiBitOscilloscope-Debug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* EmotiBitOscilloscope-x86_64-Debug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1549,7 +1666,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E4B69B5A0A3A1756003C02F2 /* EmotiBitOscilloscope */,
+				B990E5B62C0E7A370094B63E /* EmotiBitOscilloscope-arm64 */,
+				E4B69B5A0A3A1756003C02F2 /* EmotiBitOscilloscope-x86_64 */,
 			);
 		};
 /* End PBXProject section */
@@ -1586,6 +1704,63 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nrsync -aved \"$OF_PATH/addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64/liblsl.1.14.0.dylib\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/\";\n";
 		};
+		B990E5B72C0E7A370094B63E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "xcodebuild -project \"$OF_PATH/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj\" -target openFrameworks -configuration \"${CONFIGURATION}\"\n";
+		};
+		B990E5F72C0E7A370094B63E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mkdir -p \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\n# Copy default icon file into App/Resources\nrsync -aved \"$ICON_FILE\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\n# Copy libfmod and change install directory for fmod to run\nrsync -aved \"$OF_PATH/libs/fmod/lib/osx/libfmod.dylib\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/\";\ninstall_name_tool -change @executable_path/libfmodex.dylib @executable_path/../Frameworks/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\n\necho \"$GCC_PREPROCESSOR_DEFINITIONS\";\n";
+		};
+		B990E6012C0E7A370094B63E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"$GCC_PREPROCESSOR_DEFINITIONS\";\nAPPSTORE=`expr \"$GCC_PREPROCESSOR_DEFINITIONS\" : \".*APPSTORE=\\([0-9]*\\)\"`\nif [ -z \"$APPSTORE\" ] ; then\necho \"Note: Not copying bin/data to App Package or doing App Code signing. Use AppStore target for AppStore distribution\";\nelse\n# Copy bin/data into App/Resources\nrsync -avz --exclude='.DS_Store' \"${SRCROOT}/bin/data/\" \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/data/\"\n\n# Strip 32bit from fmod dylib\nlipo -remove i386 \"${TARGET_BUILD_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/libfmod.dylib\" -o \"${TARGET_BUILD_DIR}/${PRODUCT_NAME}.app/Contents/Frameworks/libfmod.dylib\" \n\n# ---- Code Sign App Package ----\n\n# WARNING: You may have to run Clean in Xcode after changing CODE_SIGN_IDENTITY!\n\n# Verify that $CODE_SIGN_IDENTITY is set\nif [ -z \"${CODE_SIGN_IDENTITY}\" ] ; then\necho \"CODE_SIGN_IDENTITY needs to be set for framework code-signing\"\nexit 0\nfi\n\nif [ -z \"${CODE_SIGN_ENTITLEMENTS}\" ] ; then\necho \"CODE_SIGN_ENTITLEMENTS needs to be set for framework code-signing!\"\n\nif [ \"${CONFIGURATION}\" = \"Release\" ] ; then\nexit 1\nelse\n# Code-signing is optional for non-release builds.\nexit 0\nfi\nfi\n\nITEMS=\"\"\n\nFRAMEWORKS_DIR=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\necho \"$FRAMEWORKS_DIR\"\nif [ -d \"$FRAMEWORKS_DIR\" ] ; then\nFRAMEWORKS=$(find \"${FRAMEWORKS_DIR}\" -depth -type d -name \"*.framework\" -or -name \"*.dylib\" -or -name \"*.bundle\" | sed -e \"s/\\(.*framework\\)/\\1\\/Versions\\/A\\//\")\nRESULT=$?\nif [[ $RESULT != 0 ]] ; then\nexit 1\nfi\n\nITEMS=\"${FRAMEWORKS}\"\nfi\n\nLOGINITEMS_DIR=\"${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Library/LoginItems/\"\nif [ -d \"$LOGINITEMS_DIR\" ] ; then\nLOGINITEMS=$(find \"${LOGINITEMS_DIR}\" -depth -type d -name \"*.app\")\nRESULT=$?\nif [[ $RESULT != 0 ]] ; then\nexit 1\nfi\n\nITEMS=\"${ITEMS}\"$'\\n'\"${LOGINITEMS}\"\nfi\n\n# Prefer the expanded name, if available.\nCODE_SIGN_IDENTITY_FOR_ITEMS=\"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\"\nif [ \"${CODE_SIGN_IDENTITY_FOR_ITEMS}\" = \"\" ] ; then\n# Fall back to old behavior.\nCODE_SIGN_IDENTITY_FOR_ITEMS=\"${CODE_SIGN_IDENTITY}\"\nfi\n\necho \"Identity:\"\necho \"${CODE_SIGN_IDENTITY_FOR_ITEMS}\"\n\necho \"Entitlements:\"\necho \"${CODE_SIGN_ENTITLEMENTS}\"\n\necho \"Found:\"\necho \"${ITEMS}\"\n\n# Change the Internal Field Separator (IFS) so that spaces in paths will not cause problems below.\nSAVED_IFS=$IFS\nIFS=$(echo -en \"\\n\\b\")\n\n# Loop through all items.\nfor ITEM in $ITEMS;\ndo\necho \"Stripping invalid archs '${ITEM}'\"\nlipo -remove i386 \"${ITEM}\" -o \"${ITEM}\"\necho \"Signing '${ITEM}'\"\ncodesign --force --verbose --sign \"${CODE_SIGN_IDENTITY_FOR_ITEMS}\" --entitlements \"${CODE_SIGN_ENTITLEMENTS}\" \"${ITEM}\"\nRESULT=$?\nif [[ $RESULT != 0 ]] ; then\necho \"Failed to sign '${ITEM}'.\"\nIFS=$SAVED_IFS\nexit 1\nfi\ndone\n\n# Restore $IFS.\nIFS=$SAVED_IFS\n\nfi\n";
+		};
+		B990E6022C0E7A370094B63E /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nrsync -aved \"$OF_PATH/addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm/liblsl.1.14.0.dylib\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/\";\n";
+		};
 		E42962A92163ECCD00A6A9E2 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1615,6 +1790,73 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B990E5B82C0E7A370094B63E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B990E5B92C0E7A370094B63E /* SoftwareVersionChecker.cpp in Sources */,
+				B990E5BA2C0E7A370094B63E /* main.cpp in Sources */,
+				B990E5BB2C0E7A370094B63E /* ofApp.cpp in Sources */,
+				B990E5BC2C0E7A370094B63E /* ofxBiquadFilter.cpp in Sources */,
+				B990E5BD2C0E7A370094B63E /* ofxBiquadFilterInstance.cpp in Sources */,
+				B990E5BE2C0E7A370094B63E /* EmotiBitFactoryTest.cpp in Sources */,
+				B990E5BF2C0E7A370094B63E /* jsoncpp.cpp in Sources */,
+				B990E5C02C0E7A370094B63E /* EmotiBitTestingHelper.cpp in Sources */,
+				B990E5C12C0E7A370094B63E /* EmotiBitWiFiHost.cpp in Sources */,
+				B990E5C22C0E7A370094B63E /* EmotiBitLsl.cpp in Sources */,
+				B990E5C32C0E7A370094B63E /* EmotiBitEdaCalibration.cpp in Sources */,
+				B990E5C42C0E7A370094B63E /* ofxLSLResolver.cpp in Sources */,
+				B990E5C52C0E7A370094B63E /* ofxBaseGui.cpp in Sources */,
+				B990E5C62C0E7A370094B63E /* ofxButton.cpp in Sources */,
+				B990E5C72C0E7A370094B63E /* PatchboardJson.cpp in Sources */,
+				B990E5C82C0E7A370094B63E /* ofxColorPicker.cpp in Sources */,
+				B990E5C92C0E7A370094B63E /* ofxGuiGroup.cpp in Sources */,
+				B990E5CA2C0E7A370094B63E /* ofxInputField.cpp in Sources */,
+				B990E5CB2C0E7A370094B63E /* DigitalFilter.cpp in Sources */,
+				B990E5CC2C0E7A370094B63E /* ofxLabel.cpp in Sources */,
+				B990E5CD2C0E7A370094B63E /* Periodizer.cpp in Sources */,
+				B990E5CE2C0E7A370094B63E /* ofxPanel.cpp in Sources */,
+				B990E5CF2C0E7A370094B63E /* ofxSlider.cpp in Sources */,
+				B990E5D02C0E7A370094B63E /* ofxSliderGroup.cpp in Sources */,
+				B990E5D12C0E7A370094B63E /* ofxToggle.cpp in Sources */,
+				B990E5D22C0E7A370094B63E /* ofxNetworkUtils.cpp in Sources */,
+				B990E5D32C0E7A370094B63E /* ofxLSLReceiver.cpp in Sources */,
+				B990E5D42C0E7A370094B63E /* EmotiBitOfUtils.cpp in Sources */,
+				B990E5D52C0E7A370094B63E /* EmotiBitPacket.cpp in Sources */,
+				B990E5D62C0E7A370094B63E /* ofxTCPClient.cpp in Sources */,
+				B990E5D72C0E7A370094B63E /* ofxTCPManager.cpp in Sources */,
+				B990E5D82C0E7A370094B63E /* ofxTCPServer.cpp in Sources */,
+				B990E5D92C0E7A370094B63E /* ofxUDPManager.cpp in Sources */,
+				B990E5DA2C0E7A370094B63E /* ofxXmlPoco.cpp in Sources */,
+				B990E5DB2C0E7A370094B63E /* IPAddressRange.cpp in Sources */,
+				B990E5DC2C0E7A370094B63E /* NetworkInterfaceListener.cpp in Sources */,
+				B990E5DD2C0E7A370094B63E /* NetworkUtils.cpp in Sources */,
+				B990E5DE2C0E7A370094B63E /* ofxNetworkUtils.cpp in Sources */,
+				B990E5DF2C0E7A370094B63E /* PatchboardBase.cpp in Sources */,
+				B990E5E02C0E7A370094B63E /* IpEndpointName.cpp in Sources */,
+				B990E5E12C0E7A370094B63E /* NetworkingUtils.cpp in Sources */,
+				B990E5E22C0E7A370094B63E /* ofxJSONElement.cpp in Sources */,
+				B990E5E32C0E7A370094B63E /* UdpSocket.cpp in Sources */,
+				B990E5E42C0E7A370094B63E /* OscOutboundPacketStream.cpp in Sources */,
+				B990E5E52C0E7A370094B63E /* OscPrintReceivedElements.cpp in Sources */,
+				B990E5E62C0E7A370094B63E /* OscReceivedElements.cpp in Sources */,
+				B990E5E72C0E7A370094B63E /* PatchboardXml.cpp in Sources */,
+				B990E5E82C0E7A370094B63E /* OscTypes.cpp in Sources */,
+				B990E5E92C0E7A370094B63E /* ofxOscBundle.cpp in Sources */,
+				B990E5EA2C0E7A370094B63E /* ofxOscMessage.cpp in Sources */,
+				B990E5EB2C0E7A370094B63E /* ofxOscParameterSync.cpp in Sources */,
+				B990E5EC2C0E7A370094B63E /* ofxOscReceiver.cpp in Sources */,
+				B990E5ED2C0E7A370094B63E /* ofxOscSender.cpp in Sources */,
+				B990E5EE2C0E7A370094B63E /* ofxOscilloscope.cpp in Sources */,
+				B990E5EF2C0E7A370094B63E /* ofxThreadedLogger.cpp in Sources */,
+				B990E5F02C0E7A370094B63E /* tinyxml.cpp in Sources */,
+				B990E5F12C0E7A370094B63E /* EmotiBitVariants.cpp in Sources */,
+				B990E5F22C0E7A370094B63E /* tinyxmlerror.cpp in Sources */,
+				B990E5F32C0E7A370094B63E /* tinyxmlparser.cpp in Sources */,
+				B990E5F42C0E7A370094B63E /* ofxXmlSettings.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4B69B580A3A1756003C02F2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1814,6 +2056,249 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
+				);
+				OTHER_LDFLAGS = (
+					"$(OF_CORE_LIBS)",
+					"$(OF_CORE_FRAMEWORKS)",
+					"$(LIB_OF)",
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoNetSSL.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoNet.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoCrypto.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoUtil.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoJSON.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoXML.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoFoundation.a,
+					../../../addons/ofxPoco/libs/openssl/lib/osx/crypto.a,
+					../../../addons/ofxPoco/libs/openssl/lib/osx/ssl.a,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+				baseConfigurationReference = E4EB6923138AFD0F00A09F29;
+			};
+			name = AppStore;
+		};
+		B990E6042C0E7A370094B63E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = NONE;
+				GCC_PREPROCESSOR_DEFINITIONS = TARGET_MAC_OS;
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					src,
+					src,
+					../../../addons/ofxBiquadFilter/src,
+					../../../addons/ofxEmotiBit/src/Signal,
+					../../../addons/ofxEmotiBit/src,
+					../../../addons/ofxGui/src,
+					../../../addons/ofxLSL/libs,
+					../../../addons/ofxLSL/libs/labstreaminglayer,
+					../../../addons/ofxLSL/libs/labstreaminglayer/include,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/win64,
+					../../../addons/ofxLSL/src,
+					../../../addons/ofxNetwork/src,
+					../../../addons/ofxPoco/libs/poco/include,
+					../../../addons/ofxPoco/src,
+					../../../addons/ofxPoco/libs/openssl/include,
+					../../../addons/ofxNetworkUtils/libs,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx/Net,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/src,
+					../../../addons/ofxNetworkUtils/src,
+					../../../addons/ofxOsc/libs,
+					../../../addons/ofxOsc/libs/oscpack,
+					../../../addons/ofxOsc/libs/oscpack/src,
+					../../../addons/ofxOsc/libs/oscpack/src/ip,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/posix,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/win32,
+					../../../addons/ofxOsc/libs/oscpack/src/osc,
+					../../../addons/ofxOsc/src,
+					../../../addons/ofxOscilloscope/src,
+					../../../addons/ofxThreadedLogger/src,
+					../../../addons/ofxXmlSettings/libs,
+					../../../addons/ofxXmlSettings/src,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
+					../../../addons/ofxJSON/src,
+					../../../addons/EmotiBit_XPlat_Utils/src,
+				);
+				ICON = "$(ICON_NAME_DEBUG)";
+				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
+				INFOPLIST_FILE = "openFrameworks-Info.plist";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
+				);
+				OTHER_LDFLAGS = (
+					"$(OF_CORE_LIBS)",
+					"$(OF_CORE_FRAMEWORKS)",
+					"$(LIB_OF_DEBUG)",
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoNetSSL.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoNet.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoCrypto.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoUtil.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoJSON.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoXML.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoFoundation.a,
+					../../../addons/ofxPoco/libs/openssl/lib/osx/crypto.a,
+					../../../addons/ofxPoco/libs/openssl/lib/osx/ssl.a,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		B990E6052C0E7A370094B63E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = NONE;
+				GCC_PREPROCESSOR_DEFINITIONS = TARGET_MAC_OS;
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					src,
+					src,
+					../../../addons/ofxBiquadFilter/src,
+					../../../addons/ofxEmotiBit/src/Signal,
+					../../../addons/ofxEmotiBit/src,
+					../../../addons/ofxGui/src,
+					../../../addons/ofxLSL/libs,
+					../../../addons/ofxLSL/libs/labstreaminglayer,
+					../../../addons/ofxLSL/libs/labstreaminglayer/include,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/win64,
+					../../../addons/ofxLSL/src,
+					../../../addons/ofxNetwork/src,
+					../../../addons/ofxPoco/libs/poco/include,
+					../../../addons/ofxPoco/src,
+					../../../addons/ofxPoco/libs/openssl/include,
+					../../../addons/ofxNetworkUtils/libs,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx/Net,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/src,
+					../../../addons/ofxNetworkUtils/src,
+					../../../addons/ofxOsc/libs,
+					../../../addons/ofxOsc/libs/oscpack,
+					../../../addons/ofxOsc/libs/oscpack/src,
+					../../../addons/ofxOsc/libs/oscpack/src/ip,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/posix,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/win32,
+					../../../addons/ofxOsc/libs/oscpack/src/osc,
+					../../../addons/ofxOsc/src,
+					../../../addons/ofxOscilloscope/src,
+					../../../addons/ofxThreadedLogger/src,
+					../../../addons/ofxXmlSettings/libs,
+					../../../addons/ofxXmlSettings/src,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
+					../../../addons/ofxJSON/src,
+					../../../addons/EmotiBit_XPlat_Utils/src,
+				);
+				ICON = "$(ICON_NAME_RELEASE)";
+				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
+				INFOPLIST_FILE = "openFrameworks-Info.plist";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
+				);
+				OTHER_LDFLAGS = (
+					"$(OF_CORE_LIBS)",
+					"$(OF_CORE_FRAMEWORKS)",
+					"$(LIB_OF)",
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoNetSSL.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoNet.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoCrypto.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoUtil.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoJSON.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoXML.a,
+					../../../addons/ofxPoco/libs/poco/lib/osx/PocoFoundation.a,
+					../../../addons/ofxPoco/libs/openssl/lib/osx/crypto.a,
+					../../../addons/ofxPoco/libs/openssl/lib/osx/ssl.a,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+				baseConfigurationReference = E4EB6923138AFD0F00A09F29;
+			};
+			name = Release;
+		};
+		B990E6062C0E7A370094B63E /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = NONE;
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "APPSTORE=1";
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					src,
+					src,
+					../../../addons/ofxBiquadFilter/src,
+					../../../addons/ofxEmotiBit/src/Signal,
+					../../../addons/ofxEmotiBit/src,
+					../../../addons/ofxGui/src,
+					../../../addons/ofxLSL/libs,
+					../../../addons/ofxLSL/libs/labstreaminglayer,
+					../../../addons/ofxLSL/libs/labstreaminglayer/include,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx,
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/win64,
+					../../../addons/ofxLSL/src,
+					../../../addons/ofxNetwork/src,
+					../../../addons/ofxPoco/libs/poco/include,
+					../../../addons/ofxPoco/src,
+					../../../addons/ofxPoco/libs/openssl/include,
+					../../../addons/ofxNetworkUtils/libs,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/include/ofx/Net,
+					../../../addons/ofxNetworkUtils/libs/ofxNetworkUtils/src,
+					../../../addons/ofxNetworkUtils/src,
+					../../../addons/ofxOsc/libs,
+					../../../addons/ofxOsc/libs/oscpack,
+					../../../addons/ofxOsc/libs/oscpack/src,
+					../../../addons/ofxOsc/libs/oscpack/src/ip,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/posix,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/win32,
+					../../../addons/ofxOsc/libs/oscpack/src/osc,
+					../../../addons/ofxOsc/src,
+					../../../addons/ofxOscilloscope/src,
+					../../../addons/ofxThreadedLogger/src,
+					../../../addons/ofxXmlSettings/libs,
+					../../../addons/ofxXmlSettings/src,
+					../../../addons/ofxJSON/libs/jsoncpp/include,
+					../../../addons/ofxJSON/src,
+					../../../addons/EmotiBit_XPlat_Utils/src,
+				);
+				ICON = "$(ICON_NAME_RELEASE)";
+				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
+				INFOPLIST_FILE = "openFrameworks-Info.plist";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2136,6 +2621,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B990E6032C0E7A370094B63E /* Build configuration list for PBXNativeTarget "EmotiBitOscilloscope-arm64" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B990E6042C0E7A370094B63E /* Debug */,
+				B990E6052C0E7A370094B63E /* Release */,
+				B990E6062C0E7A370094B63E /* AppStore */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "EmotiBitOscilloscope" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2146,7 +2641,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "EmotiBitOscilloscope" */ = {
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "EmotiBitOscilloscope-x86_64" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B600A3A1757003C02F2 /* Debug */,
