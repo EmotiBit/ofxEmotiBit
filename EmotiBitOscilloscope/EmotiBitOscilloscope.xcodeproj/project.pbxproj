@@ -360,7 +360,7 @@
 		B62DC455BB791E69D877D3B6 /* blowfish.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = blowfish.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/blowfish.h; sourceTree = SOURCE_ROOT; };
 		B65483D96A9E876D46C93373 /* srtp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = srtp.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/srtp.h; sourceTree = SOURCE_ROOT; };
 		B87C60311EC1FE841C1ECD89 /* ofxLabel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxLabel.h; path = ../../../addons/ofxGui/src/ofxLabel.h; sourceTree = SOURCE_ROOT; };
-		B990E6072C0E7A370094B63E /* EmotiBitOscilloscope-arm64.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EmotiBitOscilloscope-arm64.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B990E6072C0E7A370094B63E /* EmotiBitOscilloscope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmotiBitOscilloscope.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA274EC7A169D538BD43A5D8 /* ofxGuiUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxGuiUtils.h; path = ../../../addons/ofxGui/src/ofxGuiUtils.h; sourceTree = SOURCE_ROOT; };
 		BAE45B5EDF2D519E39986297 /* ofxNetworkUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxNetworkUtils.h; path = ../../../addons/ofxNetworkUtils/src/ofxNetworkUtils.h; sourceTree = SOURCE_ROOT; };
 		BC8881B3C8C0A1C45F042E7A /* OscPrintReceivedElements.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = OscPrintReceivedElements.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscPrintReceivedElements.cpp; sourceTree = SOURCE_ROOT; };
@@ -1542,7 +1542,7 @@
 				6948EE371B920CB800B5AC1A /* local_addons */,
 				E4B69B5B0A3A1756003C02F2 /* EmotiBitOscilloscope-x86_64-Debug.app */,
 				948E6B5428528E33000A8B76 /* Frameworks */,
-				B990E6072C0E7A370094B63E /* EmotiBitOscilloscope-arm64.app */,
+				B990E6072C0E7A370094B63E /* EmotiBitOscilloscope.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1618,7 +1618,7 @@
 			);
 			name = "EmotiBitOscilloscope-arm64";
 			productName = myOFApp;
-			productReference = B990E6072C0E7A370094B63E /* EmotiBitOscilloscope-arm64.app */;
+			productReference = B990E6072C0E7A370094B63E /* EmotiBitOscilloscope.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E4B69B5A0A3A1756003C02F2 /* EmotiBitOscilloscope-x86_64 */ = {
@@ -2153,7 +2153,7 @@
 					../../../addons/ofxPoco/libs/openssl/lib/osx/crypto.a,
 					../../../addons/ofxPoco/libs/openssl/lib/osx/ssl.a,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = EmotiBitOscilloscope;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2234,7 +2234,7 @@
 					../../../addons/ofxPoco/libs/openssl/lib/osx/crypto.a,
 					../../../addons/ofxPoco/libs/openssl/lib/osx/ssl.a,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = EmotiBitOscilloscope;
 				WRAPPER_EXTENSION = app;
 				baseConfigurationReference = E4EB6923138AFD0F00A09F29;
 			};
@@ -2316,7 +2316,7 @@
 					../../../addons/ofxPoco/libs/openssl/lib/osx/crypto.a,
 					../../../addons/ofxPoco/libs/openssl/lib/osx/ssl.a,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = EmotiBitOscilloscope;
 				WRAPPER_EXTENSION = app;
 				baseConfigurationReference = E4EB6923138AFD0F00A09F29;
 			};
