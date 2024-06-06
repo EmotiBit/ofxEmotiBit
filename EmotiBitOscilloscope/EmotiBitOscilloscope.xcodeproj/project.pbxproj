@@ -2219,6 +2219,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
 					"$(OF_CORE_FRAMEWORKS)",
@@ -2300,6 +2301,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
 					"$(OF_CORE_FRAMEWORKS)",
