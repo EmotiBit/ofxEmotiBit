@@ -51,19 +51,23 @@ cd ..
 ```
 
 ## macOS 
-### Note on using M1 macs (apple silicon)
-- Building from source on Apple Silicon macs is not yet supported. 
-- We are working on compiling a list of changes required to build on Apple silicon macs and will make that patch as soon as possible.
+The EmotiBit software can be compiled on macOS using the provided xcode project files. Each EmotiBit software has it's own project file, already setup with all settings required to build the project from source. Users just have to open the project files and build using xcode.
 
-### Setting up xcode project
-- **Adding paths to Library search paths**
-  - Check if the directory paths for the files `liblsl64-static.a` and `liblslboost.a` are already present in the `project` > `Build Settings` > `Library Search Paths`. If they are not present, follow the below steps:  
-    - Select your project in the **Target group**(in xcode project navigator), go to **Build Settings** tab, and add the following path in the **Library Search Paths** section: `../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx`
-- For `EmotiBitDataParser`, if you get an error `ERROR: -NSDocumentRevisionsDebugMode does not exist, try absolute path` when compiling in `debug mode`,
-  - Choose the `build scheme` on the top left
-  - In the `Run` tab, open the `Options` tab
-  - unckeck the `Allow debugging when using document Version Browser` checkbox
-  - Try building again.
+### Building EmotiBitOscilloscope
+- EmotiBit Oscilloscope uses external dependencies that are platform (x86 or arm64) specific. The EmotiBitOscilloscope project therefore provides 2 targets, 1 for x86 and another for arm.
+- If you are building on a x86 machine, for example on intel macs, please select the target as `EmotiBitOscilloscope-x86_64` under the build schemes.
+- If you are building on an arm machine, for example on apple-silicon macs, please select the target as `EmotiBitOscilloscope-arm64` under the build schemes.
+- To edit schemes, click on the `build scheme` > `Edit` > choose the correct target to build.
+
+
+- <details><summary><b>Known EmotiBitDataParser build error</b></summary>
+
+  - For `EmotiBitDataParser`, if you get an error `ERROR: -NSDocumentRevisionsDebugMode does not exist, try absolute path` when compiling in `debug mode`,
+    - Choose the `build scheme`.
+    - In the `Run` tab, open the `Options` tab.
+    - unckeck the `Allow debugging when using document Version Browser` checkbox.
+    - Try building again.
+  </details>  
 
 ## Developing on Linux
 - You will require a version of gcc on your linux machine. Depending on the version, we need to install the appropriate OpenFrameworks code base. You can check the gcc verison on you system using the following command: `gcc --verison`.
