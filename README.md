@@ -12,6 +12,10 @@ Install openFrameworks 0.11.2 (vs2017_release) from the official [openFrameworks
 
 ### The following addons should be placed inside the OpenFrameworks addons folder:
 #### Note: If downloading zip instead of `git clone` be sure to remove `-master`  or `-xxx-xxx` from the folder name to maintain correct path references. Move only the folder located inside each extracted add-on folder to `of_v0.11.2_vs2017_release\addons`.
+```plaintext
+ofxNetworkUtils/
+└── ofxNetworkUtils/ (this is the folder you would move)
+```
 - **ofxNetworkUtils:** [GitHub repository](https://github.com/bakercp/ofxNetworkUtils)
 - **ofxOscilloscope_feat-Patchboard:** [GitHub repository](https://github.com/produceconsumerobot/ofxOscilloscope/tree/feat-PatchboardJson)
 - **ofxThreadedLogger:** [GitHub repository](https://github.com/produceconsumerobot/ofxThreadedLogger)
@@ -27,7 +31,7 @@ Install openFrameworks 0.11.2 (vs2017_release) from the official [openFrameworks
 - Required to build EmotiBit FirmwareInstaller
   - **ofxSerial:** [GitHub repository](https://github.com/EmotiBit/ofxSerial)
   - **ofxIO:** [GitHub repository](https://github.com/bakercp/ofxIO)
-  - 
+    
 #### The following script may be run from a bash shell within your openFrameworks/addons/ directory to install ofxEmotiBit and all dependencies. 
 _**Note:**_ this requires you to have [github SSH key access set up](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 ```
@@ -54,7 +58,10 @@ git checkout stable
 cd ..
 ```
 
-## Setup Instructions for Windows 11 with Visual Studio 2022
+## Setup Instructions for Windows 11
+
+<details>
+<summary>Click to expand</summary>
 
 1. **Install Visual Studio 2022**: Download and install from [Microsoft Visual Studio](https://visualstudio.microsoft.com/vs/). If previously installed, navigate to the "Tools" tab and select "Get tools and features".
 2. During setup, select the "Desktop Development with C++" workload. Ensure the following components are installed:
@@ -89,8 +96,14 @@ cd ..
    - vcpkg package manager
    - GitHub Copilot (optional)
    - MSVC v141 - VS 2017 C++ x64/x86 build tools (v14.16), not in the default components list but necessary for our build.
+</details>
 
-## macOS 
+
+## Setup Instructions for macOS 
+
+<details>
+<summary>Click to expand</summary>
+
 ### Note on using M1 macs (apple silicon)
 - If you are using the new M1 macs, then make sure to use Rosetta installed in xcode.
 - EmotiBit software has not been officially tested on M1/M2 macs. If you are building on these systems, please let the community know on the [forum](http://forum.emotibit.com) about any additional steps you had to take get the source to build!
@@ -104,7 +117,13 @@ cd ..
   - unckeck the `Allow debugging when using document Version Browser` checkbox
   - Try building again.
 
-## Developing on Linux
+</details>
+
+## Setup Instructions for Linux
+
+<details>
+<summary>Click to expand</summary>
+
 - You will require a version of gcc on your linux machine. Depending on the version, we need to install the appropriate OpenFrameworks code base. You can check the gcc verison on you system using the following command: `gcc --verison`.
 - If you do not have gcc installed, you can install it using `sudo apt install gcc`.
 - For EmotiBit software development, we have used gcc v6+, which has been tested to run with the OpenFrameworks
@@ -123,3 +142,4 @@ cd ..
 - To run the Oscilloscope, cd to `(OF_ROOT)/addons/ofxEmotiBit/EmotiBitOscilloscope`. Run the command `make Debug` or `make` to create the release executable.
 - Note: When trying to run the EmotiBit Oscilloscope, if you get an error with the following message `cannot open shared object file: No such file or directory : liblsl-1.14.0-manylinux2010_x64`, make sure you have the latest master for [ofxLSL](https://github.com/EmotiBit/ofxLSL). The [fix](https://github.com/EmotiBit/ofxLSL/pull/8/files) added the required [shared object file](https://github.com/EmotiBit/ofxLSL/tree/master/libs/labstreaminglayer/lib/linux64).
 
+</details>
