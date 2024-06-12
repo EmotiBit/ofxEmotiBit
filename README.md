@@ -15,7 +15,7 @@ Install openFrameworks 0.11.2 (vs2017_release) from the official [openFrameworks
 - **ofxBiquadFilter:** [GitHub repository](https://github.com/mrbichel/ofxBiquadFilter)
 - **ofxJSON:** [GitHub repository](https://github.com/jeffcrouse/ofxJSON)
 - **EmotiBit_XPlat_Utils:** [GitHub repository](https://github.com/EmotiBit/EmotiBit_XPlat_Utils/)
-- **ofxLSL_feat:** [GitHub repository](https://github.com/EmotiBit/ofxLSL/tree/feat-lslArmBin)
+- **ofxLSL:** [GitHub repository](https://github.com/EmotiBit/ofxLSL/)
   - <details><summary>Notes for developing with Visual Studio</summary>
     
     - _**Note:**_ for LSL support, if developing with Visual Studio, code should be compiled for x64
