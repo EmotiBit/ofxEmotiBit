@@ -33,6 +33,8 @@
 		B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */; };
 		B65D7C8C591DF95D595E2053 /* NetworkInterfaceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44D29F961AB993B629D7C467 /* NetworkInterfaceListener.cpp */; };
 		B990E6152C17F4E60094B63E /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B990E6142C17F4E60094B63E /* EmotiBitPacket.cpp */; };
+		B990E61C2C1CAB040094B63E /* parsedDataFormat.json in Copy Resources */ = {isa = PBXBuildFile; fileRef = B990E61A2C1CAB040094B63E /* parsedDataFormat.json */; };
+		B990E61D2C1CAB040094B63E /* verdana.ttf in Copy Resources */ = {isa = PBXBuildFile; fileRef = B990E61B2C1CAB040094B63E /* verdana.ttf */; };
 		BEDFEE7400C58EA4E412B757 /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F2B099E6BD1199664C48B177 /* ofxJSONElement.cpp */; };
 		D1E529D7B6961183405926CF /* EmotiBitOfUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BDE549108B6A79D110451A5 /* EmotiBitOfUtils.cpp */; };
 		E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 35BB9BB90DBABFD3B39F8DB6 /* ofxUDPManager.cpp */; };
@@ -43,6 +45,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		B990E6192C1CAADE0094B63E /* Copy Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				B990E61C2C1CAB040094B63E /* parsedDataFormat.json in Copy Resources */,
+				B990E61D2C1CAB040094B63E /* verdana.ttf in Copy Resources */,
+			);
+			name = "Copy Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -167,6 +181,8 @@
 		B990E6132C17F4E60094B63E /* EmotiBitPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmotiBitPacket.h; path = ../../../addons/EmotiBit_XPlat_Utils/src/EmotiBitPacket.h; sourceTree = "<group>"; };
 		B990E6142C17F4E60094B63E /* EmotiBitPacket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EmotiBitPacket.cpp; path = ../../../addons/EmotiBit_XPlat_Utils/src/EmotiBitPacket.cpp; sourceTree = "<group>"; };
 		B990E6182C17F6F10094B63E /* ofxOscilloscope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxOscilloscope.h; path = ../../ofxOscilloscope/src/ofxOscilloscope.h; sourceTree = "<group>"; };
+		B990E61A2C1CAB040094B63E /* parsedDataFormat.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = parsedDataFormat.json; path = bin/data/parsedDataFormat.json; sourceTree = "<group>"; };
+		B990E61B2C1CAB040094B63E /* verdana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdana.ttf; path = bin/data/verdana.ttf; sourceTree = "<group>"; };
 		BA274EC7A169D538BD43A5D8 /* ofxGuiUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxGuiUtils.h; path = ../../../addons/ofxGui/src/ofxGuiUtils.h; sourceTree = SOURCE_ROOT; };
 		BAE45B5EDF2D519E39986297 /* ofxNetworkUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxNetworkUtils.h; path = ../../../addons/ofxNetworkUtils/src/ofxNetworkUtils.h; sourceTree = SOURCE_ROOT; };
 		BF88F02779DD820913ACEA06 /* ofxTCPClient.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxTCPClient.cpp; path = ../../../addons/ofxNetwork/src/ofxTCPClient.cpp; sourceTree = SOURCE_ROOT; };
@@ -1116,6 +1132,8 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
+				B990E61A2C1CAB040094B63E /* parsedDataFormat.json */,
+				B990E61B2C1CAB040094B63E /* verdana.ttf */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
@@ -1167,6 +1185,7 @@
 				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
 				E4C2427710CC5ABF004149E2 /* CopyFiles */,
 				8466F1851C04CA0E00918B1C /* ShellScript */,
+				B990E6192C1CAADE0094B63E /* Copy Resources */,
 			);
 			buildRules = (
 			);
