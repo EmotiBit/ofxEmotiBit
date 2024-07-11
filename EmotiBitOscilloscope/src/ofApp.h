@@ -211,7 +211,7 @@ public:
 	const string GUI_STRING_MODE_ACTIVE = "ACTIVE";
 	const string GUI_STRING_NO_EMOTIBIT_SELECTED = "None Selected";
 	//const string GUI_DEVICE_GROUP_MENU_NAME = "Emotibit Device Menu";
-	const string GUI_DEVICE_GROUP_NAME = "EmotiBit Device List";
+	const string GUI_DEVICE_GROUP_NAME = "EmotiBits On Network";
 	const string GUI_STRING_CLIPPING_EVENTS = "Clipping Events:";
 	const string GUI_STRING_OVERFLOW_EVENTS = "Overflow Events:";
 	//const string GUI_SEND_DATA_MENU_NAME = "Send Data Menu";
