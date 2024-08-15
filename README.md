@@ -157,8 +157,7 @@ cd ..
 - For EmotiBit software development, we have used gcc v6+, which has been tested to run with the OpenFrameworks
 - Download and extract the Openframeworks package for the gcc version on your system. [Openframeworks Downloads](https://openframeworks.cc/versions/v0.11.2/)
   - You can use the following command to extract `tar xvzf <filename>`
-- Follow the official [openframeworks guide](https://openframeworks.cc/setup/linux-install/) to set things up. Follow the instruction mentioned below during running `install_dependencies.sh`
-  - At one point during installation of the dependencies(after you run the shell script `install_dependencies.sh`), a prompt will ask the user to press Y/N to install `Prompt: “installing OF dependencies with -hwe-18.04 packages, confirm Y/N ?`. Press N. [Link to article](https://forum.openframeworks.cc/t/urgent-installing-libgl1-mesa-dev-hwe-18-04/32345/3)
+- Follow the official [openframeworks guide](https://openframeworks.cc/setup/linux-install/) to set things up.
 - At this point, you should have 
   - all the dependencies installed(successfull run of `install_dependencies.sh`)
   - compiled OF (successfull run of `./compileOF.sh`)
