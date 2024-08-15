@@ -169,6 +169,13 @@
     <ClCompile Include="..\src\EmotiBitOfUtils.cpp">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SoftwareVersionChecker.cpp" />
+    <ClCompile Include="src\AuxInstrQ.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AuxCxnController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -559,6 +566,12 @@
     </ClInclude>
     <ClInclude Include="..\src\EmotiBitOfUtils.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AuxInstrQ.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AuxCxnController.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

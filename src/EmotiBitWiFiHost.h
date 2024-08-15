@@ -17,7 +17,9 @@
 #include "EmotiBitComms.h"
 #include "DoubleBuffer.h"
 #include "json/json.h"
-
+#include "AuxCxnController.h"
+#include "ofUtils.h"
+#include "EmotiBitOfUtils.h"
 using namespace EmotiBit;
 
 class EmotibitInfo
@@ -61,6 +63,7 @@ public:
 	ofxUDPManager advertisingCxn;
 	ofxUDPManager dataCxn;
 	ofxTCPServer controlCxn;
+	AuxCxnController m_auxNetworkChannelController;
 
 	std::thread* dataThread;
 	std::thread* advertisingThread;
@@ -68,6 +71,7 @@ public:
 	std::mutex controlCxnMutex;
 	std::mutex dataCxnMutex;
 	std::mutex discoveredEmotibitsMutex;
+	std::mutex commSettingsUpdateMutex;
 
 	uint16_t advertisingPort;
 	uint16_t _dataPort;
@@ -179,6 +183,33 @@ public:
 	@param sleepMicros <0 does nothing, ==0 yeilds, >0 sleep_for
 	*/
 	void threadSleepFor(int sleepMicros);
+
+	/**
+	 * \brief Read messages received on the aux. network channel.
+	 * 
+	 */
+	void readAuxNetworkChannel();
+
+	/**
+	 * \brief Attach reference to the main application to the aux network controller.
+	 * 
+	 * \param q pointer to the main application queue
+	 * \return true if successful, else false
+	 */
+	bool attachAuxInstrQ(AuxInstrQ* q);
+
+	/**
+	 * \brief move packets from aux network controller buffer queue to main application queue.
+	 * 
+	 */
+	void updateAuxInstrQ();
+
+	/**
+	 * \brief Process the packets received on the auc channel.  All instructions that require network communication are processed by wifi host.
+	 * 
+	 * \param q Pointer to the main application queue
+	 */
+	void processAuxInstrQ(AuxInstrQ *q);
 };
 
 
