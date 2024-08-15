@@ -6,7 +6,10 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 
 ## Requirements
 ### Openframeworks
-Install openFrameworks 0.11.2 (vs2017_release) from the official [openFrameworks GitHub repository](https://github.com/openframeworks/openFrameworks/releases/tag/0.11.2).
+Install openFrameworks 0.11.2 from the official [openFrameworks GitHub repository](https://github.com/openframeworks/openFrameworks/releases/tag/0.11.2). Choose the appriopriate version for your operating system.
+  - For windows:  `of_v0.11.2_vs2017_release.zip`
+  - For macOS: `of_v0.11.2_osx_release.zip`
+  - For linux: `of_v0.11.2_linux64gcc6_release.tar.gz`
 
 #### Openframeworks addons
 - **ofxNetworkUtils:** [GitHub repository](https://github.com/bakercp/ofxNetworkUtils)
