@@ -11,6 +11,30 @@ Install openFrameworks 0.11.2 from the official [openFrameworks GitHub repositor
   - For macOS: `of_v0.11.2_osx_release.zip`
   - For linux: `of_v0.11.2_linux64gcc6_release.tar.gz`
 
+#### Addons directory structure
+Openframeworks uses `addons` to support adding features to the projects. The addons used by EmotiBit software are listed in the section below.
+The addons are placed in the `OF_ROOT/addons` folder and it's structure is shown below. Please download or clone (uses git) the addons listed in the section below in the `OF_ROOT/addons` directory. You can have additional addons in the addons folder, but the addons linked above are **required** for building EmotiBit software.
+```plaintext
+addons
+├── ofxEmotiBit
+│   ├── src
+│   ├── EmotiBitOscilloscope
+│   │   ├── EmotiBitOscilloscope.sln
+│   │   ├── EmotiBitOscilloscope.xcodeproj
+│   │   └── ...
+│   ├── EmotiBitDataParser
+│   └── EmotiBitFirmwareInstaller        
+├── ofxNetworkUtils
+├── ofxOscilloscope
+├── ofxThreadedLogger
+├── ofxBiquadFilter
+├── ofxJSON
+├── EmotiBit_XPlat_Utils
+├── ofxLSL
+├── ofxSerial
+└── ofxIO
+```
+
 #### Openframeworks addons
 - **ofxNetworkUtils:** [GitHub repository](https://github.com/bakercp/ofxNetworkUtils)
 - **ofxOscilloscope:** [GitHub repository](https://github.com/produceconsumerobot/ofxOscilloscope/)
@@ -32,28 +56,6 @@ Install openFrameworks 0.11.2 from the official [openFrameworks GitHub repositor
   - **ofxIO:** [GitHub repository](https://github.com/bakercp/ofxIO)
 - **If downloading the zip instead of `git clone` be sure to remove `-master`  or `-xxx-xxx` from the folder name to maintain correct path references**. 
 
-#### Addons directory structure
-The `OF_ROOT/addons` folder should look like shown below. You can have additional addons in the addons folder, but the addons linked above are **required** for building EmotiBit software.
-```plaintext
-addons
-├── ofxEmotiBit
-│   ├── src
-│   ├── EmotiBitOscilloscope
-│   │   ├── EmotiBitOscilloscope.sln
-│   │   ├── EmotiBitOscilloscope.xcodeproj
-│   │   └── ...
-│   ├── EmotiBitDataParser
-│   └── EmotiBitFirmwareInstaller        
-├── ofxNetworkUtils
-├── ofxOscilloscope
-├── ofxThreadedLogger
-├── ofxBiquadFilter
-├── ofxJSON
-├── EmotiBit_XPlat_Utils
-├── ofxLSL
-├── ofxSerial
-└── ofxIO
-```
 
 #### The following script may be run from a bash shell within your openFrameworks/addons/ directory to install ofxEmotiBit and all dependencies. 
 _**Note:**_ this requires you to have [github SSH key access set up](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
@@ -161,8 +163,7 @@ cd ..
   - all the dependencies installed(successfull run of `install_dependencies.sh`)
   - compiled OF (successfull run of `./compileOF.sh`)
   - project Generator set up(successfull run of `./compilePG.sh`)
-- Now, we need all the repositories required to build EmotiBit_Oscilloscope. Install all the addons mentioned in the `Requirements` section.
-  - You can either download the repositories, or use `git clone <repo name>` to get the  addons. If git is not installed on your system, use `sudo apt install git` to install git.
+- If you have not already, get all the addons listed above.
 - You will also require net-tools to run certain commands required by the Oscilloscope. Run `sudo apt install net-tools`
 - That's it! You now are ready to run EmotiBit Oscilloscope!
 - To run the Oscilloscope, cd to `(OF_ROOT)/addons/ofxEmotiBit/EmotiBitOscilloscope`. Run the command `make Debug` or `make` to create the release executable.
