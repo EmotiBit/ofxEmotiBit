@@ -163,7 +163,7 @@ cd ..
   - compiled OF (successfull run of `./compileOF.sh`)
   - project Generator set up(successfull run of `./compilePG.sh`)
 - If you have not already, get all the addons listed above.
-- You will also require net-tools to run certain commands required by the Oscilloscope. Run `sudo apt install net-tools`
+- You will also require net-tools to run certain commands required by the Oscilloscope. Run `sudo apt install net-tools`. See (https://github.com/EmotiBit/ofxEmotiBit/issues/249)
 - That's it! You now are ready to run EmotiBit Oscilloscope!
 - To run the Oscilloscope, cd to `(OF_ROOT)/addons/ofxEmotiBit/EmotiBitOscilloscope`. Run the command `make Debug` or `make` to create the release executable.
 - Note: When trying to run the EmotiBit Oscilloscope, if you get an error with the following message `cannot open shared object file: No such file or directory : liblsl-1.14.0-manylinux2010_x64`, make sure you have the latest master for [ofxLSL](https://github.com/EmotiBit/ofxLSL). The [fix](https://github.com/EmotiBit/ofxLSL/pull/8/files) added the required [shared object file](https://github.com/EmotiBit/ofxLSL/tree/master/libs/labstreaminglayer/lib/linux64).
