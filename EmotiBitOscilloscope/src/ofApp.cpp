@@ -1825,6 +1825,7 @@ bool ofApp::startUdpOutput()
 
 void ofApp::processAuxInstrQ()
 {
+	// ToDo: implement parsing of the JSON instructions
 	// process all messages of type A - APpGui
 
 
@@ -1832,78 +1833,5 @@ void ofApp::processAuxInstrQ()
 	// The AuxInstrQ contains instructions in packet format.
 	// We need to parse these instructions and call the relevant function
 	// parse instruction
-	EmotiBitPacket::Header header;
-	std::string packet;
-	if (m_auxCtrlQ.getSize())
-	{
-		bool status = m_auxCtrlQ.front(packet);
-		if (status)
-		{
-			// element found in queue
-			uint16_t dataStartChar = EmotiBitPacket::getHeader(ofToString(packet), header);
-			if (header.typeTag.compare(EmotiBitPacket::TypeTag::APP_GUI) == 0)
-			{
-				{
-					// locally scoped to destroy variable after popping
-					std::string str;
-					m_auxCtrlQ.pop(str);
-					m_auxCtrlQ.updateLastPopTime();
-				}
-				// Parse all App gui stuff
-				vector<string> splitPacket = ofSplitString(packet, ",");
-				size_t startIndex = EmotiBitPacket::headerLength;
-				string value;
-				
-				// KAY PRESSED
-				int pos = EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::TypeTag::KEY_PRESSED, value);
-				if (pos > -1)
-				{
-					char key = (char)value[0];
-					keyPressed((int)key);
-					//if ((header.typeTag.compare(EmotiBitPacket::TypeTag::KEY_PRESSED) == 0) || (header.typeTag.compare(EmotiBitPacket::TypeTag::KEY_RELEASED) == 0))
-					//{
-
-						//std::string keyStroke = packet.substr(dataStartChar);
-						//keyStroke.pop_back();
-						//char key = (char)keyStroke[0];
-						//if (header.typeTag.compare(EmotiBitPacket::TypeTag::KEY_PRESSED) == 0)
-						//{
-						//	keyPressed((int)key);
-						//}
-						//else
-						//{
-						//	keyReleased((int)key);
-						//}
-					//}
-				}
-
-				// KEY RELEASED
-				pos = EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::TypeTag::KEY_RELEASED, value);
-				if (pos > -1)
-				{
-					char key = (char)value[0];
-					keyPressed((int)key);
-				}
-				
-				// Update Oscillosocpe settings using files
-				pos = EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::TypeTag::FILE_SETTINGS, value);
-				if (pos > -1)
-				{
-					// Found FILE_SETTINGS label
-					size_t payloadLabelLoc = packet.find(EmotiBitPacket::PayloadLabel::COMM_SETTINGS_FILE);
-					if (payloadLabelLoc != std::string::npos)
-					{
-						// found COMM_SETTINGS_FILE label
-
-						// Find loc of starting char of file
-						size_t fileStartLoc = packet.find(EmotiBitPacket::PAYLOAD_DELIMITER, payloadLabelLoc);
-						std::string settings = packet.substr(fileStartLoc + 1);
-						emotiBitWiFi.commSettingsUpdateMutex.lock();
-						emotiBitWiFi.parseCommSettings(settings);
-						emotiBitWiFi.commSettingsUpdateMutex.unlock();
-					}
-				}
-			}
-		}
-	}
+	
 }
