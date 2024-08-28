@@ -1143,92 +1143,166 @@ void EmotiBitWiFiHost::updateAuxInstrQ()
 
 void EmotiBitWiFiHost::processAuxInstrQ(AuxInstrQ *q)
 {
-	// Process all messages of type WH - WiFiHost
-	EmotiBitPacket::Header header;
+	Json::Reader reader;
+	Json::Value jsonSettings;
 	std::string packet;
-	if (q->getSize())
+	
+	try
 	{
-		bool status = q->front(packet);
-		if (status)
+		// Process all messages of type WH - WiFiHost
+		if (q->getSize())
 		{
-			// element found in queue
-			uint16_t dataStartChar = EmotiBitPacket::getHeader(ofToString(packet), header);
-			ofLogVerbose("EmotiBitWiFiHost") << "Peek Aux Instruction";
-			if (header.typeTag.compare(EmotiBitPacket::TypeTag::WIFI_HOST) == 0)
+			bool status = q->front(packet);
+			if (status)
 			{
-				ofLogVerbose("EmotiBitWiFiHost") << "Processing Aux Instruction";
+				if (reader.parse(packet, jsonSettings))
 				{
-					// locally scoped to destroy variable after popping
-					std::string str;
-					q->pop(str);
-					q->updateLastPopTime();
-				}
-				vector<string> splitPacket = ofSplitString(packet, ",");
-				size_t startIndex = EmotiBitPacket::headerLength;
-				string value;
-
-				// EMOTIBIT_CONNECT
-				if (packet.find(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT) != std::string::npos)
-				{
-					int pos = EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT, value);
-					if (pos > -1)
+					if (jsonSettings["target"].asString().compare("WIFI_HOST") == 0)
 					{
-						ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT) + ":" + value + " from Aux Instr Q";
-						connect(value);
-					}
-				}
-				else if (packet.find(EmotiBitPacket::TypeTag::EMOTIBIT_DISCONNECT) != std::string::npos)
-				{
-					// EMOTIBIT_DISCONNECT
-					ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_DISCONNECT) + " from Aux Instr Q";
-					disconnect();
-				}
-				else if (packet.find(EmotiBitPacket::TypeTag::RECORD_BEGIN) != std::string::npos)
-				{
-					// RECORD_BEGIN
-					ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_BEGIN) + ":" + value + " from Aux Instr Q";
-					string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-					sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, controlPacketCounter++, localTime, 1));
-				}
-				else if (packet.find(EmotiBitPacket::TypeTag::RECORD_END) != std::string::npos)
-				{
-					// RECORD_END
-					ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_END) + ":" + value + " from Aux Instr Q";
-					string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-					sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, controlPacketCounter++, localTime, 1));
-				}
-				else if (packet.find(EmotiBitPacket::TypeTag::USER_NOTE) != std::string::npos)
-				{
-					// USER_NOTE
-					int pos = EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::TypeTag::USER_NOTE, value);
-					if (pos > -1)
-					{
-						ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::USER_NOTE) + ":" + value + " from Aux Instr Q";
-						if (isConnected()) 
+						// Message meant to be parsed by WIFI_HOST
+						// pop queue element
+						ofLogVerbose("EmotiBitWiFiHost") << "Processing Aux Instruction";
 						{
-							vector<string> payload;
-							payload.push_back(EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT));
-							payload.push_back(value);
-							sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::USER_NOTE, controlPacketCounter++, payload));
+							// locally scoped to destroy variable after popping
+							std::string str;
+							q->pop(str);
+							q->updateLastPopTime();
+						}
+						// loop through all the arguments
+						if (jsonSettings.isMember("typetag"))
+						{
+							// Arguments are meant to be stitched together and sent directly to EmotiBit
+							// ToDo: implement sending message to emotibit using CTR/DAT/ADV channels
 						}
 						else
 						{
-							ofLogWarning("EmotiBitWiFiHost") << "EmotiBit not connected. User Note not sent";
+							// perform required action
+							for (Json::ArrayIndex i = 0; i < jsonSettings["arguments"].size(); i++)
+							{
+								if (jsonSettings["arguments"][i].asString().compare("EMOTIBIT_CONNECT") == 0)
+								{
+									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT);
+									std::string emotibitId = jsonSettings["arguments"][i + 1].asString();
+									// ToDo: We probably need to also call "clear Oscilloscope" before we can connect.
+									// Since that function belongs to ofApp, it probably needs to be called using an Event handle
+									connect(emotibitId);
+								}
+								else if (jsonSettings["arguments"][i].asString().compare("EMOTIBIT_DISCONNECT") == 0)
+								{
+									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_DISCONNECT);
+									// ToDo: We probably need to also call "clear Oscilloscope" before we can connect.
+									// Since that function belongs to ofApp, it probably needs to be called using an Event handle
+									disconnect();
+								}
+								else if (jsonSettings["arguments"][i].asString().compare("RECORD_BEGIN") == 0)
+								{
+									// RECORD_BEGIN
+									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_BEGIN);
+									string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+									sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, controlPacketCounter++, localTime, 1));
+								}
+								else if (jsonSettings["arguments"][i].asString().compare("RECORD_END") == 0)
+								{
+									// RECORD_END
+									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_END);
+									string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+									sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, controlPacketCounter++, localTime, 1));
+								}
+								else
+								{
+									// future functionality.
+									ofLogVerbose("EmotiBitWiFiHost") << "Action currently not defined.";
+								}
+							}
 						}
+					}
+				}
+#if(0)
+				// element found in queue
+				uint16_t dataStartChar = EmotiBitPacket::getHeader(ofToString(packet), header);
+				ofLogVerbose("EmotiBitWiFiHost") << "Peek Aux Instruction";
+				if (header.typeTag.compare(EmotiBitPacket::TypeTag::WIFI_HOST) == 0)
+				{
+					ofLogVerbose("EmotiBitWiFiHost") << "Processing Aux Instruction";
+					{
+						// locally scoped to destroy variable after popping
+						std::string str;
+						q->pop(str);
+						q->updateLastPopTime();
+					}
+					vector<string> splitPacket = ofSplitString(packet, ",");
+					size_t startIndex = EmotiBitPacket::headerLength;
+					string value;
+
+					// EMOTIBIT_CONNECT
+					if (packet.find(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT) != std::string::npos)
+					{
+						int pos = EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT, value);
+						if (pos > -1)
+						{
+							ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT) + ":" + value + " from Aux Instr Q";
+							connect(value);
+						}
+					}
+					else if (packet.find(EmotiBitPacket::TypeTag::EMOTIBIT_DISCONNECT) != std::string::npos)
+					{
+						// EMOTIBIT_DISCONNECT
+						ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_DISCONNECT) + " from Aux Instr Q";
+						disconnect();
+					}
+					else if (packet.find(EmotiBitPacket::TypeTag::RECORD_BEGIN) != std::string::npos)
+					{
+						// RECORD_BEGIN
+						ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_BEGIN) + ":" + value + " from Aux Instr Q";
+						string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+						sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, controlPacketCounter++, localTime, 1));
+					}
+					else if (packet.find(EmotiBitPacket::TypeTag::RECORD_END) != std::string::npos)
+					{
+						// RECORD_END
+						ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_END) + ":" + value + " from Aux Instr Q";
+						string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+						sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, controlPacketCounter++, localTime, 1));
+					}
+					else if (packet.find(EmotiBitPacket::TypeTag::USER_NOTE) != std::string::npos)
+					{
+						// USER_NOTE
+						int pos = EmotiBitPacket::getPacketKeyedValue(splitPacket, EmotiBitPacket::TypeTag::USER_NOTE, value);
+						if (pos > -1)
+						{
+							ofLogVerbose("EmotiBitWiFiHost") << "Executing " + ofToString(EmotiBitPacket::TypeTag::USER_NOTE) + ":" + value + " from Aux Instr Q";
+							if (isConnected())
+							{
+								vector<string> payload;
+								payload.push_back(EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT));
+								payload.push_back(value);
+								sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::USER_NOTE, controlPacketCounter++, payload));
+							}
+							else
+							{
+								ofLogWarning("EmotiBitWiFiHost") << "EmotiBit not connected. User Note not sent";
+							}
+						}
+					}
+					else
+					{
+						// ToDo: power modes
 					}
 				}
 				else
 				{
-					// ToDo: power modes
+					// not for WiFi Host
+					// do nothing
+					ofLogVerbose("EmotiBitWiFiHost") << "Not processed by WiFiHost";
+					return;
 				}
-			}
-			else
-			{
-				// not for WiFi Host
-				// do nothing
-				ofLogVerbose("EmotiBitWiFiHost") << "Not processed by WiFiHost";
-				return;
+#endif
 			}
 		}
+	}
+	catch (exception e)
+	{
+		ofLogWarning("[EmotiBitWiFiHost::processAuxInstrQ] Failed to parse message ") << e.what();
+		ofLogWarning("Skipping: ") << packet;
 	}
 }
