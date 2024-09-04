@@ -6,7 +6,34 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 
 ## Requirements
 ### Openframeworks
-Install openFrameworks 0.11.2 (vs2017_release) from the official [openFrameworks GitHub repository](https://github.com/openframeworks/openFrameworks/releases/tag/0.11.2).
+Install openFrameworks 0.11.2 from the official [openFrameworks GitHub repository](https://github.com/openframeworks/openFrameworks/releases/tag/0.11.2). Choose the appriopriate version for your operating system.
+  - For windows:  `of_v0.11.2_vs2017_release.zip`
+  - For macOS: `of_v0.11.2_osx_release.zip`
+  - For linux: `of_v0.11.2_linux64gcc6_release.tar.gz`
+
+#### Addons directory structure
+Openframeworks uses `addons` to support adding features to the projects. The addons used by EmotiBit software are listed in the section below.
+The addons are placed in the `OF_ROOT/addons` folder and it's structure is shown below. Please download or clone (uses git) the addons listed in the section below in the `OF_ROOT/addons` directory. You can have additional addons in the addons folder, but the addons linked above are **required** for building EmotiBit software.
+```plaintext
+addons
+├── ofxEmotiBit
+│   ├── src
+│   ├── EmotiBitOscilloscope
+│   │   ├── EmotiBitOscilloscope.sln
+│   │   ├── EmotiBitOscilloscope.xcodeproj
+│   │   └── ...
+│   ├── EmotiBitDataParser
+│   └── EmotiBitFirmwareInstaller        
+├── ofxNetworkUtils
+├── ofxOscilloscope
+├── ofxThreadedLogger
+├── ofxBiquadFilter
+├── ofxJSON
+├── EmotiBit_XPlat_Utils
+├── ofxLSL
+├── ofxSerial
+└── ofxIO
+```
 
 #### Openframeworks addons
 - **ofxNetworkUtils:** [GitHub repository](https://github.com/bakercp/ofxNetworkUtils)
@@ -29,28 +56,6 @@ Install openFrameworks 0.11.2 (vs2017_release) from the official [openFrameworks
   - **ofxIO:** [GitHub repository](https://github.com/bakercp/ofxIO)
 - **If downloading the zip instead of `git clone` be sure to remove `-master`  or `-xxx-xxx` from the folder name to maintain correct path references**. 
 
-#### Addons directory structure
-The `OF_ROOT/addons` folder should look like shown below. You can have additional addons in the addons folder, but the addons linked above are **required** for building EmotiBit software.
-```plaintext
-addons
-├── ofxEmotiBit
-│   ├── src
-│   ├── EmotiBitOscilloscope
-│   │   ├── EmotiBitOscilloscope.sln
-│   │   ├── EmotiBitOscilloscope.xcodeproj
-│   │   └── ...
-│   ├── EmotiBitDataParser
-│   └── EmotiBitFirmwareInstaller        
-├── ofxNetworkUtils
-├── ofxOscilloscope
-├── ofxThreadedLogger
-├── ofxBiquadFilter
-├── ofxJSON
-├── EmotiBit_XPlat_Utils
-├── ofxLSL
-├── ofxSerial
-└── ofxIO
-```
 
 #### The following script may be run from a bash shell within your openFrameworks/addons/ directory to install ofxEmotiBit and all dependencies. 
 _**Note:**_ this requires you to have [github SSH key access set up](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
@@ -152,15 +157,13 @@ cd ..
 - For EmotiBit software development, we have used gcc v6+, which has been tested to run with the OpenFrameworks
 - Download and extract the Openframeworks package for the gcc version on your system. [Openframeworks Downloads](https://openframeworks.cc/versions/v0.11.2/)
   - You can use the following command to extract `tar xvzf <filename>`
-- Follow the official [openframeworks guide](https://openframeworks.cc/setup/linux-install/) to set things up. Follow the instruction mentioned below during running `install_dependencies.sh`
-  - At one point during installation of the dependencies(after you run the shell script `install_dependencies.sh`), a prompt will ask the user to press Y/N to install `Prompt: “installing OF dependencies with -hwe-18.04 packages, confirm Y/N ?`. Press N. [Link to article](https://forum.openframeworks.cc/t/urgent-installing-libgl1-mesa-dev-hwe-18-04/32345/3)
+- Follow the official [openframeworks guide](https://openframeworks.cc/setup/linux-install/) to set things up.
 - At this point, you should have 
   - all the dependencies installed(successfull run of `install_dependencies.sh`)
   - compiled OF (successfull run of `./compileOF.sh`)
   - project Generator set up(successfull run of `./compilePG.sh`)
-- Now, we need all the repositories required to build EmotiBit_Oscilloscope. Install all the addons mentioned in the `Requirements` section.
-  - You can either download the repositories, or use `git clone <repo name>` to get the  addons. If git is not installed on your system, use `sudo apt install git` to install git.
-- You will also require net-tools to run certain commands required by the Oscilloscope. Run `sudo apt install net-tools`
+- If you have not already, get all the addons listed above.
+- You will also require net-tools to run certain commands required by the Oscilloscope. Run `sudo apt install net-tools`. See (https://github.com/EmotiBit/ofxEmotiBit/issues/249)
 - That's it! You now are ready to run EmotiBit Oscilloscope!
 - To run the Oscilloscope, cd to `(OF_ROOT)/addons/ofxEmotiBit/EmotiBitOscilloscope`. Run the command `make Debug` or `make` to create the release executable.
 - Note: When trying to run the EmotiBit Oscilloscope, if you get an error with the following message `cannot open shared object file: No such file or directory : liblsl-1.14.0-manylinux2010_x64`, make sure you have the latest master for [ofxLSL](https://github.com/EmotiBit/ofxLSL). The [fix](https://github.com/EmotiBit/ofxLSL/pull/8/files) added the required [shared object file](https://github.com/EmotiBit/ofxLSL/tree/master/libs/labstreaminglayer/lib/linux64).

@@ -1884,15 +1884,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EmotiBit"
-        "ProductCode" = "8:{D74C278E-3E0C-40AC-B4C1-56D5A518A45D}"
-        "PackageCode" = "8:{F4BDC302-6B3A-419C-AC3F-6416E44DB1D9}"
+        "ProductCode" = "8:{322AF875-28A4-4C9B-B95C-E864C48CCEB9}"
+        "PackageCode" = "8:{9B5CEA40-554A-40B3-B227-FDFA63D1DFA3}"
         "UpgradeCode" = "8:{AAD962FC-B6FF-472D-BFD0-D28410DAD03A}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.11.1"
+        "ProductVersion" = "8:1.11.3"
         "Manufacturer" = "8:EmotiBit"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -2063,7 +2063,7 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B51FD5F9C690426DA361E2B017739029"
             {
-            "Name" = "8:EmotiBitFirmwareInstaller"
+            "Name" = "8:EmotiBit FirmwareInstaller"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -2072,7 +2072,7 @@
             "Target" = "8:_5FE98E46229E4D54A0EF81F6FAE66E64"
             "Folder" = "8:_FE1B0AAB6F3742FD8F5D64562A8D9CBF"
             "WorkingFolder" = "8:_FE641728B9154ECFA648D27AAC2EE00C"
-            "Icon" = "8:"
+            "Icon" = "8:_CC73A8F217424EA2BCAD1FEB3CC33561"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_CE21AE5EA4EE48A39E8F930723363413"
