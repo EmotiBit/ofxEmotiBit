@@ -80,6 +80,9 @@ void ofApp::update() {
 	emotiBitWiFi.processAuxInstrQ(&m_auxCtrlQ);
 	processAuxInstrQ();
 
+	// ToDo: This function should really be on its own thread, running on a timer. See ofTimer: https://openframeworks.cc/documentation/utils/ofTimer/#show_reset
+	m_auxCtrlQ.clearStaleElement();
+
 	//ofSetLogLevel(currentLogLevel);
 	//ofLogToConsole();
 

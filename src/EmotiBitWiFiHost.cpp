@@ -1145,77 +1145,90 @@ void EmotiBitWiFiHost::processAuxInstrQ(AuxInstrQ *q)
 {
 	Json::Reader reader;
 	Json::Value jsonSettings;
-	std::string packet;
+	std::string instruction;
 	
 	try
 	{
 		// Process all messages of type WH - WiFiHost
 		if (q->getSize())
 		{
-			bool status = q->front(packet);
+			bool status = q->front(instruction);
 			if (status)
 			{
-				if (reader.parse(packet, jsonSettings))
+				if (reader.parse(instruction, jsonSettings))
 				{
-					if (jsonSettings["target"].asString().compare("WIFI_HOST") == 0)
+					if (jsonSettings["version"].asInt() == 0)
 					{
-						// Message meant to be parsed by WIFI_HOST
-						// pop queue element
-						ofLogVerbose("EmotiBitWiFiHost") << "Processing Aux Instruction";
+						// parsing for V0 format
+						if (jsonSettings["target"].asString().compare("WIFI_HOST") == 0)
 						{
-							// locally scoped to destroy variable after popping
-							std::string str;
-							q->pop(str);
-							q->updateLastPopTime();
-						}
-						// loop through all the arguments
-						if (jsonSettings.isMember("typetag"))
-						{
-							// Arguments are meant to be stitched together and sent directly to EmotiBit
-							// ToDo: implement sending message to emotibit using CTR/DAT/ADV channels
-						}
-						else
-						{
-							// perform required action
-							for (Json::ArrayIndex i = 0; i < jsonSettings["arguments"].size(); i++)
+							// Message meant to be parsed by WIFI_HOST
+							// pop queue element
+							ofLogVerbose("EmotiBitWiFiHost") << "Processing Aux Instruction";
 							{
-								if (jsonSettings["arguments"][i].asString().compare("EMOTIBIT_CONNECT") == 0)
+								// locally scoped to destroy variable after popping
+								std::string str;
+								q->pop(str);
+								q->updateLastPopTime();
+							}
+							// loop through all the arguments
+							if (jsonSettings.isMember("typetag"))
+							{
+								// ToDo: implement sending message to emotibit using CTR/DAT/ADV channels
+								// Arguments are meant to be stitched together and sent directly to EmotiBit
+							}
+							else
+							{
+								// perform required action
+								for (Json::ArrayIndex i = 0; i < jsonSettings["arguments"].size(); i++)
 								{
-									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT);
-									std::string emotibitId = jsonSettings["arguments"][i + 1].asString();
-									// ToDo: We probably need to also call "clear Oscilloscope" before we can connect.
-									// Since that function belongs to ofApp, it probably needs to be called using an Event handle
-									connect(emotibitId);
-								}
-								else if (jsonSettings["arguments"][i].asString().compare("EMOTIBIT_DISCONNECT") == 0)
-								{
-									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_DISCONNECT);
-									// ToDo: We probably need to also call "clear Oscilloscope" before we can connect.
-									// Since that function belongs to ofApp, it probably needs to be called using an Event handle
-									disconnect();
-								}
-								else if (jsonSettings["arguments"][i].asString().compare("RECORD_BEGIN") == 0)
-								{
-									// RECORD_BEGIN
-									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_BEGIN);
-									string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-									sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, controlPacketCounter++, localTime, 1));
-								}
-								else if (jsonSettings["arguments"][i].asString().compare("RECORD_END") == 0)
-								{
-									// RECORD_END
-									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_END);
-									string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
-									sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, controlPacketCounter++, localTime, 1));
-								}
-								else
-								{
-									// future functionality.
-									ofLogVerbose("EmotiBitWiFiHost") << "Action currently not defined.";
+									if (jsonSettings["arguments"][i].asString().compare("EMOTIBIT_CONNECT") == 0)
+									{
+										ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT);
+										std::string emotibitId = jsonSettings["arguments"][i + 1].asString();
+										// ToDo: We probably need to also call "clear Oscilloscope" before we can connect.
+										// Since that function belongs to ofApp, it probably needs to be called using an Event handle
+										connect(emotibitId);
+									}
+									else if (jsonSettings["arguments"][i].asString().compare("EMOTIBIT_DISCONNECT") == 0)
+									{
+										ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_DISCONNECT);
+										// ToDo: We probably need to also call "clear Oscilloscope" before we can connect.
+										// Since that function belongs to ofApp, it probably needs to be called using an Event handle
+										disconnect();
+									}
+									else if (jsonSettings["arguments"][i].asString().compare("RECORD_BEGIN") == 0)
+									{
+										// RECORD_BEGIN
+										ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_BEGIN);
+										string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+										sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, controlPacketCounter++, localTime, 1));
+									}
+									else if (jsonSettings["arguments"][i].asString().compare("RECORD_END") == 0)
+									{
+										// RECORD_END
+										ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_END);
+										string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+										sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, controlPacketCounter++, localTime, 1));
+									}
+									else
+									{
+										// future functionality.
+										ofLogVerbose("EmotiBitWiFiHost") << "Action currently not defined.";
+									}
 								}
 							}
 						}
 					}
+				}
+				else
+				{
+					// not valid JSON
+					ofLogNotice("EmotiBitWiFiHost") << "Aux Instruction not in JSON format. Removing from Queue.";
+					// pop from Queue
+					std::string str;
+					q->pop(str);
+					q->updateLastPopTime();
 				}
 
 			}
@@ -1224,6 +1237,6 @@ void EmotiBitWiFiHost::processAuxInstrQ(AuxInstrQ *q)
 	catch (exception e)
 	{
 		ofLogWarning("[EmotiBitWiFiHost::processAuxInstrQ] Failed to parse message ") << e.what();
-		ofLogWarning("Skipping: ") << packet;
+		ofLogWarning("Skipping: ") << instruction;
 	}
 }
