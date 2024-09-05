@@ -14,11 +14,11 @@ public:
 		CHANNEL_UDP = 0,
 		CHANNEL_TCP
 	};
-	int m_auxPort = 8080;  ///< Port where auxillary messages can be sent to the oscilloscope
+	int auxPort = 8080;  ///< Port where auxillary messages can be sent to the oscilloscope
 	const int MAX_QUEUE_SIZE = 1000; // random number chosen for now
 	
-	ofxUDPManager m_auxCxnUdp;
-	ofxTCPClient m_auxCxnTcp;
+	ofxUDPManager auxCxnUdp;
+	//ofxTCPClient auxCxnTcp; ToDo
 	
 	/*!
 	* \brief Setup the AUX Cxn
@@ -65,10 +65,10 @@ public:
 	 * \param q pointer to main application queue
 	 * \return true if pointer is not null
 	 */
-	bool attachMainQueue(AuxInstrQ *q);
+	bool attachAppQ(AuxInstrQ *q);
 
 private:
 
-	std::queue<std::string> m_bufferQ;  ///< Local queue to buffer UDP/TCP messages before pushing into the main application queue
-	AuxInstrQ *m_mainQueue;  ///< pointer to main application queue
+	std::queue<std::string> bufferQ;  ///< Local queue to buffer UDP/TCP messages before pushing into the main application queue
+	AuxInstrQ *appQ;  ///< pointer to main application queue
 };

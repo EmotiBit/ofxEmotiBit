@@ -3,10 +3,10 @@
 std::uint16_t AuxCxnController::begin()
 {
 	// start the UDP channel
-	m_auxCxnUdp.Create();
-	m_auxCxnUdp.SetNonBlocking(true);
-	m_auxCxnUdp.SetReceiveBufferSize(pow(2, 13)); // 8KB
-	m_auxCxnUdp.Bind(m_auxPort);
+	auxCxnUdp.Create();
+	auxCxnUdp.SetNonBlocking(true);
+	auxCxnUdp.SetReceiveBufferSize(pow(2, 13)); // 8KB
+	auxCxnUdp.Bind(auxPort);
 
 	// setup TCP channel
 	// ToDo: setup for TCP channel
@@ -26,8 +26,8 @@ void AuxCxnController::readAuxCxn(AuxChannel channel)
 	if (channel == AuxChannel::CHANNEL_UDP)
 	{
 		// Read the UDP channel
-		msgSize = m_auxCxnUdp.Receive(udpMessage, maxSize);
-		m_auxCxnUdp.GetRemoteAddr(remote.ip, remote.port);
+		msgSize = auxCxnUdp.Receive(udpMessage, maxSize);
+		auxCxnUdp.GetRemoteAddr(remote.ip, remote.port);
 		if (msgSize)
 		{
 			// debug test code
@@ -88,9 +88,9 @@ std::vector<std::string> AuxCxnController::parseMessage(std::string message)
 
 bool AuxCxnController::push(std::string packet)
 {
-	if (m_bufferQ.size() < MAX_QUEUE_SIZE)
+	if (bufferQ.size() < MAX_QUEUE_SIZE)
 	{
-		m_bufferQ.push(packet);
+		bufferQ.push(packet);
 	}
 	else
 	{
@@ -101,10 +101,10 @@ bool AuxCxnController::push(std::string packet)
 
 bool AuxCxnController::pop(std::string &packet)
 {
-	if (!m_bufferQ.empty())
+	if (!bufferQ.empty())
 	{
-		packet = m_bufferQ.front();
-		m_bufferQ.pop();
+		packet = bufferQ.front();
+		bufferQ.pop();
 	}
 	else
 	{
@@ -115,13 +115,13 @@ bool AuxCxnController::pop(std::string &packet)
 
 bool AuxCxnController::pushToAuxInstrQ()
 {
-	while (!m_bufferQ.empty())
+	while (!bufferQ.empty())
 	{
-		if (m_mainQueue != nullptr)
+		if (appQ != nullptr)
 		{
 			ofLogVerbose("AuxCxnController") << "pushing to AuxInstrQ";
-			m_mainQueue->push(m_bufferQ.front());
-			m_bufferQ.pop();
+			appQ->push(bufferQ.front());
+			bufferQ.pop();
 		}
 		else
 		{
@@ -132,12 +132,12 @@ bool AuxCxnController::pushToAuxInstrQ()
 	return true;
 }
 
-bool AuxCxnController::attachMainQueue(AuxInstrQ *q)
+bool AuxCxnController::attachAppQ(AuxInstrQ *q)
 {
 	// ToDo: consider passing this as a constructor argument
 	if (q != nullptr)
 	{
-		m_mainQueue = q;
+		appQ = q;
 		return true;
 	}
 	else

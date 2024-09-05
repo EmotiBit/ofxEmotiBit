@@ -1,8 +1,8 @@
 #pragma once
 #include <queue>
 class AuxInstrQ {
-	std::queue<std::string> m_queue;
-	uint32_t m_lastPopTime = 0;
+	std::queue<std::string> q;
+	uint32_t lastPopTime = 0;
 	const uint16_t MAX_TIME_WITHOUT_POP_MS = 1000;  ///< Max time an element can stay at the top of the queue in mS
 
 public:

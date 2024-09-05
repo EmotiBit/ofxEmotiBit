@@ -63,7 +63,7 @@ public:
 	ofxUDPManager advertisingCxn;
 	ofxUDPManager dataCxn;
 	ofxTCPServer controlCxn;
-	AuxCxnController m_auxNetworkChannelController;
+	AuxCxnController auxNetworkChannelController;
 
 	std::thread* dataThread;
 	std::thread* advertisingThread;

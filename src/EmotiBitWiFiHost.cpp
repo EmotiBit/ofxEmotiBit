@@ -48,7 +48,7 @@ int8_t EmotiBitWiFiHost::begin()
 
 	dataThread = new std::thread(&EmotiBitWiFiHost::updateDataThread, this); 
 	advertisingThread = new std::thread(&EmotiBitWiFiHost::processAdvertisingThread, this);
-	m_auxNetworkChannelController.begin();
+	auxNetworkChannelController.begin();
 	return SUCCESS;
 }
 
@@ -1118,12 +1118,12 @@ void EmotiBitWiFiHost::parseCommSettings(string jsonStr)
 
 void EmotiBitWiFiHost::readAuxNetworkChannel()
 {
-	m_auxNetworkChannelController.readAuxCxn(AuxCxnController::AuxChannel::CHANNEL_UDP);
+	auxNetworkChannelController.readAuxCxn(AuxCxnController::AuxChannel::CHANNEL_UDP);
 }
 
 bool EmotiBitWiFiHost::attachAuxInstrQ(AuxInstrQ* q)
 {
-	bool status = m_auxNetworkChannelController.attachMainQueue(q);
+	bool status = auxNetworkChannelController.attachAppQ(q);
 	if (status)
 	{
 		ofLogVerbose("EmotiBitWiFiHost") << "AuxInstrQ attached";
@@ -1138,7 +1138,7 @@ bool EmotiBitWiFiHost::attachAuxInstrQ(AuxInstrQ* q)
 
 void EmotiBitWiFiHost::updateAuxInstrQ()
 {
-	m_auxNetworkChannelController.pushToAuxInstrQ();
+	auxNetworkChannelController.pushToAuxInstrQ();
 }
 
 void EmotiBitWiFiHost::processAuxInstrQ(AuxInstrQ *q)
