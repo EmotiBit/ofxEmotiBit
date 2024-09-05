@@ -3,7 +3,7 @@
 #include "ofMain.h"
 
 
-const std::string ofxEmotiBitVersion = "1.11.3.feat-OscilloscopeControlAutomation.0";
+const std::string ofxEmotiBitVersion = "1.11.3.feat-OscilloscopeControlAutomation.1";
 
 static const char SOFTWARE_VERSION_PREFIX = 'v';
 

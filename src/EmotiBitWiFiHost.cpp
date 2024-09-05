@@ -1118,10 +1118,11 @@ void EmotiBitWiFiHost::parseCommSettings(string jsonStr)
 
 void EmotiBitWiFiHost::readAuxNetworkChannel()
 {
+	// ToDo: This function definition will change when a TCP channel is implemented.
 	auxNetworkChannelController.readAuxCxn(AuxCxnController::AuxChannel::CHANNEL_UDP);
 }
 
-bool EmotiBitWiFiHost::attachAuxInstrQ(AuxInstrQ* q)
+bool EmotiBitWiFiHost::attachAppQ(AuxInstrQ* q)
 {
 	bool status = auxNetworkChannelController.attachAppQ(q);
 	if (status)
@@ -1138,10 +1139,10 @@ bool EmotiBitWiFiHost::attachAuxInstrQ(AuxInstrQ* q)
 
 void EmotiBitWiFiHost::updateAuxInstrQ()
 {
-	auxNetworkChannelController.pushToAuxInstrQ();
+	auxNetworkChannelController.pushToAppQ();
 }
 
-void EmotiBitWiFiHost::processAuxInstrQ(AuxInstrQ *q)
+void EmotiBitWiFiHost::processAppQ()
 {
 	Json::Reader reader;
 	Json::Value jsonSettings;
@@ -1150,9 +1151,9 @@ void EmotiBitWiFiHost::processAuxInstrQ(AuxInstrQ *q)
 	try
 	{
 		// Process all messages of type WH - WiFiHost
-		if (q->getSize())
+		if (auxNetworkChannelController.appQ->getSize())
 		{
-			bool status = q->front(instruction);
+			bool status = auxNetworkChannelController.appQ->front(instruction);
 			if (status)
 			{
 				if (reader.parse(instruction, jsonSettings))
@@ -1168,8 +1169,8 @@ void EmotiBitWiFiHost::processAuxInstrQ(AuxInstrQ *q)
 							{
 								// locally scoped to destroy variable after popping
 								std::string str;
-								q->pop(str);
-								q->updateLastPopTime();
+								auxNetworkChannelController.appQ->pop(str);
+								auxNetworkChannelController.appQ->updateLastPopTime();
 							}
 							// loop through all the arguments
 							if (jsonSettings.isMember("typetag"))
@@ -1227,8 +1228,8 @@ void EmotiBitWiFiHost::processAuxInstrQ(AuxInstrQ *q)
 					ofLogNotice("EmotiBitWiFiHost") << "Aux Instruction not in JSON format. Removing from Queue.";
 					// pop from Queue
 					std::string str;
-					q->pop(str);
-					q->updateLastPopTime();
+					auxNetworkChannelController.appQ->pop(str);
+					auxNetworkChannelController.appQ->updateLastPopTime();
 				}
 
 			}
@@ -1236,7 +1237,7 @@ void EmotiBitWiFiHost::processAuxInstrQ(AuxInstrQ *q)
 	}
 	catch (exception e)
 	{
-		ofLogWarning("[EmotiBitWiFiHost::processAuxInstrQ] Failed to parse message ") << e.what();
+		ofLogWarning("[EmotiBitWiFiHost::processAppQ] Failed to parse message ") << e.what();
 		ofLogWarning("Skipping: ") << instruction;
 	}
 }

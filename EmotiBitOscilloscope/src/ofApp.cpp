@@ -22,7 +22,7 @@ void ofApp::setup() {
 	emotiBitWiFi.parseCommSettings(commSettings);
 
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
-	emotiBitWiFi.attachAuxInstrQ(&m_auxCtrlQ);  // pass the main application instruction q to the wifi controller
+	emotiBitWiFi.attachAppQ(&auxCtrlQ);  // pass the main application instruction q to the wifi controller
 	timeWindowOnSetup = 10;  // set timeWindow for setup (in seconds)
 	setupGui();
 	setupOscilloscopes();
@@ -77,11 +77,11 @@ void ofApp::update() {
 	emotiBitWiFi.updateAuxInstrQ();
 
 	// process elements in the AuxInstrQ
-	emotiBitWiFi.processAuxInstrQ(&m_auxCtrlQ);
+	emotiBitWiFi.processAppQ();
 	processAuxInstrQ();
 
 	// ToDo: This function should really be on its own thread, running on a timer. See ofTimer: https://openframeworks.cc/documentation/utils/ofTimer/#show_reset
-	m_auxCtrlQ.clearStaleElement();
+	auxCtrlQ.clearStaleElement();
 
 	//ofSetLogLevel(currentLogLevel);
 	//ofLogToConsole();

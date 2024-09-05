@@ -196,7 +196,7 @@ public:
 	 * \param q pointer to the main application queue
 	 * \return true if successful, else false
 	 */
-	bool attachAuxInstrQ(AuxInstrQ* q);
+	bool attachAppQ(AuxInstrQ* q);
 
 	/**
 	 * \brief move packets from aux network controller buffer queue to main application queue.
@@ -209,7 +209,7 @@ public:
 	 * 
 	 * \param q Pointer to the main application queue
 	 */
-	void processAuxInstrQ(AuxInstrQ *q);
+	void processAppQ();
 };
 
 

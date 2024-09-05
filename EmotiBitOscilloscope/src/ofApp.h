@@ -309,7 +309,7 @@ public:
 	
 	EmotiBitLsl emotibitLsl;
 	bool sendLsl = false;
-	AuxInstrQ m_auxCtrlQ;  ///< Main application queue for aux messages
+	AuxInstrQ auxCtrlQ;  ///< Main application queue for aux messages
 
 	/**
 	 * \brief Function to process the instructions received on the aux queue.

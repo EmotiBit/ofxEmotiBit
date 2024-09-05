@@ -113,7 +113,7 @@ bool AuxCxnController::pop(std::string &packet)
 	return true;
 }
 
-bool AuxCxnController::pushToAuxInstrQ()
+bool AuxCxnController::pushToAppQ()
 {
 	while (!bufferQ.empty())
 	{

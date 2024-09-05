@@ -19,6 +19,7 @@ public:
 	
 	ofxUDPManager auxCxnUdp;
 	//ofxTCPClient auxCxnTcp; ToDo
+	AuxInstrQ *appQ;  ///< pointer to main application queue
 	
 	/*!
 	* \brief Setup the AUX Cxn
@@ -57,7 +58,7 @@ public:
 	* \brief Pushes all messages from local controller queue to main application queue
 	* \return true is successful
 	*/
-	bool pushToAuxInstrQ();
+	bool pushToAppQ();
 
 	/**
 	 * \brief Function called in ofApp during setup to pass main application queue pointer to this controller.
@@ -70,5 +71,5 @@ public:
 private:
 
 	std::queue<std::string> bufferQ;  ///< Local queue to buffer UDP/TCP messages before pushing into the main application queue
-	AuxInstrQ *appQ;  ///< pointer to main application queue
+	
 };
