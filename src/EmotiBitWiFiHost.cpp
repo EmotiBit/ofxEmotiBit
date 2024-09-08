@@ -285,9 +285,7 @@ void EmotiBitWiFiHost::processAdvertisingThread()
 int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 {
 	const int maxSize = 32768;
-	commSettingsUpdateMutex.lock();
 	sendAdvertising();
-	commSettingsUpdateMutex.unlock();
 
 	static uint64_t checkAdvertisingTimer = ofGetElapsedTimeMillis();
 	uint64_t checkAdvertisingTime = ofGetElapsedTimeMillis() - checkAdvertisingTimer;
@@ -490,7 +488,6 @@ int8_t EmotiBitWiFiHost::sendControl(const string& packet)
 	controlCxnMutex.unlock();
 	if (sent)
 	{
-		//ofLogWarning("EmotiBitWiFiHost") << "TCP Client not connected. TCP transaction skipped for packet: " + packet;
 		return SUCCESS;
 	}
 	ofLogWarning("EmotiBitWiFiHost") << "TCP Client not connected. TCP transaction skipped for packet: " + packet;

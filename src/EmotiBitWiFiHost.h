@@ -71,7 +71,6 @@ public:
 	std::mutex controlCxnMutex;
 	std::mutex dataCxnMutex;
 	std::mutex discoveredEmotibitsMutex;
-	std::mutex commSettingsUpdateMutex;
 
 	uint16_t advertisingPort;
 	uint16_t _dataPort;
