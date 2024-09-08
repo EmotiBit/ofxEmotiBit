@@ -7,6 +7,7 @@
 #include <ofUtils.h>
 #include "EmotiBitPacket.h"
 #include "AuxInstrQ.h"
+#include "EmotiBitComms.h"
 
 class AuxCxnController {
 public:
@@ -14,7 +15,7 @@ public:
 		CHANNEL_UDP = 0,
 		CHANNEL_TCP
 	};
-	int auxPort = 8080;  ///< Port where auxillary messages can be sent to the oscilloscope
+	int auxPort = EmotiBitComms::WIFI_ADVERTISING_PORT - 1;  ///< Port where auxillary messages can be sent to the oscilloscope
 	const int MAX_QUEUE_SIZE = 1000; // random number chosen for now
 	
 	ofxUDPManager auxCxnUdp;
