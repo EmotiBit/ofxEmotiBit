@@ -6,8 +6,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	//ofLogToConsole();
-	ofLogToFile("Application.log");
+	ofLogToConsole();
 #ifdef TARGET_MAC_OS
     ofSetDataPathRoot("../Resources/");
     cout<<"Changed the data pathroot for macOS."<<endl;
@@ -69,10 +68,6 @@ void ofApp::update() {
 	vector<string> dataPackets;
 	emotiBitWiFi.readData(dataPackets);
 
-	// check the AuxInstrQ
-	//ofLogToFile("auxCtrlQ.log");
-	//auto currentLogLevel = ofGetLogLevel();
-	//ofSetLogLevel(OF_LOG_VERBOSE);
 	emotiBitWiFi.readAuxNetworkChannel();
 	emotiBitWiFi.updateAuxInstrQ();
 
@@ -82,10 +77,6 @@ void ofApp::update() {
 
 	// ToDo: This function should really be on its own thread, running on a timer. See ofTimer: https://openframeworks.cc/documentation/utils/ofTimer/#show_reset
 	auxCtrlQ.clearStaleElement();
-
-	//ofSetLogLevel(currentLogLevel);
-	//ofLogToConsole();
-
 
 	for (string packet : dataPackets)
 	{
@@ -1829,12 +1820,6 @@ bool ofApp::startUdpOutput()
 void ofApp::processAuxInstrQ()
 {
 	// ToDo: implement parsing of the JSON instructions
-	// process all messages of type A - APpGui
-
-
-	// process the main queue and call appropriate functions
-	// The AuxInstrQ contains instructions in packet format.
-	// We need to parse these instructions and call the relevant function
-	// parse instruction
+	// process all messages of type APP_GUI
 	
 }

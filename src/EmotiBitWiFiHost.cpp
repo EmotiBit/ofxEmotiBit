@@ -469,7 +469,6 @@ int8_t EmotiBitWiFiHost::processAdvertising(vector<string> &infoPackets)
 int8_t EmotiBitWiFiHost::sendControl(const string& packet)
 {
 	controlCxnMutex.lock();
-	bool sent = false;
 	for (unsigned int i = 0; i < (unsigned int)controlCxn.getLastID(); i++)
 	{
 		if (!controlCxn.isClientConnected(i)) continue;
@@ -482,14 +481,10 @@ int8_t EmotiBitWiFiHost::sendControl(const string& packet)
 		//isStartingConnection = false;
 		ofLogVerbose("EmotiBitWiFiHost") << "Sending: " << packet;
 		controlCxn.send(i, packet);
-		sent = true;
-		break; // msg sent. stop scanning through all clients
-	}
-	controlCxnMutex.unlock();
-	if (sent)
-	{
 		return SUCCESS;
 	}
+	controlCxnMutex.unlock();
+
 	ofLogWarning("EmotiBitWiFiHost") << "TCP Client not connected. TCP transaction skipped for packet: " + packet;
 	return FAIL;
 }

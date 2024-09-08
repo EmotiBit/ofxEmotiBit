@@ -18,7 +18,6 @@
 #include "DoubleBuffer.h"
 #include "json/json.h"
 #include "AuxCxnController.h"
-#include "ofUtils.h"
 #include "EmotiBitOfUtils.h"
 using namespace EmotiBit;
 
