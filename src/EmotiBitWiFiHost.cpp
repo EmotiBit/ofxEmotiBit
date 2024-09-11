@@ -477,9 +477,11 @@ int8_t EmotiBitWiFiHost::sendControl(const string& packet)
 		string ip = controlCxn.getClientIP(i);
 
 		if (ip.compare(connectedEmotibitIp) != 0) continue;	// Confirm this is the EmotiBit IP we're connected to
+		
 		//_isConnected = true;
 		//isStartingConnection = false;
 
+		ofLogVerbose() << "Sending: " << packet;
 		controlCxn.send(i, packet);
 	}
 	controlCxnMutex.unlock();
