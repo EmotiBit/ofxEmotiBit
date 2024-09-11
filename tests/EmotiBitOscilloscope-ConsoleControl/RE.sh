@@ -21,7 +21,7 @@ if [ -z ${UDP_PORT} ]; then
 	UDP_PORT=$DEFAULT_UDP_PORT
 fi
 
-
+# use stream editor to update the action list
 UDP_PACKET=$(sed "s/\"ACTION\"/\"RECORD_END\"/" ./template.json)
 #echo $UDP_PACKET
 
