@@ -112,6 +112,8 @@
     <ClCompile Include="..\src\EmotiBitOfUtils.cpp" />
     <ClCompile Include="..\src\Signal\Periodizer.cpp" />
     <ClCompile Include="..\src\SoftwareVersionChecker.cpp" />
+    <ClCompile Include="src\AuxInstrQ.cpp" />
+    <ClCompile Include="src\AuxCxnController.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.cpp" />
@@ -173,6 +175,8 @@
     <ClInclude Include="..\src\EmotiBitOfUtils.h" />
     <ClInclude Include="..\src\Signal\Periodizer.h" />
     <ClInclude Include="..\src\SoftwareVersionChecker.h" />
+    <ClInclude Include="src\AuxInstrQ.h" />
+    <ClInclude Include="src\AuxCxnController.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />
