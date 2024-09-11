@@ -479,14 +479,12 @@ int8_t EmotiBitWiFiHost::sendControl(const string& packet)
 		if (ip.compare(connectedEmotibitIp) != 0) continue;	// Confirm this is the EmotiBit IP we're connected to
 		//_isConnected = true;
 		//isStartingConnection = false;
-		ofLogVerbose("EmotiBitWiFiHost") << "Sending: " << packet;
+
 		controlCxn.send(i, packet);
-		return SUCCESS;
 	}
 	controlCxnMutex.unlock();
 
-	ofLogWarning("EmotiBitWiFiHost") << "TCP Client not connected. TCP transaction skipped for packet: " + packet;
-	return FAIL;
+	return SUCCESS;
 }
 
 // ToDo: Implement readControl()
