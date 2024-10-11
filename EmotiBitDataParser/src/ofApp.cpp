@@ -7,11 +7,10 @@
 void ofApp::setup() {
 	ofLogToConsole();
 	ofSetLogLevel(OF_LOG_VERBOSE);
-#ifdef TARGET_MAC_OS
+#ifdef TARGET_OSX
     ofSetDataPathRoot("../Resources/");
-    cout<<"Changed the data pathroot for Release"<<endl;
+    cout<<"Datapath: Resources"<<endl;
 #endif
-	writeOfxEmotiBitVersionFile();
 	ofSetWindowTitle("EmotiBit Data Parser (v" + ofxEmotiBitVersion + ")");
 
 	ofBackground(255, 255, 255);
