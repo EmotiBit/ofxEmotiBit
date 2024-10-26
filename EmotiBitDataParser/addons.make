@@ -1,11 +1,6 @@
-ofxBiquadFilter
 ofxEmotiBit
 ofxGui
-ofxNetwork
-ofxPoco
-ofxNetworkUtils
-ofxOscilloscope
 ofxThreadedLogger
-ofxXmlSettings
 EmotiBit_XPlat_Utils
 ofxJSON
+ofxBiquadFilter
