@@ -33,7 +33,7 @@
 		853E0BA2F448076739446874 /* ofxColorPicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 181D363B6DD54D1FA6309C43 /* ofxColorPicker.cpp */; };
 		856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9604B925D32EE39065747725 /* ofxBaseGui.cpp */; };
 		879A251454401BC0B6E4F238 /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9BFFBBF4CC43DEE890B3C3E /* OscTypes.cpp */; };
-		8E012CDE29A5B157009FB530 /* udpOutputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E012CDD29A5B157009FB530 /* udpOutputSettings.xml */; };
+		8E012CDE29A5B157009FB530 /* udpOutputSettings.xml in Copy Files */ = {isa = PBXBuildFile; fileRef = 8E012CDD29A5B157009FB530 /* udpOutputSettings.xml */; };
 		8E016F642832CAFE005D7C65 /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F612832CAFE005D7C65 /* ofxJSONElement.cpp */; };
 		8E016F6E2832CB73005D7C65 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F6D2832CB73005D7C65 /* jsoncpp.cpp */; };
 		8E016F7C2832CE28005D7C65 /* EmotiBitVariants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F722832CE28005D7C65 /* EmotiBitVariants.cpp */; };
@@ -42,24 +42,24 @@
 		8E016F7F2832CE28005D7C65 /* EmotiBitPacket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F762832CE28005D7C65 /* EmotiBitPacket.cpp */; };
 		8E016F802832CE28005D7C65 /* EmotiBitFactoryTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F782832CE28005D7C65 /* EmotiBitFactoryTest.cpp */; };
 		8E016F842832CE82005D7C65 /* Periodizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E016F832832CE82005D7C65 /* Periodizer.cpp */; };
-		8E016F862832D594005D7C65 /* emotibitCommSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E016F852832D594005D7C65 /* emotibitCommSettings.json */; };
+		8E016F862832D594005D7C65 /* emotibitCommSettings.json in Copy Files */ = {isa = PBXBuildFile; fileRef = 8E016F852832D594005D7C65 /* emotibitCommSettings.json */; };
 		8E07BBAD2B1F824D00CDD443 /* SoftwareVersionChecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBAB2B1F824D00CDD443 /* SoftwareVersionChecker.cpp */; };
 		8E07BBCD2BB3B2BF00CDD443 /* PatchboardJson.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBC72BB3B2BF00CDD443 /* PatchboardJson.cpp */; };
 		8E07BBCE2BB3B2BF00CDD443 /* PatchboardXml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBC92BB3B2BF00CDD443 /* PatchboardXml.cpp */; };
 		8E07BBCF2BB3B2BF00CDD443 /* PatchboardBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBCC2BB3B2BF00CDD443 /* PatchboardBase.cpp */; };
 		8E07BBD52BB3B46400CDD443 /* EmotiBitOfUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E07BBD32BB3B46400CDD443 /* EmotiBitOfUtils.cpp */; };
-		8E07BBD72BB3B5D200CDD443 /* lslOutputSettings.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E07BBD62BB3B5D200CDD443 /* lslOutputSettings.json */; };
-		8E6079EA27C978BE00959DDB /* inputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E827C978BE00959DDB /* inputSettings.xml */; };
-		8E6079EB27C978BE00959DDB /* ofxOscilloscopeSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */; };
+		8E07BBD72BB3B5D200CDD443 /* lslOutputSettings.json in Copy Files */ = {isa = PBXBuildFile; fileRef = 8E07BBD62BB3B5D200CDD443 /* lslOutputSettings.json */; };
+		8E6079EA27C978BE00959DDB /* inputSettings.xml in Copy Files */ = {isa = PBXBuildFile; fileRef = 8E6079E827C978BE00959DDB /* inputSettings.xml */; };
+		8E6079EB27C978BE00959DDB /* ofxOscilloscopeSettings.xml in Copy Files */ = {isa = PBXBuildFile; fileRef = 8E6079E927C978BE00959DDB /* ofxOscilloscopeSettings.xml */; };
 		8E80A3632CCDAAA000C65119 /* EmotiBitLsl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E80A35F2CCDAAA000C65119 /* EmotiBitLsl.cpp */; };
 		8E80A3642CCDAAA000C65119 /* EmotiBitLsl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E80A35F2CCDAAA000C65119 /* EmotiBitLsl.cpp */; };
 		8E80A3652CCDAAA000C65119 /* EmotiBitWiFiHost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E80A3622CCDAAA000C65119 /* EmotiBitWiFiHost.cpp */; };
 		8E80A3662CCDAAA000C65119 /* EmotiBitWiFiHost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E80A3622CCDAAA000C65119 /* EmotiBitWiFiHost.cpp */; };
 		8F5205AEF8861EF234F0651A /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81967292BFC87A0144BD32C6 /* ofxOscSender.cpp */; };
 		933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */; };
-		941B2FC325BA241400BB7E84 /* oscOutputSettings.xml in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB525B8EA3200BB7E84 /* oscOutputSettings.xml */; };
-		941B2FC425BA241400BB7E84 /* verdana.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB225B8E62400BB7E84 /* verdana.ttf */; };
-		941B2FC525BA241400BB7E84 /* verdanab.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 941B2FB125B8E62400BB7E84 /* verdanab.ttf */; };
+		941B2FC325BA241400BB7E84 /* oscOutputSettings.xml in Copy Files */ = {isa = PBXBuildFile; fileRef = 941B2FB525B8EA3200BB7E84 /* oscOutputSettings.xml */; };
+		941B2FC425BA241400BB7E84 /* verdana.ttf in Copy Files */ = {isa = PBXBuildFile; fileRef = 941B2FB225B8E62400BB7E84 /* verdana.ttf */; };
+		941B2FC525BA241400BB7E84 /* verdanab.ttf in Copy Files */ = {isa = PBXBuildFile; fileRef = 941B2FB125B8E62400BB7E84 /* verdanab.ttf */; };
 		948E6B5228528CA5000A8B76 /* ofxLSLReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 948E6B4E28528CA5000A8B76 /* ofxLSLReceiver.cpp */; };
 		948E6B5328528CA5000A8B76 /* ofxLSLResolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 948E6B5128528CA5000A8B76 /* ofxLSLResolver.cpp */; };
 		948E6B5928529E74000A8B76 /* liblsl.1.14.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 948E6B5528528E34000A8B76 /* liblsl.1.14.0.dylib */; };
@@ -165,21 +165,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
+		E4C2427710CC5ABF004149E2 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				8E07BBD72BB3B5D200CDD443 /* lslOutputSettings.json in CopyFiles */,
-				8E012CDE29A5B157009FB530 /* udpOutputSettings.xml in CopyFiles */,
-				8E016F862832D594005D7C65 /* emotibitCommSettings.json in CopyFiles */,
-				8E6079EA27C978BE00959DDB /* inputSettings.xml in CopyFiles */,
-				8E6079EB27C978BE00959DDB /* ofxOscilloscopeSettings.xml in CopyFiles */,
-				941B2FC325BA241400BB7E84 /* oscOutputSettings.xml in CopyFiles */,
-				941B2FC425BA241400BB7E84 /* verdana.ttf in CopyFiles */,
-				941B2FC525BA241400BB7E84 /* verdanab.ttf in CopyFiles */,
+				8E07BBD72BB3B5D200CDD443 /* lslOutputSettings.json in Copy Files */,
+				8E012CDE29A5B157009FB530 /* udpOutputSettings.xml in Copy Files */,
+				8E016F862832D594005D7C65 /* emotibitCommSettings.json in Copy Files */,
+				8E6079EA27C978BE00959DDB /* inputSettings.xml in Copy Files */,
+				8E6079EB27C978BE00959DDB /* ofxOscilloscopeSettings.xml in Copy Files */,
+				941B2FC325BA241400BB7E84 /* oscOutputSettings.xml in Copy Files */,
+				941B2FC425BA241400BB7E84 /* verdana.ttf in Copy Files */,
+				941B2FC525BA241400BB7E84 /* verdanab.ttf in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -1629,7 +1630,7 @@
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
 				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
-				E4C2427710CC5ABF004149E2 /* CopyFiles */,
+				E4C2427710CC5ABF004149E2 /* Copy Files */,
 				8466F1851C04CA0E00918B1C /* ShellScript */,
 				948E6B5A2852AA4B000A8B76 /* Run Script */,
 			);
@@ -2139,6 +2140,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
 				);
+				OTHER_CPLUSPLUSFLAGS = "-D__MACOSX_CORE__";
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
 					"$(OF_CORE_FRAMEWORKS)",
@@ -2220,6 +2222,7 @@
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
 				);
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = "-D__MACOSX_CORE__";
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
 					"$(OF_CORE_FRAMEWORKS)",
@@ -2520,6 +2523,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
+				OTHER_CPLUSPLUSFLAGS = "-D__MACOSX_CORE__";
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
 					"$(OF_CORE_FRAMEWORKS)",
@@ -2600,6 +2604,8 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = "-D__MACOSX_CORE__";
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
 					"$(OF_CORE_FRAMEWORKS)",
