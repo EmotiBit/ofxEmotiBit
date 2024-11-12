@@ -13,7 +13,8 @@
 		<patch>
 			<input>PR</input>
 			<output>/EmotiBit/0/PPG:RED</output>
-		</patch>		<patch>
+		</patch>		
+		<patch>
 			<input>PI</input>
 			<output>/EmotiBit/0/PPG:IR</output>
 		</patch>	
@@ -22,8 +23,24 @@
 			<output>/EmotiBit/0/PPG:GRN</output>
 		</patch>
 		<patch>
+			<input>HR</input>
+			<output>/EmotiBit/0/HR</output>
+		</patch>
+		<patch>
 			<input>EA</input>
 			<output>/EmotiBit/0/EDA</output>
+		</patch>
+		<patch>
+			<input>SA</input>
+			<output>/EmotiBit/0/SCR:AMP</output>
+		</patch>
+		<patch>
+			<input>SR</input>
+			<output>/EmotiBit/0/SCR:RIS</output>
+		</patch>
+		<patch>
+			<input>SF</input>
+			<output>/EmotiBit/0/SCR:FREQ</output>
 		</patch>
 		<patch>
 			<input>H0</input>
