@@ -6,7 +6,6 @@ jobs:
     environment: RUNNER-MACOS
     steps:
       - name: remove existing clone
-        #working-directory: /Users/cfl/dev/emotibit/software/deploy/of_v0.11.2_osx_release/addons
         working-directory: ${{ vars.ADDONS_DIR }}
         run: |
           pwd
@@ -28,7 +27,6 @@ jobs:
     environment: RUNNER-MACOS
     steps: 
       - name: build using xcode
-        #working-directory: /Users/cfl/dev/emotibit/software/deploy/of_v0.11.2_osx_release/addons/ofxEmotiBit
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd

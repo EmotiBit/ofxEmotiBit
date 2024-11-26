@@ -12,11 +12,9 @@ jobs:
     environment: RUNNER-MACOS
     steps:
       - name: create stage-release
-        #working-directory: /Users/cfl/dev/emotibit/software/deploy/of_v0.11.2_osx_release/addons/ofxEmotiBit
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: mkdir -p stageRelease/EmotiBitSoftware-macos
       - name: populate stage release
-        #working-directory: /Users/cfl/dev/emotibit/software/deploy/of_v0.11.2_osx_release/addons/ofxEmotiBit
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           mv EmotiBitOscilloscope/bin/EmotiBitOscilloscope.app stageRelease/EmotiBitSoftware-macos
