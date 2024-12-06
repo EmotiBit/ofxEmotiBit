@@ -1,9 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxOscilloscope.h"
-#include "ofxNetwork.h"
-#include "ofxNetworkUtils.h"
 #include "ofxThreadedLogger.h"
 #include "ofxGui.h"
 #include "ofxInputField.h"

@@ -1,0 +1,62 @@
+name: upload build artifact Windows
+on:
+   
+  #workflow_dispatch:
+  workflow_run:
+    workflows: ["Build all on Windows"]
+    types:
+     - completed
+    branches:
+     [dev]
+jobs:
+  build-installer:
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps:
+      - name: build installer project
+        shell: cmd
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          cd EmotiBitInstaller
+          devenv EmotiBitInstaller.sln /Build Release 
+
+  upload-artifact:
+    needs: build-installer
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps:
+      - name: create stage-release
+        shell: bash
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: mkdir -p stageRelease/EmotiBitSoftware-Windows
+      - name: populate stage release
+        shell: bash
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          msiInstPath=./EmotiBitInstaller/EmotiBitInstaller/Release/EmotiBitInstaller.msi
+          setupPath=./EmotiBitInstaller/EmotiBitInstaller/Release/setup.exe
+          silabsDriverPath=../../../drivers/CP210x_Windows_Drivers
+          releaseFolder="EmotiBitSoftware-Windows"
+          version=$(grep ./src/ofxEmotiBitVersion.h -e "string ofxEmotiBitVersion" | cut -d '"' -f 2)
+          echo "Staging release for version: $version"
+
+          if [ -f "$msiInstPath" ] || [ -f "$setupPath" ]; then
+            echo "msi and exe files found!"
+            echo "staging release"
+            echo "copying installer files"
+            cp "$msiInstPath" "./stageRelease/$releaseFolder"
+            cp "$setupPath" "./stageRelease/$releaseFolder"
+            for i in $(find ../../../drivers -maxdepth 1 -mindepth 1 -name '*CP210x*' -type d); do
+              dirname=$(basename "$i")
+              worktree="../../../drivers/$dirname"
+              echo "copying $dirname"
+              cp -r "$worktree" "./stageRelease/$releaseFolder"
+            done
+          else
+            echo "installer files not found! Create installer!"
+          fi
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmotiBitSoftware-Windows
+          path: ${{ vars.OFXEMOTIBIT_DIR }}\\stageRelease\\EmotiBitSoftware-Windows
