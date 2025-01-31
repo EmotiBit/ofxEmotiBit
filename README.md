@@ -11,31 +11,36 @@ Install openFrameworks 0.11.2 from the official [openFrameworks GitHub repositor
   - For macOS: `of_v0.11.2_osx_release.zip`
   - For linux: `of_v0.11.2_linux64gcc6_release.tar.gz`
 
+### Openframeworks addons
 #### Addons directory structure
 Openframeworks uses `addons` to support adding features to the projects. The addons used by EmotiBit software are listed in the section below.
-The addons are placed in the `OF_ROOT/addons` folder and it's structure is shown below. Please download or clone (uses git) the addons listed in the section below in the `OF_ROOT/addons` directory. You can have additional addons in the addons folder, but the addons linked above are **required** for building EmotiBit software.
-```plaintext
-addons
-├── ofxEmotiBit
-│   ├── src
-│   ├── EmotiBitOscilloscope
-│   │   ├── EmotiBitOscilloscope.sln
-│   │   ├── EmotiBitOscilloscope.xcodeproj
-│   │   └── ...
-│   ├── EmotiBitDataParser
-│   └── EmotiBitFirmwareInstaller        
-├── ofxNetworkUtils
-├── ofxOscilloscope
-├── ofxThreadedLogger
-├── ofxBiquadFilter
-├── ofxJSON
-├── EmotiBit_XPlat_Utils
-├── ofxLSL
-├── ofxSerial
-└── ofxIO
-```
+The addons are placed in the `OF_ROOT/addons` folder and it's structure is shown below. Please download or clone (uses git) the addons listed in the section below in the `OF_ROOT/addons` directory. You can have additional addons in the addons folder, but the addons listed below are **required** for building EmotiBit software.
+- <details><summary>Sample addons folder</summary>
 
-#### Openframeworks addons
+  ```plaintext
+  addons
+  ├── ofxEmotiBit
+  │   ├── src
+  │   ├── EmotiBitOscilloscope
+  │   │   ├── EmotiBitOscilloscope.sln
+  │   │   ├── EmotiBitOscilloscope.xcodeproj
+  │   │   └── ...
+  │   ├── EmotiBitDataParser
+  │   └── EmotiBitFirmwareInstaller        
+  ├── ofxNetworkUtils
+  ├── ofxOscilloscope
+  ├── ofxThreadedLogger
+  ├── ofxBiquadFilter
+  ├── ofxJSON
+  ├── EmotiBit_XPlat_Utils
+  ├── ofxLSL
+  ├── ofxSerial
+  └── ofxIO
+  ```
+  </details>
+
+
+#### Download the following Openframeworks addons 
 - **ofxNetworkUtils:** [GitHub repository](https://github.com/bakercp/ofxNetworkUtils)
 - **ofxOscilloscope:** [GitHub repository](https://github.com/produceconsumerobot/ofxOscilloscope/)
 - **ofxThreadedLogger:** [GitHub repository](https://github.com/produceconsumerobot/ofxThreadedLogger)
@@ -50,11 +55,12 @@ addons
     - liblsl64.lib should always be linked to in under _solution properties->linker->general->additional library directories_ and _solution properties->linker->input-> additional dependencies_
     - both of these libs are handled properly by default but should be considered if deviating from the release code
     </details>
-- The project is built on a 64-bit architecture. Ensure you are on a machine supporting the `x64` build platform.
 - Required to build EmotiBit FirmwareInstaller
   - **ofxSerial:** [GitHub repository](https://github.com/EmotiBit/ofxSerial)
   - **ofxIO:** [GitHub repository](https://github.com/bakercp/ofxIO)
-- **If downloading the zip instead of `git clone` be sure to remove `-master`  or `-xxx-xxx` from the folder name to maintain correct path references**. 
+- Additional notes
+  - The project is built on a 64-bit architecture. Ensure you are on a machine supporting the `x64` build platform.
+  - **If downloading the zip instead of `git clone`, be sure to remove `-master`  or `-xxx-xxx` from the folder name to maintain correct path references**. 
 
 
 #### The following script may be run from a bash shell within your openFrameworks/addons/ directory to install ofxEmotiBit and all dependencies. 
