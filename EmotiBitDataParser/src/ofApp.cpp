@@ -886,11 +886,6 @@ void ofApp::parseDataLine(string packet) {
 						//allTimestampData.roundTrip.push_back(-1);
 						//allTimestampData.c2e.push_back(-1);
 						lastRDPacketNumber = packetHeader.packetNumber;
-
-						auto loggerPtr = loggers.find(timestampFilenameString);
-						if (loggerPtr != loggers.end()) {
-							loggerPtr->second->push("\n" + ofToString(allTimestampData.back().RD) + ",");
-						}
 					}
 					// ToDo: handle TIMESTAMP_UTC request
 						//|| splitPacket.at(EmotiBitPacket::headerLength).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
@@ -922,6 +917,8 @@ void ofApp::parseDataLine(string packet) {
 							lastRDPacketNumber = -1; // reset the last RD packet number to avoid overwriting from duplicate
 							auto loggerPtr = loggers.find(timestampFilenameString);
 							if (loggerPtr != loggers.end()) {
+								// write RD
+								loggerPtr->second->push("\n" + ofToString(allTimestampData.back().RD) + ",");
 								// write TL information into tiemsync file
 								loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
 								loggerPtr->second->push(allTimestampData.back().TS_sent + ",");
