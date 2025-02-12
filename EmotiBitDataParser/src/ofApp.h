@@ -154,7 +154,6 @@ public:
 		@param points pair representing teh anchor points
 		*/
 		void updateAnchorPoints(std::string identifier, pair<long double, long double> points);
-	private:
 		/*!
 		@brief update the column headers for timeSyncMap csv file
 		@param typetag or paylaod label representing the time domain

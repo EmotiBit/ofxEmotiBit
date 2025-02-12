@@ -14,9 +14,11 @@ void ofApp::setup() {
 	ofSetWindowTitle("EmotiBit Data Parser (v" + ofxEmotiBitVersion + ")");
 
 	ofBackground(255, 255, 255);
-	legendFont.load(ofToDataPath("verdana.ttf"), 12, true, true);
-	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
-	parsedDataFormat.loadFromFile("parsedDataFormat.json");
+	std::string path = ofToDataPath("verdana.ttf", true);
+	cout << "Loading verdana.ttf from " << path;
+	legendFont.load(ofToDataPath("verdana.ttf", true), 12, true, true);
+	subLegendFont.load(ofToDataPath("verdana.ttf", true), 7, true, true);
+	parsedDataFormat.loadFromFile("parsedDataFormat.json", true);
 	processButton.addListener(this, &ofApp::startProcessing);
 
 	int guiXPos = 0;
@@ -211,10 +213,19 @@ void ofApp::update() {
 					cout << "Creating file: " << filename << endl;
 					ofstream mFile;
 					mFile.open(filename.c_str(), ios::out);
+					
+					// update header row
+					timeSyncMap.updateSyncMapHeader(EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT);
+					// update the column header for all additional time domains in the parsedDataFormat file 
+					for (int i = 0; i <= (int)parsedDataFormat.additionalTimestamps.size() - 1; i++)
+					{
+						timeSyncMap.updateSyncMapHeader(parsedDataFormat.additionalTimestamps.at(i));
+					}
 					mFile << timeSyncMap.columnHeaders + "TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime, DataParserVersion" << endl;
+					
+					// update data row
 					mFile << ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first, 6) << ","
 						<< ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second, 6) << ",";
-					// Add column headers for additional time domains read from parsed data format file
 					for (int i = 0;i <= (int)parsedDataFormat.additionalTimestamps.size() - 1; i++)
 					{
 						auto timeDomain = parsedDataFormat.additionalTimestamps.at(i);
@@ -272,7 +283,7 @@ void ofApp::ParsedDataFormat::loadFromFile(std::string filename, bool absolute)
 	try
 	{
 		// ToDo: find a place for these settings to be stored. a struct in ofApp?
-		ofFile parsedDataFormatFile(ofToDataPath(filename));
+		ofFile parsedDataFormatFile(ofToDataPath(filename, absolute));
 		if (parsedDataFormatFile.exists())
 		{
 			if (jsonSettings.open(ofToDataPath(filename, absolute)))
@@ -569,7 +580,11 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 	}
 	// update the calculated anchor points
 	tsMap.updateAnchorPoints(EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT, make_pair(e0,e1));
-	tsMap.updateAnchorPoints(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, make_pair(c0,c1));
+	// Add TL only if it is present in the parsedDataFormat file
+	if (std::find(parsedDataFormat.additionalTimestamps.begin(), parsedDataFormat.additionalTimestamps.end(), EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != parsedDataFormat.additionalTimestamps.end())
+	{
+		tsMap.updateAnchorPoints(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, make_pair(c0,c1));
+	}
 	// find the best CrossTime points for time domain transfers
 	selectBestCrossTimePoints();
 
@@ -677,7 +692,6 @@ void ofApp::selectBestCrossTimePoints()
 void ofApp::TimeSyncMap::updateAnchorPoints(std::string identifier, pair<long double, long double> points)
 {
 	anchorPoints[identifier] = points;
-	updateSyncMapHeader(identifier);
 }
 
 void ofApp::TimeSyncMap::updateSyncMapHeader(std::string identifier)
