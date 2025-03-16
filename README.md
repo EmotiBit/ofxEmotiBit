@@ -166,12 +166,12 @@ cd ..
 - Follow the official [openframeworks guide](https://openframeworks.cc/setup/linux-install/) to set things up.
 - At this point, you should have 
   - all the dependencies installed(successfull run of `install_dependencies.sh`)
-  - install additional dependencies required for EmotiBit software (see [#248](https://github.com/EmotiBit/ofxEmotiBit/issues/248) for more information)
-    - `sudo apt-get install -y -qq libxrandr-dev libxinerama-dev libxcursor-dev cmake`
-    - `sudo apt install libxi-dev`
   - compiled OF (successfull run of `./compileOF.sh`)
   - project Generator set up(successfull run of `./compilePG.sh`)
 - If you have not already, get all the addons listed above.
+- install additional dependencies required for EmotiBit software (see [#248](https://github.com/EmotiBit/ofxEmotiBit/issues/248) for more information)
+  - `sudo apt-get install -y -qq libxrandr-dev libxinerama-dev libxcursor-dev cmake`
+  - `sudo apt install libxi-dev`
 - You will also require net-tools to run certain commands required by the Oscilloscope. Run `sudo apt install net-tools`. See (https://github.com/EmotiBit/ofxEmotiBit/issues/249)
 - That's it! You now are ready to run EmotiBit Oscilloscope!
 - To run the Oscilloscope, cd to `(OF_ROOT)/addons/ofxEmotiBit/EmotiBitOscilloscope`. Run the command `make Debug` or `make` to create the release executable.
