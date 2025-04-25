@@ -14,8 +14,6 @@ void ofApp::setup() {
 	ofSetWindowTitle("EmotiBit Data Parser (v" + ofxEmotiBitVersion + ")");
 
 	ofBackground(255, 255, 255);
-	std::string path = ofToDataPath("verdana.ttf", true);
-	cout << "Loading verdana.ttf from " << path;
 	legendFont.load(ofToDataPath("verdana.ttf", true), 12, true, true);
 	subLegendFont.load(ofToDataPath("verdana.ttf", true), 7, true, true);
 	parsedDataFormat.loadFromFile("parsedDataFormat.json", true);
