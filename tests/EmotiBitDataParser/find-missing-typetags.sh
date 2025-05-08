@@ -20,7 +20,7 @@ for file in "$directory"/*; do
 		fi
     fi
 done
-tt_ignore_list="ER O2 T0 H0 BS BL SD RS TE TU EI GL GS GB GA RE S+ S- PN PO HE HH EC WA WD LS"
+tt_ignore_list="ER O2 T0 H0 BS BL SD RS TE TU EI GL GS GB GA RE S+ S- PN PO HE HH EC ED WA WD LS MN ML MM MO MH"
 
 echo "The following typatags are not in the parsed data"
 while IFS= read -r line; do
