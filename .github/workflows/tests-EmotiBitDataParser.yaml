@@ -1,11 +1,11 @@
 name: DataParser tests
-on:
-   
+on: [push]
+# on:
   #workflow_dispatch:
-  workflow_run:
-    workflows: ["Build all on linux"]
-    types:
-     - completed
+  # workflow_run:
+  #   workflows: ["Build all on linux"]
+  #   types:
+  #    - completed
 jobs:
   test-ParserOutput:
     runs-on: [self-hosted, Linux]
@@ -19,7 +19,7 @@ jobs:
       - name: find untested typetags
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
-          bash tests/EmotiBitDataParser/find_missing_typetags.sh
+          bash tests/EmotiBitDataParser/find-missing-typetags.sh
       - name: check parsed file hash
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
