@@ -1,0 +1,8 @@
+echo "Parsing sample data"
+${ vars.OFXEMOTIBIT_DIR }/EmotiBitDataParser/bin/EmotiBitDataParser "${ vars.OFXEMOTIBIT_DIR }/tests/EmotiBitDataParser/sample_data/2025-03-20_12-09-40-822726.csv"
+if [ $? -eq 0 ]; then
+  echo "Sample file parsed successfully"
+else
+  echo "parsing failed"
+  exit 1
+fi

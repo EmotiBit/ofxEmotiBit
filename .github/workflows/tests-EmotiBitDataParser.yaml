@@ -15,19 +15,13 @@ jobs:
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
-          ./EmotiBitDataParser/bin/EmotiBitDataParser "${{ vars.OFXEMOTIBIT_DIR }}/tests/EmotiBitDataParser/sample_data/2025-03-20_12-09-40-822726.csv"
-          if [ $? -eq 0 ]; then
-            echo "Sample file parsed successfully"
-          else
-            echo "parsing failed"
-            exit 1
+          bash tests/EmotiBitDataParser/test-0_parser_output/run_test.sh
       - name: find untested typetags
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
-          bash tests/EmotiBitDataParser/find-missing-typetags.sh
+          bash tests/EmotiBitDataParser/find_missing_typetags.sh
       - name: check parsed file hash
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
-          cd tests/EmotiBitDataParser/test-0_parser_output
-          bash md5_check.sh
+          bash tests/EmotiBitDataParser/test-1_check_parsed_data/run_test.sh
