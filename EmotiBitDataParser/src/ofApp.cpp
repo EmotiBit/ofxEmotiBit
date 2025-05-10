@@ -46,7 +46,7 @@ void ofApp::setup() {
 		ofFile argExists(argFileName);
 		if (!argExists.exists()) {
 			cout << "ERROR: " << argFileName << " does not exist, try absolute path" << endl;
-			ofExit();
+			ofExit(1);
 		}
 		else {
 			processButton.set(true);
