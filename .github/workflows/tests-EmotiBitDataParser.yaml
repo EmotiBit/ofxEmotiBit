@@ -14,7 +14,7 @@ jobs:
       - name: run parser on sample data
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         env: 
-          OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
+          OFXEMOTIBIT_DIR: ${ vars.OFXEMOTIBIT_DIR }
         run: |
           echo "current working directory" && pwd
           bash tests/EmotiBitDataParser/test-0_parser_output/run_test.sh
