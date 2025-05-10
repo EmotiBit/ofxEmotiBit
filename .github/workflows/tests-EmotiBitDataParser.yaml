@@ -15,7 +15,12 @@ jobs:
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
-          ./EmotiBitDataParser/bin/EmotiBitDataParser "${{ vars.OFXEMOTIBIT_DIR }}/tests/EmotiBitDataParser/sample_data/25-03-20_12-09-40-822726.csv"
+          ./EmotiBitDataParser/bin/EmotiBitDataParser "${{ vars.OFXEMOTIBIT_DIR }}/tests/EmotiBitDataParser/sample_data/2025-03-20_12-09-40-822726.csv"
+          if [ $? -eq 0 ]; then
+            echo "Sample file parsed successfully"
+          else
+            echo "parsing failed"
+            exit 1
       - name: find untested typetags
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
