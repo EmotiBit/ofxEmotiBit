@@ -42,3 +42,4 @@ while IFS= read -r line; do
 		fi
 	fi
 done < "$emotibitPacketFile"
+rm $emotibitPacketFile
