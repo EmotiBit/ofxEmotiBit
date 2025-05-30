@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Condition="'$(WindowsTargetPlatformVersion)'==''">
     <LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
-    <WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">10.0</WindowsTargetPlatformVersion>
     <TargetPlatformVersion>$(WindowsTargetPlatformVersion)</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
@@ -24,13 +24,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\addons\EmotiBit_XPlat_Utils\src\EmotiBitComms.h" />
     <ClInclude Include="..\..\..\addons\EmotiBit_XPlat_Utils\src\EmotiBitPacket.h" />
+    <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\ArduinoString.h" />
     <ClInclude Include="..\..\ofxJSON\libs\jsoncpp\include\json\json-forwards.h" />
     <ClInclude Include="..\..\ofxJSON\libs\jsoncpp\include\json\json.h" />
     <ClInclude Include="..\..\ofxJSON\src\ofxJSON.h" />
@@ -177,7 +178,6 @@
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ArduinoString.h" />
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h" />
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.h" />
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ofxEmotiBitVersion.h" />
