@@ -317,6 +317,7 @@
 		8E80A3602CCDAAA000C65119 /* EmotiBitWiFiHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmotiBitWiFiHost.h; sourceTree = "<group>"; };
 		8E80A3612CCDAAA000C65119 /* EmotiBitLsl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmotiBitLsl.h; sourceTree = "<group>"; };
 		8E80A3622CCDAAA000C65119 /* EmotiBitWiFiHost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmotiBitWiFiHost.cpp; sourceTree = "<group>"; };
+		8EFF3F692DFC7A1800FB6792 /* ArduinoString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ArduinoString.h; path = ../../EmotiBit_XPlat_Utils/src/ArduinoString.h; sourceTree = "<group>"; };
 		8F225C97B6ECA8B22FFB4B76 /* rc5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc5.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rc5.h; sourceTree = SOURCE_ROOT; };
 		907C5B5E104864A2D3A25745 /* ofxToggle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxToggle.cpp; path = ../../../addons/ofxGui/src/ofxToggle.cpp; sourceTree = SOURCE_ROOT; };
 		941B2FB125B8E62400BB7E84 /* verdanab.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = verdanab.ttf; path = bin/data/verdanab.ttf; sourceTree = "<group>"; };
@@ -349,7 +350,6 @@
 		AE335EB4709BFD4671EEAC84 /* MessageMappingOscPacketListener.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MessageMappingOscPacketListener.h; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/MessageMappingOscPacketListener.h; sourceTree = SOURCE_ROOT; };
 		AE68B54581BE4A1DAE853180 /* ofxInputField.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxInputField.h; path = ../../../addons/ofxGui/src/ofxInputField.h; sourceTree = SOURCE_ROOT; };
 		AF53C1FCB4DC2DA249C71CE4 /* asn1t.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = asn1t.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/asn1t.h; sourceTree = SOURCE_ROOT; };
-		AFB59BF33EDC27D6AF2CC50B /* ArduinoString.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ArduinoString.h; path = ../../../addons/ofxEmotiBit/src/ArduinoString.h; sourceTree = SOURCE_ROOT; };
 		B1CC96657896D2F948104F3D /* seed.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = seed.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/seed.h; sourceTree = SOURCE_ROOT; };
 		B21E7E5F548EEA92F368040B /* tinyxml.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tinyxml.h; path = ../../../addons/ofxXmlSettings/libs/tinyxml.h; sourceTree = SOURCE_ROOT; };
 		B2D9BED8F594CFBBD0821E7E /* mdc2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = mdc2.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/mdc2.h; sourceTree = SOURCE_ROOT; };
@@ -833,7 +833,6 @@
 				8E07BBAB2B1F824D00CDD443 /* SoftwareVersionChecker.cpp */,
 				8E07BBAC2B1F824D00CDD443 /* SoftwareVersionChecker.h */,
 				8E016F812832CE65005D7C65 /* Signal */,
-				AFB59BF33EDC27D6AF2CC50B /* ArduinoString.h */,
 				B37D59256BC5BDEB408A0B4B /* DoubleBuffer.h */,
 				7A8815F94AF8B1A79DAF932B /* EmotiBitTestingHelper.cpp */,
 				974B6F6CECCC45548FC1A608 /* EmotiBitTestingHelper.h */,
@@ -1038,6 +1037,7 @@
 		8E016F702832CE1C005D7C65 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				8EFF3F692DFC7A1800FB6792 /* ArduinoString.h */,
 				8E016F752832CE28005D7C65 /* DigitalFilter.cpp */,
 				8E016F792832CE28005D7C65 /* DigitalFilter.h */,
 				8E016F712832CE28005D7C65 /* EmotiBitComms.h */,
