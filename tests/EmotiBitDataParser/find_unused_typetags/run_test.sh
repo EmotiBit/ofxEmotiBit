@@ -1,11 +1,46 @@
 #!/bin/bash
 
+echo "Parsing sample data"
+unset ENV_OFXEMOTIBIT_DIR
+
+OPTIONS=$(getopt -o d: --long --ofxemotibit-dir: -n "run_tesh.sh" -- "$@")
+
+if [ $? -ne 0 ]; then
+  echo "Terminating script." >&2
+  exit 1
+fi
+
+eval set -- "$OPTIONS"
+
+while true; do
+  case "$1" in
+    -d | --ofxemotibit-dir)
+      echo "ofxEmotibit dir location: $2"
+      ENV_OFXEMOTIBIT_DIR=$2
+      shift 2
+      ;;
+    --) # End of options marker
+      shift
+      break
+      ;;
+  esac
+done
+
+if [ -z "$ENV_OFXEMOTIBIT_DIR" ]; then
+	echo "path to ofxEmotiBit not provided. Aborting"
+	exit 1
+fi
+
+
+${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/EmotiBitDataParser "${ENV_OFXEMOTIBIT_DIR}/tests/EmotiBitDataParser/sample_data/2025-03-20_12-09-40-822726.csv"
+
+echo "find missing typetags from parsed data"
 emotibitPacketFile="temp_emotibitpacket.txt"
 curl https://raw.githubusercontent.com/EmotiBit/EmotiBit_XPlat_Utils/refs/heads/master/src/EmotiBitPacket.cpp > $emotibitPacketFile
 tt_list=""
 
-directory="./sample_data"
-basename="2025-03-18_10-27-52-355758"
+directory="../sample_data"
+basename="2025-03-20_12-09-40-822726"
 for file in "$directory"/*; do
     if [ -f "$file" ]; then
 		file=${file#$directory"/"}

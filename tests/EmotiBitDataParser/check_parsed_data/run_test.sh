@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Parsing sample data"
 unset ENV_OFXEMOTIBIT_DIR
 
@@ -13,7 +15,7 @@ eval set -- "$OPTIONS"
 while true; do
   case "$1" in
     -d | --ofxemotibit-dir)
-      echo "ofxEmotibit dir location"
+      echo "ofxEmotibit dir location: $2"
       ENV_OFXEMOTIBIT_DIR=$2
       shift 2
       ;;
@@ -31,4 +33,17 @@ fi
 
 
 ${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/EmotiBitDataParser "${ENV_OFXEMOTIBIT_DIR}/tests/EmotiBitDataParser/sample_data/2025-03-20_12-09-40-822726.csv"
-
+hash_dir="expected_output_hash"
+for file in "$hash_dir"/*; do
+  if [ -f "$file" ]; then
+    #echo "checking $file"
+    md5sum -c $file
+    if [ $? -eq 0 ]; then
+      echo "MD5 checksum verification successful."
+    else
+      echo "MD5 checksum verification failed."
+      exit 1
+    fi
+  fi
+done
+exit 0
