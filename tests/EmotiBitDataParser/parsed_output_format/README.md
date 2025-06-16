@@ -1,5 +1,5 @@
 # Description
-- Test if changing the `parsedDataFormat.json` file changes the parsed output format.
+- Test to validate effect of changing the `parsedDataFormat.json`.
 
 # How to run the test
 - Run the bash script to change the `parsedDataFormat.json`.
