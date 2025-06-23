@@ -1209,10 +1209,12 @@ void ofApp::parseDataLine(string packet) {
 					{
 						// concat payload.
 						// ToDo: consider if string operation on raw packet is faster than split+concat
-						for (int i = 0; i < dataLength; i++)
+						for (int i = 0; i < dataLength - 1; i++)
 						{
 							parsedDataRow = parsedDataRow + splitData.at(i + 6) + EmotiBitPacket::PAYLOAD_DELIMITER;
 						}
+
+						parsedDataRow = parsedDataRow + splitData.back();
 					}
 					parsedDataRow = parsedDataRow + '\n';
 					loggerPtr->second->push(parsedDataRow);
