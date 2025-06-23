@@ -924,19 +924,24 @@ void ofApp::parseDataLine(string packet) {
 					if (splitPacket.size() > EmotiBitPacket::headerLength) {
 						// verify if AK is for the correct RD
 						if (lastRDPacketNumber == stoi(splitPacket.at(EmotiBitPacket::headerLength))) {
-							allTimestampData.back().AK = packetHeader.timestamp;
-							allTimestampData.back().roundTrip = allTimestampData.back().TS_received - allTimestampData.back().RD;
-							lastRDPacketNumber = -1; // reset the last RD packet number to avoid overwriting from duplicate
-							auto loggerPtr = loggers.find(timestampFilenameString);
-							if (loggerPtr != loggers.end()) {
-								// write RD
-								loggerPtr->second->push("\n" + ofToString(allTimestampData.back().RD) + ",");
-								// write TL information into tiemsync file
-								loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
-								loggerPtr->second->push(allTimestampData.back().TS_sent + ",");
-								// write AK information into timesync file
-								loggerPtr->second->push(ofToString(allTimestampData.back().AK) + ",");
-								loggerPtr->second->push(ofToString(allTimestampData.back().roundTrip) + ",");
+							if (allTimestampData.back().TS_received != 0)
+							{
+								// Received and processed a TL packet for the RD under consideration.
+								// If TL is not received, allTimestampData.back().roundTrip stays as -1, and removed when the nect RD is processed.
+								allTimestampData.back().AK = packetHeader.timestamp;
+								allTimestampData.back().roundTrip = allTimestampData.back().TS_received - allTimestampData.back().RD;
+								lastRDPacketNumber = -1; // reset the last RD packet number to avoid overwriting from duplicate
+								auto loggerPtr = loggers.find(timestampFilenameString);
+								if (loggerPtr != loggers.end()) {
+									// write RD
+									loggerPtr->second->push("\n" + ofToString(allTimestampData.back().RD) + ",");
+									// write TL information into tiemsync file
+									loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
+									loggerPtr->second->push(allTimestampData.back().TS_sent + ",");
+									// write AK information into timesync file
+									loggerPtr->second->push(ofToString(allTimestampData.back().AK) + ",");
+									loggerPtr->second->push(ofToString(allTimestampData.back().roundTrip) + ",");
+								}
 							}
 						}
 						// AK for a previous RD
