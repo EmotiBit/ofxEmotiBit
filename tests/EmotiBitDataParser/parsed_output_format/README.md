@@ -1,9 +1,6 @@
 # Description
 - Test to validate effect of changing the `parsedDataFormat.json`.
-
-# How to run the test
-- Run the bash script to change the `parsedDataFormat.json`.
-- Copy the sample data format into this folder.
-- Parse the sample data.
-- Verify the timesyncMap file header columns for consistency with the output format.
+- The test temporarily changes the `parsedDataFormat.json` file by toggling `TL` column to `false`.
+- The md5sum of the resulting parsed sample data is compared against the ground-truth hash.
+- The `parsedDataFormat.json` holds the modified version of the output format.
 

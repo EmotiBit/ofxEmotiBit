@@ -9,6 +9,6 @@
 
 # Helper Scripts
 - The test data is created using the python script `create_test_data.py`. The script needs a dynamic library, that provides python bindings for EmotiBit Packet. See `EmotiBit_Plugins` repository for more information. The `.so` file is not checked in since it a binary.
-- The md5sum for each typetag under test is created using the `md5_creator.sh`. Run this script from the test folder.
-- The test data is stored in the test_data directory. 
+- The md5sum for each typetag under test is created using the `md5_creator.sh`. Run this script from the `composite_payloads` test folder.
+- The test data is stored in the `test_data` directory. 
 - To run the test, execute the script `run_test.sh`. The script needs the path to ofxEmotiBit as an input to run.

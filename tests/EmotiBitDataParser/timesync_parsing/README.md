@@ -9,16 +9,16 @@
 
 |Case number| Case description| is timeSync parsed correctly? | is timeSync file written correctly?|
 |--------------|-------------------|---------------------------------|---------------------------------|
-|1|Expected | ✔️  | ✔️  |
-|2| 2 or mode TL received for 1 RD |  ✔️ | ✔️|
-|3|No AK from host | ✔️| ✔️|
-|4| No TL from host | ✔️ | ✔️ |
-|5|Multiple responses, missing wrong TL | ✔️ | ✔️ |
-|6|Multiple responses, missing correct TL | ✔️ | ✔️ d
-|7|Multiple responses, missing wrong AK | ✔️ | ✔️ |
-|8|Multiple responses, missing correct AK| ✔️ | ✔️ |
+|1|Normal `RD-TL-AK` triplet | ✔️  | ✔️  |
+|2|Multiple TL-AK responses for 1 RD |  ✔️ | ✔️|
+|3|`AK` dropped under UDP | ✔️| ✔️|
+|4|`TL` dropped under UDP | ✔️ | ✔️ |
+|5|Multiple TL responses. Incorrect TL missing| ✔️ | ✔️ |
+|6|Multiple TL responses. Correct TL missing | ✔️ | ✔️ d
+|7|Multiple AK, with the incorrect AK missing | ✔️ | ✔️ |
+|8|Multiple AK, with the correct AK missing| ✔️ | ✔️ |
 |9|No response | ✔️ | ✔️ |
-|10| received wrong TL and correct AK, but dropped wrong AK | ✔️  | ✔️ |
+|10| Received wrong TL and correct AK, but dropped wrong AK | x  | x |
 
 ## Test cases
 1. Normal `RD-TL-AK` triplet. See the following lines in the test case
@@ -91,7 +91,7 @@ This can happen when previous responses (echo's from data channel tx) for RD get
 [UDP loss]34938,1821,1,TL,1,100,2022-02-03_15-36-38-612039
 34942,1822,2,AK,1,100,1818,RD
 ```
-
+To fix this, we would have to tx TL and AK as one UDP packet in the oscilloscope.
 
 
 
