@@ -1,7 +1,5 @@
 name: DataParser tests
 on:
-   
-  #workflow_dispatch:
   workflow_run:
     workflows: ["Build all on linux"]
     types:
@@ -11,18 +9,38 @@ jobs:
     runs-on: [self-hosted, Linux]
     environment: RUNNER-LINUX
     steps:
-      - name: run parser on sample data
-        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
-        run: |
-          echo "current working directory" && pwd
-          ./EmotiBitDataParser/bin/EmotiBitDataParser "${{ vars.OFXEMOTIBIT_DIR }}/tests/EmotiBitDataParser/sample_data/2025-03-20_12-09-40-822726.csv"
-      - name: find untested typetags
-        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
-        run: |
-          bash tests/EmotiBitDataParser/find_missing_typetags.sh
       - name: check parsed file hash
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        env:
+          ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
-          cd tests/EmotiBitDataParser/test-0_parser_output
-          bash md5_check.sh
+          bash tests/EmotiBitDataParser/check_parsed_data/run_test.sh -d ENV_OFXEMOTIBIT_DIR
+      - name: find untested typetags
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        env:
+          ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo pwd
+          bash tests/EmotiBitDataParser/find_unused_typetags/run_test.sh -d ENV_OFXEMOTIBIT_DIR
+      - name: parsed output format test
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        env:
+          ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          bash tests/EmotiBitDataParser/parsed_output_format/run_test.sh -d ENV_OFXEMOTIBIT_DIR
+      - name: composite payload parsing test
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        env:
+          ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          bash tests/EmotiBitDataParser/composite_payloads/run_test.sh -d ENV_OFXEMOTIBIT_DIR
+      - name: Parsing timesync responses to RD
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        env:
+          ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          bash tests/EmotiBitDataParser/timesync_parsing/run_test.sh -d ENV_OFXEMOTIBIT_DIR
