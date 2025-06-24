@@ -41,6 +41,11 @@ mv $ENV_OFXEMOTIBIT_DIR/EmotiBitDataParser/bin/data/parsedDataFormat.json $ENV_O
 cp $ENV_OFXEMOTIBIT_DIR/tests/EmotiBitDataParser/parsedDataFormat.json $ENV_OFXEMOTIBIT_DIR/EmotiBitDataParser/bin/data/parsedDataFormat.json
 
 ${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/EmotiBitDataParser "${ENV_OFXEMOTIBIT_DIR}/tests/EmotiBitDataParser/sample_data/2025-03-20_12-09-40-822726.csv"
+# rename the backup
+echo "renaming the backup"
+mv ${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/data/${backup_filename} ${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/data/parsedDataFormat.json
+
+cd tests/EmotiBitDataParser/parsed_output_format
 # check the hash
 hash_dir="expected_output_hash"
 for file in "$hash_dir"/*; do
@@ -55,6 +60,3 @@ for file in "$hash_dir"/*; do
     fi
   fi
 done
-# rename the backup
-echo "renaming the backup"
-mv ${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/data/${backup_filename} ${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/data/parsedDataFormat.json
