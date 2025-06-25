@@ -342,9 +342,6 @@
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h">
       <Filter>addons\ofxBiquadFilter\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ArduinoString.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
@@ -560,6 +557,9 @@
     </ClInclude>
     <ClInclude Include="src\EmotiBitLsl.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\ArduinoString.h">
+      <Filter>src\EmotiBit_XPlat_Utils\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
