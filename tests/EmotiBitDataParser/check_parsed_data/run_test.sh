@@ -32,7 +32,7 @@ if [ -z "$ENV_OFXEMOTIBIT_DIR" ]; then
 fi
 
 
-${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/EmotiBitDataParser "${ENV_OFXEMOTIBIT_DIR}/tests/EmotiBitDataParser/sample_data/2025-03-20_12-09-40-822726.csv"
+${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/EmotiBitDataParser "${ENV_OFXEMOTIBIT_DIR}/tests/EmotiBitDataParser/sample_data/2025-06-27_09-56-59-929206.csv"
 cd tests/EmotiBitDataParser/check_parsed_data
 hash_dir="expected_output_hash"
 for file in "$hash_dir"/*; do

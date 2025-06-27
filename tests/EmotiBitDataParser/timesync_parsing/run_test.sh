@@ -32,7 +32,7 @@ if [ -z "$ENV_OFXEMOTIBIT_DIR" ]; then
 fi
 
 
-${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/EmotiBitDataParser "${ENV_OFXEMOTIBIT_DIR}/tests/EmotiBitDataParser/timesync_parsing/test_cases/2022-04-20_12-10-28-051739.csv"
+${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/EmotiBitDataParser "${ENV_OFXEMOTIBIT_DIR}/tests/EmotiBitDataParser/timesync_parsing/test_data/test_data.csv"
 
 cd tests/EmotiBitDataParser/timesync_parsing/
 hash_dir="expected_output_hash"

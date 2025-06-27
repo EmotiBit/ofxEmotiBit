@@ -38,9 +38,9 @@ backup_filename="parsedDataFormat.json.bckup"
 # store original file as backup
 mv $ENV_OFXEMOTIBIT_DIR/EmotiBitDataParser/bin/data/parsedDataFormat.json $ENV_OFXEMOTIBIT_DIR/EmotiBitDataParser/bin/data/${backup_filename}
 # copy modified format file
-cp $ENV_OFXEMOTIBIT_DIR/tests/EmotiBitDataParser/parsedDataFormat.json $ENV_OFXEMOTIBIT_DIR/EmotiBitDataParser/bin/data/parsedDataFormat.json
+cp $ENV_OFXEMOTIBIT_DIR/tests/EmotiBitDataParser/parsed_output_format/parsedDataFormat.json $ENV_OFXEMOTIBIT_DIR/EmotiBitDataParser/bin/data/parsedDataFormat.json
 
-${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/EmotiBitDataParser "${ENV_OFXEMOTIBIT_DIR}/tests/EmotiBitDataParser/sample_data/2025-03-20_12-09-40-822726.csv"
+${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/EmotiBitDataParser "${ENV_OFXEMOTIBIT_DIR}/tests/EmotiBitDataParser/sample_data/2025-06-27_09-56-59-929206.csv"
 # rename the backup
 echo "renaming the backup"
 mv ${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/data/${backup_filename} ${ENV_OFXEMOTIBIT_DIR}/EmotiBitDataParser/bin/data/parsedDataFormat.json
