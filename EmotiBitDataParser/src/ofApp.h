@@ -7,6 +7,7 @@
 #include "EmotiBitPacket.h"
 #include "ofxEmotiBitVersion.h"
 #include "ofxJSON.h"
+#include <unordered_set>
 
 class ofApp : public ofBaseApp {
 public:
@@ -154,7 +155,6 @@ public:
 		@param points pair representing teh anchor points
 		*/
 		void updateAnchorPoints(std::string identifier, pair<long double, long double> points);
-	private:
 		/*!
 		@brief update the column headers for timeSyncMap csv file
 		@param typetag or paylaod label representing the time domain
@@ -201,6 +201,35 @@ public:
 		std::string getParsedFileColHeaders();
 	}parsedDataFormat;
 
+	unordered_set<std::string> sensorDataGroup{
+		EmotiBitPacket::TypeTag::EDA,
+		EmotiBitPacket::TypeTag::EDL,
+		EmotiBitPacket::TypeTag::EDR,
+		EmotiBitPacket::TypeTag::PPG_INFRARED,
+		EmotiBitPacket::TypeTag::PPG_RED,
+		EmotiBitPacket::TypeTag::PPG_GREEN,
+		EmotiBitPacket::TypeTag::SPO2,
+		EmotiBitPacket::TypeTag::TEMPERATURE_0,
+		EmotiBitPacket::TypeTag::TEMPERATURE_1,
+		EmotiBitPacket::TypeTag::THERMOPILE,
+		EmotiBitPacket::TypeTag::HUMIDITY_0,
+		EmotiBitPacket::TypeTag::ACCELEROMETER_X,
+		EmotiBitPacket::TypeTag::ACCELEROMETER_Y,
+		EmotiBitPacket::TypeTag::ACCELEROMETER_Z,
+		EmotiBitPacket::TypeTag::GYROSCOPE_X,
+		EmotiBitPacket::TypeTag::GYROSCOPE_Y,
+		EmotiBitPacket::TypeTag::GYROSCOPE_Z,
+		EmotiBitPacket::TypeTag::MAGNETOMETER_X,
+		EmotiBitPacket::TypeTag::MAGNETOMETER_Y,
+		EmotiBitPacket::TypeTag::MAGNETOMETER_Z,
+		EmotiBitPacket::TypeTag::BATTERY_VOLTAGE,
+		EmotiBitPacket::TypeTag::BATTERY_PERCENT,
+		EmotiBitPacket::TypeTag::HEART_RATE,
+		EmotiBitPacket::TypeTag::INTER_BEAT_INTERVAL,
+		EmotiBitPacket::TypeTag::SKIN_CONDUCTANCE_RESPONSE_AMPLITUDE,
+		EmotiBitPacket::TypeTag::SKIN_CONDUCTANCE_RESPONSE_FREQ,
+		EmotiBitPacket::TypeTag::SKIN_CONDUCTANCE_RESPONSE_RISE_TIME
+	};
 	int eofCounter = 0;
 
 	void setup();
