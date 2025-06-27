@@ -1219,7 +1219,7 @@ void ofApp::parseDataLine(string packet) {
 							parsedDataRow = parsedDataRow + splitData.at(i + 6) + EmotiBitPacket::PAYLOAD_DELIMITER;
 						}
 
-						parsedDataRow = parsedDataRow + splitData.back();
+						parsedDataRow = parsedDataRow + splitData.at(6 + (dataLength - 1));
 					}
 					parsedDataRow = parsedDataRow + '\n';
 					loggerPtr->second->push(parsedDataRow);
