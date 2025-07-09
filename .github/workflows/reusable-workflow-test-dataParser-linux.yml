@@ -12,33 +12,33 @@ jobs:
           ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
-          bash tests/EmotiBitDataParser/check_parsed_data/run_test.sh -d ENV_OFXEMOTIBIT_DIR
+          bash tests/EmotiBitDataParser/check_parsed_data/run_test.sh -d $ENV_OFXEMOTIBIT_DIR
       - name: find untested typetags
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         env:
           ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo pwd
-          bash tests/EmotiBitDataParser/find_unused_typetags/run_test.sh -d ENV_OFXEMOTIBIT_DIR
+          bash tests/EmotiBitDataParser/find_unused_typetags/run_test.sh -d $ENV_OFXEMOTIBIT_DIR
       - name: parsed output format test
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         env:
           ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
-          bash tests/EmotiBitDataParser/parsed_output_format/run_test.sh -d ENV_OFXEMOTIBIT_DIR
+          bash tests/EmotiBitDataParser/parsed_output_format/run_test.sh -d $ENV_OFXEMOTIBIT_DIR
       - name: composite payload parsing test
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         env:
           ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
-          bash tests/EmotiBitDataParser/composite_payloads/run_test.sh -d ENV_OFXEMOTIBIT_DIR
+          bash tests/EmotiBitDataParser/composite_payloads/run_test.sh -d $ENV_OFXEMOTIBIT_DIR
       - name: Parsing timesync responses to RD
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         env:
           ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
-          bash tests/EmotiBitDataParser/timesync_parsing/run_test.sh -d ENV_OFXEMOTIBIT_DIR
+          bash tests/EmotiBitDataParser/timesync_parsing/run_test.sh -d $ENV_OFXEMOTIBIT_DIR
 
