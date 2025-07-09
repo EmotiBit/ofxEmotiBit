@@ -1,0 +1,14 @@
+name: Build Oscilloscope on linux
+on:
+  workflow_call:
+jobs:
+  build-oscilloscope:
+    runs-on: [self-hosted, Linux]
+    environment: RUNNER-LINUX
+    steps: 
+      - name: build using make
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          cd EmotiBitOscilloscope
+          make

@@ -14,9 +14,9 @@ void ofApp::setup() {
 	ofSetWindowTitle("EmotiBit Data Parser (v" + ofxEmotiBitVersion + ")");
 
 	ofBackground(255, 255, 255);
-	legendFont.load(ofToDataPath("verdana.ttf"), 12, true, true);
-	subLegendFont.load(ofToDataPath("verdana.ttf"), 7, true, true);
-	parsedDataFormat.loadFromFile("parsedDataFormat.json");
+	legendFont.load(ofToDataPath("verdana.ttf", true), 12, true, true);
+	subLegendFont.load(ofToDataPath("verdana.ttf", true), 7, true, true);
+	parsedDataFormat.loadFromFile("parsedDataFormat.json", true);
 	processButton.addListener(this, &ofApp::startProcessing);
 
 	int guiXPos = 0;
@@ -46,7 +46,7 @@ void ofApp::setup() {
 		ofFile argExists(argFileName);
 		if (!argExists.exists()) {
 			cout << "ERROR: " << argFileName << " does not exist, try absolute path" << endl;
-			ofExit();
+			ofExit(1);
 		}
 		else {
 			processButton.set(true);
@@ -211,10 +211,19 @@ void ofApp::update() {
 					cout << "Creating file: " << filename << endl;
 					ofstream mFile;
 					mFile.open(filename.c_str(), ios::out);
+					
+					// update header row
+					timeSyncMap.updateSyncMapHeader(EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT);
+					// update the column header for all additional time domains in the parsedDataFormat file 
+					for (int i = 0; i <= (int)parsedDataFormat.additionalTimestamps.size() - 1; i++)
+					{
+						timeSyncMap.updateSyncMapHeader(parsedDataFormat.additionalTimestamps.at(i));
+					}
 					mFile << timeSyncMap.columnHeaders + "TimeSyncsReceived,EmotiBitStartTime, EmotiBitEndTime, DataParserVersion" << endl;
+					
+					// update data row
 					mFile << ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first, 6) << ","
 						<< ofToString(timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second, 6) << ",";
-					// Add column headers for additional time domains read from parsed data format file
 					for (int i = 0;i <= (int)parsedDataFormat.additionalTimestamps.size() - 1; i++)
 					{
 						auto timeDomain = parsedDataFormat.additionalTimestamps.at(i);
@@ -272,7 +281,7 @@ void ofApp::ParsedDataFormat::loadFromFile(std::string filename, bool absolute)
 	try
 	{
 		// ToDo: find a place for these settings to be stored. a struct in ofApp?
-		ofFile parsedDataFormatFile(ofToDataPath(filename));
+		ofFile parsedDataFormatFile(ofToDataPath(filename, absolute));
 		if (parsedDataFormatFile.exists())
 		{
 			if (jsonSettings.open(ofToDataPath(filename, absolute)))
@@ -569,7 +578,11 @@ ofApp::TimeSyncMap ofApp::calculateTimeSyncMap(vector<TimestampData> &timestampD
 	}
 	// update the calculated anchor points
 	tsMap.updateAnchorPoints(EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT, make_pair(e0,e1));
-	tsMap.updateAnchorPoints(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, make_pair(c0,c1));
+	// Add TL only if it is present in the parsedDataFormat file
+	if (std::find(parsedDataFormat.additionalTimestamps.begin(), parsedDataFormat.additionalTimestamps.end(), EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) != parsedDataFormat.additionalTimestamps.end())
+	{
+		tsMap.updateAnchorPoints(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL, make_pair(c0,c1));
+	}
 	// find the best CrossTime points for time domain transfers
 	selectBestCrossTimePoints();
 
@@ -677,7 +690,6 @@ void ofApp::selectBestCrossTimePoints()
 void ofApp::TimeSyncMap::updateAnchorPoints(std::string identifier, pair<long double, long double> points)
 {
 	anchorPoints[identifier] = points;
-	updateSyncMapHeader(identifier);
 }
 
 void ofApp::TimeSyncMap::updateSyncMapHeader(std::string identifier)
@@ -886,11 +898,6 @@ void ofApp::parseDataLine(string packet) {
 						//allTimestampData.roundTrip.push_back(-1);
 						//allTimestampData.c2e.push_back(-1);
 						lastRDPacketNumber = packetHeader.packetNumber;
-
-						auto loggerPtr = loggers.find(timestampFilenameString);
-						if (loggerPtr != loggers.end()) {
-							loggerPtr->second->push("\n" + ofToString(allTimestampData.back().RD) + ",");
-						}
 					}
 					// ToDo: handle TIMESTAMP_UTC request
 						//|| splitPacket.at(EmotiBitPacket::headerLength).compare(EmotiBitPacket::TypeTag::TIMESTAMP_UTC) == 0)
@@ -917,17 +924,24 @@ void ofApp::parseDataLine(string packet) {
 					if (splitPacket.size() > EmotiBitPacket::headerLength) {
 						// verify if AK is for the correct RD
 						if (lastRDPacketNumber == stoi(splitPacket.at(EmotiBitPacket::headerLength))) {
-							allTimestampData.back().AK = packetHeader.timestamp;
-							allTimestampData.back().roundTrip = allTimestampData.back().TS_received - allTimestampData.back().RD;
-							lastRDPacketNumber = -1; // reset the last RD packet number to avoid overwriting from duplicate
-							auto loggerPtr = loggers.find(timestampFilenameString);
-							if (loggerPtr != loggers.end()) {
-								// write TL information into tiemsync file
-								loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
-								loggerPtr->second->push(allTimestampData.back().TS_sent + ",");
-								// write AK information into timesync file
-								loggerPtr->second->push(ofToString(allTimestampData.back().AK) + ",");
-								loggerPtr->second->push(ofToString(allTimestampData.back().roundTrip) + ",");
+							if (allTimestampData.back().TS_received != 0)
+							{
+								// Received and processed a TL packet for the RD under consideration.
+								// If TL is not received, allTimestampData.back().roundTrip stays as -1, and removed when the nect RD is processed.
+								allTimestampData.back().AK = packetHeader.timestamp;
+								allTimestampData.back().roundTrip = allTimestampData.back().TS_received - allTimestampData.back().RD;
+								lastRDPacketNumber = -1; // reset the last RD packet number to avoid overwriting from duplicate
+								auto loggerPtr = loggers.find(timestampFilenameString);
+								if (loggerPtr != loggers.end()) {
+									// write RD
+									loggerPtr->second->push("\n" + ofToString(allTimestampData.back().RD) + ",");
+									// write TL information into tiemsync file
+									loggerPtr->second->push(ofToString(allTimestampData.back().TS_received) + ",");
+									loggerPtr->second->push(allTimestampData.back().TS_sent + ",");
+									// write AK information into timesync file
+									loggerPtr->second->push(ofToString(allTimestampData.back().AK) + ",");
+									loggerPtr->second->push(ofToString(allTimestampData.back().roundTrip) + ",");
+								}
 							}
 						}
 						// AK for a previous RD
@@ -1036,19 +1050,7 @@ void ofApp::parseDataLine(string packet) {
 				if (splitData.at(5) != "") {
 					dataReliability = ofToInt(splitData.at(5));
 				}
-				//string outFilePath = inFilePath + "_" + typeTag + ".csv";
-				//string outFilePath = inFilePath + "_";
 
-				//outFile.open(outFilePath.c_str(), ios::out | ios::app);
-				//if (outFile.is_open()) {
-				bool isCompositePayload = false;
-				for (int i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_COMPOSITE_PAYLOAD; i++)
-				{
-					if (typeTag.compare(EmotiBitPacket::TypeTagGroups::COMPOSITE_PAYLOAD[i]) == 0)
-					{
-						isCompositePayload = true;
-					}
-				}
 
 				std::string fileTypeModifier;
 				// If packet is of type TX, create a file with name _TL_AA_BB.csv
@@ -1098,154 +1100,13 @@ void ofApp::parseDataLine(string packet) {
 					loggerPtr = loggers.find(fileTypeModifier);
 					loggerPtr->second->startThread();
 					std::string headerString = "";
-					if (!isCompositePayload)
-					{
-						headerString = parsedDataFormat.getParsedFileColHeaders() + typeTag + "\n";
-					}
-					else
-					{
-						headerString += parsedDataFormat.getParsedFileColHeaders();
-						for (int i = 0; i < dataLength; i++)
-						{
-							if (i + 6 >= splitData.size())
-							{
-								cout << "Error: dataLength > size, " << packet << endl;
-							}
-							else
-							{
-								if ((i + 6) % 2 == 0) // is even
-								{
-									headerString += splitData.at(i + 6);
-									headerString += EmotiBitPacket::PAYLOAD_DELIMITER;
-								}
-							}
-						}
-						headerString += "\n";
-					}
+					headerString = parsedDataFormat.getParsedFileColHeaders() + typeTag + "\n";
 					loggerPtr->second->push(headerString);
 				}
-				bool isAperiodicType = false;
-				for (int i = 0; i < EmotiBitPacket::TypeTagGroups::NUM_APERIODIC; i++)
+
+				if (sensorDataGroup.find(typeTag) != sensorDataGroup.end())
 				{
-					if (typeTag.compare(EmotiBitPacket::TypeTagGroups::APERIODIC[i]) == 0)
-					{
-						isAperiodicType = true;
-					}
-				}
-				
-				if (isAperiodicType) { //for aperiodic
-					std::string parsedDataRow = "";
-					if (splitData.size() < 6) {
-						cout << "Error: dataLength < size, " << packet << endl;
-					}
-					else {
-						// add timestamp for each new domain
-						for (auto newTimeDomain : parsedDataFormat.additionalTimestamps)
-						{
-							long double newDomainTimestamp;
-							// use calculated anchor poitns to find timestamps
-							newDomainTimestamp = linterp(timestamp,
-								timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first,
-								timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second,
-								timeSyncMap.anchorPoints[newTimeDomain].first,
-								timeSyncMap.anchorPoints[newTimeDomain].second);
-							parsedDataRow = ofToString(newDomainTimestamp, 6) + "," + parsedDataRow;
-
-						}
-						// ToDo: Add provision for LM timestamp
-						loggerPtr->second->push(
-							parsedDataRow +
-							ofToString(timestamp, 3) + "," +
-							splitData.at(1) + "," +
-							splitData.at(2) + "," +
-							splitData.at(3) + "," +
-							splitData.at(4) + "," +
-							splitData.at(5) + "," +
-							splitData.at(6) +
-							'\n'
-						);
-					}
-				}
-				else if (isCompositePayload)
-				{
-					std::string parsedDataRow = "";
-					for (auto newTimeDomain : parsedDataFormat.additionalTimestamps)
-					{
-						long double newDomainTimestamp;
-						newDomainTimestamp = linterp(timestamp,
-							timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first,
-							timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second,
-							timeSyncMap.anchorPoints[newTimeDomain].first,
-							timeSyncMap.anchorPoints[newTimeDomain].second);
-						parsedDataRow = ofToString(newDomainTimestamp, 6) + "," + parsedDataRow;
-
-					}
-					// ToDo: Add provision for LM timestamp
-					parsedDataRow += ofToString(timestamp, 3) + "," +
-						splitData.at(1) + "," +
-						splitData.at(2) + "," +
-						splitData.at(3) + "," +
-						splitData.at(4) + "," +
-						splitData.at(5) + ",";
-					for (int i = 0; i < dataLength; i++) 
-					{
-						if (i + 6 >= splitData.size()) 
-						{
-							cout << "Error: dataLength > size, " << packet << endl;
-						}
-						else 
-						{
-							if ((i + 6) % 2 == 1)
-							{
-								parsedDataRow += splitData.at(i + 6);
-								parsedDataRow += EmotiBitPacket::PAYLOAD_DELIMITER;
-							}
-						}
-					}
-					loggerPtr->second->push(parsedDataRow + '\n');
-				}
-				else if (typeTag == EmotiBitPacket::TypeTagGroups::USER_MESSAGES[0]) { // for push messages
-					if (splitData.size() != 8) {
-						cout << "Error: userNote package error " << packet << endl;
-					}
-					else {
-						std::string parsedDataRow = "";
-						std::time_t c;
-						std::string computerTime = splitData.at(6);
-						size_t lastDelim = computerTime.find_last_of('-'); // find subsecond decimal
-						size_t lastNChar = computerTime.size() - lastDelim - 1;
-						c = getEpochTime(std::wstring(computerTime.begin(), computerTime.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
-						for (auto newTimeDomain : parsedDataFormat.additionalTimestamps)
-						{
-							if (newTimeDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0)
-							{
-								parsedDataRow += ofToString((long double)c, 6) + ",";
-							}
-							else
-							{
-								long double newDomainTimestamp;
-								newDomainTimestamp = linterp((long double)c,
-									timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL].first,
-									timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL].second,
-									timeSyncMap.anchorPoints[newTimeDomain].first,
-									timeSyncMap.anchorPoints[newTimeDomain].second);
-								parsedDataRow = ofToString(newDomainTimestamp, 6) + "," + parsedDataRow;
-							}
-						}
-						loggerPtr->second->push(
-							parsedDataRow + ofToString(timestamp, 3) + "," +
-							splitData.at(1) + "," +
-							splitData.at(2) + "," +
-							splitData.at(3) + "," +
-							splitData.at(4) + "," +
-							splitData.at(5) + "," +
-							splitData.at(7) +
-							'\n'
-						);
-					}
-
-				}
-				else { // if typetag is periodic
+					// sensor data. Interpolate samples in payload
 					for (int i = 0; i < dataLength; i++) {
 						if (i + 6 >= splitData.size()) {
 							cout << "Error: dataLength > size, " << packet << endl;
@@ -1273,13 +1134,96 @@ void ofApp::parseDataLine(string packet) {
 								splitData.at(i + 6) +
 								'\n'
 							);
-							//outFile << interpTimestamp << "," << packetNumber << "," << dataLength << "," << typeTag << "," << protocolVersion << "," << dataReliability << "," << splitData.at(i + 6) << endl;
 						}
 					}
 				}
+				else
+				{
+					// Do not interpolate payload. Write payload into 1 line
+					std::string parsedDataRow = "";
+					if (typeTag == EmotiBitPacket::TypeTagGroups::USER_MESSAGES[0]) 
+					{ 
+						// Handle UN as a special case
+						// Use Local Time in UN payload as the "true time" to interpolate
+						if (splitData.size() != 8) 
+						{
+							cout << "Error: userNote package error " << packet << endl;
+						}
+						else 
+						{
+							std::time_t c;
+							std::string computerTime = splitData.at(6);
+							size_t lastDelim = computerTime.find_last_of('-'); // find subsecond decimal
+							size_t lastNChar = computerTime.size() - lastDelim - 1;
+							c = getEpochTime(std::wstring(computerTime.begin(), computerTime.end() - lastNChar - 1)); // Convert to epoch time without subsecond decimal
+							for (auto newTimeDomain : parsedDataFormat.additionalTimestamps)
+							{
+								if (newTimeDomain.compare(EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL) == 0)
+								{
+									parsedDataRow += ofToString((long double)c, 6) + ",";
+								}
+								else
+								{
+									long double newDomainTimestamp;
+									newDomainTimestamp = linterp((long double)c,
+										timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL].first,
+										timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_LOCAL].second,
+										timeSyncMap.anchorPoints[newTimeDomain].first,
+										timeSyncMap.anchorPoints[newTimeDomain].second);
+									parsedDataRow = ofToString(newDomainTimestamp, 6) + "," + parsedDataRow;
+								}
+							}
+						}
+					}
+					else
+					{
+						// Use EmotiBit timestamp to interpolate
+						if (splitData.size() < 6) {
+							cout << "Error: dataLength < size, " << packet << endl;
+						}
+						else {
+							// add timestamp for each new domain
+							for (auto newTimeDomain : parsedDataFormat.additionalTimestamps)
+							{
+								long double newDomainTimestamp;
+								// use calculated anchor poitns to find timestamps
+								newDomainTimestamp = linterp(timestamp,
+									timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].first,
+									timeSyncMap.anchorPoints[EmotiBitPacket::TypeTag::TIMESTAMP_EMOTIBIT].second,
+									timeSyncMap.anchorPoints[newTimeDomain].first,
+									timeSyncMap.anchorPoints[newTimeDomain].second);
+								parsedDataRow = ofToString(newDomainTimestamp, 6) + "," + parsedDataRow;
 
-				//outFile.close();
-			//}
+							}
+						}
+					}					
+					// ToDo: Add provision for LM timestamp
+					parsedDataRow = parsedDataRow +
+						ofToString(timestamp, 3) + "," +
+						splitData.at(1) + "," +
+						splitData.at(2) + "," +
+						splitData.at(3) + "," +
+						splitData.at(4) + "," +
+						splitData.at(5) + ",";
+					if (typeTag == EmotiBitPacket::TypeTagGroups::USER_MESSAGES[0])
+					{
+						// only append user note to the UN parsed packet. Discard the TL part of the payload
+						parsedDataRow += splitData.back();
+					}
+					else
+					{
+						// concat payload.
+						// ToDo: consider if string operation on raw packet is faster than split+concat
+						for (int i = 0; i < dataLength - 1; i++)
+						{
+							parsedDataRow = parsedDataRow + splitData.at(i + 6) + EmotiBitPacket::PAYLOAD_DELIMITER;
+						}
+
+						parsedDataRow = parsedDataRow + splitData.at(6 + (dataLength - 1));
+					}
+					parsedDataRow = parsedDataRow + '\n';
+					loggerPtr->second->push(parsedDataRow);
+				}
 			}
 		}
 	}
