@@ -1,13 +1,8 @@
-name: DataParser tests
-#on: [push]
+name: Test DataParser
 on:
-  #workflow_dispatch:
-  workflow_run:
-    workflows: ["Build all on linux"]
-    types:
-     - completed
+  workflow_call:
 jobs:
-  test-ParserOutput:
+  test-DataParser:
     runs-on: [self-hosted, Linux]
     environment: RUNNER-LINUX
     steps:

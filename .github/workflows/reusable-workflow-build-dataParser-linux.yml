@@ -1,0 +1,14 @@
+name: Build DataParser on linux
+on:
+  workflow_call:
+jobs:
+  build-dataparser:
+  runs-on: [self-hosted, Linux]
+  environment: RUNNER-LINUX
+  steps: 
+    - name: build using make
+      working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+      run: |
+        echo "current working directory" && pwd
+        cd EmotiBitDataParser
+        make
