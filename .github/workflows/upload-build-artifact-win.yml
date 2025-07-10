@@ -3,7 +3,7 @@ on:
    
   #workflow_dispatch:
   workflow_run:
-    workflows: ["Build all on Windows"]
+    workflows: ["Build all on Windows", "check Installer project version"]
     types:
      - completed
     branches:
