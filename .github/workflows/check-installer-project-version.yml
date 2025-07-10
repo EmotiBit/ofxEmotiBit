@@ -21,4 +21,4 @@ jobs:
         run: |
           pwd
           cd tests/EmotiBitInstaller/check-installer-version
-          bash run-test.sh
+          bash run_test.sh
