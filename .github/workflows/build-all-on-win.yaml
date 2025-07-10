@@ -1,0 +1,63 @@
+name: Build all on Windows
+on: [push]
+jobs:
+  clone-to-OF_ROOT:
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps:
+      - name: remove existing clone
+        shell: bash
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: |
+          pwd
+          #echo "the commit that dispatched this job-- ${GITHUB_SHA}"
+          if [ -d ofxEmotiBit ]; then
+            echo "Directory exists."
+            rm -rf ofxEmotiBit
+            echo "clone removed"
+          else
+            echo "Directory does not already exist"
+          fi
+      - name: checkout repository
+        uses: actions/checkout@v4  
+      - name: move fresh clone to OF_ROOT
+        shell: bash
+        run: |
+          echo ${{ github.repository }} | cut -d '/' -f 2
+          cp -r ..\\$(echo ${{ github.repository }} | cut -d '/' -f 2) ${{ vars.ADDONS_DIR }}
+  build-oscilloscope:
+    needs: clone-to-OF_ROOT
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps: 
+      - name: build using MSBuild
+        shell: cmd
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          cd EmotiBitOscilloscope
+          MSBuild EmotiBitOscilloscope.sln -t:Build -p:Configuration=Release 
+  build-dataparser:
+    needs: clone-to-OF_ROOT
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps: 
+      - name: build using MSBuild
+        shell: cmd
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          cd EmotiBitDataParser
+          MSBuild EmotiBitDataParser.sln -t:Build -p:Configuration=Release
+  build-firmwareinstaller:
+    needs: clone-to-OF_ROOT
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps: 
+      - name: build using MSBuild
+        shell: cmd
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          cd EmotiBitFirmwareInstaller
+          MSBuild EmotiBitFirmwareInstaller.sln -t:Build -p:Configuration=Release

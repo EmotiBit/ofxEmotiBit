@@ -22,9 +22,6 @@
     <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.cpp">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitWiFiHost.cpp">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
@@ -154,9 +151,6 @@
     <ClCompile Include="..\..\ofxLSL\src\ofxLSLResolver.cpp">
       <Filter>addons\ofxLSL\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\EmotiBitLsl.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardBase.cpp">
       <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
     </ClCompile>
@@ -171,9 +165,11 @@
     </ClCompile>
     <ClCompile Include="..\src\SoftwareVersionChecker.cpp" />
     <ClCompile Include="src\AuxInstrQ.cpp">
+    <ClCompile Include="src\EmotiBitWiFiHost.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\AuxCxnController.cpp">
+    <ClCompile Include="src\EmotiBitLsl.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -348,16 +344,10 @@
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h">
       <Filter>addons\ofxBiquadFilter\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ArduinoString.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\DoubleBuffer.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitTestingHelper.h">
-      <Filter>addons\ofxEmotiBit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\EmotiBitWiFiHost.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxEmotiBit\src\ofxEmotiBitVersion.h">
@@ -552,9 +542,6 @@
     <ClInclude Include="..\src\SoftwareVersionChecker.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\EmotiBitLsl.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ofxOscilloscope\ofxPatchboard\Patchboard\src\PatchboardBase.h">
       <Filter>addons\ofxOscilloscope\ofxPatchboard\Patchboard\src</Filter>
     </ClInclude>
@@ -568,10 +555,15 @@
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
     <ClInclude Include="src\AuxInstrQ.h">
+    <ClInclude Include="src\EmotiBitWiFiHost.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\AuxCxnController.h">
+    <ClInclude Include="src\EmotiBitLsl.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\EmotiBit_XPlat_Utils\src\ArduinoString.h">
+      <Filter>src\EmotiBit_XPlat_Utils\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
