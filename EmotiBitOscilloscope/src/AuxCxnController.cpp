@@ -5,7 +5,7 @@ std::uint16_t AuxCxnController::begin()
 	// start the UDP channel
 	auxCxnUdp.Create();
 	auxCxnUdp.SetNonBlocking(true);
-	auxCxnUdp.SetReceiveBufferSize(pow(2, 13)); // 8KB
+	auxCxnUdp.SetReceiveBufferSize(UDP_CXN_BUFFER_SIZE); // 8KB
 	auxCxnUdp.Bind(auxPort);
 
 	// setup TCP channel

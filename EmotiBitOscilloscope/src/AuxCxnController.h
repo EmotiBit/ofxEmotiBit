@@ -2,7 +2,7 @@
 /* Controller for auxillary network channel*/
 #include <queue>
 #include <ofxUDPManager.h>
-#include <ofxTCPClient.h>
+//#include <ofxTCPClient.h> // ToDo
 #include <ofLog.h>
 #include <ofUtils.h>
 #include "EmotiBitPacket.h"
@@ -10,6 +10,7 @@
 #include "EmotiBitComms.h"
 
 class AuxCxnController {
+	const uint32_t UDP_CXN_BUFFER_SIZE = 8192; // 8KB
 public:
 	enum AuxChannel {
 		CHANNEL_UDP = 0,
