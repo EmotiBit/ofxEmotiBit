@@ -1201,6 +1201,23 @@ void EmotiBitWiFiHost::processAppQ()
 									sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, controlPacketCounter++, localTime, 1));
 									break;
 								}
+								else if (jsonSettings["action"][0].asString().compare("USER_NOTE") == 0)
+								{
+									// NOTE: Sending user note using AuxCxn probably does not give the best results as there may be delays in UDP transmission
+									// and processing of this request. Some latency should be expected when sending user note using the Aux channel.
+									// USER_NOTE
+									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::USER_NOTE);
+									string localTime = EmotiBit::ofGetTimestampString(EmotiBitPacket::TIMESTAMP_STRING_FORMAT);
+									vector<string> payload;
+									payload.push_back(localTime);
+									// ToDo: improve this for error checking
+									if (jsonSettings["action"].size() > 1)
+									{
+										payload.push_back(jsonSettings["action"][1].asString());
+									}
+									sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::USER_NOTE, controlPacketCounter++, payload));
+									break;
+								}
 								else if (jsonSettings["action"][0].asString().compare("DIRECT_MESSAGE") == 0)
 								{
 									// ToDo: implement sending message to emotibit using CTR/DAT/ADV channels
