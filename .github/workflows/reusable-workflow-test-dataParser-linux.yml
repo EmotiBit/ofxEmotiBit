@@ -1,11 +1,8 @@
-name: DataParser tests
+name: Test DataParser
 on:
-  workflow_run:
-    workflows: ["Build all on linux"]
-    types:
-     - completed
+  workflow_call:
 jobs:
-  test-ParserOutput:
+  test-DataParser:
     runs-on: [self-hosted, Linux]
     environment: RUNNER-LINUX
     steps:
@@ -44,3 +41,4 @@ jobs:
         run: |
           echo "current working directory" && pwd
           bash tests/EmotiBitDataParser/timesync_parsing/run_test.sh -d $ENV_OFXEMOTIBIT_DIR
+
