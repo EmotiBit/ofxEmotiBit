@@ -76,7 +76,7 @@ void ofApp::update() {
 	processAuxInstrQ();
 
 	// ToDo: This function should really be on its own thread, running on a timer. See ofTimer: https://openframeworks.cc/documentation/utils/ofTimer/#show_reset
-	auxCtrlQ.clearStaleElement();
+	auxCtrlQ.clearStaleElement((uint32_t)ofGetElapsedTimeMillis());
 
 	for (string packet : dataPackets)
 	{

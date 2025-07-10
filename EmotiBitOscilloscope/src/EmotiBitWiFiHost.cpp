@@ -1162,7 +1162,7 @@ void EmotiBitWiFiHost::processAppQ()
 								// locally scoped to destroy variable after popping
 								std::string str;
 								auxNetworkChannelController.appQ->pop(str);
-								auxNetworkChannelController.appQ->updateLastPopTime();
+								auxNetworkChannelController.appQ->updateLastPopTime((uint32_t)ofGetElapsedTimeMillis());
 							}
 							// loop through all the actions
 							// perform required action
@@ -1223,7 +1223,7 @@ void EmotiBitWiFiHost::processAppQ()
 					// pop from Queue
 					std::string str;
 					auxNetworkChannelController.appQ->pop(str);
-					auxNetworkChannelController.appQ->updateLastPopTime();
+					auxNetworkChannelController.appQ->updateLastPopTime((uint32_t)ofGetElapsedTimeMillis());
 				}
 
 			}

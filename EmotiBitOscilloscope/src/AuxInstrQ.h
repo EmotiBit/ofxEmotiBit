@@ -41,8 +41,9 @@ public:
 	/**
 	 * \brief Function to record the time when element is popped from the queue. Used internally to remove stale queue elements.
 	 * 
+	 * \param popTime Time when the element was popped
 	 */
-	void updateLastPopTime();
+	void updateLastPopTime(uint32_t popTime);
 
 	/**
 	 * \brief Returns last time-since-application-start when queue elelment was popped.
@@ -54,7 +55,8 @@ public:
 	/**
 	 * \brief Pops front element if it has not been popped for more than set timeout.
 	 * 
+	 * \param the current time
 	 * \return true if stale element is popped 
 	 */
-	bool clearStaleElement();
+	bool clearStaleElement(uint32_t currentTime);
 };

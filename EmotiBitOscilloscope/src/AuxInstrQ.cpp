@@ -35,9 +35,9 @@ bool AuxInstrQ::front(std::string &packet)
 	return false;
 }
 
-void AuxInstrQ::updateLastPopTime()
+void AuxInstrQ::updateLastPopTime(uint32_t popTime)
 {
-	lastPopTime = ofGetElapsedTimeMillis();
+	lastPopTime = popTime;
 }
 
 uint32_t AuxInstrQ::getLastPopTime()
@@ -45,9 +45,9 @@ uint32_t AuxInstrQ::getLastPopTime()
 	return lastPopTime;
 }
 
-bool AuxInstrQ::clearStaleElement()
+bool AuxInstrQ::clearStaleElement(uint32_t currentTime)
 {
-	if (ofGetElapsedTimeMillis() - getLastPopTime() > MAX_TIME_WITHOUT_POP_MS)
+	if (currentTime - getLastPopTime() > MAX_TIME_WITHOUT_POP_MS)
 	{
 		if (q.size())
 		{
