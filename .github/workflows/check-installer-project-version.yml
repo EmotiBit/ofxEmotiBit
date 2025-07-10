@@ -1,0 +1,24 @@
+name: check Installer project version
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened, synchronized]
+    branches:
+      - dev
+
+jobs:
+  checkout:
+    runs-on: [self-hosted, Linux]
+    environment: RUNNER-LINUX
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4  
+  check-installer-project-version:
+    needs: checkout
+    runs-on: [self-hosted, Linux]
+    steps:
+      - name: check-version
+        run: |
+          pwd
+          cd tests/EmotiBitInstaller/check-installer-version
+          bash run_test.sh
