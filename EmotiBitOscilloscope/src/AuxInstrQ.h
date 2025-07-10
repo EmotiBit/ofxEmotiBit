@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <queue>
 class AuxInstrQ {
 	std::queue<std::string> q;
