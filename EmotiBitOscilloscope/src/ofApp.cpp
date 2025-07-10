@@ -21,6 +21,7 @@ void ofApp::setup() {
 	emotiBitWiFi.parseCommSettings(commSettings);
 
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
+	emotiBitWiFi.attachAppQ(&auxCtrlQ);  // pass the main application instruction q to the wifi controller
 	timeWindowOnSetup = 10;  // set timeWindow for setup (in seconds)
 	setupGui();
 	setupOscilloscopes();
@@ -45,8 +46,8 @@ void ofApp::setup() {
 	}
 
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
-	ofSetLogLevel(OF_LOG_FATAL_ERROR);
-	//ofSetLogLevel(OF_LOG_VERBOSE);
+	//ofSetLogLevel(OF_LOG_FATAL_ERROR);
+	ofSetLogLevel(OF_LOG_VERBOSE);
 }
 
 //--------------------------------------------------------------
@@ -66,6 +67,17 @@ void ofApp::update() {
 	}
 	vector<string> dataPackets;
 	emotiBitWiFi.readData(dataPackets);
+
+	emotiBitWiFi.readAuxNetworkChannel();
+	emotiBitWiFi.updateAuxInstrQ();
+
+	// process elements in the AuxInstrQ
+	emotiBitWiFi.processAppQ();
+	processAuxInstrQ();
+
+	// ToDo: This function should really be on its own thread, running on a timer. See ofTimer: https://openframeworks.cc/documentation/utils/ofTimer/#show_reset
+	auxCtrlQ.clearStaleElement((uint32_t)ofGetElapsedTimeMillis());
+
 	for (string packet : dataPackets)
 	{
 		processSlowResponseMessage(packet);
@@ -1803,4 +1815,11 @@ bool ofApp::startUdpOutput()
 	}
 
 	return false;
+}
+
+void ofApp::processAuxInstrQ()
+{
+	// ToDo: implement parsing of the JSON instructions
+	// process all messages of type APP_GUI
+	
 }

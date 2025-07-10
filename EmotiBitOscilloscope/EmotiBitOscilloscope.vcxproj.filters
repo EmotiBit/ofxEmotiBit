@@ -163,8 +163,16 @@
     <ClCompile Include="..\src\EmotiBitOfUtils.cpp">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SoftwareVersionChecker.cpp" />
+    <ClCompile Include="..\src\SoftwareVersionChecker.cpp">
+      <Filter>addons\ofxEmotiBit\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AuxInstrQ.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\EmotiBitWiFiHost.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AuxCxnController.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\EmotiBitLsl.cpp">
@@ -552,7 +560,13 @@
     <ClInclude Include="..\src\EmotiBitOfUtils.h">
       <Filter>addons\ofxEmotiBit\src</Filter>
     </ClInclude>
+    <ClInclude Include="src\AuxInstrQ.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\EmotiBitWiFiHost.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AuxCxnController.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\EmotiBitLsl.h">

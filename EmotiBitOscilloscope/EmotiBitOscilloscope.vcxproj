@@ -111,6 +111,8 @@
     <ClCompile Include="..\src\EmotiBitOfUtils.cpp" />
     <ClCompile Include="..\src\Signal\Periodizer.cpp" />
     <ClCompile Include="..\src\SoftwareVersionChecker.cpp" />
+    <ClCompile Include="src\AuxInstrQ.cpp" />
+    <ClCompile Include="src\AuxCxnController.cpp" />
     <ClCompile Include="src\EmotiBitLsl.cpp" />
     <ClCompile Include="src\EmotiBitWiFiHost.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -175,6 +177,8 @@
     <ClInclude Include="..\src\SoftwareVersionChecker.h" />
     <ClInclude Include="src\EmotiBitLsl.h" />
     <ClInclude Include="src\EmotiBitWiFiHost.h" />
+    <ClInclude Include="src\AuxInstrQ.h" />
+    <ClInclude Include="src\AuxCxnController.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilter.h" />
     <ClInclude Include="..\..\..\addons\ofxBiquadFilter\src\ofxBiquadFilterInstance.h" />
