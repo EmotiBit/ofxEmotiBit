@@ -1,10 +1,10 @@
 name: check Installer project version
 on:
-  workflow_dispatch:
   pull_request:
     types: [opened, reopened, synchronized]
     branches:
       - dev
+  workflow_dispatch:
 
 jobs:
   checkout:
