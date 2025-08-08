@@ -26,7 +26,7 @@ jobs:
           silabsDriverPath="../../drivers/macOS_VCP_Driver"
           if [ -d "$silabsDriverPath" ]; then
             echo "copying drivers!"
-            cp -r "$silabsDriverPath" "$releaseFolder"
+            cp -r "$silabsDriverPath/" "ofxEmotiBit/stageRelease/EmotiBitSoftware-macos"
           else
             echo "drivers not found! proceeding without drivers!"
             exit 1
