@@ -1903,6 +1903,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
 					"$(OF_CORE_FRAMEWORKS)",
@@ -1976,6 +1977,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2051,6 +2053,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm,
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2192,7 +2195,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2398,7 +2401,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
 					"$(OF_CORE_FRAMEWORKS)",
@@ -2474,7 +2477,7 @@
 					"$(inherited)",
 					../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/x86_64,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
