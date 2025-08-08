@@ -14,12 +14,23 @@ jobs:
       - name: create stage-release
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: mkdir -p stageRelease/EmotiBitSoftware-macos
-      - name: populate stage release
+      - name: Move application binaries
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           mv EmotiBitOscilloscope/bin/EmotiBitOscilloscope.app stageRelease/EmotiBitSoftware-macos
           mv EmotiBitDataParser/bin/EmotiBitDataParser.app stageRelease/EmotiBitSoftware-macos
           mv EmotiBitFirmwareInstaller/bin/EmotiBitFirmwareInstaller.app stageRelease/EmotiBitSoftware-macos
+      - name: copy SiLabs drivers
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: |
+          silabsDriverPath="../../drivers/macOS_VCP_Driver"
+          if [ -d "$silabsDriverPath" ]; then
+            echo "copying drivers!"
+            cp -r "$silabsDriverPath" "$releaseFolder"
+          else
+            echo "drivers not found! proceeding without drivers!"
+            exit 1
+          fi
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
