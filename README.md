@@ -79,7 +79,7 @@ git clone git@github.com:smukkejohan/ofxBiquadFilter.git
 git clone git@github.com:jeffcrouse/ofxJSON.git
 git clone git@github.com:EmotiBit/EmotiBit_XPlat_Utils.git
 git clone git@github.com:EmotiBit/ofxLSL.git
-git clone git@github.com:bakercp/ofxSerial.git
+git clone git@github.com:EmotiBit/ofxSerial.git
 cd ofxSerial
 git checkout stable
 cd ..
