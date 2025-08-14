@@ -17,94 +17,35 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Mac artifacts
-        uses: actions/github-script@v6
-        id: download-mac-artifacts
+        uses: dawidd6/action-download-artifact@v2
         with:
-          script: |
-            const { owner, repo } = context.repo;
-            const workflows = await github.rest.actions.listRepoWorkflows({ owner, repo });
-            const macWorkflow = workflows.data.workflows.find(w => w.name === 'upload build artifact mac');
+          workflow: upload-build-artifact-mac.yml
+          branch: dev
+          name: EmotiBitSoftware-macos
+          path: ./
+        continue-on-error: true
 
-            if (macWorkflow) {
-              const runs = await github.rest.actions.listWorkflowRuns({
-                owner,
-                repo,
-                workflow_id: macWorkflow.id,
-                branch: 'dev',
-                per_page: 1,
-                status: 'success'
-              });
-
-              if (runs.data.workflow_runs.length > 0) {
-                const runId = runs.data.workflow_runs[0].id;
-                const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-                  owner,
-                  repo,
-                  run_id: runId
-                });
-
-                for (const artifact of artifacts.data.artifacts) {
-                  if (artifact.name === 'EmotiBitSoftware-macos') {
-                    const download = await github.rest.actions.downloadArtifact({
-                      owner,
-                      repo,
-                      artifact_id: artifact.id,
-                      archive_format: 'zip'
-                    });
-                    
-                    const fs = require('fs');
-                    fs.writeFileSync('EmotiBitSoftware-macos.zip', Buffer.from(download.data));
-                    core.setOutput('mac-artifact-downloaded', 'true');
-                    break;
-                  }
-                }
-              }
-            }
-
-      - name: Download Windows artifacts
-        uses: actions/github-script@v6
-        id: download-win-artifacts
+      - name: Download Windows artifacts  
+        uses: dawidd6/action-download-artifact@v2
         with:
-          script: |
-            const { owner, repo } = context.repo;
-            const workflows = await github.rest.actions.listRepoWorkflows({ owner, repo });
-            const winWorkflow = workflows.data.workflows.find(w => w.name === 'upload build artifact Windows');
+          workflow: upload-build-artifact-win.yml
+          branch: dev
+          name: EmotiBitSoftware-Windows
+          path: ./
+        continue-on-error: true
 
-            if (winWorkflow) {
-              const runs = await github.rest.actions.listWorkflowRuns({
-                owner,
-                repo,
-                workflow_id: winWorkflow.id,
-                branch: 'dev',
-                per_page: 1,
-                status: 'success'
-              });
-
-              if (runs.data.workflow_runs.length > 0) {
-                const runId = runs.data.workflow_runs[0].id;
-                const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-                  owner,
-                  repo,
-                  run_id: runId
-                });
-
-                for (const artifact of artifacts.data.artifacts) {
-                  if (artifact.name === 'EmotiBitSoftware-Windows') {
-                    const download = await github.rest.actions.downloadArtifact({
-                      owner,
-                      repo,
-                      artifact_id: artifact.id,
-                      archive_format: 'zip'
-                    });
-                    
-                    const fs = require('fs');
-                    fs.writeFileSync('EmotiBitSoftware-Windows.zip', Buffer.from(download.data));
-                    core.setOutput('win-artifact-downloaded', 'true');
-                    break;
-                  }
-                }
-              }
-            }
+      - name: Create artifact zips
+        run: |
+          if [ -d "EmotiBitSoftware-macos" ]; then
+            cd EmotiBitSoftware-macos
+            zip -r ../EmotiBitSoftware-macos.zip .
+            cd ..
+          fi
+          if [ -d "EmotiBitSoftware-Windows" ]; then
+            cd EmotiBitSoftware-Windows  
+            zip -r ../EmotiBitSoftware-Windows.zip .
+            cd ..
+          fi
 
       - name: Generate release notes
         id: generate-release-notes
