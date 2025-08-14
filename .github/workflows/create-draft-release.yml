@@ -23,6 +23,7 @@ jobs:
           branch: master
           name: EmotiBitSoftware-macos
           path: ./
+          skip_unpack: true
         continue-on-error: true
 
       - name: Download Windows artifacts  
@@ -32,19 +33,16 @@ jobs:
           branch: master
           name: EmotiBitSoftware-Windows
           path: ./
+          skip_unpack: true
         continue-on-error: true
 
-      - name: Create artifact zips
+      - name: Rename artifacts
         run: |
-          if [ -d "EmotiBitSoftware-macos" ]; then
-            cd EmotiBitSoftware-macos
-            zip -r ../EmotiBitSoftware-macos.zip .
-            cd ..
+          if [ -f "EmotiBitSoftware-macos.zip" ]; then
+            echo "Mac artifact downloaded as zip"
           fi
-          if [ -d "EmotiBitSoftware-Windows" ]; then
-            cd EmotiBitSoftware-Windows  
-            zip -r ../EmotiBitSoftware-Windows.zip .
-            cd ..
+          if [ -f "EmotiBitSoftware-Windows.zip" ]; then
+            echo "Windows artifact downloaded as zip"
           fi
 
       - name: Generate release notes
