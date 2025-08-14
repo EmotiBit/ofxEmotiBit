@@ -51,5 +51,5 @@
 *Results.txt
 */bin
 EmotiBitIcons/otherFormats
-*/*xcodeproj/*data/*
 */*xcodeproj/*workspace/*
+**/xcuser*/**
