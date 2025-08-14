@@ -58,18 +58,18 @@ jobs:
 
           # Installation
           #### Windows
-          - Download the `EmotiBitSoftware-Windows.zip` linked below.
+          - Download the **EmotiBitSoftware-Windows.zip** linked below.
           - Extract the zip file downloaded
-          - run the `.msi` installer file.
-            - If the **Windows Defender Smartscreen** pops up, click on `More info` and `Run anyway`
-          - The `EmotiBit Oscilloscope` and `EmotiBit DataParser` will be installed on your system.
-          - You can access the software from the `Start` menu under `EmotiBit` or from the desktop shortcut.
+          - run the **.msi** installer file.
+            - If the **Windows Defender Smartscreen** pops up, click on **More info** and **Run anyway**
+          - The **EmotiBit Oscilloscope** and **EmotiBit DataParser** will be installed on your system.
+          - You can access the software from the **Start** menu under **EmotiBit** or from the desktop shortcut.
 
           #### macOS
-          - Download `EmotiBitSoftware-macOS`
+          - Download **EmotiBitSoftware-macOS**
           - Extract the downloaded zip file. 
-          - The extracted folder will contain `EmotiBit Oscilloscope` and `EmotiBit DataParser`.
-            - Right-click and select `Open` to run the executables
+          - The extracted folder will contain **EmotiBit Oscilloscope** and **EmotiBit DataParser**.
+            - Right-click and select **Open** to run the executables
 
           #### Linux
           - Download the source code linked below. Follow the steps in the [ReadMe](https://github.com/EmotiBit/ofxEmotiBit#readme).
