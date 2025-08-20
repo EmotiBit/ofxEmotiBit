@@ -56,8 +56,8 @@ The addons are placed in the `OF_ROOT/addons` folder and it's structure is shown
     - both of these libs are handled properly by default but should be considered if deviating from the release code
     </details>
 - Required to build EmotiBit FirmwareInstaller
-  - **ofxSerial:** [GitHub repository](https://github.com/EmotiBit/ofxSerial)
-  - **ofxIO:** [GitHub repository](https://github.com/bakercp/ofxIO)
+  - **ofxSerial:** [EmotiBit ofxSerial](https://github.com/EmotiBit/ofxSerial)
+  - **ofxIO:** [bakercp ofxIO](https://github.com/bakercp/ofxIO)
 - Additional notes
   - The project is built on a 64-bit architecture. Ensure you are on a machine supporting the `x64` build platform.
   - **If downloading the zip instead of `git clone`, be sure to remove `-master`  or `-xxx-xxx` from the folder name to maintain correct path references**. 
@@ -79,7 +79,7 @@ git clone git@github.com:smukkejohan/ofxBiquadFilter.git
 git clone git@github.com:jeffcrouse/ofxJSON.git
 git clone git@github.com:EmotiBit/EmotiBit_XPlat_Utils.git
 git clone git@github.com:EmotiBit/ofxLSL.git
-git clone git@github.com:bakercp/ofxSerial.git
+git clone git@github.com:EmotiBit/ofxSerial.git
 cd ofxSerial
 git checkout stable
 cd ..

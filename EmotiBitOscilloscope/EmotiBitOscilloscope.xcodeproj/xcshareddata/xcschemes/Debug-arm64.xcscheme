@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1420"
+   LastUpgradeVersion = "0600"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B990E5B62C0E7A370094B63E"
-               BuildableName = "EmotiBitOscilloscope.app"
+               BlueprintIdentifier = "8EF01B542E4544B600BF0971"
+               BuildableName = "EmotiBitOscilloscope-arm64.app"
                BlueprintName = "EmotiBitOscilloscope-arm64"
                ReferencedContainer = "container:EmotiBitOscilloscope.xcodeproj">
             </BuildableReference>
@@ -37,42 +37,22 @@
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
-      debugDocumentVersioning = "YES"
+      debugDocumentVersioning = "NO"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B990E5B62C0E7A370094B63E"
-            BuildableName = "EmotiBitOscilloscope.app"
-            BlueprintName = "EmotiBitOscilloscope-arm64"
-            ReferencedContainer = "container:EmotiBitOscilloscope.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B990E5B62C0E7A370094B63E"
-            BuildableName = "EmotiBitOscilloscope.app"
-            BlueprintName = "EmotiBitOscilloscope-arm64"
-            ReferencedContainer = "container:EmotiBitOscilloscope.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
+      debugDocumentVersioning = "NO">
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
