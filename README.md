@@ -3,6 +3,10 @@ Software code for the EmotiBit.
 If you just want to visualize and parse data from the EmotiBit (for Windows/ macOS), you can simply download the software directly in [releases](https://github.com/EmotiBit/ofxEmotiBit/releases).
 
 If you want to modify the code(or build the tools in Linux), below are the requirements to build the project.  
+|Branch|Build status mac| Build status Windows | Build status Linux|
+|------|------------| -------------------------| ----------------- |
+|master| [![Build all on macos](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml/badge.svg?branch=master)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml)|[![Build all on Windows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml/badge.svg?branch=master)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml)|[![Linux workflows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml/badge.svg)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml)|
+|dev|[![Build all on macos](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml/badge.svg?branch=dev)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml)|[![Build all on Windows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml/badge.svg?branch=dev)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml)|[![Linux workflows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml/badge.svg)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml)|
 
 ## Requirements
 ### Openframeworks
