@@ -17,94 +17,33 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Mac artifacts
-        uses: actions/github-script@v6
-        id: download-mac-artifacts
+        uses: dawidd6/action-download-artifact@v6
         with:
-          script: |
-            const { owner, repo } = context.repo;
-            const workflows = await github.rest.actions.listRepoWorkflows({ owner, repo });
-            const macWorkflow = workflows.data.workflows.find(w => w.name === 'upload build artifact mac');
+          workflow: upload-build-artifact-mac.yml
+          branch: master
+          name: EmotiBitSoftware-macos
+          path: ./
+          skip_unpack: true
+        continue-on-error: true
 
-            if (macWorkflow) {
-              const runs = await github.rest.actions.listWorkflowRuns({
-                owner,
-                repo,
-                workflow_id: macWorkflow.id,
-                branch: 'dev',
-                per_page: 1,
-                status: 'success'
-              });
-
-              if (runs.data.workflow_runs.length > 0) {
-                const runId = runs.data.workflow_runs[0].id;
-                const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-                  owner,
-                  repo,
-                  run_id: runId
-                });
-
-                for (const artifact of artifacts.data.artifacts) {
-                  if (artifact.name === 'EmotiBitSoftware-macos') {
-                    const download = await github.rest.actions.downloadArtifact({
-                      owner,
-                      repo,
-                      artifact_id: artifact.id,
-                      archive_format: 'zip'
-                    });
-                    
-                    const fs = require('fs');
-                    fs.writeFileSync('EmotiBitSoftware-macos.zip', Buffer.from(download.data));
-                    core.setOutput('mac-artifact-downloaded', 'true');
-                    break;
-                  }
-                }
-              }
-            }
-
-      - name: Download Windows artifacts
-        uses: actions/github-script@v6
-        id: download-win-artifacts
+      - name: Download Windows artifacts  
+        uses: dawidd6/action-download-artifact@v6
         with:
-          script: |
-            const { owner, repo } = context.repo;
-            const workflows = await github.rest.actions.listRepoWorkflows({ owner, repo });
-            const winWorkflow = workflows.data.workflows.find(w => w.name === 'upload build artifact Windows');
+          workflow: upload-build-artifact-win.yml
+          branch: master
+          name: EmotiBitSoftware-Windows
+          path: ./
+          skip_unpack: true
+        continue-on-error: true
 
-            if (winWorkflow) {
-              const runs = await github.rest.actions.listWorkflowRuns({
-                owner,
-                repo,
-                workflow_id: winWorkflow.id,
-                branch: 'dev',
-                per_page: 1,
-                status: 'success'
-              });
-
-              if (runs.data.workflow_runs.length > 0) {
-                const runId = runs.data.workflow_runs[0].id;
-                const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-                  owner,
-                  repo,
-                  run_id: runId
-                });
-
-                for (const artifact of artifacts.data.artifacts) {
-                  if (artifact.name === 'EmotiBitSoftware-Windows') {
-                    const download = await github.rest.actions.downloadArtifact({
-                      owner,
-                      repo,
-                      artifact_id: artifact.id,
-                      archive_format: 'zip'
-                    });
-                    
-                    const fs = require('fs');
-                    fs.writeFileSync('EmotiBitSoftware-Windows.zip', Buffer.from(download.data));
-                    core.setOutput('win-artifact-downloaded', 'true');
-                    break;
-                  }
-                }
-              }
-            }
+      - name: Rename artifacts
+        run: |
+          if [ -f "EmotiBitSoftware-macos.zip" ]; then
+            echo "Mac artifact downloaded as zip"
+          fi
+          if [ -f "EmotiBitSoftware-Windows.zip" ]; then
+            echo "Windows artifact downloaded as zip"
+          fi
 
       - name: Generate release notes
         id: generate-release-notes
@@ -119,18 +58,18 @@ jobs:
 
           # Installation
           #### Windows
-          - Download the `EmotiBitSoftware-Windows.zip` linked below.
+          - Download the **EmotiBitSoftware-Windows.zip** linked below.
           - Extract the zip file downloaded
-          - run the `.msi` installer file.
-            - If the **Windows Defender Smartscreen** pops up, click on `More info` and `Run anyway`
-          - The `EmotiBit Oscilloscope` and `EmotiBit DataParser` will be installed on your system.
-          - You can access the software from the `Start` menu under `EmotiBit` or from the desktop shortcut.
+          - run the **.msi** installer file.
+            - If the **Windows Defender Smartscreen** pops up, click on **More info** and **Run anyway**
+          - The **EmotiBit Oscilloscope** and **EmotiBit DataParser** will be installed on your system.
+          - You can access the software from the **Start** menu under **EmotiBit** or from the desktop shortcut.
 
           #### macOS
-          - Download `EmotiBitSoftware-macOS`
+          - Download **EmotiBitSoftware-macOS**
           - Extract the downloaded zip file. 
-          - The extracted folder will contain `EmotiBit Oscilloscope` and `EmotiBit DataParser`.
-            - Right-click and select `Open` to run the executables
+          - The extracted folder will contain **EmotiBit Oscilloscope** and **EmotiBit DataParser**.
+            - Right-click and select **Open** to run the executables
 
           #### Linux
           - Download the source code linked below. Follow the steps in the [ReadMe](https://github.com/EmotiBit/ofxEmotiBit#readme).
