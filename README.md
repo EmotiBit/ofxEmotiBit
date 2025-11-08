@@ -8,6 +8,8 @@ If you want to modify the code(or build the tools in Linux), below are the requi
 |master| [![Build all on macos](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml/badge.svg?branch=master)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml)|[![Build all on Windows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml/badge.svg?branch=master)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml)|[![Linux workflows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml/badge.svg)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml)|
 |dev|[![Build all on macos](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml/badge.svg?branch=dev)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml)|[![Build all on Windows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml/badge.svg?branch=dev)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml)|[![Linux workflows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml/badge.svg)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml)|
 
+For detailed information about CI/CD workflows and the release process, see [WORKFLOWS.md](WORKFLOWS.md).
+
 ## Requirements
 ### Openframeworks
 Install openFrameworks 0.11.2 from the official [openFrameworks GitHub repository](https://github.com/openframeworks/openFrameworks/releases/tag/0.11.2). Choose the appriopriate version for your operating system.
