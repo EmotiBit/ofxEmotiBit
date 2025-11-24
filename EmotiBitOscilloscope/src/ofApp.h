@@ -309,12 +309,9 @@ public:
 	
 	EmotiBitLsl emotibitLsl;
 	bool sendLsl = false;
+	bool _processAuxCtrl = false;
 	AuxInstrQ auxCtrlQ;  ///< Main application queue for aux messages
 
-	/**
-	 * \brief Function to process the instructions received on the aux queue.
-	 * 
-	 */
-	void processAuxInstrQ();
+	void initAuxControl(std::string commSettingsFile);
 };
 

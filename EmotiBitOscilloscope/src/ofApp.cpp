@@ -19,7 +19,7 @@ void ofApp::setup() {
 
 	string commSettings = loadTextFile(commSettingsFile);
 	emotiBitWiFi.parseCommSettings(commSettings);
-
+	initAuxControl(commSettings);
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
 	emotiBitWiFi.attachAppQ(&auxCtrlQ);  // pass the main application instruction q to the wifi controller
 	timeWindowOnSetup = 10;  // set timeWindow for setup (in seconds)
@@ -67,16 +67,19 @@ void ofApp::update() {
 	}
 	vector<string> dataPackets;
 	emotiBitWiFi.readData(dataPackets);
+	
+	if (_processAuxCtrl)
+	{
+		// TODO: Move this to a ofApp::processAuxQ, when we have more than 1 sources of auxillary intructions
+		emotiBitWiFi.readAuxNetworkChannel();
+		emotiBitWiFi.updateAuxInstrQ();
+		// process elements in the AuxInstrQ
+		emotiBitWiFi.processAppQ();
+		// TODO: This function should really be on its own thread, running on a timer. See ofTimer: https://openframeworks.cc/documentation/utils/ofTimer/#show_reset
+		// TODO: This function should be called by the ofApp::processAuxQ
+		auxCtrlQ.clearStaleElement((uint32_t)ofGetElapsedTimeMillis());
+	}
 
-	emotiBitWiFi.readAuxNetworkChannel();
-	emotiBitWiFi.updateAuxInstrQ();
-
-	// process elements in the AuxInstrQ
-	emotiBitWiFi.processAppQ();
-	processAuxInstrQ();
-
-	// ToDo: This function should really be on its own thread, running on a timer. See ofTimer: https://openframeworks.cc/documentation/utils/ofTimer/#show_reset
-	auxCtrlQ.clearStaleElement((uint32_t)ofGetElapsedTimeMillis());
 
 	for (string packet : dataPackets)
 	{
@@ -1817,9 +1820,26 @@ bool ofApp::startUdpOutput()
 	return false;
 }
 
-void ofApp::processAuxInstrQ()
+void ofApp::initAuxControl(std::string commSettingsFile)
 {
-	// ToDo: implement parsing of the JSON instructions
-	// process all messages of type APP_GUI
-	
+	if (!commSettingsFile.empty())
+	{
+		Json::Reader reader;
+		Json::Value jsonCommSettings;
+
+		try
+		{
+			if (reader.parse(commSettingsFile, jsonCommSettings))
+			{
+				if (jsonCommSettings.isMember("auxillaryControl"))
+				{
+					_processAuxCtrl = jsonCommSettings["auxillaryControl"].asBool();
+				}
+			}
+		}
+		catch (exception e)
+		{
+			ofLogError("[ofApp::Setup] CommSettings settings parse exception: ") << e.what();
+		}
+	}
 }
