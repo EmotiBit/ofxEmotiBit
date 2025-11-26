@@ -1,0 +1,20 @@
+name: Test Oscilloscope
+on:
+  workflow_call:
+jobs:
+  test-oscilloscope:
+    runs-on: [self-hosted, Linux]
+    environment: RUNNER-LINUX
+    steps:
+      - name: Install jq
+        run: |
+          if ! command -v jq &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y jq
+          fi
+      - name: Auxillary control configuration test
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        env:
+          ENV_OFXEMOTIBIT_DIR: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          bash tests/EmotiBitOscilloscope/control-automation/test_auxillary_control.sh

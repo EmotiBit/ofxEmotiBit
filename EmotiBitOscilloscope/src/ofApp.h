@@ -20,6 +20,7 @@
 #include "ofxJSON.h"
 #include "SoftwareVersionChecker.h"
 #include "EmotiBitLsl.h"
+#include "AuxInstrQ.h"
 
 class ofApp : public ofBaseApp {
 public:
@@ -308,6 +309,9 @@ public:
 	
 	EmotiBitLsl emotibitLsl;
 	bool sendLsl = false;
+	bool _processAuxCtrl = false;
+	AuxInstrQ auxCtrlQ;  ///< Main application queue for aux messages
 
+	void initAuxControl(std::string commSettingsFile);
 };
 

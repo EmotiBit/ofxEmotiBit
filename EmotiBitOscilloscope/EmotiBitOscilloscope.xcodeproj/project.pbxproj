@@ -55,6 +55,10 @@
 		8EF01B5A2E4544B600BF0971 /* ofxBiquadFilterInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F32C175B3E53B0864752B5D7 /* ofxBiquadFilterInstance.cpp */; };
 		8EF01B5B2E4544B600BF0971 /* EmotiBitOfUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BDE549108B6A79D110451A5 /* EmotiBitOfUtils.cpp */; };
 		8EF01B5C2E4544B600BF0971 /* Periodizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA65A234F6CABD350A1BA57 /* Periodizer.cpp */; };
+		8EF01A612E20483A00BF0971 /* AuxInstrQ.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EF01A5D2E20483900BF0971 /* AuxInstrQ.cpp */; };
+		8EF01A622E20483A00BF0971 /* AuxInstrQ.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EF01A5D2E20483900BF0971 /* AuxInstrQ.cpp */; };
+		8EF01A632E20483A00BF0971 /* AuxCxnController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EF01A5E2E20483A00BF0971 /* AuxCxnController.cpp */; };
+		8EF01A642E20483A00BF0971 /* AuxCxnController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EF01A5E2E20483A00BF0971 /* AuxCxnController.cpp */; };
 		8EF01B5D2E4544B600BF0971 /* SoftwareVersionChecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9B3B69F1411454D188127C4E /* SoftwareVersionChecker.cpp */; };
 		8EF01B5E2E4544B600BF0971 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9604B925D32EE39065747725 /* ofxBaseGui.cpp */; };
 		8EF01B5F2E4544B600BF0971 /* EmotiBitTestingHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EF01AEF2E4532BC00BF0971 /* EmotiBitTestingHelper.cpp */; };
@@ -319,6 +323,10 @@
 		8EF01AFE2E45385A00BF0971 /* inputSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = inputSettings.xml; path = bin/data/inputSettings.xml; sourceTree = "<group>"; };
 		8EF01B9F2E4544B600BF0971 /* EmotiBitOscilloscope-arm64.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EmotiBitOscilloscope-arm64.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EF01BA12E45450F00BF0971 /* liblsl.1.14.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblsl.1.14.0.dylib; path = ../../../addons/ofxLSL/libs/labstreaminglayer/lib/osx/arm/liblsl.1.14.0.dylib; sourceTree = "<group>"; };
+		8EF01A5D2E20483900BF0971 /* AuxInstrQ.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AuxInstrQ.cpp; sourceTree = "<group>"; };
+		8EF01A5E2E20483A00BF0971 /* AuxCxnController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AuxCxnController.cpp; sourceTree = "<group>"; };
+		8EF01A5F2E20483A00BF0971 /* AuxInstrQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuxInstrQ.h; sourceTree = "<group>"; };
+		8EF01A602E20483A00BF0971 /* AuxCxnController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuxCxnController.h; sourceTree = "<group>"; };
 		8F225C97B6ECA8B22FFB4B76 /* rc5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc5.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/rc5.h; sourceTree = SOURCE_ROOT; };
 		907C5B5E104864A2D3A25745 /* ofxToggle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxToggle.cpp; path = ../../../addons/ofxGui/src/ofxToggle.cpp; sourceTree = SOURCE_ROOT; };
 		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
@@ -1479,6 +1487,10 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				8EF01A5E2E20483A00BF0971 /* AuxCxnController.cpp */,
+				8EF01A602E20483A00BF0971 /* AuxCxnController.h */,
+				8EF01A5D2E20483900BF0971 /* AuxInstrQ.cpp */,
+				8EF01A5F2E20483A00BF0971 /* AuxInstrQ.h */,
 				8EF01ADD2E45302800BF0971 /* EmotiBitLsl.cpp */,
 				8EF01ADE2E45302800BF0971 /* EmotiBitLsl.h */,
 				8EF01ADC2E45302800BF0971 /* EmotiBitWiFiHost.cpp */,
@@ -1745,11 +1757,13 @@
 				8EF01B642E4544B600BF0971 /* ofxInputField.cpp in Sources */,
 				8EF01B652E4544B600BF0971 /* ofxLabel.cpp in Sources */,
 				8EF01B662E4544B600BF0971 /* ofxPanel.cpp in Sources */,
+				8EF01A632E20483A00BF0971 /* AuxCxnController.cpp in Sources */,
 				8EF01B672E4544B600BF0971 /* ofxSlider.cpp in Sources */,
 				8EF01B682E4544B600BF0971 /* ofxSliderGroup.cpp in Sources */,
 				8EF01B692E4544B600BF0971 /* EmotiBitWiFiHost.cpp in Sources */,
 				8EF01B6A2E4544B600BF0971 /* ofxToggle.cpp in Sources */,
 				8EF01B6B2E4544B600BF0971 /* PatchboardXml.cpp in Sources */,
+				8EF01A612E20483A00BF0971 /* AuxInstrQ.cpp in Sources */,
 				8EF01B6C2E4544B600BF0971 /* jsoncpp.cpp in Sources */,
 				8EF01B6D2E4544B600BF0971 /* ofxJSONElement.cpp in Sources */,
 				8EF01B6E2E4544B600BF0971 /* tinyxml.cpp in Sources */,
@@ -1801,9 +1815,11 @@
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				853E0BA2F448076739446874 /* ofxColorPicker.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
+				8EF01A642E20483A00BF0971 /* AuxCxnController.cpp in Sources */,
 				8EF01AEE2E4530F600BF0971 /* PatchboardBase.cpp in Sources */,
 				852E0891794923EE7583C621 /* ofxInputField.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
+				8EF01A622E20483A00BF0971 /* AuxInstrQ.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,

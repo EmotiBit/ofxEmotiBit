@@ -28,7 +28,11 @@ jobs:
   build-dataparser:
     needs: clone-to-OF_ROOT
     uses: ./.github/workflows/reusable-workflow-build-dataParser-linux.yml
-  
+
+  test-oscilloscope:
+    needs: build-oscilloscope
+    uses: ./.github/workflows/reusable-workflow-test-oscilloscope-linux.yml
+
   test-dataParser:
     needs: build-dataparser
     uses: ./.github/workflows/reusable-workflow-test-dataParser-linux.yml

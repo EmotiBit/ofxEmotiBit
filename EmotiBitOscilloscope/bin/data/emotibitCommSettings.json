@@ -31,5 +31,6 @@
       "name": "DataSyncMarker",
       "sourceId": "12345"
     }
-  }
+  },
+  "auxillaryControl": false
 }

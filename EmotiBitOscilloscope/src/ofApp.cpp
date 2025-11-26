@@ -19,8 +19,9 @@ void ofApp::setup() {
 
 	string commSettings = loadTextFile(commSettingsFile);
 	emotiBitWiFi.parseCommSettings(commSettings);
-
+	initAuxControl(commSettings);
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
+	emotiBitWiFi.attachAppQ(&auxCtrlQ);  // pass the main application instruction q to the wifi controller
 	timeWindowOnSetup = 10;  // set timeWindow for setup (in seconds)
 	setupGui();
 	setupOscilloscopes();
@@ -46,7 +47,6 @@ void ofApp::setup() {
 
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
 	ofSetLogLevel(OF_LOG_FATAL_ERROR);
-	//ofSetLogLevel(OF_LOG_VERBOSE);
 }
 
 //--------------------------------------------------------------
@@ -66,6 +66,20 @@ void ofApp::update() {
 	}
 	vector<string> dataPackets;
 	emotiBitWiFi.readData(dataPackets);
+	
+	if (_processAuxCtrl)
+	{
+		// TODO: Move this to a new function ofApp::processAuxInstrQ, when we have more than 1 sources of auxillary intructions
+		emotiBitWiFi.readAuxNetworkChannel();
+		emotiBitWiFi.updateAppAuxInstrQ();
+		// process elements in the AuxInstrQ
+		emotiBitWiFi.processAppAuxInstrQ();
+		// TODO: This function should really be on its own thread, running on a timer. See ofTimer: https://openframeworks.cc/documentation/utils/ofTimer/#show_reset
+		// TODO: This function should be called by the ofApp::processAuxQ
+		auxCtrlQ.clearStaleElement((uint32_t)ofGetElapsedTimeMillis());
+	}
+
+
 	for (string packet : dataPackets)
 	{
 		processSlowResponseMessage(packet);
@@ -1803,4 +1817,48 @@ bool ofApp::startUdpOutput()
 	}
 
 	return false;
+}
+
+void ofApp::initAuxControl(std::string commSettingsFile)
+{
+	auto initLogLevel = ofGetLogLevel();
+	ofSetLogLevel(OF_LOG_NOTICE);
+	if (!commSettingsFile.empty())
+	{
+		Json::Reader reader;
+		Json::Value jsonCommSettings;
+
+		try
+		{
+			if (reader.parse(commSettingsFile, jsonCommSettings))
+			{
+				if (jsonCommSettings.isMember("auxillaryControl"))
+				{
+					_processAuxCtrl = jsonCommSettings["auxillaryControl"].asBool();
+					if (_processAuxCtrl)
+					{
+						ofLogNotice("Auxillary control enabled");
+					}
+					else
+					{
+						ofLogNotice("Auxillary control disabled");
+					}
+				}
+				else
+				{
+					ofLogNotice("Auxillary control settings not specified in the settings file");
+				}
+			}
+		}
+		catch (exception e)
+		{
+			ofLogError("[ofApp::Setup] CommSettings settings parse exception: ") << e.what();
+		}
+	}
+	else
+	{
+		ofLogNotice("ofApp::initAuxControl") << "Auxillary control settings not specified in the settings file";
+	}
+	ofSetLogLevel(initLogLevel);
+	return;
 }
