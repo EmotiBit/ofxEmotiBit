@@ -1,0 +1,121 @@
+name: Create Draft Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  create-draft-release:
+    runs-on: [self-hosted, Linux]
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'dev')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Mac artifacts
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: upload-build-artifact-mac.yml
+          branch: master
+          name: EmotiBitSoftware-macos
+          path: ./
+          skip_unpack: true
+        continue-on-error: true
+
+      - name: Download Windows artifacts  
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: upload-build-artifact-win.yml
+          branch: master
+          name: EmotiBitSoftware-Windows
+          path: ./
+          skip_unpack: true
+        continue-on-error: true
+
+      - name: Rename artifacts
+        run: |
+          if [ -f "EmotiBitSoftware-macos.zip" ]; then
+            echo "Mac artifact downloaded as zip"
+          fi
+          if [ -f "EmotiBitSoftware-Windows.zip" ]; then
+            echo "Windows artifact downloaded as zip"
+          fi
+
+      - name: Generate release notes
+        id: generate-release-notes
+        run: |
+          RELEASE_NOTES=$(cat <<-END_OF_NOTES
+          # New features and bug fixes
+
+          # Firmware Installed by FirmwareInstaller
+          EmotiBit firmware [`vx.x.x`](enter-url-here)
+
+          # PRs completed
+
+          # Installation
+          #### Windows
+          - Download the **EmotiBitSoftware-Windows.zip** linked below.
+          - Extract the zip file downloaded
+          - run the **.msi** installer file.
+            - If the **Windows Defender Smartscreen** pops up, click on **More info** and **Run anyway**
+          - The **EmotiBit Oscilloscope** and **EmotiBit DataParser** will be installed on your system.
+          - You can access the software from the **Start** menu under **EmotiBit** or from the desktop shortcut.
+
+          #### macOS
+          - Download **EmotiBitSoftware-macOS**
+          - Extract the downloaded zip file. 
+          - The extracted folder will contain **EmotiBit Oscilloscope** and **EmotiBit DataParser**.
+            - Right-click and select **Open** to run the executables
+
+          #### Linux
+          - Download the source code linked below. Follow the steps in the [ReadMe](https://github.com/EmotiBit/ofxEmotiBit#readme).
+
+
+          END_OF_NOTES
+          )
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Get version from source
+        id: get_version
+        run: |
+          VERSION=$(grep src/ofxEmotiBitVersion.h -e "ofxEmotiBitVersion" | grep -o '"[^"]*"' | tr -d '"')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create config.txt
+        id: create-config
+        run: |
+          CONFIG_CONTENT=$(cat <<-END_OF_CONFIG
+          {
+            "WifiCredentials": [
+              {
+                "ssid": "YOUR_WIFI_NAME_GOES_HERE",
+                "password": "YOUR_WIFI_PASSWORD_GOES_HERE"
+              }
+            ]
+          }
+          END_OF_CONFIG
+          )
+          echo "$CONFIG_CONTENT" > config.txt
+          echo "Config file created successfully"
+
+      - name: Create Draft Release
+        id: create-release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          tag_name: ${{ steps.get_version.outputs.tag }}
+          name: Draft Release ${{ steps.get_version.outputs.tag }}
+          body: ${{ steps.generate-release-notes.outputs.release_notes }}
+          files: |
+            EmotiBitSoftware-macos.zip
+            EmotiBitSoftware-Windows.zip
+            config.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

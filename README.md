@@ -3,6 +3,12 @@ Software code for the EmotiBit.
 If you just want to visualize and parse data from the EmotiBit (for Windows/ macOS), you can simply download the software directly in [releases](https://github.com/EmotiBit/ofxEmotiBit/releases).
 
 If you want to modify the code(or build the tools in Linux), below are the requirements to build the project.  
+|Branch|Build status mac| Build status Windows | Build status Linux|
+|------|------------| -------------------------| ----------------- |
+|master| [![Build all on macos](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml/badge.svg?branch=master)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml)|[![Build all on Windows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml/badge.svg?branch=master)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml)|[![Linux workflows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml/badge.svg)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml)|
+|dev|[![Build all on macos](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml/badge.svg?branch=dev)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-macos.yml)|[![Build all on Windows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml/badge.svg?branch=dev)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/build-all-on-win.yaml)|[![Linux workflows](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml/badge.svg)](https://github.com/EmotiBit/ofxEmotiBit/actions/workflows/linux-workflows.yaml)|
+
+For detailed information about CI/CD workflows and the release process, see [WORKFLOWS.md](WORKFLOWS.md).
 
 ## Requirements
 ### Openframeworks
@@ -56,8 +62,8 @@ The addons are placed in the `OF_ROOT/addons` folder and it's structure is shown
     - both of these libs are handled properly by default but should be considered if deviating from the release code
     </details>
 - Required to build EmotiBit FirmwareInstaller
-  - **ofxSerial:** [GitHub repository](https://github.com/EmotiBit/ofxSerial)
-  - **ofxIO:** [GitHub repository](https://github.com/bakercp/ofxIO)
+  - **ofxSerial:** [EmotiBit ofxSerial](https://github.com/EmotiBit/ofxSerial)
+  - **ofxIO:** [bakercp ofxIO](https://github.com/bakercp/ofxIO)
 - Additional notes
   - The project is built on a 64-bit architecture. Ensure you are on a machine supporting the `x64` build platform.
   - **If downloading the zip instead of `git clone`, be sure to remove `-master`  or `-xxx-xxx` from the folder name to maintain correct path references**. 
@@ -79,7 +85,7 @@ git clone git@github.com:smukkejohan/ofxBiquadFilter.git
 git clone git@github.com:jeffcrouse/ofxJSON.git
 git clone git@github.com:EmotiBit/EmotiBit_XPlat_Utils.git
 git clone git@github.com:EmotiBit/ofxLSL.git
-git clone git@github.com:bakercp/ofxSerial.git
+git clone git@github.com:EmotiBit/ofxSerial.git
 cd ofxSerial
 git checkout stable
 cd ..
