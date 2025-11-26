@@ -1844,6 +1844,10 @@ void ofApp::initAuxControl(std::string commSettingsFile)
 						ofLogNotice("Auxillary control disabled");
 					}
 				}
+				else
+				{
+					ofLogNotice("Auxillary control settings not specified in the settings file");
+				}
 			}
 		}
 		catch (exception e)
@@ -1853,7 +1857,7 @@ void ofApp::initAuxControl(std::string commSettingsFile)
 	}
 	else
 	{
-		ofLogNotice("Auxillary control settings not specified in the settings file");
+		ofLogNotice("ofApp::initAuxControl") << "Auxillary control settings not specified in the settings file";
 	}
 	ofSetLogLevel(initLogLevel);
 	return;
