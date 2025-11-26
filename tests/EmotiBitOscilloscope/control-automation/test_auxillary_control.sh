@@ -4,7 +4,7 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ADDON_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 CONFIG_FILE="$ADDON_ROOT/EmotiBitOscilloscope/bin/data/emotibitCommSettings.json"
-APP="$ADDON_ROOT/EmotiBitOscilloscope/bin/EmotiBitOscilloscope_debug.exe"
+APP="$ADDON_ROOT/EmotiBitOscilloscope/bin/EmotiBitOscilloscope"
 TIMEOUT=5
 
 # ===== EDIT CHECK PHRASES HERE =====
