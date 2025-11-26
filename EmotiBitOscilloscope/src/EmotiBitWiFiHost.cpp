@@ -1129,15 +1129,15 @@ bool EmotiBitWiFiHost::attachAppQ(AuxInstrQ* q)
 	}
 }
 
-void EmotiBitWiFiHost::updateAuxInstrQ()
+void EmotiBitWiFiHost::updateAppAuxInstrQ()
 {
 	auxNetworkChannelController.pushToAppQ();
 }
 
-void EmotiBitWiFiHost::processAppQ()
+void EmotiBitWiFiHost::processAppAuxInstrQ()
 {
 	Json::Reader reader;
-	Json::Value jsonSettings;
+	Json::Value jsonInstr;
 	std::string instruction;
 	
 	try
@@ -1148,12 +1148,12 @@ void EmotiBitWiFiHost::processAppQ()
 			bool status = auxNetworkChannelController.appQ->front(instruction);
 			if (status)
 			{
-				if (reader.parse(instruction, jsonSettings))
+				if (reader.parse(instruction, jsonInstr))
 				{
-					if (jsonSettings["version"].asInt() == 0)
+					if (jsonInstr["version"].asInt() == 0)
 					{
 						// parsing for V0 format
-						if (jsonSettings["target"].asString().compare("WIFI_HOST") == 0)
+						if (jsonInstr["target"].asString().compare("WIFI_HOST") == 0)
 						{
 							// Message meant to be parsed by WIFI_HOST
 							// pop queue element
@@ -1166,18 +1166,18 @@ void EmotiBitWiFiHost::processAppQ()
 							}
 							// loop through all the actions
 							// perform required action
-							while(jsonSettings.isMember("action") && jsonSettings["action"].size())
+							while(jsonInstr.isMember("action") && jsonInstr["action"].size())
 							{
-								if (jsonSettings["action"][0].asString().compare("EMOTIBIT_CONNECT") == 0)
+								if (jsonInstr["action"][0].asString().compare("EMOTIBIT_CONNECT") == 0)
 								{
 									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_CONNECT);
-									std::string emotibitId = jsonSettings["action"][1].asString();
+									std::string emotibitId = jsonInstr["action"][1].asString();
 									// ToDo: We probably need to also call "clear Oscilloscope" before we can connect.
 									// Since that function belongs to ofApp, it probably needs to be called using an Event handle
 									connect(emotibitId);
 									break;
 								}
-								else if (jsonSettings["action"][0].asString().compare("EMOTIBIT_DISCONNECT") == 0)
+								else if (jsonInstr["action"][0].asString().compare("EMOTIBIT_DISCONNECT") == 0)
 								{
 									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::EMOTIBIT_DISCONNECT);
 									// ToDo: We probably need to also call "clear Oscilloscope" before we can connect.
@@ -1185,7 +1185,7 @@ void EmotiBitWiFiHost::processAppQ()
 									disconnect();
 									break;
 								}
-								else if (jsonSettings["action"][0].asString().compare("RECORD_BEGIN") == 0)
+								else if (jsonInstr["action"][0].asString().compare("RECORD_BEGIN") == 0)
 								{
 									// RECORD_BEGIN
 									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_BEGIN);
@@ -1193,7 +1193,7 @@ void EmotiBitWiFiHost::processAppQ()
 									sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_BEGIN, controlPacketCounter++, localTime, 1));
 									break;
 								}
-								else if (jsonSettings["action"][0].asString().compare("RECORD_END") == 0)
+								else if (jsonInstr["action"][0].asString().compare("RECORD_END") == 0)
 								{
 									// RECORD_END
 									ofLogVerbose("EmotiBitWiFiHost::processAuxQ()") << "Executing " + ofToString(EmotiBitPacket::TypeTag::RECORD_END);
@@ -1201,7 +1201,7 @@ void EmotiBitWiFiHost::processAppQ()
 									sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::RECORD_END, controlPacketCounter++, localTime, 1));
 									break;
 								}
-								else if (jsonSettings["action"][0].asString().compare("USER_NOTE") == 0)
+								else if (jsonInstr["action"][0].asString().compare("USER_NOTE") == 0)
 								{
 									// NOTE: Sending user note using AuxCxn probably does not give the best results as there may be delays in UDP transmission
 									// and processing of this request. Some latency should be expected when sending user note using the Aux channel.
@@ -1211,14 +1211,14 @@ void EmotiBitWiFiHost::processAppQ()
 									vector<string> payload;
 									payload.push_back(localTime);
 									// ToDo: improve this for error checking
-									if (jsonSettings["action"].size() > 1)
+									if (jsonInstr["action"].size() > 1)
 									{
-										payload.push_back(jsonSettings["action"][1].asString());
+										payload.push_back(jsonInstr["action"][1].asString());
 									}
 									sendControl(EmotiBitPacket::createPacket(EmotiBitPacket::TypeTag::USER_NOTE, controlPacketCounter++, payload));
 									break;
 								}
-								else if (jsonSettings["action"][0].asString().compare("DIRECT_MESSAGE") == 0)
+								else if (jsonInstr["action"][0].asString().compare("DIRECT_MESSAGE") == 0)
 								{
 									// ToDo: implement sending message to emotibit using CTR/DAT/ADV channels
 									// Arguments are meant to be stitched together and sent directly to EmotiBit

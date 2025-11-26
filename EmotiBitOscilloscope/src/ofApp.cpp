@@ -46,8 +46,7 @@ void ofApp::setup() {
 	}
 
 	// set log level to FATAL_ERROR to remove unrelated LSL error overflow in the console
-	//ofSetLogLevel(OF_LOG_FATAL_ERROR);
-	ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_FATAL_ERROR);
 }
 
 //--------------------------------------------------------------
@@ -70,11 +69,11 @@ void ofApp::update() {
 	
 	if (_processAuxCtrl)
 	{
-		// TODO: Move this to a ofApp::processAuxQ, when we have more than 1 sources of auxillary intructions
+		// TODO: Move this to a new function ofApp::processAuxInstrQ, when we have more than 1 sources of auxillary intructions
 		emotiBitWiFi.readAuxNetworkChannel();
-		emotiBitWiFi.updateAuxInstrQ();
+		emotiBitWiFi.updateAppAuxInstrQ();
 		// process elements in the AuxInstrQ
-		emotiBitWiFi.processAppQ();
+		emotiBitWiFi.processAppAuxInstrQ();
 		// TODO: This function should really be on its own thread, running on a timer. See ofTimer: https://openframeworks.cc/documentation/utils/ofTimer/#show_reset
 		// TODO: This function should be called by the ofApp::processAuxQ
 		auxCtrlQ.clearStaleElement((uint32_t)ofGetElapsedTimeMillis());
@@ -1822,6 +1821,8 @@ bool ofApp::startUdpOutput()
 
 void ofApp::initAuxControl(std::string commSettingsFile)
 {
+	auto initLogLevel = ofGetLogLevel();
+	ofSetLogLevel(OF_LOG_NOTICE);
 	if (!commSettingsFile.empty())
 	{
 		Json::Reader reader;
@@ -1834,6 +1835,14 @@ void ofApp::initAuxControl(std::string commSettingsFile)
 				if (jsonCommSettings.isMember("auxillaryControl"))
 				{
 					_processAuxCtrl = jsonCommSettings["auxillaryControl"].asBool();
+					if (_processAuxCtrl)
+					{
+						ofLogNotice("Auxillary control enabled");
+					}
+					else
+					{
+						ofLogNotice("Auxillary control disabled");
+					}
 				}
 			}
 		}
@@ -1842,4 +1851,10 @@ void ofApp::initAuxControl(std::string commSettingsFile)
 			ofLogError("[ofApp::Setup] CommSettings settings parse exception: ") << e.what();
 		}
 	}
+	else
+	{
+		ofLogNotice("Auxillary control settings not specified in the settings file");
+	}
+	ofSetLogLevel(initLogLevel);
+	return;
 }

@@ -200,14 +200,14 @@ public:
 	 * \brief move packets from aux network controller buffer queue to main application queue.
 	 * 
 	 */
-	void updateAuxInstrQ();
+	void updateAppAuxInstrQ();
 
 	/**
 	 * \brief Process the packets received on the auc channel.  All instructions that require network communication are processed by wifi host.
 	 * 
 	 * \param q Pointer to the main application queue
 	 */
-	void processAppQ();
+	void processAppAuxInstrQ();
 };
 
 
