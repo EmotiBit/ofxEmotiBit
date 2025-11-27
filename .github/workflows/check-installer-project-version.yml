@@ -1,9 +1,15 @@
-name: check Installer project version
+# DEPRECATED: This workflow is no longer needed after migration to INNO Setup
+# INNO Setup automatically reads version from src/ofxEmotiBitVersion.h
+# Old workflow checked if .vdproj ProductVersion matched ofxEmotiBitVersion.h
+# Kept for reference only - will be deleted in future cleanup
+
+name: check Installer project version (DEPRECATED)
 on:
-  pull_request:
-    types: [opened, reopened, synchronized]
-    branches:
-      - dev
+  # Disabled - no longer needed with INNO Setup
+  # pull_request:
+  #   types: [opened, reopened, synchronized]
+  #   branches:
+  #     - dev
   workflow_dispatch:
 
 jobs:

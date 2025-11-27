@@ -1,62 +1,89 @@
 name: upload build artifact Windows
 on:
-   
+
   #workflow_dispatch:
   workflow_run:
-    workflows: ["Build all on Windows", "check Installer project version"]
+    workflows: ["Build all on Windows"]
     types:
      - completed
     branches:
      [dev]
+  # Note: Removed "check Installer project version" - no longer needed with INNO Setup auto-version
 jobs:
   build-installer:
     runs-on: [self-hosted, Windows]
     environment: RUNNER-WINDOWS
     steps:
-      - name: build installer project
+      - name: check INNO Setup installation
+        shell: powershell
+        run: |
+          $innoPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $innoPath)) {
+            Write-Host "INNO Setup 6 not found at $innoPath"
+            Write-Host "Downloading INNO Setup 6..."
+            $innoUrl = "https://files.jrsoftware.org/is/6/innosetup-6.3.3.exe"
+            $innoInstaller = "$env:TEMP\innosetup-6.3.3.exe"
+            Invoke-WebRequest -Uri $innoUrl -OutFile $innoInstaller
+            Write-Host "Installing INNO Setup 6..."
+            Start-Process -FilePath $innoInstaller -Args "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-" -Wait
+            Write-Host "INNO Setup 6 installed successfully"
+          } else {
+            Write-Host "INNO Setup 6 found at $innoPath"
+          }
+
+      - name: build installer with INNO Setup
         shell: cmd
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           cd EmotiBitInstaller
-          devenv EmotiBitInstaller.sln /Build Release 
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" EmotiBitInstaller.iss 
 
   upload-artifact:
     needs: build-installer
     runs-on: [self-hosted, Windows]
     environment: RUNNER-WINDOWS
     steps:
-      - name: create stage-release
-        shell: bash
-        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
-        run: mkdir -p stageRelease/EmotiBitSoftware-Windows
       - name: populate stage release
         shell: bash
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
-          msiInstPath=./EmotiBitInstaller/EmotiBitInstaller/Release/EmotiBitInstaller.msi
-          setupPath=./EmotiBitInstaller/EmotiBitInstaller/Release/setup.exe
-          silabsDriverPath=../../../drivers/CP210x_Windows_Drivers
-          releaseFolder="EmotiBitSoftware-Windows"
           version=$(grep ./src/ofxEmotiBitVersion.h -e "string ofxEmotiBitVersion" | cut -d '"' -f 2)
+          releaseFolder="EmotiBitSoftware-Windows-${version}"
           echo "Staging release for version: $version"
+          echo "Release folder: $releaseFolder"
 
-          if [ -f "$msiInstPath" ] || [ -f "$setupPath" ]; then
-            echo "msi and exe files found!"
-            echo "staging release"
-            echo "copying installer files"
-            cp "$msiInstPath" "./stageRelease/$releaseFolder"
-            cp "$setupPath" "./stageRelease/$releaseFolder"
+          mkdir -p "stageRelease/$releaseFolder"
+
+          installerPath="./EmotiBitInstaller/Output/EmotiBitInstaller-${version}.exe"
+
+          if [ -f "$installerPath" ]; then
+            echo "INNO Setup installer found: $installerPath"
+            echo "copying installer"
+            cp "$installerPath" "./stageRelease/$releaseFolder/"
+
+            echo "copying drivers"
             for i in $(find ../../../drivers -maxdepth 1 -mindepth 1 -name '*CP210x*' -type d); do
               dirname=$(basename "$i")
               worktree="../../../drivers/$dirname"
               echo "copying $dirname"
               cp -r "$worktree" "./stageRelease/$releaseFolder"
             done
+
+            echo "Release staged successfully in: stageRelease/$releaseFolder"
           else
-            echo "installer files not found! Create installer!"
+            echo "ERROR: Installer not found at $installerPath"
+            exit 1
           fi
+      - name: get version for artifact name
+        id: get_version
+        shell: bash
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          version=$(grep ./src/ofxEmotiBitVersion.h -e "string ofxEmotiBitVersion" | cut -d '"' -f 2)
+          echo "version=$version" >> $GITHUB_OUTPUT
+
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: EmotiBitSoftware-Windows
-          path: ${{ vars.OFXEMOTIBIT_DIR }}\\stageRelease\\EmotiBitSoftware-Windows
+          name: EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}
+          path: ${{ vars.OFXEMOTIBIT_DIR }}\\stageRelease\\EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}
