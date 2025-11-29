@@ -12,7 +12,7 @@ jobs:
         run: |
           echo Testing PowerShell versions...
           powershell -Command "Write-Host 'Windows PowerShell works'"
-          where pwsh 2>nul || echo pwsh not found - will use Windows PowerShell
+          where pwsh 2>nul && echo pwsh found || (echo pwsh not found - will use Windows PowerShell & exit /b 0)
 
       - name: check INNO Setup installation
         shell: powershell -ExecutionPolicy Bypass -File {0}
