@@ -15,7 +15,7 @@ jobs:
     environment: RUNNER-WINDOWS
     steps:
       - name: check INNO Setup installation
-        shell: pwsh -Command "& {{0}}"
+        shell: powershell -ExecutionPolicy Bypass -File {0}
         run: |
           $innoPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
           if (-not (Test-Path $innoPath)) {
@@ -32,7 +32,7 @@ jobs:
           }
 
       - name: Download VC++ Redistributable
-        shell: pwsh -Command "& {{0}}"
+        shell: powershell -ExecutionPolicy Bypass -File {0}
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           $redistPath = "EmotiBitInstaller/redist"

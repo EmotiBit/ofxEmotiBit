@@ -3,7 +3,7 @@ on:
   workflow_dispatch:  # Manual trigger only
 
 jobs:
-  test-powershell:
+  test-installer-steps:
     runs-on: [self-hosted, Windows]
     environment: RUNNER-WINDOWS
     steps:
@@ -12,19 +12,68 @@ jobs:
         run: |
           echo Testing PowerShell versions...
           powershell -Command "Write-Host 'Windows PowerShell works'"
-          where pwsh || echo pwsh not found
+          where pwsh 2>nul || echo pwsh not found - will use Windows PowerShell
 
-      - name: Test INNO Setup check (Option A - powershell)
+      - name: check INNO Setup installation
         shell: powershell -ExecutionPolicy Bypass -File {0}
         run: |
           $innoPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
-          if (Test-Path $innoPath) {
-            Write-Host "INNO Setup found at $innoPath"
+          if (-not (Test-Path $innoPath)) {
+            Write-Host "INNO Setup 6 not found at $innoPath"
+            Write-Host "Downloading INNO Setup 6..."
+            $innoUrl = "https://files.jrsoftware.org/is/6/innosetup-6.3.3.exe"
+            $innoInstaller = "$env:TEMP\innosetup-6.3.3.exe"
+            Invoke-WebRequest -Uri $innoUrl -OutFile $innoInstaller
+            Write-Host "Installing INNO Setup 6..."
+            Start-Process -FilePath $innoInstaller -Args "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-" -Wait
+            Write-Host "INNO Setup 6 installed successfully"
           } else {
-            Write-Host "INNO Setup NOT found at $innoPath"
+            Write-Host "INNO Setup 6 found at $innoPath"
           }
 
-      - name: Test VC++ Redist download (Option B - inline)
-        shell: cmd
+      - name: Download VC++ Redistributable
+        shell: powershell -ExecutionPolicy Bypass -File {0}
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
-          powershell -ExecutionPolicy Bypass -Command "$redistPath = 'test_redist'; if (-not (Test-Path $redistPath)) { New-Item -ItemType Directory -Force -Path $redistPath; Write-Host 'Created test directory' } else { Write-Host 'Directory exists' }"
+          $redistPath = "EmotiBitInstaller/redist"
+          $redistFile = "$redistPath/vc_redist.x64.exe"
+
+          if (-not (Test-Path $redistFile)) {
+            Write-Host "VC++ Redistributable not found, downloading..."
+            New-Item -ItemType Directory -Force -Path $redistPath | Out-Null
+            $url = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+            Invoke-WebRequest -Uri $url -OutFile $redistFile
+            Write-Host "Downloaded VC++ Redistributable to $redistFile"
+          } else {
+            Write-Host "VC++ Redistributable already exists at $redistFile"
+          }
+
+      - name: Verify INNO Setup can be executed
+        shell: cmd
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo Verifying INNO Setup executable...
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /? || echo INNO Setup test failed
+          echo.
+          echo Checking if EmotiBitInstaller.iss exists...
+          if exist EmotiBitInstaller\EmotiBitInstaller.iss (
+            echo EmotiBitInstaller.iss found
+          ) else (
+            echo WARNING: EmotiBitInstaller.iss NOT found
+          )
+
+      - name: Verify VC++ Redistributable downloaded correctly
+        shell: powershell -ExecutionPolicy Bypass -File {0}
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          $redistFile = "EmotiBitInstaller/redist/vc_redist.x64.exe"
+          if (Test-Path $redistFile) {
+            $fileInfo = Get-Item $redistFile
+            Write-Host "VC++ Redistributable found:"
+            Write-Host "  Path: $($fileInfo.FullName)"
+            Write-Host "  Size: $([math]::Round($fileInfo.Length / 1MB, 2)) MB"
+            Write-Host "  Created: $($fileInfo.CreationTime)"
+          } else {
+            Write-Host "ERROR: VC++ Redistributable not found at $redistFile"
+            exit 1
+          }
