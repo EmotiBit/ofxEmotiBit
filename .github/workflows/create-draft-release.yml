@@ -50,7 +50,7 @@ jobs:
           # New features and bug fixes
 
           # Firmware Installed by FirmwareInstaller
-          EmotiBit firmware [`vx.x.x`](enter-url-here)
+          EmotiBit firmware [vx.x.x](enter-url-here)
 
           # PRs completed
 
