@@ -11,22 +11,29 @@ jobs:
     runs-on: [self-hosted, macOS]
     environment: RUNNER-MACOS
     steps:
+      - name: get version for artifact name
+        id: get_version
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          version=$(grep ./src/ofxEmotiBitVersion.h -e "string ofxEmotiBitVersion" | cut -d '"' -f 2)
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "Staging release for version: $version"
       - name: create stage-release
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
-        run: mkdir -p stageRelease/EmotiBitSoftware-macos
+        run: mkdir -p stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
       - name: Move application binaries
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
-          mv EmotiBitOscilloscope/bin/EmotiBitOscilloscope.app stageRelease/EmotiBitSoftware-macos
-          mv EmotiBitDataParser/bin/EmotiBitDataParser.app stageRelease/EmotiBitSoftware-macos
-          mv EmotiBitFirmwareInstaller/bin/EmotiBitFirmwareInstaller.app stageRelease/EmotiBitSoftware-macos
+          mv EmotiBitOscilloscope/bin/EmotiBitOscilloscope.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+          mv EmotiBitDataParser/bin/EmotiBitDataParser.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+          mv EmotiBitFirmwareInstaller/bin/EmotiBitFirmwareInstaller.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
       - name: copy SiLabs drivers
         working-directory: ${{ vars.ADDONS_DIR }}
         run: |
           silabsDriverPath="../../drivers/macOS_VCP_Driver"
           if [ -d "$silabsDriverPath" ]; then
             echo "copying drivers!"
-            cp -r "$silabsDriverPath/" "ofxEmotiBit/stageRelease/EmotiBitSoftware-macos"
+            cp -r "$silabsDriverPath/" "ofxEmotiBit/stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}"
           else
             echo "drivers not found! proceeding without drivers!"
             exit 1
@@ -34,5 +41,5 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: EmotiBitSoftware-macos
-          path: ${{ vars.OFXEMOTIBIT_DIR }}/stageRelease/EmotiBitSoftware-macos/
+          name: EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+          path: ${{ vars.OFXEMOTIBIT_DIR }}/stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}/
