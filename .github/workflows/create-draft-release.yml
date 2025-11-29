@@ -28,7 +28,7 @@ jobs:
         with:
           workflow: upload-build-artifact-mac.yml
           branch: master
-          name: EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+          name: EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-macOS
           path: ./
           skip_unpack: true
         continue-on-error: true
@@ -38,7 +38,7 @@ jobs:
         with:
           workflow: upload-build-artifact-win.yml
           branch: master
-          name: EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}
+          name: EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-Windows
           path: ./
           skip_unpack: true
         continue-on-error: true
@@ -46,7 +46,8 @@ jobs:
       - name: Generate release notes
         id: generate-release-notes
         run: |
-          RELEASE_NOTES=$(cat <<-END_OF_NOTES
+          VERSION="${{ steps.get_version.outputs.version }}"
+          RELEASE_NOTES=$(cat <<END_OF_NOTES
           # New features and bug fixes
 
           # Firmware Installed by FirmwareInstaller
@@ -56,7 +57,7 @@ jobs:
 
           # Installation
           #### Windows
-          - Download the **EmotiBitSoftware-Windows-$VERSION.zip** linked below.
+          - Download the **EmotiBitSoftware_v${VERSION}-Windows.zip** linked below.
           - Extract the zip file downloaded
           - run the **.exe** installer file.
             - If the **Windows Defender Smartscreen** pops up, click on **More info** and **Run anyway**
@@ -64,7 +65,7 @@ jobs:
           - You can access the software from the **Start** menu under **EmotiBit** or from the desktop shortcut.
 
           #### macOS
-          - Download **EmotiBitSoftware-macos-$VERSION.zip**
+          - Download **EmotiBitSoftware_v${VERSION}-macOS.zip**
           - Extract the downloaded zip file.
           - The extracted folder will contain **EmotiBit Oscilloscope** and **EmotiBit DataParser**.
             - Right-click and select **Open** to run the executables
@@ -105,8 +106,8 @@ jobs:
           name: Draft Release ${{ steps.get_version.outputs.tag }}
           body: ${{ steps.generate-release-notes.outputs.release_notes }}
           files: |
-            EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}.zip
-            EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}.zip
+            EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-macOS.zip
+            EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-Windows.zip
             config.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

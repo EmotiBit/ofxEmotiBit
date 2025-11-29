@@ -41,5 +41,5 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+          name: EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-macOS
           path: ${{ vars.OFXEMOTIBIT_DIR }}/stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}/
