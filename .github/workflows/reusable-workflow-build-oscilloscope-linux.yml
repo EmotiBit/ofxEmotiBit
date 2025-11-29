@@ -11,4 +11,4 @@ jobs:
         run: |
           echo "current working directory" && pwd
           cd EmotiBitOscilloscope
-          make
+          make -j
