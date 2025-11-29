@@ -1,0 +1,30 @@
+name: Test PowerShell Setup
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  test-powershell:
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps:
+      - name: Test PowerShell availability
+        shell: cmd
+        run: |
+          echo Testing PowerShell versions...
+          powershell -Command "Write-Host 'Windows PowerShell works'"
+          where pwsh || echo pwsh not found
+
+      - name: Test INNO Setup check (Option A - powershell)
+        shell: powershell -ExecutionPolicy Bypass -File {0}
+        run: |
+          $innoPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (Test-Path $innoPath) {
+            Write-Host "INNO Setup found at $innoPath"
+          } else {
+            Write-Host "INNO Setup NOT found at $innoPath"
+          }
+
+      - name: Test VC++ Redist download (Option B - inline)
+        shell: cmd
+        run: |
+          powershell -ExecutionPolicy Bypass -Command "$redistPath = 'test_redist'; if (-not (Test-Path $redistPath)) { New-Item -ItemType Directory -Force -Path $redistPath; Write-Host 'Created test directory' } else { Write-Host 'Directory exists' }"
