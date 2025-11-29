@@ -15,7 +15,7 @@ jobs:
     environment: RUNNER-WINDOWS
     steps:
       - name: check INNO Setup installation
-        shell: powershell
+        shell: pwsh -Command "& {{0}}"
         run: |
           $innoPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
           if (-not (Test-Path $innoPath)) {
@@ -29,6 +29,23 @@ jobs:
             Write-Host "INNO Setup 6 installed successfully"
           } else {
             Write-Host "INNO Setup 6 found at $innoPath"
+          }
+
+      - name: Download VC++ Redistributable
+        shell: pwsh -Command "& {{0}}"
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          $redistPath = "EmotiBitInstaller/redist"
+          $redistFile = "$redistPath/vc_redist.x64.exe"
+
+          if (-not (Test-Path $redistFile)) {
+            Write-Host "VC++ Redistributable not found, downloading..."
+            New-Item -ItemType Directory -Force -Path $redistPath | Out-Null
+            $url = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+            Invoke-WebRequest -Uri $url -OutFile $redistFile
+            Write-Host "Downloaded VC++ Redistributable to $redistFile"
+          } else {
+            Write-Host "VC++ Redistributable already exists at $redistFile"
           }
 
       - name: build installer with INNO Setup
