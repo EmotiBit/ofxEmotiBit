@@ -43,17 +43,6 @@ jobs:
           skip_unpack: true
         continue-on-error: true
 
-      - name: Rename artifacts
-        run: |
-          if [ -f "EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}.zip" ]; then
-            echo "Mac artifact downloaded as zip"
-            mv "EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}.zip" "EmotiBitSoftware-macos.zip"
-          fi
-          if [ -f "EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}.zip" ]; then
-            echo "Windows artifact downloaded as zip"
-            mv "EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}.zip" "EmotiBitSoftware-Windows.zip"
-          fi
-
       - name: Generate release notes
         id: generate-release-notes
         run: |
@@ -67,16 +56,16 @@ jobs:
 
           # Installation
           #### Windows
-          - Download the **EmotiBitSoftware-Windows.zip** linked below.
+          - Download the **EmotiBitSoftware-Windows-$VERSION.zip** linked below.
           - Extract the zip file downloaded
-          - run the **.msi** installer file.
+          - run the **.exe** installer file.
             - If the **Windows Defender Smartscreen** pops up, click on **More info** and **Run anyway**
           - The **EmotiBit Oscilloscope** and **EmotiBit DataParser** will be installed on your system.
           - You can access the software from the **Start** menu under **EmotiBit** or from the desktop shortcut.
 
           #### macOS
-          - Download **EmotiBitSoftware-macOS**
-          - Extract the downloaded zip file. 
+          - Download **EmotiBitSoftware-macos-$VERSION.zip**
+          - Extract the downloaded zip file.
           - The extracted folder will contain **EmotiBit Oscilloscope** and **EmotiBit DataParser**.
             - Right-click and select **Open** to run the executables
 
@@ -116,8 +105,8 @@ jobs:
           name: Draft Release ${{ steps.get_version.outputs.tag }}
           body: ${{ steps.generate-release-notes.outputs.release_notes }}
           files: |
-            EmotiBitSoftware-macos.zip
-            EmotiBitSoftware-Windows.zip
+            EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}.zip
+            EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}.zip
             config.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
