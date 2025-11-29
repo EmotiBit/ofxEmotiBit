@@ -27,7 +27,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: upload-build-artifact-mac.yml
-          branch: dev
+          branch: master
           name: EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
           path: ./
           skip_unpack: true
@@ -37,7 +37,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: upload-build-artifact-win.yml
-          branch: dev
+          branch: master
           name: EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}
           path: ./
           skip_unpack: true
