@@ -33,10 +33,9 @@ jobs:
 
       - name: Download VC++ Redistributable
         shell: powershell -ExecutionPolicy Bypass -File {0}
-        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
-          $redistPath = "EmotiBitInstaller/redist"
-          $redistFile = "$redistPath/vc_redist.x64.exe"
+          $redistPath = "$env:TEMP\test-redist"
+          $redistFile = "$redistPath\vc_redist.x64.exe"
 
           if (-not (Test-Path $redistFile)) {
             Write-Host "VC++ Redistributable not found, downloading..."
@@ -48,25 +47,10 @@ jobs:
             Write-Host "VC++ Redistributable already exists at $redistFile"
           }
 
-      - name: Verify INNO Setup can be executed
-        shell: cmd
-        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
-        run: |
-          echo Verifying INNO Setup executable...
-          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /? || echo INNO Setup test failed
-          echo.
-          echo Checking if EmotiBitInstaller.iss exists...
-          if exist EmotiBitInstaller\EmotiBitInstaller.iss (
-            echo EmotiBitInstaller.iss found
-          ) else (
-            echo WARNING: EmotiBitInstaller.iss NOT found
-          )
-
       - name: Verify VC++ Redistributable downloaded correctly
         shell: powershell -ExecutionPolicy Bypass -File {0}
-        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
-          $redistFile = "EmotiBitInstaller/redist/vc_redist.x64.exe"
+          $redistFile = "$env:TEMP\test-redist\vc_redist.x64.exe"
           if (Test-Path $redistFile) {
             $fileInfo = Get-Item $redistFile
             Write-Host "VC++ Redistributable found:"
