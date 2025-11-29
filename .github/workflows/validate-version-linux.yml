@@ -1,0 +1,74 @@
+name: Validate Version on Linux
+on:
+  push:
+
+jobs:
+  validate-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version format and compare with dev
+        run: |
+          echo "=== Validating version format and comparison with dev branch ==="
+
+          # Extract current version
+          current_version=$(grep ./src/ofxEmotiBitVersion.h -e "string ofxEmotiBitVersion" | cut -d '"' -f 2)
+          echo "Current branch version: $current_version"
+
+          # Validate format: X.Y.Z with nothing trailing
+          if ! echo "$current_version" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "ERROR: Version must be in format X.Y.Z (e.g., 1.14.0)"
+            echo "Found: $current_version"
+            exit 1
+          fi
+          echo "✓ Version format is valid"
+
+          # Extract major, minor, patch from current version
+          current_major=$(echo "$current_version" | cut -d. -f1)
+          current_minor=$(echo "$current_version" | cut -d. -f2)
+          current_patch=$(echo "$current_version" | cut -d. -f3)
+
+          echo "Current version components: major=$current_major, minor=$current_minor, patch=$current_patch"
+
+          # Fetch dev branch and get its version
+          git fetch origin dev
+          dev_version=$(git show origin/dev:src/ofxEmotiBitVersion.h | grep "string ofxEmotiBitVersion" | cut -d '"' -f 2)
+          echo "Dev branch version: $dev_version"
+
+          # Validate dev version format
+          if ! echo "$dev_version" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "WARNING: Dev branch version format is invalid: $dev_version"
+            echo "Skipping version comparison"
+            exit 0
+          fi
+
+          # Extract major, minor, patch from dev version
+          dev_major=$(echo "$dev_version" | cut -d. -f1)
+          dev_minor=$(echo "$dev_version" | cut -d. -f2)
+          dev_patch=$(echo "$dev_version" | cut -d. -f3)
+
+          echo "Dev version components: major=$dev_major, minor=$dev_minor, patch=$dev_patch"
+
+          # Compare versions
+          if [ "$current_major" -gt "$dev_major" ]; then
+            echo "✓ Version is greater (major version increased)"
+          elif [ "$current_major" -eq "$dev_major" ] && [ "$current_minor" -gt "$dev_minor" ]; then
+            echo "✓ Version is greater (minor version increased)"
+          elif [ "$current_major" -eq "$dev_major" ] && [ "$current_minor" -eq "$dev_minor" ] && [ "$current_patch" -gt "$dev_patch" ]; then
+            echo "✓ Version is greater (patch version increased)"
+          elif [ "$current_version" = "$dev_version" ]; then
+            echo "WARNING: Version is the same as dev branch ($dev_version)"
+            echo "Consider incrementing the version number"
+            exit 0
+          else
+            echo "ERROR: Version must be greater than dev branch version"
+            echo "Current: $current_version"
+            echo "Dev: $dev_version"
+            exit 1
+          fi
+
+          echo "=== Version validation passed ==="

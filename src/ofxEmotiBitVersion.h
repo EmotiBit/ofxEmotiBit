@@ -3,7 +3,7 @@
 #include "ofMain.h"
 
 
-const std::string ofxEmotiBitVersion = "1.13.0";
+const std::string ofxEmotiBitVersion = "1.14.0";
 
 static const char SOFTWARE_VERSION_PREFIX = 'v';
 
