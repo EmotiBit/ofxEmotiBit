@@ -35,8 +35,8 @@ jobs:
         shell: powershell -ExecutionPolicy Bypass -File {0}
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
-          $redistPath = "EmotiBitInstaller/redist"
-          $redistFile = "$redistPath/vc_redist.x64.exe"
+          $redistPath = "EmotiBitInstaller\redist"
+          $redistFile = "$redistPath\vc_redist.x64.exe"
 
           if (-not (Test-Path $redistFile)) {
             Write-Host "VC++ Redistributable not found, downloading..."
