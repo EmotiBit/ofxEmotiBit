@@ -16,33 +16,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Get version from source
+        id: get_version
+        run: |
+          VERSION=$(grep src/ofxEmotiBitVersion.h -e "ofxEmotiBitVersion" | grep -o '"[^"]*"' | tr -d '"')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
       - name: Download Mac artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: upload-build-artifact-mac.yml
-          branch: master
-          name: EmotiBitSoftware-macos
+          branch: dev
+          name: EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
           path: ./
           skip_unpack: true
         continue-on-error: true
 
-      - name: Download Windows artifacts  
+      - name: Download Windows artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow: upload-build-artifact-win.yml
-          branch: master
-          name: EmotiBitSoftware-Windows
+          branch: dev
+          name: EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}
           path: ./
           skip_unpack: true
         continue-on-error: true
 
       - name: Rename artifacts
         run: |
-          if [ -f "EmotiBitSoftware-macos.zip" ]; then
+          if [ -f "EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}.zip" ]; then
             echo "Mac artifact downloaded as zip"
+            mv "EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}.zip" "EmotiBitSoftware-macos.zip"
           fi
-          if [ -f "EmotiBitSoftware-Windows.zip" ]; then
+          if [ -f "EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}.zip" ]; then
             echo "Windows artifact downloaded as zip"
+            mv "EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}.zip" "EmotiBitSoftware-Windows.zip"
           fi
 
       - name: Generate release notes
@@ -80,13 +89,6 @@ jobs:
           echo "release_notes<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-          
-      - name: Get version from source
-        id: get_version
-        run: |
-          VERSION=$(grep src/ofxEmotiBitVersion.h -e "ofxEmotiBitVersion" | grep -o '"[^"]*"' | tr -d '"')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
 
       - name: Create config.txt
         id: create-config
