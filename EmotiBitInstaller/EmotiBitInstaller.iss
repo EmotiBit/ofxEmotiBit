@@ -77,6 +77,15 @@ Name: "{group}\EmotiBit FirmwareInstaller"; Filename: "{app}\EmotiBit FirmwareIn
 ; Install VC++ 2017 Redistributable if not already installed
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; StatusMsg: "Installing Visual C++ 2017 Redistributable..."; Check: VCRedistNeedsInstall
 
+[UninstallDelete]
+; Delete entire application folders to ensure clean uninstall
+; This removes all files including runtime-created logs, cache, backups, and user data
+Type: filesandordirs; Name: "{app}\EmotiBit Oscilloscope"
+Type: filesandordirs; Name: "{app}\EmotiBit DataParser"
+Type: filesandordirs; Name: "{app}\EmotiBit FirmwareInstaller"
+; Delete the parent EmotiBit folder if empty after above deletions
+Type: dirifempty; Name: "{app}"
+
 [Code]
 const
   // MSI ProductCode from the old Visual Studio Installer Project (v1.12.2)
@@ -204,23 +213,56 @@ function GetBackupFilePath(OriginalPath: String): String;
 var
   Dir, Name, Ext: String;
 begin
-  // Convert "C:\path\settings.json" to "C:\path\settings_backup_2026-01-29_143052.json"
+  // Convert "C:\path\settings.json" to "C:\path\backups\settings_2026-01-29_143052.json"
   Dir := ExtractFilePath(OriginalPath);
   Name := ExtractFileName(OriginalPath);
   Ext := ExtractFileExt(Name);
   Name := Copy(Name, 1, Length(Name) - Length(Ext));
-  Result := Dir + Name + '_backup_' + BackupTimestamp + Ext;
+  Result := Dir + 'backups\' + Name + '_' + BackupTimestamp + Ext;
+end;
+
+function GetBackupsFolder(OriginalPath: String): String;
+begin
+  // Get the backups folder path for a given file path
+  Result := ExtractFilePath(OriginalPath) + 'backups';
+end;
+
+function IsDirEmpty(DirPath: String): Boolean;
+var
+  FindRec: TFindRec;
+begin
+  Result := True;
+  if FindFirst(DirPath + '\*', FindRec) then
+  begin
+    try
+      repeat
+        if (FindRec.Name <> '.') and (FindRec.Name <> '..') then
+        begin
+          Result := False;
+          Break;
+        end;
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
+  end;
 end;
 
 procedure BackupSettingsFile(FileName, DestSubDir: String);
 var
-  DestPath, BackupPath: String;
+  DestPath, BackupPath, BackupsFolder: String;
 begin
   DestPath := ExpandConstant(DestSubDir + '\') + FileName;
 
   if FileExists(DestPath) then
   begin
     BackupPath := GetBackupFilePath(DestPath);
+    BackupsFolder := GetBackupsFolder(DestPath);
+
+    // Create the backups folder if it doesn't exist
+    if not DirExists(BackupsFolder) then
+      ForceDirectories(BackupsFolder);
+
     if RenameFile(DestPath, BackupPath) then
     begin
       Log('Backed up: ' + DestPath + ' -> ' + BackupPath);
@@ -250,11 +292,12 @@ end;
 
 procedure CleanupBackupIfIdentical(FileName, DestSubDir: String);
 var
-  NewFilePath, BackupPath: String;
+  NewFilePath, BackupPath, BackupsFolder: String;
   NewContent, BackupContent: AnsiString;
 begin
   NewFilePath := ExpandConstant(DestSubDir + '\') + FileName;
   BackupPath := GetBackupFilePath(NewFilePath);
+  BackupsFolder := GetBackupsFolder(NewFilePath);
 
   if not FileExists(BackupPath) then
     Exit;
@@ -274,6 +317,15 @@ begin
       begin
         Log('Deleted identical backup: ' + BackupPath);
         BackedUpFilesCount := BackedUpFilesCount - 1;
+
+        // Delete the backups folder if it's now empty
+        if DirExists(BackupsFolder) and IsDirEmpty(BackupsFolder) then
+        begin
+          if RemoveDir(BackupsFolder) then
+            Log('Deleted empty backups folder: ' + BackupsFolder)
+          else
+            Log('Warning: Failed to delete empty backups folder: ' + BackupsFolder);
+        end;
       end
       else
         Log('Warning: Failed to delete backup: ' + BackupPath);
@@ -307,7 +359,7 @@ begin
     // Show message if any backups remain (user had customizations)
     if (BackedUpFilesCount > 0) and (not WizardSilent()) then
     begin
-      MsgBox('Your customized settings files were backed up with a _backup_' + BackupTimestamp + ' suffix.',
+      MsgBox('Your customized settings files were backed up to the "backups" folder with timestamp ' + BackupTimestamp + '.',
         mbInformation, MB_OK);
     end;
   end;
