@@ -30,15 +30,17 @@ ArchitecturesInstallIn64BitMode=x64
 ; EmotiBit Oscilloscope
 Source: "..\EmotiBitOscilloscope\bin\EmotiBitOscilloscope.exe"; DestDir: "{app}\EmotiBit Oscilloscope"
 Source: "..\EmotiBitOscilloscope\bin\*.dll"; DestDir: "{app}\EmotiBit Oscilloscope"
+Source: "..\EmotiBitOscilloscope\bin\data\*.ttf"; DestDir: "{app}\EmotiBit Oscilloscope\data"
+; Settings files (*.json, *.xml) - backed up automatically in [Code] before overwriting
 Source: "..\EmotiBitOscilloscope\bin\data\*.json"; DestDir: "{app}\EmotiBit Oscilloscope\data"
 Source: "..\EmotiBitOscilloscope\bin\data\*.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
-Source: "..\EmotiBitOscilloscope\bin\data\*.ttf"; DestDir: "{app}\EmotiBit Oscilloscope\data"
 
 ; EmotiBit DataParser
 Source: "..\EmotiBitDataParser\bin\EmotiBitDataParser.exe"; DestDir: "{app}\EmotiBit DataParser"
 Source: "..\EmotiBitDataParser\bin\*.dll"; DestDir: "{app}\EmotiBit DataParser"
-Source: "..\EmotiBitDataParser\bin\data\*.json"; DestDir: "{app}\EmotiBit DataParser\data"
 Source: "..\EmotiBitDataParser\bin\data\*.ttf"; DestDir: "{app}\EmotiBit DataParser\data"
+; Settings files (*.json, *.xml) - backed up automatically in [Code] before overwriting
+Source: "..\EmotiBitDataParser\bin\data\*.json"; DestDir: "{app}\EmotiBit DataParser\data"
 
 ; EmotiBit FirmwareInstaller
 Source: "..\EmotiBitFirmwareInstaller\bin\EmotiBitFirmwareInstaller.exe"; DestDir: "{app}\EmotiBit FirmwareInstaller"
@@ -71,6 +73,15 @@ Name: "{group}\EmotiBit FirmwareInstaller"; Filename: "{app}\EmotiBit FirmwareIn
 ; Install VC++ 2017 Redistributable if not already installed
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; StatusMsg: "Installing Visual C++ 2017 Redistributable..."; Check: VCRedistNeedsInstall
 
+[UninstallDelete]
+; Delete entire application folders to ensure clean uninstall
+; This removes all files including runtime-created logs, cache, backups, and user data
+Type: filesandordirs; Name: "{app}\EmotiBit Oscilloscope"
+Type: filesandordirs; Name: "{app}\EmotiBit DataParser"
+Type: filesandordirs; Name: "{app}\EmotiBit FirmwareInstaller"
+; Delete the parent EmotiBit folder if empty after above deletions
+Type: dirifempty; Name: "{app}"
+
 [Code]
 const
   // MSI ProductCode from the old Visual Studio Installer Project (v1.12.2)
@@ -82,6 +93,9 @@ var
   DriverInfoLabel: TNewStaticText;
   DriverLinkLabel: TNewStaticText;
   DriverAckCheckbox: TNewCheckBox;
+  // Settings backup tracking
+  BackedUpFilesCount: Integer;
+  BackupTimestamp: String;
 
 //=============================================================================
 // MSI Detection Functions
@@ -163,7 +177,215 @@ begin
 end;
 
 //=============================================================================
-// Pre-Installation Check (MSI Migration)
+// Settings File Backup Functions
+//=============================================================================
+
+function GetBackupTimestamp: String;
+begin
+  // Get current date/time formatted as YYYY-MM-DD_HHMMSS
+  // Format specifiers: yyyy=year, mm=month, dd=day, hh=hour, nn=minute, ss=second
+  Result := GetDateTimeString('yyyy-mm-dd_hhnnss', '-', ':');
+end;
+
+function GetBackupFilePath(OriginalPath: String): String;
+var
+  Dir, FileName: String;
+begin
+  // Convert "C:\path\data\settings.json" to "C:\path\data\backups\2026-01-29_143052\settings.json"
+  Dir := ExtractFilePath(OriginalPath);
+  FileName := ExtractFileName(OriginalPath);
+  Result := Dir + 'backups\' + BackupTimestamp + '\' + FileName;
+end;
+
+function GetBackupSessionFolder(DataDir: String): String;
+begin
+  // Get the backup session folder: "C:\path\data\backups\2026-01-29_143052"
+  Result := DataDir + '\backups\' + BackupTimestamp;
+end;
+
+function IsDirEmpty(DirPath: String): Boolean;
+var
+  FindRec: TFindRec;
+begin
+  Result := True;
+  if FindFirst(DirPath + '\*', FindRec) then
+  begin
+    try
+      repeat
+        if (FindRec.Name <> '.') and (FindRec.Name <> '..') then
+        begin
+          Result := False;
+          Break;
+        end;
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
+  end;
+end;
+
+procedure BackupFile(FilePath: String);
+var
+  BackupPath, BackupDir: String;
+begin
+  if not FileExists(FilePath) then
+  begin
+    Log('No file to backup: ' + FilePath);
+    Exit;
+  end;
+
+  BackupPath := GetBackupFilePath(FilePath);
+  BackupDir := ExtractFilePath(BackupPath);
+
+  if not DirExists(BackupDir) then
+    ForceDirectories(BackupDir);
+
+  if RenameFile(FilePath, BackupPath) then
+  begin
+    Log('Backed up: ' + FilePath + ' -> ' + BackupPath);
+    BackedUpFilesCount := BackedUpFilesCount + 1;
+  end
+  else
+    Log('Warning: Failed to backup ' + FilePath);
+end;
+
+procedure BackupSettingsInDir(DataDir: String);
+var
+  FindRec: TFindRec;
+begin
+  if not DirExists(DataDir) then
+    Exit;
+
+  // Backup *.json files
+  if FindFirst(DataDir + '\*.json', FindRec) then
+  begin
+    try
+      repeat
+        BackupFile(DataDir + '\' + FindRec.Name);
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
+  end;
+
+  // Backup *.xml files
+  if FindFirst(DataDir + '\*.xml', FindRec) then
+  begin
+    try
+      repeat
+        BackupFile(DataDir + '\' + FindRec.Name);
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
+  end;
+end;
+
+procedure BackupAllSettingsFiles;
+begin
+  BackupTimestamp := GetBackupTimestamp();
+  BackedUpFilesCount := 0;
+
+  BackupSettingsInDir(ExpandConstant('{app}\EmotiBit Oscilloscope\data'));
+  BackupSettingsInDir(ExpandConstant('{app}\EmotiBit DataParser\data'));
+end;
+
+procedure CleanupBackupFile(BackupPath, OriginalPath: String);
+var
+  NewContent, BackupContent: AnsiString;
+begin
+  if not FileExists(OriginalPath) then
+  begin
+    Log('Warning: New file not found, keeping backup: ' + BackupPath);
+    Exit;
+  end;
+
+  if LoadStringFromFile(OriginalPath, NewContent) and
+     LoadStringFromFile(BackupPath, BackupContent) then
+  begin
+    if NewContent = BackupContent then
+    begin
+      if DeleteFile(BackupPath) then
+      begin
+        Log('Deleted identical backup: ' + BackupPath);
+        BackedUpFilesCount := BackedUpFilesCount - 1;
+      end
+      else
+        Log('Warning: Failed to delete backup: ' + BackupPath);
+    end
+    else
+      Log('Keeping backup (file was modified): ' + BackupPath);
+  end
+  else
+    Log('Warning: Could not compare files, keeping backup: ' + BackupPath);
+end;
+
+procedure CleanupBackupsInDir(DataDir: String);
+var
+  FindRec: TFindRec;
+  BackupSessionDir, BackupPath, OriginalPath: String;
+begin
+  BackupSessionDir := GetBackupSessionFolder(DataDir);
+
+  if not DirExists(BackupSessionDir) then
+    Exit;
+
+  // Scan all files in the backup session folder
+  if FindFirst(BackupSessionDir + '\*.*', FindRec) then
+  begin
+    try
+      repeat
+        if (FindRec.Name <> '.') and (FindRec.Name <> '..') then
+        begin
+          BackupPath := BackupSessionDir + '\' + FindRec.Name;
+          OriginalPath := DataDir + '\' + FindRec.Name;
+          CleanupBackupFile(BackupPath, OriginalPath);
+        end;
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
+  end;
+
+  // Delete backup session folder if empty
+  if DirExists(BackupSessionDir) and IsDirEmpty(BackupSessionDir) then
+  begin
+    if RemoveDir(BackupSessionDir) then
+      Log('Deleted empty backup session folder: ' + BackupSessionDir);
+  end;
+
+  // Delete backups folder if empty
+  if DirExists(DataDir + '\backups') and IsDirEmpty(DataDir + '\backups') then
+  begin
+    if RemoveDir(DataDir + '\backups') then
+      Log('Deleted empty backups folder: ' + DataDir + '\backups');
+  end;
+end;
+
+procedure CleanupIdenticalBackups;
+begin
+  CleanupBackupsInDir(ExpandConstant('{app}\EmotiBit Oscilloscope\data'));
+  CleanupBackupsInDir(ExpandConstant('{app}\EmotiBit DataParser\data'));
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssPostInstall then
+  begin
+    // Clean up backups that are identical to new files
+    CleanupIdenticalBackups();
+
+    // Show message if any backups remain (user had customizations)
+    if (BackedUpFilesCount > 0) and (not WizardSilent()) then
+    begin
+      MsgBox('Your customized settings files were backed up to "backups\' + BackupTimestamp + '" folder.',
+        mbInformation, MB_OK);
+    end;
+  end;
+end;
+
+//=============================================================================
+// Pre-Installation: Settings Backup and MSI Migration
 //=============================================================================
 
 function PrepareToInstall(var NeedsRestart: Boolean): String;
@@ -174,7 +396,13 @@ begin
   Result := '';
   NeedsRestart := False;
 
-  // Check for old MSI installation
+  // STEP 1: Backup existing settings files FIRST (before any uninstall)
+  // This preserves user settings whether upgrading from MSI or Inno
+  // New files are copied later by [Files] section
+  // Identical backups are cleaned up in CurStepChanged(ssPostInstall)
+  BackupAllSettingsFiles();
+
+  // STEP 2: Check for old MSI installation and remove it
   if IsMsiInstalled() then
   begin
     MsiVersion := GetMsiVersion();
