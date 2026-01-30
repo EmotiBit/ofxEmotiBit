@@ -30,15 +30,21 @@ ArchitecturesInstallIn64BitMode=x64
 ; EmotiBit Oscilloscope
 Source: "..\EmotiBitOscilloscope\bin\EmotiBitOscilloscope.exe"; DestDir: "{app}\EmotiBit Oscilloscope"
 Source: "..\EmotiBitOscilloscope\bin\*.dll"; DestDir: "{app}\EmotiBit Oscilloscope"
-Source: "..\EmotiBitOscilloscope\bin\data\*.json"; DestDir: "{app}\EmotiBit Oscilloscope\data"
-Source: "..\EmotiBitOscilloscope\bin\data\*.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
 Source: "..\EmotiBitOscilloscope\bin\data\*.ttf"; DestDir: "{app}\EmotiBit Oscilloscope\data"
+; Settings files - existing files backed up in [Code] PrepareToInstall before Inno copies new ones
+Source: "..\EmotiBitOscilloscope\bin\data\emotibitCommSettings.json"; DestDir: "{app}\EmotiBit Oscilloscope\data"
+Source: "..\EmotiBitOscilloscope\bin\data\lslOutputSettings.json"; DestDir: "{app}\EmotiBit Oscilloscope\data"
+Source: "..\EmotiBitOscilloscope\bin\data\inputSettings.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
+Source: "..\EmotiBitOscilloscope\bin\data\ofxOscilloscopeSettings.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
+Source: "..\EmotiBitOscilloscope\bin\data\oscOutputSettings.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
+Source: "..\EmotiBitOscilloscope\bin\data\udpOutputSettings.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
 
 ; EmotiBit DataParser
 Source: "..\EmotiBitDataParser\bin\EmotiBitDataParser.exe"; DestDir: "{app}\EmotiBit DataParser"
 Source: "..\EmotiBitDataParser\bin\*.dll"; DestDir: "{app}\EmotiBit DataParser"
-Source: "..\EmotiBitDataParser\bin\data\*.json"; DestDir: "{app}\EmotiBit DataParser\data"
 Source: "..\EmotiBitDataParser\bin\data\*.ttf"; DestDir: "{app}\EmotiBit DataParser\data"
+; Settings files - existing files backed up in [Code] PrepareToInstall before Inno copies new ones
+Source: "..\EmotiBitDataParser\bin\data\parsedDataFormat.json"; DestDir: "{app}\EmotiBit DataParser\data"
 
 ; EmotiBit FirmwareInstaller
 Source: "..\EmotiBitFirmwareInstaller\bin\EmotiBitFirmwareInstaller.exe"; DestDir: "{app}\EmotiBit FirmwareInstaller"
@@ -77,11 +83,17 @@ const
   MSI_PRODUCT_CODE = '{B2F470EF-3C46-46C9-9948-9446D059330D}';
   MSI_UNINSTALL_KEY = 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B2F470EF-3C46-46C9-9948-9446D059330D}';
 
+  // Number of settings files to backup (update when adding new files)
+  SETTINGS_FILE_COUNT = 7;
+
 var
   DriverAckPage: TWizardPage;
   DriverInfoLabel: TNewStaticText;
   DriverLinkLabel: TNewStaticText;
   DriverAckCheckbox: TNewCheckBox;
+  // Settings backup tracking
+  BackedUpFilesCount: Integer;
+  BackupTimestamp: String;
 
 //=============================================================================
 // MSI Detection Functions
@@ -163,7 +175,146 @@ begin
 end;
 
 //=============================================================================
-// Pre-Installation Check (MSI Migration)
+// Settings File Backup Functions
+//=============================================================================
+
+// Centralized settings file list - update here when adding new files
+// Also update SETTINGS_FILE_COUNT constant
+procedure GetSettingsFileInfo(Index: Integer; var FileName, DestDir: String);
+begin
+  case Index of
+    0: begin FileName := 'emotibitCommSettings.json'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
+    1: begin FileName := 'lslOutputSettings.json'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
+    2: begin FileName := 'inputSettings.xml'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
+    3: begin FileName := 'ofxOscilloscopeSettings.xml'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
+    4: begin FileName := 'oscOutputSettings.xml'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
+    5: begin FileName := 'udpOutputSettings.xml'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
+    6: begin FileName := 'parsedDataFormat.json'; DestDir := '{app}\EmotiBit DataParser\data'; end;
+  end;
+end;
+
+function GetBackupTimestamp: String;
+begin
+  // Get current date/time formatted as YYYY-MM-DD_HHMMSS
+  // Format specifiers: yyyy=year, mm=month, dd=day, hh=hour, nn=minute, ss=second
+  Result := GetDateTimeString('yyyy-mm-dd_hhnnss', '-', ':');
+end;
+
+function GetBackupFilePath(OriginalPath: String): String;
+var
+  Dir, Name, Ext: String;
+begin
+  // Convert "C:\path\settings.json" to "C:\path\settings_backup_2026-01-29_143052.json"
+  Dir := ExtractFilePath(OriginalPath);
+  Name := ExtractFileName(OriginalPath);
+  Ext := ExtractFileExt(Name);
+  Name := Copy(Name, 1, Length(Name) - Length(Ext));
+  Result := Dir + Name + '_backup_' + BackupTimestamp + Ext;
+end;
+
+procedure BackupSettingsFile(FileName, DestSubDir: String);
+var
+  DestPath, BackupPath: String;
+begin
+  DestPath := ExpandConstant(DestSubDir + '\') + FileName;
+
+  if FileExists(DestPath) then
+  begin
+    BackupPath := GetBackupFilePath(DestPath);
+    if RenameFile(DestPath, BackupPath) then
+    begin
+      Log('Backed up: ' + DestPath + ' -> ' + BackupPath);
+      BackedUpFilesCount := BackedUpFilesCount + 1;
+    end
+    else
+      Log('Warning: Failed to backup ' + DestPath);
+  end
+  else
+    Log('No existing file to backup: ' + FileName);
+end;
+
+procedure BackupAllSettingsFiles;
+var
+  I: Integer;
+  FileName, DestDir: String;
+begin
+  BackupTimestamp := GetBackupTimestamp();
+  BackedUpFilesCount := 0;
+
+  for I := 0 to SETTINGS_FILE_COUNT - 1 do
+  begin
+    GetSettingsFileInfo(I, FileName, DestDir);
+    BackupSettingsFile(FileName, DestDir);
+  end;
+end;
+
+procedure CleanupBackupIfIdentical(FileName, DestSubDir: String);
+var
+  NewFilePath, BackupPath: String;
+  NewContent, BackupContent: AnsiString;
+begin
+  NewFilePath := ExpandConstant(DestSubDir + '\') + FileName;
+  BackupPath := GetBackupFilePath(NewFilePath);
+
+  if not FileExists(BackupPath) then
+    Exit;
+
+  if not FileExists(NewFilePath) then
+  begin
+    Log('Warning: New file not found, keeping backup: ' + BackupPath);
+    Exit;
+  end;
+
+  if LoadStringFromFile(NewFilePath, NewContent) and
+     LoadStringFromFile(BackupPath, BackupContent) then
+  begin
+    if NewContent = BackupContent then
+    begin
+      if DeleteFile(BackupPath) then
+      begin
+        Log('Deleted identical backup: ' + BackupPath);
+        BackedUpFilesCount := BackedUpFilesCount - 1;
+      end
+      else
+        Log('Warning: Failed to delete backup: ' + BackupPath);
+    end
+    else
+      Log('Keeping backup (file was modified): ' + BackupPath);
+  end
+  else
+    Log('Warning: Could not compare files, keeping backup: ' + BackupPath);
+end;
+
+procedure CleanupIdenticalBackups;
+var
+  I: Integer;
+  FileName, DestDir: String;
+begin
+  for I := 0 to SETTINGS_FILE_COUNT - 1 do
+  begin
+    GetSettingsFileInfo(I, FileName, DestDir);
+    CleanupBackupIfIdentical(FileName, DestDir);
+  end;
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssPostInstall then
+  begin
+    // Clean up backups that are identical to new files
+    CleanupIdenticalBackups();
+
+    // Show message if any backups remain (user had customizations)
+    if (BackedUpFilesCount > 0) and (not WizardSilent()) then
+    begin
+      MsgBox('Your customized settings files were backed up with a _backup_' + BackupTimestamp + ' suffix.',
+        mbInformation, MB_OK);
+    end;
+  end;
+end;
+
+//=============================================================================
+// Pre-Installation: Settings Backup and MSI Migration
 //=============================================================================
 
 function PrepareToInstall(var NeedsRestart: Boolean): String;
@@ -174,7 +325,13 @@ begin
   Result := '';
   NeedsRestart := False;
 
-  // Check for old MSI installation
+  // STEP 1: Backup existing settings files FIRST (before any uninstall)
+  // This preserves user settings whether upgrading from MSI or Inno
+  // New files are copied later by [Files] section
+  // Identical backups are cleaned up in CurStepChanged(ssPostInstall)
+  BackupAllSettingsFiles();
+
+  // STEP 2: Check for old MSI installation and remove it
   if IsMsiInstalled() then
   begin
     MsiVersion := GetMsiVersion();
