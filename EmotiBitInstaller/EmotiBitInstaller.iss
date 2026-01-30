@@ -31,20 +31,16 @@ ArchitecturesInstallIn64BitMode=x64
 Source: "..\EmotiBitOscilloscope\bin\EmotiBitOscilloscope.exe"; DestDir: "{app}\EmotiBit Oscilloscope"
 Source: "..\EmotiBitOscilloscope\bin\*.dll"; DestDir: "{app}\EmotiBit Oscilloscope"
 Source: "..\EmotiBitOscilloscope\bin\data\*.ttf"; DestDir: "{app}\EmotiBit Oscilloscope\data"
-; Settings files - existing files backed up in [Code] PrepareToInstall before Inno copies new ones
-Source: "..\EmotiBitOscilloscope\bin\data\emotibitCommSettings.json"; DestDir: "{app}\EmotiBit Oscilloscope\data"
-Source: "..\EmotiBitOscilloscope\bin\data\lslOutputSettings.json"; DestDir: "{app}\EmotiBit Oscilloscope\data"
-Source: "..\EmotiBitOscilloscope\bin\data\inputSettings.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
-Source: "..\EmotiBitOscilloscope\bin\data\ofxOscilloscopeSettings.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
-Source: "..\EmotiBitOscilloscope\bin\data\oscOutputSettings.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
-Source: "..\EmotiBitOscilloscope\bin\data\udpOutputSettings.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
+; Settings files (*.json, *.xml) - backed up automatically in [Code] before overwriting
+Source: "..\EmotiBitOscilloscope\bin\data\*.json"; DestDir: "{app}\EmotiBit Oscilloscope\data"
+Source: "..\EmotiBitOscilloscope\bin\data\*.xml"; DestDir: "{app}\EmotiBit Oscilloscope\data"
 
 ; EmotiBit DataParser
 Source: "..\EmotiBitDataParser\bin\EmotiBitDataParser.exe"; DestDir: "{app}\EmotiBit DataParser"
 Source: "..\EmotiBitDataParser\bin\*.dll"; DestDir: "{app}\EmotiBit DataParser"
 Source: "..\EmotiBitDataParser\bin\data\*.ttf"; DestDir: "{app}\EmotiBit DataParser\data"
-; Settings files - existing files backed up in [Code] PrepareToInstall before Inno copies new ones
-Source: "..\EmotiBitDataParser\bin\data\parsedDataFormat.json"; DestDir: "{app}\EmotiBit DataParser\data"
+; Settings files (*.json, *.xml) - backed up automatically in [Code] before overwriting
+Source: "..\EmotiBitDataParser\bin\data\*.json"; DestDir: "{app}\EmotiBit DataParser\data"
 
 ; EmotiBit FirmwareInstaller
 Source: "..\EmotiBitFirmwareInstaller\bin\EmotiBitFirmwareInstaller.exe"; DestDir: "{app}\EmotiBit FirmwareInstaller"
@@ -91,9 +87,6 @@ const
   // MSI ProductCode from the old Visual Studio Installer Project (v1.12.2)
   MSI_PRODUCT_CODE = '{B2F470EF-3C46-46C9-9948-9446D059330D}';
   MSI_UNINSTALL_KEY = 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B2F470EF-3C46-46C9-9948-9446D059330D}';
-
-  // Number of settings files to backup (update when adding new files)
-  SETTINGS_FILE_COUNT = 7;
 
 var
   DriverAckPage: TWizardPage;
@@ -187,21 +180,6 @@ end;
 // Settings File Backup Functions
 //=============================================================================
 
-// Centralized settings file list - update here when adding new files
-// Also update SETTINGS_FILE_COUNT constant
-procedure GetSettingsFileInfo(Index: Integer; var FileName, DestDir: String);
-begin
-  case Index of
-    0: begin FileName := 'emotibitCommSettings.json'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
-    1: begin FileName := 'lslOutputSettings.json'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
-    2: begin FileName := 'inputSettings.xml'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
-    3: begin FileName := 'ofxOscilloscopeSettings.xml'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
-    4: begin FileName := 'oscOutputSettings.xml'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
-    5: begin FileName := 'udpOutputSettings.xml'; DestDir := '{app}\EmotiBit Oscilloscope\data'; end;
-    6: begin FileName := 'parsedDataFormat.json'; DestDir := '{app}\EmotiBit DataParser\data'; end;
-  end;
-end;
-
 function GetBackupTimestamp: String;
 begin
   // Get current date/time formatted as YYYY-MM-DD_HHMMSS
@@ -211,20 +189,18 @@ end;
 
 function GetBackupFilePath(OriginalPath: String): String;
 var
-  Dir, Name, Ext: String;
+  Dir, FileName: String;
 begin
-  // Convert "C:\path\settings.json" to "C:\path\backups\settings_2026-01-29_143052.json"
+  // Convert "C:\path\data\settings.json" to "C:\path\data\backups\2026-01-29_143052\settings.json"
   Dir := ExtractFilePath(OriginalPath);
-  Name := ExtractFileName(OriginalPath);
-  Ext := ExtractFileExt(Name);
-  Name := Copy(Name, 1, Length(Name) - Length(Ext));
-  Result := Dir + 'backups\' + Name + '_' + BackupTimestamp + Ext;
+  FileName := ExtractFileName(OriginalPath);
+  Result := Dir + 'backups\' + BackupTimestamp + '\' + FileName;
 end;
 
-function GetBackupsFolder(OriginalPath: String): String;
+function GetBackupSessionFolder(DataDir: String): String;
 begin
-  // Get the backups folder path for a given file path
-  Result := ExtractFilePath(OriginalPath) + 'backups';
+  // Get the backup session folder: "C:\path\data\backups\2026-01-29_143052"
+  Result := DataDir + '\backups\' + BackupTimestamp;
 end;
 
 function IsDirEmpty(DirPath: String): Boolean;
@@ -248,67 +224,83 @@ begin
   end;
 end;
 
-procedure BackupSettingsFile(FileName, DestSubDir: String);
+procedure BackupFile(FilePath: String);
 var
-  DestPath, BackupPath, BackupsFolder: String;
+  BackupPath, BackupDir: String;
 begin
-  DestPath := ExpandConstant(DestSubDir + '\') + FileName;
-
-  if FileExists(DestPath) then
+  if not FileExists(FilePath) then
   begin
-    BackupPath := GetBackupFilePath(DestPath);
-    BackupsFolder := GetBackupsFolder(DestPath);
+    Log('No file to backup: ' + FilePath);
+    Exit;
+  end;
 
-    // Create the backups folder if it doesn't exist
-    if not DirExists(BackupsFolder) then
-      ForceDirectories(BackupsFolder);
+  BackupPath := GetBackupFilePath(FilePath);
+  BackupDir := ExtractFilePath(BackupPath);
 
-    if RenameFile(DestPath, BackupPath) then
-    begin
-      Log('Backed up: ' + DestPath + ' -> ' + BackupPath);
-      BackedUpFilesCount := BackedUpFilesCount + 1;
-    end
-    else
-      Log('Warning: Failed to backup ' + DestPath);
+  if not DirExists(BackupDir) then
+    ForceDirectories(BackupDir);
+
+  if RenameFile(FilePath, BackupPath) then
+  begin
+    Log('Backed up: ' + FilePath + ' -> ' + BackupPath);
+    BackedUpFilesCount := BackedUpFilesCount + 1;
   end
   else
-    Log('No existing file to backup: ' + FileName);
+    Log('Warning: Failed to backup ' + FilePath);
+end;
+
+procedure BackupSettingsInDir(DataDir: String);
+var
+  FindRec: TFindRec;
+begin
+  if not DirExists(DataDir) then
+    Exit;
+
+  // Backup *.json files
+  if FindFirst(DataDir + '\*.json', FindRec) then
+  begin
+    try
+      repeat
+        BackupFile(DataDir + '\' + FindRec.Name);
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
+  end;
+
+  // Backup *.xml files
+  if FindFirst(DataDir + '\*.xml', FindRec) then
+  begin
+    try
+      repeat
+        BackupFile(DataDir + '\' + FindRec.Name);
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
+  end;
 end;
 
 procedure BackupAllSettingsFiles;
-var
-  I: Integer;
-  FileName, DestDir: String;
 begin
   BackupTimestamp := GetBackupTimestamp();
   BackedUpFilesCount := 0;
 
-  for I := 0 to SETTINGS_FILE_COUNT - 1 do
-  begin
-    GetSettingsFileInfo(I, FileName, DestDir);
-    BackupSettingsFile(FileName, DestDir);
-  end;
+  BackupSettingsInDir(ExpandConstant('{app}\EmotiBit Oscilloscope\data'));
+  BackupSettingsInDir(ExpandConstant('{app}\EmotiBit DataParser\data'));
 end;
 
-procedure CleanupBackupIfIdentical(FileName, DestSubDir: String);
+procedure CleanupBackupFile(BackupPath, OriginalPath: String);
 var
-  NewFilePath, BackupPath, BackupsFolder: String;
   NewContent, BackupContent: AnsiString;
 begin
-  NewFilePath := ExpandConstant(DestSubDir + '\') + FileName;
-  BackupPath := GetBackupFilePath(NewFilePath);
-  BackupsFolder := GetBackupsFolder(NewFilePath);
-
-  if not FileExists(BackupPath) then
-    Exit;
-
-  if not FileExists(NewFilePath) then
+  if not FileExists(OriginalPath) then
   begin
     Log('Warning: New file not found, keeping backup: ' + BackupPath);
     Exit;
   end;
 
-  if LoadStringFromFile(NewFilePath, NewContent) and
+  if LoadStringFromFile(OriginalPath, NewContent) and
      LoadStringFromFile(BackupPath, BackupContent) then
   begin
     if NewContent = BackupContent then
@@ -317,15 +309,6 @@ begin
       begin
         Log('Deleted identical backup: ' + BackupPath);
         BackedUpFilesCount := BackedUpFilesCount - 1;
-
-        // Delete the backups folder if it's now empty
-        if DirExists(BackupsFolder) and IsDirEmpty(BackupsFolder) then
-        begin
-          if RemoveDir(BackupsFolder) then
-            Log('Deleted empty backups folder: ' + BackupsFolder)
-          else
-            Log('Warning: Failed to delete empty backups folder: ' + BackupsFolder);
-        end;
       end
       else
         Log('Warning: Failed to delete backup: ' + BackupPath);
@@ -337,16 +320,52 @@ begin
     Log('Warning: Could not compare files, keeping backup: ' + BackupPath);
 end;
 
-procedure CleanupIdenticalBackups;
+procedure CleanupBackupsInDir(DataDir: String);
 var
-  I: Integer;
-  FileName, DestDir: String;
+  FindRec: TFindRec;
+  BackupSessionDir, BackupPath, OriginalPath: String;
 begin
-  for I := 0 to SETTINGS_FILE_COUNT - 1 do
+  BackupSessionDir := GetBackupSessionFolder(DataDir);
+
+  if not DirExists(BackupSessionDir) then
+    Exit;
+
+  // Scan all files in the backup session folder
+  if FindFirst(BackupSessionDir + '\*.*', FindRec) then
   begin
-    GetSettingsFileInfo(I, FileName, DestDir);
-    CleanupBackupIfIdentical(FileName, DestDir);
+    try
+      repeat
+        if (FindRec.Name <> '.') and (FindRec.Name <> '..') then
+        begin
+          BackupPath := BackupSessionDir + '\' + FindRec.Name;
+          OriginalPath := DataDir + '\' + FindRec.Name;
+          CleanupBackupFile(BackupPath, OriginalPath);
+        end;
+      until not FindNext(FindRec);
+    finally
+      FindClose(FindRec);
+    end;
   end;
+
+  // Delete backup session folder if empty
+  if DirExists(BackupSessionDir) and IsDirEmpty(BackupSessionDir) then
+  begin
+    if RemoveDir(BackupSessionDir) then
+      Log('Deleted empty backup session folder: ' + BackupSessionDir);
+  end;
+
+  // Delete backups folder if empty
+  if DirExists(DataDir + '\backups') and IsDirEmpty(DataDir + '\backups') then
+  begin
+    if RemoveDir(DataDir + '\backups') then
+      Log('Deleted empty backups folder: ' + DataDir + '\backups');
+  end;
+end;
+
+procedure CleanupIdenticalBackups;
+begin
+  CleanupBackupsInDir(ExpandConstant('{app}\EmotiBit Oscilloscope\data'));
+  CleanupBackupsInDir(ExpandConstant('{app}\EmotiBit DataParser\data'));
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
@@ -359,7 +378,7 @@ begin
     // Show message if any backups remain (user had customizations)
     if (BackedUpFilesCount > 0) and (not WizardSilent()) then
     begin
-      MsgBox('Your customized settings files were backed up to the "backups" folder with timestamp ' + BackupTimestamp + '.',
+      MsgBox('Your customized settings files were backed up to "backups\' + BackupTimestamp + '" folder.',
         mbInformation, MB_OK);
     end;
   end;
