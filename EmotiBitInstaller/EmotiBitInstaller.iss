@@ -72,11 +72,84 @@ Name: "{group}\EmotiBit FirmwareInstaller"; Filename: "{app}\EmotiBit FirmwareIn
 Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; StatusMsg: "Installing Visual C++ 2017 Redistributable..."; Check: VCRedistNeedsInstall
 
 [Code]
+const
+  // MSI ProductCode from the old Visual Studio Installer Project (v1.12.2)
+  MSI_PRODUCT_CODE = '{B2F470EF-3C46-46C9-9948-9446D059330D}';
+  MSI_UNINSTALL_KEY = 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B2F470EF-3C46-46C9-9948-9446D059330D}';
+
 var
   DriverAckPage: TWizardPage;
   DriverInfoLabel: TNewStaticText;
   DriverLinkLabel: TNewStaticText;
   DriverAckCheckbox: TNewCheckBox;
+
+//=============================================================================
+// MSI Detection Functions
+//=============================================================================
+
+function IsMsiInstalled: Boolean;
+var
+  DisplayName: String;
+begin
+  Result := False;
+  // Check 64-bit registry first (this is a 64-bit installer)
+  if RegQueryStringValue(HKLM64, MSI_UNINSTALL_KEY, 'DisplayName', DisplayName) then
+  begin
+    if Pos('EmotiBit', DisplayName) > 0 then
+      Result := True;
+  end
+end;
+
+function GetMsiVersion: String;
+var
+  Version: String;
+begin
+  Result := 'unknown';
+  if RegQueryStringValue(HKLM64, MSI_UNINSTALL_KEY, 'DisplayVersion', Version) then
+    Result := Version
+end;
+
+//=============================================================================
+// MSI Uninstallation Function
+//=============================================================================
+
+function UninstallMsi: Boolean;
+var
+  ResultCode: Integer;
+  UninstallCommand: String;
+begin
+  Result := False;
+
+  // Use msiexec with ProductCode for silent uninstall
+  // /x = uninstall, /qn = quiet (no UI), /norestart = don't reboot
+  UninstallCommand := '/x ' + MSI_PRODUCT_CODE + ' /qn /norestart';
+
+  Log('Attempting MSI uninstall: msiexec.exe ' + UninstallCommand);
+
+  if Exec('msiexec.exe', UninstallCommand, '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
+  begin
+    Log('msiexec.exe returned exit code: ' + IntToStr(ResultCode));
+
+    // MSI exit codes: (complete list can be found in the online documentation)
+    // 0 = Success
+    // 1605 = Product not installed (acceptable)
+    // 3010 = Reboot required but suppressed (acceptable)
+    if (ResultCode = 0) or (ResultCode = 1605) or (ResultCode = 3010) then
+    begin
+      Result := True;
+      if ResultCode = 3010 then
+        Log('MSI uninstall succeeded but a reboot may be recommended');
+    end
+    else
+      Log('MSI uninstall failed with exit code: ' + IntToStr(ResultCode));
+  end
+  else
+    Log('Failed to execute msiexec.exe');
+end;
+
+//=============================================================================
+// VC++ Redistributable Detection
+//=============================================================================
 
 function VCRedistNeedsInstall: Boolean;
 var
@@ -87,6 +160,85 @@ begin
     Result := (Copy(Version, 2, 5) < '14.10')
   else
     Result := True;
+end;
+
+//=============================================================================
+// Pre-Installation Check (MSI Migration)
+//=============================================================================
+
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var
+  MsiVersion: String;
+  UserChoice: Integer;
+begin
+  Result := '';
+  NeedsRestart := False;
+
+  // Check for old MSI installation
+  if IsMsiInstalled() then
+  begin
+    MsiVersion := GetMsiVersion();
+    Log('Detected MSI installation version: ' + MsiVersion);
+
+    // In silent mode, just try to uninstall without prompts
+    if WizardSilent() then
+    begin
+      Log('Silent mode: attempting automatic MSI removal');
+      if not UninstallMsi() then
+        Log('Silent mode: MSI removal failed, continuing anyway');
+    end
+    else
+    begin
+      // Interactive mode: ask user for confirmation
+      UserChoice := MsgBox(
+        'A previous version of EmotiBit (v' + MsiVersion + ') was detected.' + #13#10#13#10 +
+        'Click OK to automatically remove the old version and continue, ' +
+        'or Cancel to abort installation.',
+        mbConfirmation, MB_OKCANCEL);
+
+      if UserChoice = IDCANCEL then
+      begin
+        Result := 'Installation cancelled by user.';
+        Exit;
+      end;
+
+      // Update status label
+      WizardForm.StatusLabel.Caption := 'Removing previous installation...';
+      WizardForm.StatusLabel.Update;
+
+      if UninstallMsi() then
+      begin
+        // Brief pause for Windows to finalize cleanup
+        Sleep(2000);
+
+        // Verify removal
+        if IsMsiInstalled() then
+        begin
+          MsgBox(
+            'Warning: The previous installation may not have been fully removed.' + #13#10#13#10 +
+            'Installation will continue. If you see duplicate entries in ' +
+            'Add/Remove Programs after installation, please manually remove the older entry.',
+            mbInformation, MB_OK);
+        end
+        else
+          Log('MSI successfully removed');
+      end
+      else
+      begin
+        // Uninstall failed - offer choice to continue or abort
+        UserChoice := MsgBox(
+          'Could not automatically remove the previous installation.' + #13#10#13#10 +
+          'You can:' + #13#10 +
+          '  - Click Yes to continue anyway (may cause duplicate entries in Add/Remove Programs)' + #13#10 +
+          '  - Click No to cancel and manually uninstall from Control Panel first' + #13#10#13#10 +
+          'Would you like to continue?',
+          mbError, MB_YESNO);
+
+        if UserChoice = IDNO then
+          Result := 'Please uninstall EmotiBit v' + MsiVersion + ' from Control Panel and try again.';
+      end;
+    end;
+  end;
 end;
 
 procedure DriverLinkClick(Sender: TObject);
@@ -115,7 +267,7 @@ begin
   DriverInfoLabel.Caption :=
     'After this installation completes, you MUST install the USB drivers to be able to run the FirmwareInstaller with Feather ESP32.' + #13#10#13#10 +
     'Driver installation steps:' + #13#10 +
-    '1. The driver installer is included in the downloaded package' + #13#10 +
+    '1. The installer for the drivers is included in the download' + #13#10 +
     '2. Navigate to the download location' + #13#10 +
     '3. Run the CP210x driver installer for your system';
 
