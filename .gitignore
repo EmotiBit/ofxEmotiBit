@@ -53,3 +53,10 @@
 EmotiBitIcons/otherFormats
 */*xcodeproj/*workspace/*
 **/xcuser*/**
+
+# INNO Setup
+EmotiBitInstaller/Output/
+EmotiBitInstaller/redist/
+
+# testing
+tests/EmotiBitDataParser/sample_data/2025-06-27_09-56-59-929206*.csv
