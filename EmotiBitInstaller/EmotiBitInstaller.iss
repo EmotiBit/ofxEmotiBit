@@ -392,28 +392,28 @@ function PrepareToInstall(var NeedsRestart: Boolean): String;
 var
   MsiVersion: String;
   UserChoice: Integer;
+  ShouldUninstallMsi: Boolean;
 begin
   Result := '';
   NeedsRestart := False;
+  ShouldUninstallMsi := False;
 
-  // STEP 1: Backup existing settings files FIRST (before any uninstall)
-  // This preserves user settings whether upgrading from MSI or Inno
-  // New files are copied later by [Files] section
-  // Identical backups are cleaned up in CurStepChanged(ssPostInstall)
-  BackupAllSettingsFiles();
+  //===========================================================================
+  // PHASE 1: CONFIRMATIONS ONLY (no file operations)
+  // Get all user consent before touching any files. If user cancels at any
+  // point, we exit immediately with no changes made to the system.
+  //===========================================================================
 
-  // STEP 2: Check for old MSI installation and remove it
   if IsMsiInstalled() then
   begin
     MsiVersion := GetMsiVersion();
     Log('Detected MSI installation version: ' + MsiVersion);
 
-    // In silent mode, just try to uninstall without prompts
     if WizardSilent() then
     begin
-      Log('Silent mode: attempting automatic MSI removal');
-      if not UninstallMsi() then
-        Log('Silent mode: MSI removal failed, continuing anyway');
+      // Silent mode: proceed with uninstall (no prompts needed)
+      Log('Silent mode: will attempt automatic MSI removal');
+      ShouldUninstallMsi := True;
     end
     else
     begin
@@ -427,9 +427,40 @@ begin
       if UserChoice = IDCANCEL then
       begin
         Result := 'Installation cancelled by user.';
-        Exit;
+        Exit;  // Exit immediately - no files touched
       end;
 
+      // User confirmed - mark for uninstall (but don't do it yet)
+      ShouldUninstallMsi := True;
+    end;
+  end;
+
+  //===========================================================================
+  // PHASE 2: BACKUP (user has committed to proceed)
+  // Now that we have user consent, safely backup settings files.
+  // This preserves user settings whether upgrading from MSI or Inno.
+  // New files are copied later by [Files] section.
+  // Identical backups are cleaned up in CurStepChanged(ssPostInstall).
+  //===========================================================================
+
+  BackupAllSettingsFiles();
+
+  //===========================================================================
+  // PHASE 3: MSI UNINSTALL (backup is safe)
+  // Execute the MSI uninstall now that backup is complete. If uninstall fails,
+  // user's settings are already safely backed up.
+  //===========================================================================
+
+  if ShouldUninstallMsi then
+  begin
+    if WizardSilent() then
+    begin
+      // Silent mode: just try to uninstall without prompts
+      if not UninstallMsi() then
+        Log('Silent mode: MSI removal failed, continuing anyway');
+    end
+    else
+    begin
       // Update status label
       WizardForm.StatusLabel.Caption := 'Removing previous installation...';
       WizardForm.StatusLabel.Update;
@@ -454,6 +485,7 @@ begin
       else
       begin
         // Uninstall failed - offer choice to continue or abort
+        // Note: At this point, backup is already complete, so user settings are safe
         UserChoice := MsgBox(
           'Could not automatically remove the previous installation.' + #13#10#13#10 +
           'You can:' + #13#10 +
@@ -463,7 +495,10 @@ begin
           mbError, MB_YESNO);
 
         if UserChoice = IDNO then
+        begin
           Result := 'Please uninstall EmotiBit v' + MsiVersion + ' from Control Panel and try again.';
+          Exit;
+        end;
       end;
     end;
   end;
