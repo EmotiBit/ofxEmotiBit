@@ -1,0 +1,44 @@
+{
+  "globalSlideSettings": {
+    "background": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/default/dbg.png",
+    "slideSetIntroSlide": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/default/def_intro.png", // no intro slide specified defaults to an all black slide
+    "pauseOnSetIntroSlide": true,
+    "slideSetIntroSlideTimeMin_msec": 4000, // durations are randomized in between min and max
+    "slideSetIntroSlideTimeMax_msec": 10000,
+    "slideOrderRandomization": true,
+    "maxSlidesPerSet": 5, // number of slides to play from each set
+    "slideOnTimeMin_msec": 0,
+    "slideOnTimeMax_msec": 0,
+    "slideOffTimeMin_msec": 0,
+    "slideOffTimeMax_msec": 2000
+  },
+  "appSettings": {
+    "keyboardControls": {
+      "toggleFullScreen": "F",
+      "nextSlide": "N",
+      "previousSlide": "B",
+      "pauseSlideshowToggle": "P",
+      "restartSlideshow": "R",
+      "restartSlideSet": "T",
+      "loadSettingsFile": "S",
+      "setLogFileDirectory": "L"
+    },
+    "logFileDirectory": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/",
+    "startFullScreen": true,
+    "startPaused": true
+  },
+  "slideSets": [
+    // At the beginning of each slideSet the globalSlideSettings are reloaded
+    // and then the slideSet-specific settings are loaded
+    {
+      "slideDirectory": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/set-1",
+      "slideOrderRandomization": false,
+      "slideSetIntroSlide": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/set-1/intro.png"
+    },
+    {
+      "slideDirectory": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/set-2",
+      "slideOrderRandomization": false,
+      "background": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/set-2/bg/bg.001.png"
+    }
+  ]
+}
