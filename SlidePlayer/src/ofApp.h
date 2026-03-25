@@ -68,23 +68,29 @@ class ofApp : public ofBaseApp
             std::string slide_set_intro_slide_ = "";
             /// @brief Whether to pause automatically on the intro slide.
             bool pause_on_set_intro_slide_ = true;
-            /// @brief Minimum time the intro slide is displayed (ms).
+            /// @brief Lower bound (ms) of the random display time for the intro
+            /// slide. If equal to max, the value is used directly.
             float slide_set_intro_slide_time_min_msec_ = 0;
-            /// @brief Maximum time the intro slide is displayed (ms).
+            /// @brief Upper bound (ms) of the random display time for the intro
+            /// slide. If equal to min, the value is used directly.
             float slide_set_intro_slide_time_max_msec_ = 0;
             /// @brief Whether to randomize slide order within the set.
             bool slide_order_randomization_ = true;
             /// @brief Maximum number of slides to show per set.
             int max_slides_per_set_ = 5;
-            /// @brief Minimum time a slide is shown before a key press can
-            /// advance it (ms).
+            /// @brief Lower bound (ms) of the random on-time per slide.
+            /// If equal to max, the value is used directly. If both are 0,
+            /// only key presses advance the slide.
             float slide_on_time_min_msec_ = 0;
-            /// @brief Maximum time a slide is shown before auto-advancing (ms).
-            /// 0 = key-press only.
+            /// @brief Upper bound (ms) of the random on-time per slide.
+            /// If equal to min, the value is used directly. If both are 0,
+            /// only key presses advance the slide.
             float slide_on_time_max_msec_ = 0;
-            /// @brief Minimum time the screen is blank between slides (ms).
+            /// @brief Lower bound (ms) of the random off-time between slides.
+            /// If equal to max, the value is used directly.
             float slide_off_time_min_msec_ = 0;
-            /// @brief Maximum time the screen is blank between slides (ms).
+            /// @brief Upper bound (ms) of the random off-time between slides.
+            /// If equal to min, the value is used directly.
             float slide_off_time_max_msec_ = 0;
         } SlideSettings;
 
@@ -133,12 +139,18 @@ class ofApp : public ofBaseApp
             kSlideIntro   ///< Intro slide is visible.
         };
 
+        /// @brief Holds the randomly chosen on and off durations for the
+        /// current slide, sampled once per slide change from the min/max
+        /// ranges in SlideSettings.
         typedef struct StateTimes
         {
-            float on_time_;
-            float off_time_;
-
+            /// @brief Randomly chosen duration (ms) the slide stays visible.
+            float on_time_ = 0;
+            /// @brief Randomly chosen duration (ms) the screen stays blank
+            /// after the slide goes off.
+            float off_time_ = 0;
         } StateTimes;
+        /// @brief Active on/off durations for the current slide.
         StateTimes state_times_;
         /// @brief Current phase state.
         SlideState slide_state_ = SlideState::kSlideOn;
