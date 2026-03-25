@@ -18,7 +18,7 @@
 void ofApp::ensureSettingsFile()
 {
     std::string docs_dir =
-        ofFilePath::join(ofFilePath::join(ofFilePath::join(ofGetUserHomeDir(), "Documents"), "EmotiBit"), "SlidePlayer");
+        ofFilePath::join(ofFilePath::join(ofFilePath::join(ofFilePath::getUserHomeDir(), "Documents"), "EmotiBit"), "SlidePlayer");
     std::string target_path = ofFilePath::join(docs_dir, settings_file_name_);
     if (!ofFile(target_path).exists())
     {
@@ -59,7 +59,7 @@ void ofApp::setup()
 
 bool ofApp::loadAppSettings()
 {
-    ofFile emotibit_slide_player_settings(ofToDataPath(settings_file_name_));
+    ofFile emotibit_slide_player_settings(settings_file_name_);
     std::string json_str;
     if (emotibit_slide_player_settings.exists())
     {
@@ -171,16 +171,22 @@ bool ofApp::parseSettings(const Json::Value& settings)
         std::cerr << "Error: appSettings not specified" << std::endl;
     }
 
+    auto resolve_path = [](const std::string& path) -> std::string
+    {
+        return ofFilePath::isAbsolute(path) ? path : ofToDataPath(path, true);
+    };
+
     auto load_slide_settings =
-        [](const Json::Value& node, AppSettings::SlideSettings& s)
+        [&resolve_path](const Json::Value& node, AppSettings::SlideSettings& s)
     {
         if (node.isMember("background"))
         {
-            s.background_ = node["background"].asString();
+            s.background_ = resolve_path(node["background"].asString());
         }
         if (node.isMember("slideSetIntroSlide"))
         {
-            s.slide_set_intro_slide_ = node["slideSetIntroSlide"].asString();
+            s.slide_set_intro_slide_ =
+                resolve_path(node["slideSetIntroSlide"].asString());
         }
         if (node.isMember("pauseOnSetIntroSlide"))
         {
@@ -242,7 +248,7 @@ bool ofApp::parseSettings(const Json::Value& settings)
             if (settings["slideSets"][i].isMember("slideDirectory"))
             {
                 ss.slide_directory_ =
-                    settings["slideSets"][i]["slideDirectory"].asString();
+                    resolve_path(settings["slideSets"][i]["slideDirectory"].asString());
                 // start from global settings, then apply per-set overrides
                 ss.settings_ = app_settings_.global_slide_settings_;
                 load_slide_settings(settings["slideSets"][i], ss.settings_);

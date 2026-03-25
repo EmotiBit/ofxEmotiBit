@@ -1,7 +1,7 @@
 {
   "globalSlideSettings": {
-    "background": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/default/dbg.png",
-    "slideSetIntroSlide": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/default/def_intro.png", // no intro slide specified defaults to an all black slide
+    "background": "example_slides/default_slides/default_background.png",
+    "slideSetIntroSlide": "example_slides/default_slides/default_intro_slide.png",
     "pauseOnSetIntroSlide": true,
     "slideSetIntroSlideTimeMin_msec": 4000, // durations are randomized in between min and max
     "slideSetIntroSlideTimeMax_msec": 10000,
@@ -31,14 +31,14 @@
     // At the beginning of each slideSet the globalSlideSettings are reloaded
     // and then the slideSet-specific settings are loaded
     {
-      "slideDirectory": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/set-1",
+      "slideDirectory": "example_slides/set-1",
       "slideOrderRandomization": false,
-      "slideSetIntroSlide": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/set-1/intro.png"
+      "slideSetIntroSlide": "example_slides/set-1/set_1-Intro_slide.png"
     },
     {
-      "slideDirectory": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/set-2",
+      "slideDirectory": "example_slides/set-2",
       "slideOrderRandomization": false,
-      "background": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/slides/set-2/bg/bg.001.png"
+      "background": "example_slides/set-2/set_2-background.png"
     }
   ]
 }
