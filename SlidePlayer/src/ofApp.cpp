@@ -17,13 +17,17 @@
 
 void ofApp::ensureSettingsFile()
 {
-    std::string docs_dir =
-        ofFilePath::join(ofFilePath::join(ofFilePath::join(ofFilePath::getUserHomeDir(), "Documents"), "EmotiBit"), "SlidePlayer");
+    std::string docs_dir = ofFilePath::join(
+        ofFilePath::join(
+            ofFilePath::join(ofFilePath::getUserHomeDir(), "Documents"),
+            "EmotiBit"),
+        "SlidePlayer");
     std::string target_path = ofFilePath::join(docs_dir, settings_file_name_);
     if (!ofFile(target_path).exists())
     {
         ofDirectory::createDirectory(docs_dir, false, true);
-        ofFile source(ofToDataPath(settings_file_name_), ofFile::Reference, false);
+        ofFile source(ofToDataPath(settings_file_name_), ofFile::Reference,
+                      false);
         source.copyTo(target_path, false, false);
     }
     settings_file_name_ = target_path;
@@ -102,13 +106,20 @@ bool ofApp::parseSettings(const Json::Value& settings)
         {
             app_settings_.log_file_directory_ =
                 app["logFileDirectory"].asString();
-            // TODO: consider if we want to create the directory if the
-            // directory does not exist
         }
         else
         {
-            // TODO: Consider if the app should quit if this is not specified
-            std::cerr << "Error: log file directory not specified" << std::endl;
+            app_settings_.log_file_directory_ = ofFilePath::join(
+                ofFilePath::join(
+                    ofFilePath::join(
+                        ofFilePath::join(ofFilePath::getUserHomeDir(),
+                                         "Documents"),
+                        "EmotiBit"),
+                    "SlidePlayer"),
+                "log");
+            std::cerr
+                << "Warning: log file directory not specified. Using default: "
+                << app_settings_.log_file_directory_ << std::endl;
         }
 
         if (app.isMember("startFullScreen") && app["startFullScreen"].isBool())
@@ -172,9 +183,7 @@ bool ofApp::parseSettings(const Json::Value& settings)
     }
 
     auto resolve_path = [](const std::string& path) -> std::string
-    {
-        return ofFilePath::isAbsolute(path) ? path : ofToDataPath(path, true);
-    };
+    { return ofFilePath::isAbsolute(path) ? path : ofToDataPath(path, true); };
 
     auto load_slide_settings =
         [&resolve_path](const Json::Value& node, AppSettings::SlideSettings& s)
@@ -247,8 +256,8 @@ bool ofApp::parseSettings(const Json::Value& settings)
             AppSettings::SlideSet ss;
             if (settings["slideSets"][i].isMember("slideDirectory"))
             {
-                ss.slide_directory_ =
-                    resolve_path(settings["slideSets"][i]["slideDirectory"].asString());
+                ss.slide_directory_ = resolve_path(
+                    settings["slideSets"][i]["slideDirectory"].asString());
                 // start from global settings, then apply per-set overrides
                 ss.settings_ = app_settings_.global_slide_settings_;
                 load_slide_settings(settings["slideSets"][i], ss.settings_);
