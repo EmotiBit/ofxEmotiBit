@@ -7,9 +7,9 @@
     "slideSetIntroSlideTimeMax_msec": 10000,
     "slideOrderRandomization": true,
     "maxSlidesPerSet": 5, // number of slides to play from each set
-    "slideOnTimeMin_msec": 0,
-    "slideOnTimeMax_msec": 0,
-    "slideOffTimeMin_msec": 0,
+    "slideOnTimeMin_msec": 3000,
+    "slideOnTimeMax_msec": 3000,
+    "slideOffTimeMin_msec": 1000,
     "slideOffTimeMax_msec": 2000
   },
   "appSettings": {

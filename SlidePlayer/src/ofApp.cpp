@@ -358,36 +358,32 @@ void ofApp::updateCurrentState()
             return;
         }
 
-        // extract intro slide before shuffle/resize so it is not counted
-        // towards num_slides and not randomized
-        std::string intro_path;
-        const std::string& intro =
-            current_state_.slide_settings_.slide_set_intro_slide_;
-        if (!intro.empty())
+        // extract intro and background slides before shuffle/resize so they
+        // are not counted towards num_slides and not randomized
+        auto extract_from_set = [&](const std::string& path) -> std::string
         {
-            std::string intro_filename = ofFilePath::getFileName(intro);
+            if (path.empty())
+            {
+                return "";
+            }
+            std::string filename = ofFilePath::getFileName(path);
             auto it = std::find_if(
                 current_state_.slide_paths_.begin(),
                 current_state_.slide_paths_.end(),
-                [&intro_filename](const std::string& path)
-                { return ofFilePath::getFileName(path) == intro_filename; });
+                [&filename](const std::string& p)
+                { return ofFilePath::getFileName(p) == filename; });
             if (it != current_state_.slide_paths_.end())
             {
-                // intro is inside the set directory — extract it so it is
-                // not counted towards max_slides and not randomized
-                intro_path = *it;
+                std::string extracted = *it;
                 current_state_.slide_paths_.erase(it);
+                return extracted;
             }
-            else
-            {
-                // intro is outside the set directory — use the path directly
-                intro_path = intro;
-            }
-            logEvent(
-                "SLIDE_SET_INIT",
-                "set_index=" + std::to_string(current_state_.slide_set_index_) +
-                    " intro_slide=" + intro_path);
-        }
+            return path;  // outside the set directory — use the path directly
+        };
+
+        std::string intro_path = extract_from_set(
+            current_state_.slide_settings_.slide_set_intro_slide_);
+        extract_from_set(current_state_.slide_settings_.background_);
 
         if (current_state_.slide_settings_.slide_order_randomization_)
         {
@@ -423,7 +419,8 @@ void ofApp::updateCurrentState()
         logEvent(
             "SLIDE_SET_INIT",
             "set_index=" + std::to_string(current_state_.slide_set_index_) +
-                " slide_count=" +
+                " intro_slide=" + intro_path + " background=" +
+                current_state_.slide_settings_.background_ + " slide_count=" +
                 std::to_string(current_state_.slide_paths_.size()) +
                 " slides=" + slide_list);
         // use existing machinery to advance to the next slide
@@ -484,7 +481,6 @@ void ofApp::changeSlide(int delta)
         // set, we stay at the beginning of the current set
         current_state_.slide_index_ = 0;
     }
-    current_state_.slide_state_ = CurrentState::SlideState::kSlideOn;
     float on_time_min = current_state_.slide_settings_.slide_on_time_min_msec_;
     float on_time_max = current_state_.slide_settings_.slide_on_time_max_msec_;
     float off_time_min =
@@ -537,6 +533,7 @@ void ofApp::changeSlide(int delta)
     }
     else
     {
+        current_state_.slide_state_ = CurrentState::SlideState::kSlideOn;
         load_slide_image_(
             current_state_.slide_paths_[current_state_.slide_index_]);
         logEvent(
