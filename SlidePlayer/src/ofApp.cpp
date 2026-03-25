@@ -405,7 +405,14 @@ void ofApp::updateCurrentState()
                 current_state_.slide_paths_.begin(), intro_path);
         }
 
-        load_background_image_(current_state_.slide_settings_.background_);
+        if (!current_state_.slide_settings_.background_.empty())
+        {
+            load_background_image_(current_state_.slide_settings_.background_);
+        }
+        else
+        {
+            background_image_.clear();
+        }
         current_state_.init_new_set_ = false;
         std::string slide_list;
         for (const auto& path : current_state_.slide_paths_)
