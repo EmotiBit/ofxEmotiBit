@@ -15,11 +15,26 @@
 // ── Setup
 // ─────────────────────────────────────────────────────────────────────
 
+void ofApp::ensureSettingsFile()
+{
+    std::string docs_dir =
+        ofFilePath::join(ofFilePath::join(ofFilePath::join(ofGetUserHomeDir(), "Documents"), "EmotiBit"), "SlidePlayer");
+    std::string target_path = ofFilePath::join(docs_dir, settings_file_name_);
+    if (!ofFile(target_path).exists())
+    {
+        ofDirectory::createDirectory(docs_dir, false, true);
+        ofFile source(ofToDataPath(settings_file_name_), ofFile::Reference, false);
+        source.copyTo(target_path, false, false);
+    }
+    settings_file_name_ = target_path;
+}
+
 void ofApp::setup()
 {
 #ifdef TARGET_OSX
     ofSetDataPathRoot("../Resources");
 #endif
+    ensureSettingsFile();
     ofSetLogLevel(OF_LOG_SILENT);
     if (!loadAppSettings())
     {

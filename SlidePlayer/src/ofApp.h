@@ -222,6 +222,11 @@ class ofApp : public ofBaseApp
     // ── Setup
     // ─────────────────────────────────────────────────────────────────
 
+    /// @brief Ensures the settings file exists in ~/Documents/EmotiBit/.
+    /// Copies it from the app bundle Resources if not present, then updates
+    /// settings_file_name_ to the absolute path.
+    void ensureSettingsFile();
+
     /// @brief openFrameworks setup callback. Loads settings and opens the log
     /// file.
     void setup();
