@@ -133,6 +133,13 @@ class ofApp : public ofBaseApp
             kSlideIntro   ///< Intro slide is visible.
         };
 
+        typedef struct StateTimes
+        {
+            float on_time_;
+            float off_time_;
+
+        } StateTimes;
+        StateTimes state_times_;
         /// @brief Current phase state.
         SlideState slide_state_ = SlideState::kSlideOn;
         /// @brief State that was active before the show was paused.

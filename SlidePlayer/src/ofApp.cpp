@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cctype>
 #include <cstdint>
+#include <random>
 #include <string>
 
 #include "json/json.h"
@@ -394,21 +395,13 @@ void ofApp::updateCurrentState()
     // SlideState management
     if (CurrentState::SlideState::kSlideOn == current_state_.slide_state_)
     {
-        float max_on_time =
-            current_state_.slide_settings_.slide_on_time_max_msec_;
-        if (current_state_.slide_index_ == 0)
+        if (current_state_.state_times_.on_time_ != 0)
         {
-            // use intro wait time for intro slide
-            max_on_time = current_state_.slide_settings_
-                              .slide_set_intro_slide_time_max_msec_;
-        }
-        if (max_on_time != 0)
-        {
-            // if max_on time is set to 0, only key strokes can change
+            // if on time is set to 0, only key strokes can change
             // slides
             if ((float)get_time_msec_() -
                     (float)current_state_.phase_start_msec_ >
-                max_on_time)
+                current_state_.state_times_.on_time_)
             {
                 current_state_.slide_state_ =
                     CurrentState::SlideState::kSlideOff;
@@ -433,7 +426,7 @@ void ofApp::updateCurrentState()
         {
             if ((float)get_time_msec_() -
                     (float)current_state_.phase_start_msec_ >
-                current_state_.slide_settings_.slide_off_time_max_msec_)
+                current_state_.state_times_.off_time_)
             {
                 changeSlide(1);
             }
@@ -451,6 +444,43 @@ void ofApp::changeSlide(int delta)
         current_state_.slide_index_ = 0;
     }
     current_state_.slide_state_ = CurrentState::SlideState::kSlideOn;
+    float on_time_min = current_state_.slide_settings_.slide_on_time_min_msec_;
+    float on_time_max = current_state_.slide_settings_.slide_on_time_max_msec_;
+    float off_time_min =
+        current_state_.slide_settings_.slide_off_time_min_msec_;
+    float off_time_max =
+        current_state_.slide_settings_.slide_off_time_max_msec_;
+    if (current_state_.slide_index_ == 0)
+    {
+        // if first slide, use the intro slide values
+        // NOTE: There is no OFF time for intro slides
+        on_time_min =
+            current_state_.slide_settings_.slide_set_intro_slide_time_min_msec_;
+        on_time_max =
+            current_state_.slide_settings_.slide_set_intro_slide_time_max_msec_;
+    }
+    if (on_time_min == on_time_max)
+    {
+        current_state_.state_times_.on_time_ = on_time_max;
+    }
+    else
+    {
+        std::mt19937 rng{std::random_device{}()};
+        std::uniform_int_distribution<int> dist((int)on_time_min,
+                                                (int)on_time_max);
+        current_state_.state_times_.on_time_ = (float)dist(rng);
+    }
+    if (off_time_min == off_time_max)
+    {
+        current_state_.state_times_.off_time_ = off_time_max;
+    }
+    else
+    {
+        std::mt19937 rng{std::random_device{}()};
+        std::uniform_int_distribution<int> dist((int)off_time_min,
+                                                (int)off_time_max);
+        current_state_.state_times_.off_time_ = (float)dist(rng);
+    }
     current_state_.phase_start_msec_ = get_time_msec_();
     if (current_state_.slide_index_ >= (int)current_state_.slide_paths_.size())
     {
@@ -517,36 +547,20 @@ void ofApp::keyPressed(int key)
     logEvent("KEY_PRESS", std::string("key=") + kKeyChar);
     if (app_settings_.keyboard_controls_.next_slide_ == kKeyChar)
     {
-        if ((float)get_time_msec_() - (float)current_state_.phase_start_msec_ >=
-            current_state_.slide_settings_.slide_on_time_min_msec_)
-        {
-            changeSlide(1);
-        }
+        changeSlide(1);
     }
     if (app_settings_.keyboard_controls_.previous_slide_ == kKeyChar)
     {
-        if ((float)get_time_msec_() - (float)current_state_.phase_start_msec_ >=
-            current_state_.slide_settings_.slide_on_time_min_msec_)
-        {
-            changeSlide(-1);
-        }
+        changeSlide(-1);
     }
     if (app_settings_.keyboard_controls_.restart_slide_set_ == kKeyChar)
     {
-        if ((float)get_time_msec_() - (float)current_state_.phase_start_msec_ >=
-            current_state_.slide_settings_.slide_on_time_min_msec_)
-        {
-            changeSlide((-1 * current_state_.slide_index_));
-        }
+        changeSlide((-1 * current_state_.slide_index_));
     }
     if (app_settings_.keyboard_controls_.restart_slide_show_ == kKeyChar)
     {
-        if ((float)get_time_msec_() - (float)current_state_.phase_start_msec_ >=
-            current_state_.slide_settings_.slide_on_time_min_msec_)
-        {
-            current_state_.slide_set_index_ = -1;
-            current_state_.init_new_set_ = true;
-        }
+        current_state_.slide_set_index_ = -1;
+        current_state_.init_new_set_ = true;
     }
     if (app_settings_.keyboard_controls_.pause_slide_show_toggle_ == kKeyChar)
     {
