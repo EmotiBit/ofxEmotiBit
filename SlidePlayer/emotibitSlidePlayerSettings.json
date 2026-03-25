@@ -23,7 +23,7 @@
       "loadSettingsFile": "S",
       "setLogFileDirectory": "L"
     },
-    "logFileDirectory": "/Users/nnair/Documents/EmotiBit/SlideShowPlayer/",
+    "logFileDirectory": "",
     "startFullScreen": true,
     "startPaused": true
   },
