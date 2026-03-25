@@ -336,7 +336,8 @@ void ofApp::updateCurrentState()
             should_exit_ = true;
             return;
         }
-        current_state_.slide_index_ = -1;
+        current_state_.slide_index_ =
+            -1;  // gets updated in the changeSlide call
         current_state_.slide_settings_ =
             app_settings_.slide_sets_[current_state_.slide_set_index_]
                 .settings_;
@@ -443,11 +444,14 @@ void ofApp::updateCurrentState()
                 current_state_.slide_state_ =
                     CurrentState::SlideState::kSlideOff;
                 current_state_.phase_start_msec_ = get_time_msec_();
-                logEvent("SLIDE_OFF",
-                         "set_index=" +
-                             std::to_string(current_state_.slide_set_index_) +
-                             " slide_index=" +
-                             std::to_string(current_state_.slide_index_));
+                logEvent(
+                    "SLIDE_OFF",
+                    "set_index=" +
+                        std::to_string(current_state_.slide_set_index_) +
+                        " slide_index=" +
+                        std::to_string(current_state_.slide_index_) +
+                        " OFF_TIME=" +
+                        std::to_string(current_state_.state_times_.off_time_));
             }
         }
     }
@@ -507,16 +511,24 @@ void ofApp::changeSlide(int delta)
                                                 (int)on_time_max);
         current_state_.state_times_.on_time_ = (float)dist(rng);
     }
-    if (off_time_min == off_time_max)
+    if (current_state_.slide_index_ == 0)
     {
-        current_state_.state_times_.off_time_ = off_time_max;
+        // NOTE: intro slide has no off time
+        current_state_.state_times_.off_time_ = 0;
     }
     else
     {
-        std::mt19937 rng{std::random_device{}()};
-        std::uniform_int_distribution<int> dist((int)off_time_min,
-                                                (int)off_time_max);
-        current_state_.state_times_.off_time_ = (float)dist(rng);
+        if (off_time_min == off_time_max)
+        {
+            current_state_.state_times_.off_time_ = off_time_max;
+        }
+        else
+        {
+            std::mt19937 rng{std::random_device{}()};
+            std::uniform_int_distribution<int> dist((int)off_time_min,
+                                                    (int)off_time_max);
+            current_state_.state_times_.off_time_ = (float)dist(rng);
+        }
     }
     current_state_.phase_start_msec_ = get_time_msec_();
     if (current_state_.slide_index_ >= (int)current_state_.slide_paths_.size())
@@ -532,7 +544,9 @@ void ofApp::changeSlide(int delta)
             "set_index=" + std::to_string(current_state_.slide_set_index_) +
                 " slide_index=" + std::to_string(current_state_.slide_index_) +
                 " path=" +
-                current_state_.slide_paths_[current_state_.slide_index_]);
+                current_state_.slide_paths_[current_state_.slide_index_] +
+                " ON_TIME=" +
+                std::to_string(current_state_.state_times_.on_time_));
     }
 }
 
