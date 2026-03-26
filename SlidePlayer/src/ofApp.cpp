@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <cctype>
 #include <cstdint>
+#include <iostream>
+#include <ostream>
 #include <random>
 #include <string>
 
@@ -29,6 +31,11 @@ void ofApp::ensureSettingsFile()
         ofFile source(ofToDataPath(settings_file_name_), ofFile::Reference,
                       false);
         source.copyTo(target_path, false, false);
+    }
+    else
+    {
+        std::cout << "Settings file already exists at: " << target_path
+                  << ". Use this file to specify app settings" << std::endl;
     }
     settings_file_name_ = target_path;
 }
