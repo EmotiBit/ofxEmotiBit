@@ -160,7 +160,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 # ── Always copy JSON settings to app bundle Resources ─────────────────────────
-set(JSON_SRC "${CMAKE_CURRENT_SOURCE_DIR}/emotibitSlidePlayerSettings.json")
+set(JSON_SRC "${CMAKE_CURRENT_SOURCE_DIR}/bin/data/emotibitSlidePlayerSettings.json")
 set(BUNDLE_RESOURCES "${CMAKE_CURRENT_SOURCE_DIR}/bin/${PROJECT_NAME}.app/Contents/Resources")
 
 set(EXAMPLE_SLIDES_SRC "${CMAKE_CURRENT_SOURCE_DIR}/bin/data/example_slides")
