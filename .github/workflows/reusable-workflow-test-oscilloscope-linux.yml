@@ -1,8 +1,8 @@
-name: Test Oscilloscope
+name: Test Oscilloscope on Linux (reusable)
 on:
   workflow_call:
 jobs:
-  test-oscilloscope:
+  test-oscilloscope-linux:
     runs-on: [self-hosted, Linux]
     environment: RUNNER-LINUX
     steps:

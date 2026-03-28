@@ -1,7 +1,7 @@
-name: Linux workflows
+name: Linux
 on: [push]
 jobs:
-  clone-to-OF_ROOT:
+  clone-linux:
     runs-on: [self-hosted, Linux]
     environment: RUNNER-LINUX
     steps:
@@ -18,21 +18,21 @@ jobs:
             echo "Directory does not already exist"
           fi
       - name: checkout repository
-        uses: actions/checkout@v4  
+        uses: actions/checkout@v4
       - name: move fresh clone to OF_ROOT
         run: cp -r ../$(echo ${{ github.repository }} | cut -d '/' -f 2) ${{ vars.ADDONS_DIR }}
-  build-oscilloscope:
-    needs: clone-to-OF_ROOT
+  build-oscilloscope-linux:
+    needs: clone-linux
     uses: ./.github/workflows/reusable-workflow-build-oscilloscope-linux.yml
 
-  build-dataparser:
-    needs: clone-to-OF_ROOT
+  build-dataparser-linux:
+    needs: clone-linux
     uses: ./.github/workflows/reusable-workflow-build-dataParser-linux.yml
 
-  test-oscilloscope:
-    needs: build-oscilloscope
+  test-oscilloscope-linux:
+    needs: build-oscilloscope-linux
     uses: ./.github/workflows/reusable-workflow-test-oscilloscope-linux.yml
 
-  test-dataParser:
-    needs: build-dataparser
+  test-dataparser-linux:
+    needs: build-dataparser-linux
     uses: ./.github/workflows/reusable-workflow-test-dataParser-linux.yml

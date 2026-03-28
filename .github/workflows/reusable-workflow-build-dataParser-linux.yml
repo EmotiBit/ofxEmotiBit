@@ -1,8 +1,8 @@
-name: Build DataParser on linux
+name: Build DataParser on Linux (reusable)
 on:
   workflow_call:
 jobs:
-  build-dataparser:
+  build-dataparser-linux:
     runs-on: [self-hosted, Linux]
     environment: RUNNER-LINUX
     steps: 
