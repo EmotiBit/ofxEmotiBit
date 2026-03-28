@@ -1,8 +1,8 @@
-name: Test DataParser
+name: Test DataParser on Linux (reusable)
 on:
   workflow_call:
 jobs:
-  test-DataParser:
+  test-dataparser-linux:
     runs-on: [self-hosted, Linux]
     environment: RUNNER-LINUX
     steps:

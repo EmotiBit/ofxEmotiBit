@@ -1,8 +1,8 @@
-name: Build Oscilloscope on linux
+name: Build Oscilloscope on Linux (reusable)
 on:
   workflow_call:
 jobs:
-  build-oscilloscope:
+  build-oscilloscope-linux:
     runs-on: [self-hosted, Linux]
     environment: RUNNER-LINUX
     steps: 

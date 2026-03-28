@@ -26,8 +26,8 @@ jobs:
       - name: Download Mac artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
-          workflow: upload-build-artifact-mac.yml
-          branch: master
+          workflow: build-all-on-macos.yml
+          branch: dev
           name: EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-macOS
           path: ./
           skip_unpack: true
@@ -36,8 +36,8 @@ jobs:
       - name: Download Windows artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
-          workflow: upload-build-artifact-win.yml
-          branch: master
+          workflow: build-all-on-win.yaml
+          branch: dev
           name: EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-Windows
           path: ./
           skip_unpack: true

@@ -1,7 +1,7 @@
-name: Build all on Windows
+name: Windows
 on: [push]
 jobs:
-  clone-to-OF_ROOT:
+  clone-windows:
     runs-on: [self-hosted, Windows]
     environment: RUNNER-WINDOWS
     steps:
@@ -19,29 +19,29 @@ jobs:
             echo "Directory does not already exist"
           fi
       - name: checkout repository
-        uses: actions/checkout@v4  
+        uses: actions/checkout@v4
       - name: move fresh clone to OF_ROOT
         shell: bash
         run: |
           echo ${{ github.repository }} | cut -d '/' -f 2
           cp -r ..\\$(echo ${{ github.repository }} | cut -d '/' -f 2) ${{ vars.ADDONS_DIR }}
-  build-oscilloscope:
-    needs: clone-to-OF_ROOT
+  build-oscilloscope-windows:
+    needs: clone-windows
     runs-on: [self-hosted, Windows]
     environment: RUNNER-WINDOWS
-    steps: 
+    steps:
       - name: build using MSBuild
         shell: cmd
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
           cd EmotiBitOscilloscope
-          MSBuild EmotiBitOscilloscope.sln -t:Build -p:Configuration=Release 
-  build-dataparser:
-    needs: clone-to-OF_ROOT
+          MSBuild EmotiBitOscilloscope.sln -t:Build -p:Configuration=Release
+  build-dataparser-windows:
+    needs: clone-windows
     runs-on: [self-hosted, Windows]
     environment: RUNNER-WINDOWS
-    steps: 
+    steps:
       - name: build using MSBuild
         shell: cmd
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
@@ -49,11 +49,11 @@ jobs:
           echo "current working directory" && pwd
           cd EmotiBitDataParser
           MSBuild EmotiBitDataParser.sln -t:Build -p:Configuration=Release
-  build-firmwareinstaller:
-    needs: clone-to-OF_ROOT
+  build-firmwareinstaller-windows:
+    needs: clone-windows
     runs-on: [self-hosted, Windows]
     environment: RUNNER-WINDOWS
-    steps: 
+    steps:
       - name: build using MSBuild
         shell: cmd
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
@@ -61,3 +61,90 @@ jobs:
           echo "current working directory" && pwd
           cd EmotiBitFirmwareInstaller
           MSBuild EmotiBitFirmwareInstaller.sln -t:Build -p:Configuration=Release
+  build-installer-windows:
+    needs: [build-oscilloscope-windows, build-dataparser-windows, build-firmwareinstaller-windows]
+    if: github.ref == 'refs/heads/dev'
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps:
+      - name: check INNO Setup installation
+        shell: powershell -ExecutionPolicy Bypass -File {0}
+        run: |
+          $innoPath = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $innoPath)) {
+            Write-Host "INNO Setup 6 not found at $innoPath"
+            Write-Host "Downloading INNO Setup 6..."
+            $innoUrl = "https://files.jrsoftware.org/is/6/innosetup-6.3.3.exe"
+            $innoInstaller = "$env:TEMP\innosetup-6.3.3.exe"
+            Invoke-WebRequest -Uri $innoUrl -OutFile $innoInstaller
+            Write-Host "Installing INNO Setup 6..."
+            Start-Process -FilePath $innoInstaller -Args "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-" -Wait
+            Write-Host "INNO Setup 6 installed successfully"
+          } else {
+            Write-Host "INNO Setup 6 found at $innoPath"
+          }
+      - name: Download VC++ Redistributable
+        shell: powershell -ExecutionPolicy Bypass -File {0}
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          $redistPath = "EmotiBitInstaller\redist"
+          $redistFile = "$redistPath\vc_redist.x64.exe"
+          if (-not (Test-Path $redistFile)) {
+            Write-Host "VC++ Redistributable not found, downloading..."
+            New-Item -ItemType Directory -Force -Path $redistPath | Out-Null
+            $url = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+            Invoke-WebRequest -Uri $url -OutFile $redistFile
+            Write-Host "Downloaded VC++ Redistributable to $redistFile"
+          } else {
+            Write-Host "VC++ Redistributable already exists at $redistFile"
+          }
+      - name: build installer with INNO Setup
+        shell: cmd
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          cd EmotiBitInstaller
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" EmotiBitInstaller.iss
+  upload-artifact-windows:
+    needs: build-installer-windows
+    if: github.ref == 'refs/heads/dev'
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps:
+      - name: populate stage release
+        shell: bash
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          version=$(grep ./src/ofxEmotiBitVersion.h -e "string ofxEmotiBitVersion" | cut -d '"' -f 2)
+          releaseFolder="EmotiBitSoftware-Windows-${version}"
+          echo "Staging release for version: $version"
+          echo "Release folder: $releaseFolder"
+          mkdir -p "stageRelease/$releaseFolder"
+          installerPath="./EmotiBitInstaller/Output/EmotiBitInstaller-${version}.exe"
+          if [ -f "$installerPath" ]; then
+            echo "INNO Setup installer found: $installerPath"
+            echo "copying installer"
+            cp "$installerPath" "./stageRelease/$releaseFolder/"
+            echo "copying drivers"
+            for i in $(find ../../../drivers -maxdepth 1 -mindepth 1 -name '*CP210x*' -type d); do
+              dirname=$(basename "$i")
+              worktree="../../../drivers/$dirname"
+              echo "copying $dirname"
+              cp -r "$worktree" "./stageRelease/$releaseFolder"
+            done
+            echo "Release staged successfully in: stageRelease/$releaseFolder"
+          else
+            echo "ERROR: Installer not found at $installerPath"
+            exit 1
+          fi
+      - name: get version for artifact name
+        id: get_version
+        shell: bash
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          version=$(grep ./src/ofxEmotiBitVersion.h -e "string ofxEmotiBitVersion" | cut -d '"' -f 2)
+          echo "version=$version" >> $GITHUB_OUTPUT
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-Windows
+          path: ${{ vars.OFXEMOTIBIT_DIR }}\\stageRelease\\EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}
