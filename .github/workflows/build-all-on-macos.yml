@@ -1,7 +1,7 @@
-name: Build all on macos
+name: macOS
 on: [push]
 jobs:
-  clone-to-OF_ROOT:
+  clone-macos:
     runs-on: [self-hosted, macOS]
     environment: RUNNER-MACOS
     steps:
@@ -18,39 +18,77 @@ jobs:
             echo "Directory does not already exist"
           fi
       - name: checkout repository
-        uses: actions/checkout@v4  
+        uses: actions/checkout@v4
       - name: move fresh clone to OF_ROOT
         run: cp -r ../$(echo ${{ github.repository }} | cut -d '/' -f 2) ${{ vars.ADDONS_DIR }}
-  build-oscilloscope:
-    needs: clone-to-OF_ROOT
+  build-oscilloscope-macos:
+    needs: clone-macos
     runs-on: [self-hosted, macOS]
     environment: RUNNER-MACOS
-    steps: 
+    steps:
       - name: build using xcode
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
           cd EmotiBitOscilloscope
           xcodebuild -project EmotiBitOscilloscope.xcodeproj -scheme Release-x86_64
-  build-dataparser:
-    needs: clone-to-OF_ROOT
+  build-dataparser-macos:
+    needs: clone-macos
     runs-on: [self-hosted, macOS]
     environment: RUNNER-MACOS
-    steps: 
+    steps:
       - name: build using xcode
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
           cd EmotiBitDataParser
           xcodebuild -project EmotiBitDataParser.xcodeproj -scheme Release
-  build-firmwareinstaller:
-    needs: clone-to-OF_ROOT
+  build-firmwareinstaller-macos:
+    needs: clone-macos
     runs-on: [self-hosted, macOS]
     environment: RUNNER-MACOS
-    steps: 
+    steps:
       - name: build using xcode
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
           cd EmotiBitFirmwareInstaller
           xcodebuild -project EmotiBitFirmwareInstaller.xcodeproj -scheme Release
+  upload-artifact-macos:
+    needs: [build-oscilloscope-macos, build-dataparser-macos, build-firmwareinstaller-macos]
+    if: github.ref == 'refs/heads/dev'
+    runs-on: [self-hosted, macOS]
+    environment: RUNNER-MACOS
+    steps:
+      - name: get version for artifact name
+        id: get_version
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          version=$(grep ./src/ofxEmotiBitVersion.h -e "string ofxEmotiBitVersion" | cut -d '"' -f 2)
+          echo "version=$version" >> $GITHUB_OUTPUT
+          echo "Staging release for version: $version"
+      - name: create stage-release
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: mkdir -p stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+      - name: Move application binaries
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          mv EmotiBitOscilloscope/bin/EmotiBitOscilloscope.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+          mv EmotiBitDataParser/bin/EmotiBitDataParser.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+          mv EmotiBitFirmwareInstaller/bin/EmotiBitFirmwareInstaller.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+      - name: copy SiLabs drivers
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: |
+          silabsDriverPath="../../drivers/macOS_VCP_Driver"
+          if [ -d "$silabsDriverPath" ]; then
+            echo "copying drivers!"
+            cp -r "$silabsDriverPath/" "ofxEmotiBit/stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}"
+          else
+            echo "drivers not found! proceeding without drivers!"
+            exit 1
+          fi
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-macOS
+          path: ${{ vars.OFXEMOTIBIT_DIR }}/stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}/

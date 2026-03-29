@@ -1,4 +1,4 @@
-name: Validate Version on Linux
+name: Validate Version
 on:
   push:
 
