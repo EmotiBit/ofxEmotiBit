@@ -61,8 +61,20 @@ jobs:
           echo "current working directory" && pwd
           cd EmotiBitFirmwareInstaller
           MSBuild EmotiBitFirmwareInstaller.sln -t:Build -p:Configuration=Release
+  build-slideplayer-windows:
+    needs: clone-windows
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps:
+      - name: build using MSBuild
+        shell: cmd
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          cd SlidePlayer
+          MSBuild SlidePlayer.sln -t:Build -p:Configuration=Release
   build-installer-windows:
-    needs: [build-oscilloscope-windows, build-dataparser-windows, build-firmwareinstaller-windows]
+    needs: [build-oscilloscope-windows, build-dataparser-windows, build-firmwareinstaller-windows, build-slideplayer-windows]
     if: github.ref == 'refs/heads/dev'
     runs-on: [self-hosted, Windows]
     environment: RUNNER-WINDOWS

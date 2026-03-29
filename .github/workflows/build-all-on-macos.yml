@@ -54,8 +54,19 @@ jobs:
           echo "current working directory" && pwd
           cd EmotiBitFirmwareInstaller
           xcodebuild -project EmotiBitFirmwareInstaller.xcodeproj -scheme Release
+  build-slideplayer-macos:
+    needs: clone-macos
+    runs-on: [self-hosted, macOS]
+    environment: RUNNER-MACOS
+    steps:
+      - name: build using xcode
+        working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
+        run: |
+          echo "current working directory" && pwd
+          cd SlidePlayer
+          xcodebuild -project SlidePlayer.xcodeproj -scheme Release
   upload-artifact-macos:
-    needs: [build-oscilloscope-macos, build-dataparser-macos, build-firmwareinstaller-macos]
+    needs: [build-oscilloscope-macos, build-dataparser-macos, build-firmwareinstaller-macos, build-slideplayer-macos]
     if: github.ref == 'refs/heads/dev'
     runs-on: [self-hosted, macOS]
     environment: RUNNER-MACOS
@@ -76,6 +87,7 @@ jobs:
           mv EmotiBitOscilloscope/bin/EmotiBitOscilloscope.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
           mv EmotiBitDataParser/bin/EmotiBitDataParser.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
           mv EmotiBitFirmwareInstaller/bin/EmotiBitFirmwareInstaller.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
+          mv SlidePlayer/bin/SlidePlayer.app stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}
       - name: copy SiLabs drivers
         working-directory: ${{ vars.ADDONS_DIR }}
         run: |
