@@ -12,7 +12,7 @@ void ofApp::setup() {
     cout<<"Changed the data pathroot for macOS."<<endl;
 #endif
 	ofSetFrameRate(30);
-	ofBackground(255, 255, 255);
+	ofBackground(0, 0, 0);
 	SoftwareVersionChecker::checkLatestVersion();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	setTypeTagPlotAttributes();
@@ -23,6 +23,7 @@ void ofApp::setup() {
 	emotiBitWiFi.begin();	// Startup WiFi connectivity
 	emotiBitWiFi.attachAppQ(&auxCtrlQ);  // pass the main application instruction q to the wifi controller
 	timeWindowOnSetup = 10;  // set timeWindow for setup (in seconds)
+	loadWindowSettings();
 	setupGui();
 	setupOscilloscopes();
 	
@@ -220,6 +221,11 @@ void ofApp::removeDataStream(std::string typetag)
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	if (background_image_.isAllocated())
+	{
+		ofSetColor(255);
+		background_image_.draw(0, 0, ofGetWindowWidth(), ofGetWindowHeight());
+	}
 	drawOscilloscopes();
 	drawConsole();
 }
@@ -1122,6 +1128,25 @@ void ofApp::processSlowResponseMessage(vector<string> splitPacket)
 				}
 			}
 		}
+	}
+}
+
+void ofApp::loadWindowSettings()
+{
+	ofxXmlSettings xml;
+	if (xml.loadFile(ofToDataPath("ofxOscilloscopeSettings.xml")))
+	{
+		xml.pushTag("window");
+		int w = xml.getValue("width", 1500);
+		int h = xml.getValue("height", 900);
+		ofSetWindowShape(w, h);
+
+		string bgPath = xml.getValue("backgroundImagePath", "");
+		if (!bgPath.empty())
+		{
+			background_image_.load(ofToDataPath(bgPath));
+		}
+		xml.popTag();
 	}
 }
 
