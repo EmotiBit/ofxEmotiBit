@@ -12,7 +12,7 @@ void ofApp::setup() {
     cout<<"Changed the data pathroot for macOS."<<endl;
 #endif
 	ofSetFrameRate(30);
-	ofBackground(0, 0, 0);
+	ofBackground(255, 255, 255);
 	SoftwareVersionChecker::checkLatestVersion();
 	ofSetLogLevel(OF_LOG_NOTICE);
 	setTypeTagPlotAttributes();
