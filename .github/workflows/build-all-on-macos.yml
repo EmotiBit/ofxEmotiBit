@@ -21,6 +21,17 @@ jobs:
         uses: actions/checkout@v4
       - name: move fresh clone to OF_ROOT
         run: cp -r ../$(echo ${{ github.repository }} | cut -d '/' -f 2) ${{ vars.ADDONS_DIR }}
+      - name: download addon dependencies
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: bash ofxEmotiBit/scripts/download-dependencies.sh ${{ vars.ADDONS_DIR }}
+      - name: record dependency commits
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: bash ofxEmotiBit/scripts/record-dependencies.sh ${{ vars.ADDONS_DIR }} macos
+      - name: upload dependencies report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependencies-report-macos
+          path: ${{ vars.OFXEMOTIBIT_DIR }}/dependencies-report-macos.txt
   build-oscilloscope-macos:
     needs: clone-macos
     runs-on: [self-hosted, macOS]
@@ -104,3 +115,11 @@ jobs:
         with:
           name: EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-macOS
           path: ${{ vars.OFXEMOTIBIT_DIR }}/stageRelease/EmotiBitSoftware-macos-${{ steps.get_version.outputs.version }}/
+  cleanup-dependencies-macos:
+    needs: [build-oscilloscope-macos, build-dataparser-macos, build-firmwareinstaller-macos, build-slideplayer-macos]
+    runs-on: [self-hosted, macOS]
+    environment: RUNNER-MACOS
+    steps:
+      - name: remove cloned dependencies
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: bash ofxEmotiBit/scripts/download-dependencies.sh --cleanup ${{ vars.ADDONS_DIR }}

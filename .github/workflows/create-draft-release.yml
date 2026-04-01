@@ -43,6 +43,50 @@ jobs:
           skip_unpack: true
         continue-on-error: true
 
+      - name: Download macOS dependencies report
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: build-all-on-macos.yml
+          branch: dev
+          name: dependencies-report-macos
+          path: ./
+        continue-on-error: true
+
+      - name: Download Windows dependencies report
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: build-all-on-win.yaml
+          branch: dev
+          name: dependencies-report-windows
+          path: ./
+        continue-on-error: true
+
+      - name: Download Linux dependencies report
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: linux-workflows.yaml
+          branch: dev
+          name: dependencies-report-linux
+          path: ./
+        continue-on-error: true
+
+      - name: Read dependency reports
+        id: read_deps
+        run: |
+          combine() {
+            local file=$1 label=$2
+            if [ -f "$file" ]; then cat "$file"; else echo "*(${label} dependencies report not available)*"; fi
+          }
+          {
+            echo "deps_report<<EOF"
+            combine dependencies-report-macos.txt   macOS
+            echo ""
+            combine dependencies-report-windows.txt Windows
+            echo ""
+            combine dependencies-report-linux.txt   Linux
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
       - name: Generate release notes
         id: generate-release-notes
         run: |
@@ -78,6 +122,9 @@ jobs:
           )
           echo "release_notes<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "# Dependencies" >> $GITHUB_OUTPUT
+          echo "${{ steps.read_deps.outputs.deps_report }}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create config.txt
@@ -109,5 +156,8 @@ jobs:
             EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-macOS.zip
             EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-Windows.zip
             config.txt
+            dependencies-report-macos.txt
+            dependencies-report-windows.txt
+            dependencies-report-linux.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

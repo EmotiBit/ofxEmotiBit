@@ -1,0 +1,13 @@
+{
+  "dependencies": [
+    { "name": "ofxNetworkUtils",      "repo": "https://github.com/bakercp/ofxNetworkUtils.git",               "ref": "stable"  },
+    { "name": "ofxOscilloscope",      "repo": "https://github.com/produceconsumerobot/ofxOscilloscope.git",   "ref": "master"  },
+    { "name": "ofxThreadedLogger",    "repo": "https://github.com/produceconsumerobot/ofxThreadedLogger.git", "ref": "master"  },
+    { "name": "ofxBiquadFilter",      "repo": "https://github.com/smukkejohan/ofxBiquadFilter.git",           "ref": "master"  },
+    { "name": "ofxJSON",              "repo": "https://github.com/jeffcrouse/ofxJSON.git",                    "ref": "master"  },
+    { "name": "EmotiBit_XPlat_Utils", "repo": "https://github.com/EmotiBit/EmotiBit_XPlat_Utils.git",        "ref": "master"  },
+    { "name": "ofxLSL",               "repo": "https://github.com/EmotiBit/ofxLSL.git",                      "ref": "master"  },
+    { "name": "ofxSerial",            "repo": "https://github.com/EmotiBit/ofxSerial.git",                   "ref": "stable"  },
+    { "name": "ofxIO",                "repo": "https://github.com/bakercp/ofxIO.git",                        "ref": "stable"  }
+  ]
+}
