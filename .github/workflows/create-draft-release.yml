@@ -112,13 +112,16 @@ EmotiBit firmware [vx.x.x](enter-url-here)
 - Download the source code linked below. Follow the steps in the [ReadMe](https://github.com/EmotiBit/ofxEmotiBit#readme).
 
 # Dependencies
-
+See attached **dependencies-report.zip** for the full dependency report per platform.
 END_OF_NOTES
-          cat dependencies-report-macos.txt   >> release_notes.md 2>/dev/null || echo "*(macOS dependencies report not available)*"   >> release_notes.md
-          echo ""                              >> release_notes.md
-          cat dependencies-report-windows.txt >> release_notes.md 2>/dev/null || echo "*(Windows dependencies report not available)*" >> release_notes.md
-          echo ""                              >> release_notes.md
-          cat dependencies-report-linux.txt   >> release_notes.md 2>/dev/null || echo "*(Linux dependencies report not available)*"   >> release_notes.md
+
+      - name: Zip dependency reports
+        run: |
+          zip dependencies-report.zip \
+            dependencies-report-macos.txt \
+            dependencies-report-windows.txt \
+            dependencies-report-linux.txt \
+            2>/dev/null || true
 
       - name: Create config.txt
         id: create-config
@@ -148,8 +151,6 @@ END_OF_NOTES
             EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-macOS.zip
             EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-Windows.zip
             config.txt
-            dependencies-report-macos.txt
-            dependencies-report-windows.txt
-            dependencies-report-linux.txt
+            dependencies-report.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
