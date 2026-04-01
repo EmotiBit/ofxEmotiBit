@@ -86,34 +86,34 @@ jobs:
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
           cat > release_notes.md << END_OF_NOTES
-# New features and bug fixes
+          # New features and bug fixes
 
-# Firmware Installed by FirmwareInstaller
-EmotiBit firmware [vx.x.x](enter-url-here)
+          # Firmware Installed by FirmwareInstaller
+          EmotiBit firmware [vx.x.x](enter-url-here)
 
-# PRs completed
+          # PRs completed
 
-# Installation
-#### Windows
-- Download the **EmotiBitSoftware_v${VERSION}-Windows.zip** linked below.
-- Extract the zip file downloaded
-- run the **.exe** installer file.
-  - If the **Windows Defender Smartscreen** pops up, click on **More info** and **Run anyway**
-- The **EmotiBit Oscilloscope** and **EmotiBit DataParser** will be installed on your system.
-- You can access the software from the **Start** menu under **EmotiBit** or from the desktop shortcut.
+          # Installation
+          #### Windows
+          - Download the **EmotiBitSoftware_v${VERSION}-Windows.zip** linked below.
+          - Extract the zip file downloaded
+          - run the **.exe** installer file.
+            - If the **Windows Defender Smartscreen** pops up, click on **More info** and **Run anyway**
+          - The **EmotiBit Oscilloscope** and **EmotiBit DataParser** will be installed on your system.
+          - You can access the software from the **Start** menu under **EmotiBit** or from the desktop shortcut.
 
-#### macOS
-- Download **EmotiBitSoftware_v${VERSION}-macOS.zip**
-- Extract the downloaded zip file.
-- The extracted folder will contain **EmotiBit Oscilloscope** and **EmotiBit DataParser**.
-  - Right-click and select **Open** to run the executables
+          #### macOS
+          - Download **EmotiBitSoftware_v${VERSION}-macOS.zip**
+          - Extract the downloaded zip file.
+          - The extracted folder will contain **EmotiBit Oscilloscope** and **EmotiBit DataParser**.
+            - Right-click and select **Open** to run the executables
 
-#### Linux
-- Download the source code linked below. Follow the steps in the [ReadMe](https://github.com/EmotiBit/ofxEmotiBit#readme).
+          #### Linux
+          - Download the source code linked below. Follow the steps in the [ReadMe](https://github.com/EmotiBit/ofxEmotiBit#readme).
 
-# Dependencies
-See attached **dependencies-report.zip** for the full dependency report per platform.
-END_OF_NOTES
+          # Dependencies
+          See attached **dependencies-report.zip** for the full dependency report per platform.
+          END_OF_NOTES
 
       - name: Zip dependency reports
         run: |
