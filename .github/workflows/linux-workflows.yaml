@@ -21,6 +21,9 @@ jobs:
         uses: actions/checkout@v4
       - name: move fresh clone to OF_ROOT
         run: cp -r ../$(echo ${{ github.repository }} | cut -d '/' -f 2) ${{ vars.ADDONS_DIR }}
+      - name: download addon dependencies
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: bash ofxEmotiBit/scripts/download-dependencies.sh ${{ vars.ADDONS_DIR }}
       - name: record dependency commits
         working-directory: ${{ vars.ADDONS_DIR }}
         run: bash ofxEmotiBit/scripts/record-dependencies.sh ${{ vars.ADDONS_DIR }} linux
@@ -44,3 +47,12 @@ jobs:
   test-dataparser-linux:
     needs: build-dataparser-linux
     uses: ./.github/workflows/reusable-workflow-test-dataParser-linux.yml
+
+  cleanup-dependencies-linux:
+    needs: [test-oscilloscope-linux, test-dataparser-linux]
+    runs-on: [self-hosted, Linux]
+    environment: RUNNER-LINUX
+    steps:
+      - name: remove cloned dependencies
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: bash ofxEmotiBit/scripts/download-dependencies.sh --cleanup ${{ vars.ADDONS_DIR }}

@@ -25,6 +25,10 @@ jobs:
         run: |
           echo ${{ github.repository }} | cut -d '/' -f 2
           cp -r ..\\$(echo ${{ github.repository }} | cut -d '/' -f 2) ${{ vars.ADDONS_DIR }}
+      - name: download addon dependencies
+        shell: bash
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: bash ofxEmotiBit/scripts/download-dependencies.sh "${{ vars.ADDONS_DIR }}"
       - name: record dependency commits
         shell: bash
         working-directory: ${{ vars.ADDONS_DIR }}
@@ -169,3 +173,12 @@ jobs:
         with:
           name: EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-Windows
           path: ${{ vars.OFXEMOTIBIT_DIR }}\\stageRelease\\EmotiBitSoftware-Windows-${{ steps.get_version.outputs.version }}
+  cleanup-dependencies-windows:
+    needs: [build-oscilloscope-windows, build-dataparser-windows, build-firmwareinstaller-windows, build-slideplayer-windows]
+    runs-on: [self-hosted, Windows]
+    environment: RUNNER-WINDOWS
+    steps:
+      - name: remove cloned dependencies
+        shell: bash
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: bash ofxEmotiBit/scripts/download-dependencies.sh --cleanup "${{ vars.ADDONS_DIR }}"
