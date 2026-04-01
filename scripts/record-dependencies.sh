@@ -24,7 +24,12 @@ PLATFORM="$2"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+# On Windows, Git Bash uses MSYS2 paths (/c/...) but native Windows Python
+# requires Windows-style paths (C:/...). pwd -W returns the Windows-style
+# path in Git Bash; on macOS/Linux it is unrecognized and we fall back to pwd.
+REPO_ROOT_PY="$(cd "$REPO_ROOT" && pwd -W 2>/dev/null || pwd)"
 DEPS_JSON="$REPO_ROOT/dependencies.json"
+DEPS_JSON_PY="$REPO_ROOT_PY/dependencies.json"
 REPORT="$REPO_ROOT/dependencies-report-${PLATFORM}.txt"
 
 if [ ! -f "$DEPS_JSON" ]; then
@@ -46,8 +51,8 @@ cat > "$REPORT" <<EOF
 EOF
 
 python3 -c "
-import json, sys
-with open('$DEPS_JSON') as f:
+import json
+with open('$DEPS_JSON_PY') as f:
     for d in json.load(f)['dependencies']:
         print(d['name'] + ' ' + d['ref'])
 " | while IFS=' ' read -r name ref; do
