@@ -55,7 +55,7 @@ import json
 with open('$DEPS_JSON_PY') as f:
     for d in json.load(f)['dependencies']:
         print(d['name'] + ' ' + d['ref'])
-" | while IFS=' ' read -r name ref; do
+" | tr -d '\r' | while IFS=' ' read -r name ref; do
     target="$ADDONS_DIR/$name"
     if [ -d "$target/.git" ]; then
         resolved_commit=$(git -C "$target" rev-parse HEAD)
