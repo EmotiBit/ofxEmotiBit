@@ -21,6 +21,14 @@ jobs:
         uses: actions/checkout@v4
       - name: move fresh clone to OF_ROOT
         run: cp -r ../$(echo ${{ github.repository }} | cut -d '/' -f 2) ${{ vars.ADDONS_DIR }}
+      - name: record dependency commits
+        working-directory: ${{ vars.ADDONS_DIR }}
+        run: bash ofxEmotiBit/scripts/record-dependencies.sh ${{ vars.ADDONS_DIR }} macos
+      - name: upload dependencies report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependencies-report-macos
+          path: ${{ vars.OFXEMOTIBIT_DIR }}/dependencies-report-macos.txt
   build-oscilloscope-macos:
     needs: clone-macos
     runs-on: [self-hosted, macOS]
