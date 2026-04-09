@@ -1144,7 +1144,16 @@ void ofApp::loadWindowSettings()
 		string bgPath = xml.getValue("backgroundImagePath", "");
 		if (!bgPath.empty())
 		{
-			background_image_.load(ofToDataPath(bgPath));
+			//TODO: Add handling of specifying image not in the bin/data directory
+			ofFile bgImgFile(ofToDataPath(bgPath));
+			if(bgImgFile.exists())
+			{
+				background_image_.load(ofToDataPath(bgPath));
+			}
+			else
+			{
+				ofLogWarning() << "Image file not found. Please ensure image exists at the provided path. Proceeding without a background image" << std::endl;
+			}
 		}
 		xml.popTag();
 	}
