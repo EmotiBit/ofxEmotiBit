@@ -8,12 +8,12 @@
     {
       "name": "ofxOscilloscope",
       "repo": "https://github.com/produceconsumerobot/ofxOscilloscope.git",
-      "ref": "fix/namespace_issues"
+      "ref": "master"
     },
     {
       "name": "ofxThreadedLogger",
       "repo": "https://github.com/produceconsumerobot/ofxThreadedLogger.git",
-      "ref": "fix/namespace_issues"
+      "ref": "master"
     },
     {
       "name": "ofxBiquadFilter",
@@ -33,7 +33,7 @@
     {
       "name": "ofxLSL",
       "repo": "https://github.com/EmotiBit/ofxLSL.git",
-      "ref": "fix/namespace_issues"
+      "ref": "master"
     },
     {
       "name": "ofxSerial",
