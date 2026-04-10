@@ -30,8 +30,11 @@ static ofApp makeApp(std::vector<std::string> slide_paths,
     // one slide set with the given timing
     ofApp::AppSettings::SlideSet ss;
     ss.slide_directory_ = "./fake/";
+    ss.settings_.slide_on_time_min_msec_ = slide_on_time_max_msec;
     ss.settings_.slide_on_time_max_msec_ = slide_on_time_max_msec;
+    ss.settings_.slide_set_intro_slide_time_min_msec_ = slide_on_time_max_msec;
     ss.settings_.slide_set_intro_slide_time_max_msec_ = slide_on_time_max_msec;
+    ss.settings_.slide_off_time_min_msec_ = slide_off_time_max_msec;
     ss.settings_.slide_off_time_max_msec_ = slide_off_time_max_msec;
     ss.settings_.slide_order_randomization_ = false;
     ss.settings_.max_slides_per_set_ = (int)slide_paths.size();

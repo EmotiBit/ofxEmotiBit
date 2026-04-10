@@ -2,6 +2,7 @@
 
 #include "json/json.h"
 #include "ofApp.h"
+#include "ofFileUtils.h"
 
 TEST_CASE("global slide settings are loaded", "[parseSettings]")
 {
@@ -15,7 +16,7 @@ TEST_CASE("global slide settings are loaded", "[parseSettings]")
     ofApp app;
     app.parseSettings(root);
 
-    REQUIRE(app.app_settings_.global_slide_settings_.background_ == "./bg.jpg");
+    REQUIRE(app.app_settings_.global_slide_settings_.background_ == ofToDataPath("./bg.jpg", true));
     REQUIRE(app.app_settings_.global_slide_settings_.max_slides_per_set_ == 3);
     REQUIRE(
         app.app_settings_.global_slide_settings_.slide_order_randomization_ ==
