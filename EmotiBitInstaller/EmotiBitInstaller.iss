@@ -58,11 +58,11 @@ Source: "..\EmotiBitFirmwareInstaller\bin\data\exec\win\*"; DestDir: "{app}\Emot
 Source: "..\EmotiBitFirmwareInstaller\bin\data\instructions\*.jpg"; DestDir: "{app}\EmotiBit FirmwareInstaller\data\instructions"
 
 ; EmotiBit SlidePlayer
-Source: "..\SlidePlayer\bin\SlidePlayer.exe"; DestDir: "{app}\SlidePlayer"
-Source: "..\SlidePlayer\bin\*.dll"; DestDir: "{app}\SlidePlayer"
-Source: "..\SlidePlayer\bin\data\emotibitSlidePlayerSettings.json"; DestDir: "{app}\SlidePlayer\data"
+Source: "..\EmotiBitSlidePlayer\bin\EmotiBitSlidePlayer.exe"; DestDir: "{app}\EmotiBit SlidePlayer"
+Source: "..\EmotiBitSlidePlayer\bin\*.dll"; DestDir: "{app}\EmotiBit SlidePlayer"
+Source: "..\EmotiBitSlidePlayer\bin\data\emotibitSlidePlayerSettings.json"; DestDir: "{app}\EmotiBit SlidePlayer\data"
 ; Example slides
-Source: "..\SlidePlayer\bin\data\example_slides\*"; DestDir: "{app}\SlidePlayer\data\example_slides"; Flags: recursesubdirs
+Source: "..\EmotiBitSlidePlayer\bin\data\example_slides\*"; DestDir: "{app}\EmotiBit SlidePlayer\data\example_slides"; Flags: recursesubdirs
 
 ; VC++ 2017 Redistributable
 Source: "redist\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
@@ -75,7 +75,7 @@ Source: "..\EmotiBitIcons\icoFiles\EmotiBitLogo.ico"; DestDir: "{app}"
 Name: "{group}\EmotiBit Oscilloscope"; Filename: "{app}\EmotiBit Oscilloscope\EmotiBitOscilloscope.exe"; WorkingDir: "{app}\EmotiBit Oscilloscope"
 Name: "{group}\EmotiBit DataParser"; Filename: "{app}\EmotiBit DataParser\EmotiBitDataParser.exe"; WorkingDir: "{app}\EmotiBit DataParser"
 Name: "{group}\EmotiBit FirmwareInstaller"; Filename: "{app}\EmotiBit FirmwareInstaller\EmotiBitFirmwareInstaller.exe"; WorkingDir: "{app}\EmotiBit FirmwareInstaller"
-Name: "{group}\SlidePlayer"; Filename: "{app}\SlidePlayer\SlidePlayer.exe"; WorkingDir: "{app}\SlidePlayer"
+Name: "{group}\EmotiBit SlidePlayer"; Filename: "{app}\EmotiBit SlidePlayer\EmotiBitSlidePlayer.exe"; WorkingDir: "{app}\EmotiBit SlidePlayer"
 
 [Run]
 ; Install VC++ 2017 Redistributable if not already installed
@@ -87,7 +87,7 @@ Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/passive /norestart"; StatusMs
 Type: filesandordirs; Name: "{app}\EmotiBit Oscilloscope"
 Type: filesandordirs; Name: "{app}\EmotiBit DataParser"
 Type: filesandordirs; Name: "{app}\EmotiBit FirmwareInstaller"
-Type: filesandordirs; Name: "{app}\SlidePlayer"
+Type: filesandordirs; Name: "{app}\EmotiBit SlidePlayer"
 ; Delete the parent EmotiBit folder if empty after above deletions
 Type: dirifempty; Name: "{app}"
 

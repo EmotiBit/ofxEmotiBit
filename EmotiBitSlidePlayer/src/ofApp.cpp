@@ -23,7 +23,7 @@ void ofApp::ensureSettingsFile()
         ofFilePath::join(
             ofFilePath::join(ofFilePath::getUserHomeDir(), "Documents"),
             "EmotiBit"),
-        "SlidePlayer");
+        "EmotiBitSlidePlayer");
     std::string target_path = ofFilePath::join(docs_dir, settings_file_name_);
     if (!ofFile(target_path).exists())
     {
@@ -122,7 +122,7 @@ bool ofApp::parseSettings(const Json::Value& settings)
                         ofFilePath::join(ofFilePath::getUserHomeDir(),
                                          "Documents"),
                         "EmotiBit"),
-                    "SlidePlayer"),
+                    "EmotiBitSlidePlayer"),
                 "log");
             std::cerr
                 << "Warning: log file directory not specified. Using default: "
