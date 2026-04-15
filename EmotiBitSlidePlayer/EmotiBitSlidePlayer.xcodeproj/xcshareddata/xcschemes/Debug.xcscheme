@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "SlidePlayer.app"
-               BlueprintName = "SlidePlayer"
-               ReferencedContainer = "container:SlidePlayer.xcodeproj">
+               BuildableName = "EmotiBitSlidePlayer.app"
+               BlueprintName = "EmotiBitSlidePlayer"
+               ReferencedContainer = "container:EmotiBitSlidePlayer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,9 +31,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "SlidePlayer.app"
-            BlueprintName = "SlidePlayer"
-            ReferencedContainer = "container:SlidePlayer.xcodeproj">
+            BuildableName = "EmotiBitSlidePlayer.app"
+            BlueprintName = "EmotiBitSlidePlayer"
+            ReferencedContainer = "container:EmotiBitSlidePlayer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -54,9 +54,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "SlidePlayer.app"
-            BlueprintName = "SlidePlayer"
-            ReferencedContainer = "container:SlidePlayer.xcodeproj">
+            BuildableName = "EmotiBitSlidePlayer.app"
+            BlueprintName = "EmotiBitSlidePlayer"
+            ReferencedContainer = "container:EmotiBitSlidePlayer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "SlidePlayer.app"
-            BlueprintName = "SlidePlayer"
-            ReferencedContainer = "container:SlidePlayer.xcodeproj">
+            BuildableName = "EmotiBitSlidePlayer.app"
+            BlueprintName = "EmotiBitSlidePlayer"
+            ReferencedContainer = "container:EmotiBitSlidePlayer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "13.0" CACHE STRING "Minimum macOS version")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-project(SlidePlayer)
+project(EmotiBitSlidePlayer)
 
 # ── Shared OF + addon modules ─────────────────────────────────────────────────
 set(_CMAKE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
@@ -28,7 +28,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    MACOSX_BUNDLE_BUNDLE_NAME "SlidePlayer"
+    MACOSX_BUNDLE_BUNDLE_NAME "EmotiBitSlidePlayer"
 )
 
 # ── Copy settings + slides to app bundle Resources ────────────────────────────

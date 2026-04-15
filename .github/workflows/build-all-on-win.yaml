@@ -84,8 +84,8 @@ jobs:
         working-directory: ${{ vars.OFXEMOTIBIT_DIR }}
         run: |
           echo "current working directory" && pwd
-          cd SlidePlayer
-          MSBuild SlidePlayer.sln -t:Build -p:Configuration=Release
+          cd EmotiBitSlidePlayer
+          MSBuild EmotiBitSlidePlayer.sln -t:Build -p:Configuration=Release
   build-installer-windows:
     needs: [build-oscilloscope-windows, build-dataparser-windows, build-firmwareinstaller-windows, build-slideplayer-windows]
     if: github.ref == 'refs/heads/dev'

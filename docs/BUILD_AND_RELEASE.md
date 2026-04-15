@@ -39,7 +39,7 @@ PR dev → master (merged)
 | EmotiBitOscilloscope | Xcode (Release-x86_64) | MSBuild (Release) | make |
 | EmotiBitDataParser | Xcode (Release) | MSBuild (Release) | make |
 | EmotiBitFirmwareInstaller | Xcode (Release) | MSBuild (Release) | — |
-| SlidePlayer | Xcode (Release) | MSBuild (Release) | — |
+| EmotiBitSlidePlayer | Xcode (Release) | MSBuild (Release) | — |
 
 Linux builds are CI health-checks only — no release artifacts are produced.
 
