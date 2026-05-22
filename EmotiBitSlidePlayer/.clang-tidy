@@ -1,0 +1,55 @@
+Checks: >
+  readability-identifier-naming,
+  readability-identifier-length,
+  modernize-use-nullptr,
+  -modernize-use-override,
+  modernize-use-default-member-init,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters
+
+CheckOptions:
+  # Local variables: snake_case, no prefix
+  - key: readability-identifier-naming.LocalVariableCase
+    value: lower_case
+  - key: readability-identifier-naming.LocalVariablePrefix
+    value: ''
+
+  # Parameters: snake_case, no prefix
+  - key: readability-identifier-naming.ParameterCase
+    value: lower_case
+  - key: readability-identifier-naming.ParameterPrefix
+    value: ''
+  - key: readability-identifier-naming.ParameterMinLength
+    value: '1'
+
+  # Member variables: snake_case with trailing underscore
+  - key: readability-identifier-naming.MemberCase
+    value: lower_case
+  - key: readability-identifier-naming.MemberSuffix
+    value: '_'
+
+  # Functions and methods: camelCase (Google style)
+  - key: readability-identifier-naming.FunctionCase
+    value: camelBack
+  - key: readability-identifier-naming.MethodCase
+    value: camelBack
+
+  # Classes and structs: CamelCase
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase
+
+  # Constants: kCamelCase (Google style)
+  - key: readability-identifier-naming.ConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.ConstantPrefix
+    value: 'k'
+
+  # Allow single-character names (e.g. loop counters, x/y coords)
+  - key: readability-identifier-length.MinimumVariableNameLength
+    value: '1'
+  - key: readability-identifier-length.MinimumParameterNameLength
+    value: '1'
+  - key: readability-identifier-length.MinimumLoopCounterNameLength
+    value: '1'

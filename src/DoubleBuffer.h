@@ -34,13 +34,13 @@ public:
 
 	// assignment operator
 	DoubleBuffer& operator=(const DoubleBuffer &that) {
-		std::lock_guard<std::mutex> guard(that->_threadlock);
-		if (this != that) {
+		std::lock_guard<std::mutex> guard(that._threadlock);
+		if (this != &that) {
 			std::lock_guard<std::mutex> guard(_threadlock);
-			_buffer0 = that->_buffer0;
-			_buffer1 = that->_buffer1;
-			_inputPtr = _buffer0.data();
-			_outputPtr = _buffer1.data();
+			_buffer0 = that._buffer0;
+			_buffer1 = that._buffer1;
+			_inputPtr = &_buffer0;
+			_outputPtr = &_buffer1;
 		}
 		return *this;
 	}

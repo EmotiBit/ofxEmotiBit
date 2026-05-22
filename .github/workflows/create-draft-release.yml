@@ -23,6 +23,18 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Check release does not already exist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.get_version.outputs.tag }}"
+          if gh release view "$TAG" --repo "${{ github.repository }}" &>/dev/null; then
+            echo "ERROR: A release tagged '$TAG' already exists (draft, pre-release, or published)."
+            echo "Bump the version in src/ofxEmotiBitVersion.h before creating a new release."
+            exit 1
+          fi
+          echo "No existing release found for '$TAG'. Proceeding."
+
       - name: Download Mac artifacts
         uses: dawidd6/action-download-artifact@v6
         with:
@@ -43,11 +55,37 @@ jobs:
           skip_unpack: true
         continue-on-error: true
 
+      - name: Download macOS dependencies report
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: build-all-on-macos.yml
+          branch: dev
+          name: dependencies-report-macos
+          path: ./
+        continue-on-error: true
+
+      - name: Download Windows dependencies report
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: build-all-on-win.yaml
+          branch: dev
+          name: dependencies-report-windows
+          path: ./
+        continue-on-error: true
+
+      - name: Download Linux dependencies report
+        uses: dawidd6/action-download-artifact@v6
+        with:
+          workflow: linux-workflows.yaml
+          branch: dev
+          name: dependencies-report-linux
+          path: ./
+        continue-on-error: true
+
       - name: Generate release notes
-        id: generate-release-notes
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
-          RELEASE_NOTES=$(cat <<END_OF_NOTES
+          cat > release_notes.md << END_OF_NOTES
           # New features and bug fixes
 
           # Firmware Installed by FirmwareInstaller
@@ -73,12 +111,17 @@ jobs:
           #### Linux
           - Download the source code linked below. Follow the steps in the [ReadMe](https://github.com/EmotiBit/ofxEmotiBit#readme).
 
-
+          # Dependencies
+          See attached **dependencies-report.zip** for the full dependency report per platform.
           END_OF_NOTES
-          )
-          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
-          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Zip dependency reports
+        run: |
+          zip dependencies-report.zip \
+            dependencies-report-macos.txt \
+            dependencies-report-windows.txt \
+            dependencies-report-linux.txt \
+            2>/dev/null || true
 
       - name: Create config.txt
         id: create-config
@@ -98,16 +141,16 @@ jobs:
           echo "Config file created successfully"
 
       - name: Create Draft Release
-        id: create-release
         uses: softprops/action-gh-release@v1
         with:
           draft: true
           tag_name: ${{ steps.get_version.outputs.tag }}
           name: Draft Release ${{ steps.get_version.outputs.tag }}
-          body: ${{ steps.generate-release-notes.outputs.release_notes }}
+          body_path: release_notes.md
           files: |
             EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-macOS.zip
             EmotiBitSoftware_v${{ steps.get_version.outputs.version }}-Windows.zip
             config.txt
+            dependencies-report.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

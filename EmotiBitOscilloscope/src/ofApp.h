@@ -77,6 +77,7 @@ public:
 
 
 	// ToDo: This function is marked to be removed when we complete our move to xmlFileSettings.
+	void loadWindowSettings();
 	void updatePlotAttributeLists(std::string settingsFile = "ofxOscilloscopeSettings.xml");
 	void updateTypeTagList();
 	string loadTextFile(string filePath);
@@ -159,6 +160,7 @@ public:
 														EmotiBitPacket::TypeTag::SKIN_CONDUCTANCE_RESPONSE_RISE_TIME,
 														0)
 										  };
+	ofImage background_image_;
 	vector<ofxMultiScope> scopeWins;
 	unordered_map<int, vector<size_t>> plotIdIndexes;
 	vector<vector<vector<string>>> typeTags;
