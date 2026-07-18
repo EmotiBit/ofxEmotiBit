@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include "ofxEmotiBitVersion.h"
 
 #include <algorithm>
 #include <cctype>
@@ -45,6 +46,7 @@ void ofApp::setup()
 #ifdef TARGET_OSX
     ofSetDataPathRoot("../Resources");
 #endif
+    ofSetWindowTitle("EmotiBitSlidePlayer v" + ofxEmotiBitVersion);
     ensureSettingsFile();
     ofSetLogLevel(OF_LOG_SILENT);
     if (!loadAppSettings())

@@ -24,6 +24,7 @@ add_executable(${PROJECT_NAME} MACOSX_BUNDLE src/main.cpp ${OF_APP_SOURCES})
 of_configure_app(${PROJECT_NAME} 23)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src
     ${ADDON_OFXJSON_INCLUDE_DIRS}
 )
 
@@ -73,6 +74,7 @@ set_target_properties(slideShow_tests PROPERTIES
 )
 
 target_include_directories(slideShow_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src
     ${ADDON_OFXJSON_INCLUDE_DIRS}
 )
 

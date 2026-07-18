@@ -105,7 +105,7 @@ OF_ROOT = /Users/cfl/dev/emotibit/software/local_dev/of_v0.11.2_osx_release
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-# PROJECT_CFLAGS = 
+PROJECT_CFLAGS = -I../src
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS
