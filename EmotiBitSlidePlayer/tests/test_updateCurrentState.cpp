@@ -43,6 +43,22 @@ static ofApp makeApp(std::vector<std::string> slide_paths,
     return app;
 }
 
+static ofApp makeAppWithIntro(std::vector<std::string> slide_paths,
+                              uint64_t& fake_time,
+                              bool pause_on_intro,
+                              float slide_on_time_max_msec = 1000.0f,
+                              float slide_off_time_max_msec = 500.0f,
+                              std::ostream* log_stream = nullptr)
+{
+    ofApp app = makeApp(slide_paths, fake_time, slide_on_time_max_msec,
+                        slide_off_time_max_msec, log_stream);
+    app.app_settings_.slide_sets_[0].settings_.slide_set_intro_slide_ =
+        slide_paths[0];
+    app.app_settings_.slide_sets_[0].settings_.pause_on_set_intro_slide_ =
+        pause_on_intro;
+    return app;
+}
+
 // ── Tests: set initialisation
 // ─────────────────────────────────────────────────────
 
@@ -296,4 +312,45 @@ TEST_CASE("SLIDE_ON event is written to log stream on advance", "[logEvent]")
     app.keyReleased('N');
 
     REQUIRE(log.str().find("SLIDE_ON") != std::string::npos);
+}
+
+// ── Tests: pause_on_set_intro_slide
+// ──────────────────────────────────────────
+
+TEST_CASE("pause_on_set_intro_slide pauses on intro slide", "[updateCurrentState]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeAppWithIntro({"intro.jpg", "a.jpg", "b.jpg"}, fake_time,
+                                 /*pause_on_intro=*/true);
+
+    app.updateCurrentState();  // init → lands on intro (index 0) → auto-pause
+
+    REQUIRE(app.current_state_.slide_index_ == 0);
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlidePause);
+}
+
+TEST_CASE("pause_on_set_intro_slide resumes to ON after key press", "[updateCurrentState]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeAppWithIntro({"intro.jpg", "a.jpg", "b.jpg"}, fake_time,
+                                 /*pause_on_intro=*/true);
+
+    app.updateCurrentState();  // init → auto-pause on intro
+    app.keyReleased('P');      // resume
+
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("pause_on_set_intro_slide=false does not pause on intro slide", "[updateCurrentState]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeAppWithIntro({"intro.jpg", "a.jpg", "b.jpg"}, fake_time,
+                                 /*pause_on_intro=*/false);
+
+    app.updateCurrentState();  // init → intro shown, no pause
+
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
 }

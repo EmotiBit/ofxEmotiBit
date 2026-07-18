@@ -553,6 +553,22 @@ void ofApp::changeSlide(int delta)
                 current_state_.slide_paths_[current_state_.slide_index_] +
                 " ON_TIME=" +
                 std::to_string(current_state_.state_times_.on_time_));
+        if (current_state_.slide_index_ == 0 &&
+            !current_state_.slide_settings_.slide_set_intro_slide_.empty() &&
+            current_state_.slide_settings_.pause_on_set_intro_slide_)
+        {
+            current_state_.slide_state_before_pause_ =
+                CurrentState::SlideState::kSlideOn;
+            current_state_.slide_state_ = CurrentState::SlideState::kSlidePause;
+            current_state_.time_since_phase_start_on_pause_ = 0;
+            logEvent(
+                "PAUSE",
+                "set_index=" +
+                    std::to_string(current_state_.slide_set_index_) +
+                    " slide_index=" +
+                    std::to_string(current_state_.slide_index_) +
+                    " reason=pause_on_intro_slide");
+        }
     }
 }
 
