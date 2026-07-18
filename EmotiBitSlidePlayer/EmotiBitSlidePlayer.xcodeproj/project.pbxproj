@@ -47,6 +47,7 @@
 		61313493CDB52744E22A604D /* json-forwards.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "json-forwards.h"; path = "../../../addons/ofxJSON/libs/jsoncpp/include/json/json-forwards.h"; sourceTree = SOURCE_ROOT; };
 		8EF01BA42F7876C700BF0971 /* emotibitSlidePlayerSettings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = emotibitSlidePlayerSettings.json; path = bin/data/emotibitSlidePlayerSettings.json; sourceTree = "<group>"; };
 		8EF01BA62F7876DD00BF0971 /* example_slides */ = {isa = PBXFileReference; lastKnownFileType = folder; name = example_slides; path = bin/data/example_slides; sourceTree = "<group>"; };
+		8EF01BA9300BFE2B00BF0971 /* ofxEmotiBitVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxEmotiBitVersion.h; path = ../src/ofxEmotiBitVersion.h; sourceTree = "<group>"; };
 		E42962AC2163EDD300A6A9E2 /* ofCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ofCamera.cpp; path = ../../../libs/openFrameworks/3d/ofCamera.cpp; sourceTree = SOURCE_ROOT; };
 		E42962AD2163EDD300A6A9E2 /* ofMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofMesh.h; path = ../../../libs/openFrameworks/3d/ofMesh.h; sourceTree = SOURCE_ROOT; };
 		E42962AE2163EDD300A6A9E2 /* ofNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofNode.h; path = ../../../libs/openFrameworks/3d/ofNode.h; sourceTree = SOURCE_ROOT; };
@@ -277,6 +278,14 @@
 			name = local_addons;
 			sourceTree = "<group>";
 		};
+		8EF01BA8300BFE1400BF0971 /* ofxEmotiBIt */ = {
+			isa = PBXGroup;
+			children = (
+				8EF01BA9300BFE2B00BF0971 /* ofxEmotiBitVersion.h */,
+			);
+			name = ofxEmotiBIt;
+			sourceTree = "<group>";
+		};
 		977A836DD2C489CCC5E330FF /* jsoncpp */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,6 +298,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				8EF01BA8300BFE1400BF0971 /* ofxEmotiBIt */,
 				2865DAEF86B1907A704CA70B /* ofxJSON */,
 			);
 			name = addons;
