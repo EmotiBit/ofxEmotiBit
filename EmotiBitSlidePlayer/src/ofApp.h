@@ -221,6 +221,14 @@ class ofApp : public ofBaseApp
     std::function<void(const std::string&)> load_background_image_ =
         [this](const std::string& path) { background_image_.load(path); };
 
+    /// @brief Opens a file picker dialog and returns the chosen path, or empty
+    /// string if the user cancelled. Injectable for testing.
+    std::function<std::string()> open_file_dialog_ = []() -> std::string
+    {
+        ofFileDialogResult result = ofSystemLoadDialog("Select Settings File");
+        return result.bSuccess ? result.filePath : "";
+    };
+
     /// @brief Currently displayed slide image.
     ofImage current_slide_image_;
     /// @brief Background image shown during slide-off intervals.

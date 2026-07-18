@@ -1,5 +1,4 @@
 #include "ofApp.h"
-#include "ofxEmotiBitVersion.h"
 
 #include <algorithm>
 #include <cctype>
@@ -14,6 +13,7 @@
 #include "ofFileUtils.h"
 #include "ofImage.h"
 #include "ofUtils.h"
+#include "ofxEmotiBitVersion.h"
 
 // ── Setup
 // ─────────────────────────────────────────────────────────────────────
@@ -563,8 +563,7 @@ void ofApp::changeSlide(int delta)
             current_state_.time_since_phase_start_on_pause_ = 0;
             logEvent(
                 "PAUSE",
-                "set_index=" +
-                    std::to_string(current_state_.slide_set_index_) +
+                "set_index=" + std::to_string(current_state_.slide_set_index_) +
                     " slide_index=" +
                     std::to_string(current_state_.slide_index_) +
                     " reason=pause_on_intro_slide");
@@ -668,6 +667,45 @@ void ofApp::keyReleased(int key)
                 "set_index=" + std::to_string(current_state_.slide_set_index_) +
                     " slide_index=" +
                     std::to_string(current_state_.slide_index_));
+        }
+    }
+    if (app_settings_.keyboard_controls_.load_settings_file_ == kKeyChar)
+    {
+        // Freeze timing before the blocking dialog so wall-clock time
+        // consumed by the dialog does not advance the slide.
+        const auto kStateBeforeDialog = current_state_.slide_state_;
+        const float kElapsedBeforeDialog =
+            (float)get_time_msec_() - (float)current_state_.phase_start_msec_;
+        current_state_.slide_state_ = CurrentState::SlideState::kSlidePause;
+
+        std::string chosen_path = open_file_dialog_();
+
+        if (chosen_path.empty())
+        {
+            // User cancelled — restore timing as if no time passed.
+            current_state_.slide_state_ = kStateBeforeDialog;
+            current_state_.phase_start_msec_ =
+                get_time_msec_() - (uint64_t)kElapsedBeforeDialog;
+        }
+        else
+        {
+            settings_file_name_ = chosen_path;
+            if (loadAppSettings())
+            {
+                logEvent("SETTINGS_RELOAD", "file=" + settings_file_name_ +
+                                                " settings=" + settings_json_);
+                current_state_.slide_set_index_ = -1;
+                current_state_.init_new_set_ = true;
+                current_state_.slide_state_ =
+                    CurrentState::SlideState::kSlideOn;
+            }
+            else
+            {
+                // Bad file — restore timing so show resumes unchanged.
+                current_state_.slide_state_ = kStateBeforeDialog;
+                current_state_.phase_start_msec_ =
+                    get_time_msec_() - (uint64_t)kElapsedBeforeDialog;
+            }
         }
     }
 }

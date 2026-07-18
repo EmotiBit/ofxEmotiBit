@@ -1,4 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
+#include <fstream>
 #include <sstream>
 
 #include "ofApp.h"
@@ -351,6 +352,100 @@ TEST_CASE("pause_on_set_intro_slide=false does not pause on intro slide", "[upda
 
     app.updateCurrentState();  // init → intro shown, no pause
 
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+// ── Tests: load settings file ('S')
+// ──────────────────────────────────────────
+
+TEST_CASE("load settings: cancel leaves slide state unchanged", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    app.open_file_dialog_ = []() { return std::string(""); };
+
+    app.updateCurrentState();  // init, state = ON
+
+    app.keyReleased('S');
+
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("load settings: cancel restores timing so slide does not advance early", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f);
+    app.open_file_dialog_ = [&fake_time]()
+    {
+        fake_time += 5000;  // simulate dialog open for 5 seconds
+        return std::string("");
+    };
+
+    app.updateCurrentState();  // init at t=0, ON
+
+    fake_time = 800;           // 800ms into the 1000ms on-time
+    app.keyReleased('S');      // dialog consumes 5s but cancel → timing restored
+
+    fake_time += 100;          // only 100ms more after dialog — should not advance
+    app.updateCurrentState();
+
+    REQUIRE(app.current_state_.slide_index_ == 0);
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("load settings: valid file updates settings_file_name_", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    const std::string kTmpPath = "/tmp/test_settings.json";
+    std::ofstream f(kTmpPath);
+    f << "{}";
+    f.close();
+    app.open_file_dialog_ = [&kTmpPath]() { return kTmpPath; };
+
+    app.updateCurrentState();
+    app.keyReleased('S');
+
+    REQUIRE(app.settings_file_name_ == kTmpPath);
+}
+
+TEST_CASE("load settings: valid file restarts slide show", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    const std::string kTmpPath = "/tmp/test_settings.json";
+    std::ofstream f(kTmpPath);
+    f << "{}";
+    f.close();
+    app.open_file_dialog_ = [&kTmpPath]() { return kTmpPath; };
+
+    app.updateCurrentState();
+    app.keyReleased('S');
+
+    REQUIRE(app.current_state_.slide_set_index_ == -1);
+    REQUIRE(app.current_state_.init_new_set_ == true);
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("load settings: bad file restores slide state and timing", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f);
+    app.open_file_dialog_ = []() { return std::string("/nonexistent/bad.json"); };
+
+    app.updateCurrentState();  // init at t=0, ON
+
+    fake_time = 500;
+    app.keyReleased('S');      // bad file → timing restored
+
+    fake_time += 300;          // 800ms total into 1000ms on-time — should not advance
+    app.updateCurrentState();
+
+    REQUIRE(app.current_state_.slide_index_ == 0);
     REQUIRE(app.current_state_.slide_state_ ==
             ofApp::CurrentState::SlideState::kSlideOn);
 }
