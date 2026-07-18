@@ -593,6 +593,10 @@ void ofApp::drawImageFitted(const ofImage& img)
 
 void ofApp::keyPressed(int key)
 {
+}
+
+void ofApp::keyReleased(int key)
+{
     // TODO: Time since phase change should be calculate for boath ON and OFF
     // Modifier keys (Shift, Ctrl, etc.) produce large keycodes outside the
     // printable ASCII range — skip them to avoid spurious log entries.
@@ -601,7 +605,7 @@ void ofApp::keyPressed(int key)
         return;
     }
     const char kKeyChar = static_cast<char>(toupper(key));
-    logEvent("KEY_PRESS", std::string("key=") + kKeyChar);
+    logEvent("KEY_RELEASE", std::string("key=") + kKeyChar);
     if (app_settings_.keyboard_controls_.next_slide_ == kKeyChar)
     {
         changeSlide(1);
@@ -650,10 +654,6 @@ void ofApp::keyPressed(int key)
                     std::to_string(current_state_.slide_index_));
         }
     }
-}
-
-void ofApp::keyReleased(int key)
-{
 }
 
 void ofApp::mouseMoved(int x, int y)
