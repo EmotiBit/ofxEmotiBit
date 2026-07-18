@@ -613,9 +613,9 @@ void ofApp::keyPressed(int key)
 void ofApp::keyReleased(int key)
 {
     // TODO: Time since phase change should be calculate for boath ON and OFF
-    // Modifier keys (Shift, Ctrl, etc.) produce large keycodes outside the
-    // printable ASCII range — skip them to avoid spurious log entries.
-    if (key > 127)
+    // Only handle printable ASCII (32–126). Control characters (including
+    // modifier key releases) and values above 126 are silently ignored.
+    if (key < 32 || key > 126)
     {
         return;
     }
@@ -668,6 +668,13 @@ void ofApp::keyReleased(int key)
                     " slide_index=" +
                     std::to_string(current_state_.slide_index_));
         }
+    }
+    if (app_settings_.keyboard_controls_.toggle_full_screen_ == kKeyChar)
+    {
+        bool going_fullscreen = (ofGetWindowMode() == OF_WINDOW);
+        ofToggleFullscreen();
+        logEvent("FULL_SCREEN",
+                 std::string("state=") + (going_fullscreen ? "on" : "off"));
     }
     if (app_settings_.keyboard_controls_.load_settings_file_ == kKeyChar)
     {
