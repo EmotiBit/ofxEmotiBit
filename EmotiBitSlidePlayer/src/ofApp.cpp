@@ -604,7 +604,7 @@ void ofApp::keyReleased(int key)
     {
         return;
     }
-    const char kKeyChar = static_cast<char>(toupper(key));
+    const char kKeyChar = static_cast<char>(key);
     logEvent("KEY_RELEASE", std::string("key=") + kKeyChar);
     if (app_settings_.keyboard_controls_.next_slide_ == kKeyChar)
     {

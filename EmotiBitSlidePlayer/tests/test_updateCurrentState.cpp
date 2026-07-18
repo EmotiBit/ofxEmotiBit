@@ -168,7 +168,7 @@ TEST_CASE("slide advances after max_off_time", "[updateCurrentState]")
 // ── Tests: pause / resume
 // ─────────────────────────────────────────────────────
 
-TEST_CASE("pause stops state transitions", "[keyPressed]")
+TEST_CASE("pause stops state transitions", "[keyReleased]")
 {
     uint64_t fake_time = 0;
     ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f);
@@ -177,7 +177,7 @@ TEST_CASE("pause stops state transitions", "[keyPressed]")
     app.updateCurrentState();  // init
 
     // pause
-    app.keyPressed('P');
+    app.keyReleased('P');
     REQUIRE(app.current_state_.slide_state_ ==
             ofApp::CurrentState::SlideState::kSlidePause);
 
@@ -189,15 +189,15 @@ TEST_CASE("pause stops state transitions", "[keyPressed]")
             ofApp::CurrentState::SlideState::kSlidePause);
 }
 
-TEST_CASE("resume restores previous state", "[keyPressed]")
+TEST_CASE("resume restores previous state", "[keyReleased]")
 {
     uint64_t fake_time = 0;
     ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f);
 
     app.updateCurrentState();  // init, state = ON
 
-    app.keyPressed('P');  // pause
-    app.keyPressed('P');  // resume
+    app.keyReleased('P');  // pause
+    app.keyReleased('P');  // resume
 
     REQUIRE(app.current_state_.slide_state_ ==
             ofApp::CurrentState::SlideState::kSlideOn);
@@ -206,26 +206,54 @@ TEST_CASE("resume restores previous state", "[keyPressed]")
 // ── Tests: manual slide navigation
 // ───────────────────────────────────────
 
-TEST_CASE("next key advances slide index", "[keyPressed]")
+TEST_CASE("next key advances slide index", "[keyReleased]")
 {
     uint64_t fake_time = 0;
     ofApp app = makeApp({"a.jpg", "b.jpg", "c.jpg"}, fake_time);
 
     app.updateCurrentState();  // init
 
-    app.keyPressed('N');
+    app.keyReleased('N');
 
     REQUIRE(app.current_state_.slide_index_ == 1);
 }
 
-TEST_CASE("previous key does not go below 0", "[keyPressed]")
+TEST_CASE("previous key does not go below 0", "[keyReleased]")
 {
     uint64_t fake_time = 0;
     ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
 
     app.updateCurrentState();  // init, slide_index = 0
 
-    app.keyPressed('B');
+    app.keyReleased('B');
+
+    REQUIRE(app.current_state_.slide_index_ == 0);
+}
+
+// ── Tests: case sensitivity
+// ───────────────────────────────────────────────────
+
+TEST_CASE("lowercase pause key does not pause", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f);
+
+    app.updateCurrentState();  // init, state = ON
+
+    app.keyReleased('p');  // lowercase — should not match default 'P'
+
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("lowercase next key does not advance slide", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg", "c.jpg"}, fake_time);
+
+    app.updateCurrentState();  // init, slide_index = 0
+
+    app.keyReleased('n');  // lowercase — should not match default 'N'
 
     REQUIRE(app.current_state_.slide_index_ == 0);
 }
@@ -240,7 +268,7 @@ TEST_CASE("PAUSE event is written to log stream", "[logEvent]")
     ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time, 1000.0f, 500.0f, &log);
 
     app.updateCurrentState();
-    app.keyPressed('P');
+    app.keyReleased('P');
 
     REQUIRE(log.str().find("PAUSE") != std::string::npos);
 }
@@ -252,8 +280,8 @@ TEST_CASE("RESUME event is written to log stream", "[logEvent]")
     ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time, 1000.0f, 500.0f, &log);
 
     app.updateCurrentState();
-    app.keyPressed('P');  // pause
-    app.keyPressed('P');  // resume
+    app.keyReleased('P');  // pause
+    app.keyReleased('P');  // resume
 
     REQUIRE(log.str().find("RESUME") != std::string::npos);
 }
@@ -265,7 +293,7 @@ TEST_CASE("SLIDE_ON event is written to log stream on advance", "[logEvent]")
     ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time, 1000.0f, 500.0f, &log);
 
     app.updateCurrentState();
-    app.keyPressed('N');
+    app.keyReleased('N');
 
     REQUIRE(log.str().find("SLIDE_ON") != std::string::npos);
 }
