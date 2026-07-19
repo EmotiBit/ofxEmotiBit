@@ -567,7 +567,12 @@ void ofApp::changeSlide(int delta)
 
 void ofApp::draw()
 {
-    if (CurrentState::SlideState::kSlideOff == current_state_.slide_state_)
+    const CurrentState::SlideState display_state =
+        (current_state_.slide_state_ == CurrentState::SlideState::kSlidePause)
+            ? current_state_.slide_state_before_pause_
+            : current_state_.slide_state_;
+
+    if (display_state == CurrentState::SlideState::kSlideOff)
     {
         drawImageFitted(background_image_);
     }
