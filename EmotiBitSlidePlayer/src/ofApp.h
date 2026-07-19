@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <fstream>
 #include <functional>
 
@@ -184,6 +185,17 @@ class ofApp : public ofBaseApp
     /// @brief Returns a formatted timestamp string. Injectable for testing.
     std::function<std::string()> get_timestamp_ = []()
     { return ofGetTimestampString(); };
+
+    /// @brief Returns the current Unix epoch time in milliseconds (UTC, DST-free).
+    /// Injectable for testing.
+    std::function<uint64_t()> get_epoch_msec_ = []() -> uint64_t
+    {
+        using namespace std::chrono;
+        return static_cast<uint64_t>(
+            duration_cast<milliseconds>(
+                system_clock::now().time_since_epoch())
+                .count());
+    };
 
     /// @brief Loads and returns sorted image paths from a directory. Injectable
     /// for testing.

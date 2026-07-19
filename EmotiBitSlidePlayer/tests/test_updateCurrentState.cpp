@@ -27,6 +27,7 @@ static ofApp makeApp(std::vector<std::string> slide_paths,
     // inject controllable clock and fixed timestamp
     app.get_time_msec_ = [&fake_time]() { return fake_time; };
     app.get_timestamp_ = []() { return std::string("2026-01-01T00:00:00"); };
+    app.get_epoch_msec_ = []() -> uint64_t { return 1000000ULL; };
 
     // one slide set with the given timing
     ofApp::AppSettings::SlideSet ss;

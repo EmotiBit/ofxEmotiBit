@@ -298,7 +298,7 @@ bool ofApp::startLogToFile()
         std::cerr << "Failed to open log file: " << log_file_name << std::endl;
         return false;
     }
-    event_log_ << "dateTime,event,details\n";
+    event_log_ << "dateTime,epochMs,event,details\n";
     log_stream_ = &event_log_;
     return true;
 }
@@ -313,13 +313,15 @@ void ofApp::logEvent(const std::string& event,
         joined += details[i];
     }
     std::string timestamp = get_timestamp_();
+    uint64_t epoch_ms = get_epoch_msec_();
     if (log_stream_ != nullptr)
     {
-        *log_stream_ << timestamp << ',' << event << ',' << '"' << joined
-                     << '"' << '\n';
+        *log_stream_ << timestamp << ',' << epoch_ms << ',' << event << ','
+                     << '"' << joined << '"' << '\n';
         log_stream_->flush();
     }
-    std::cout << timestamp << ' ' << event << ' ' << joined << '\n';
+    std::cout << timestamp << ' ' << epoch_ms << ' ' << event << ' ' << joined
+              << '\n';
 }
 
 // ── Per-frame
