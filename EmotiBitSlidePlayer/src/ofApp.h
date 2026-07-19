@@ -238,6 +238,8 @@ class ofApp : public ofBaseApp
     /// @brief Pointer to the active log output stream. Points to @c event_log_
     /// after file open. Injectable for testing.
     std::ostream* log_stream_ = nullptr;
+    /// @brief Delimiter used between key=value fields in the log details column.
+    std::string log_details_delimiter_ = "|";
 
     // ── Setup
     // ─────────────────────────────────────────────────────────────────
@@ -268,7 +270,8 @@ class ofApp : public ofBaseApp
     /// @brief Writes a single event row to the CSV log and echoes it to stdout.
     /// @param event Event name (e.g. "SLIDE_ON", "KEY_PRESS").
     /// @param details Space-separated key=value pairs describing the event.
-    void logEvent(const std::string& event, const std::string& details);
+    void logEvent(const std::string& event,
+                  const std::vector<std::string>& details);
 
     // ── Per-frame
     // ─────────────────────────────────────────────────────────────
