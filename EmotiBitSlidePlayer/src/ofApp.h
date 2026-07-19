@@ -168,8 +168,9 @@ class ofApp : public ofBaseApp
     AppSettings app_settings_;
     /// @brief Live runtime state of the slide show.
     CurrentState current_state_;
-    /// @brief When true, @c update() will call @c ofExit().
-    bool should_exit_ = false;
+    /// @brief Set to true when the last slide set has finished. Freezes
+    /// @c updateCurrentState() and disables key input.
+    bool show_ended_ = false;
     /// @brief File name of the JSON settings file.
     std::string settings_file_name_ = "emotibitSlidePlayerSettings.json";
     /// @brief Compact single-line JSON snapshot of loaded settings, written to

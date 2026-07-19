@@ -481,3 +481,49 @@ TEST_CASE("load settings: bad file restores slide state and timing", "[keyReleas
     REQUIRE(app.current_state_.slide_state_ ==
             ofApp::CurrentState::SlideState::kSlideOn);
 }
+
+// ── Tests: end of show
+// ────────────────────────────────────────────────────────
+
+TEST_CASE("show ends with background visible and keys disabled",
+          "[updateCurrentState]")
+{
+    uint64_t fake_time = 0;
+    // Two real slides (no intro) so we can exhaust the set quickly
+    ofApp app =
+        makeApp({"a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f, /*off=*/500.0f);
+
+    app.updateCurrentState();  // init, index=0, ON, phase=0
+
+    fake_time = 1500;
+    app.updateCurrentState();  // slide 0 ON expires → kSlideOff, phase=1500
+
+    fake_time = 2100;
+    app.updateCurrentState();  // slide 0 OFF expires → index=1, ON, phase=2100
+
+    fake_time = 3200;
+    app.updateCurrentState();  // slide 1 ON expires → kSlideOff, phase=3200
+
+    fake_time = 3800;
+    app.updateCurrentState();  // slide 1 OFF expires → changeSlide(1) out-of-bounds
+                               //   → init_new_set_=true, state still kSlideOff
+    app.updateCurrentState();  // init block: past last set → show_ended_=true, kSlideOff
+
+    REQUIRE(app.show_ended_ == true);
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOff);
+
+    // Further updates must not change state
+    fake_time = 99999;
+    app.updateCurrentState();
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOff);
+
+    // Key presses must be silently ignored
+    app.keyReleased('N');
+    app.keyReleased('B');
+    app.keyReleased('P');
+    REQUIRE(app.show_ended_ == true);
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOff);
+}

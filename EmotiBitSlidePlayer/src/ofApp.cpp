@@ -327,17 +327,16 @@ void ofApp::logEvent(const std::string& event,
 
 void ofApp::update()
 {
-    if (should_exit_)
-    {
-        ofExit();
-        return;
-    }
     updateCurrentState();
 }
 
 void ofApp::updateCurrentState()
 {
     if (CurrentState::SlideState::kSlidePause == current_state_.slide_state_)
+    {
+        return;
+    }
+    if (show_ended_)
     {
         return;
     }
@@ -348,8 +347,9 @@ void ofApp::updateCurrentState()
             (int)app_settings_.slide_sets_.size())
         {
             logEvent("APP_END", {"reason=end_of_slide_show"});
-            // TODO: consider if we want an end slide
-            should_exit_ = true;
+            show_ended_ = true;
+            current_state_.slide_state_ =
+                CurrentState::SlideState::kSlideOff;
             return;
         }
         current_state_.slide_index_ =
@@ -607,6 +607,10 @@ void ofApp::keyReleased(int key)
     // Only handle printable ASCII (32–126). Control characters (including
     // modifier key releases) and values above 126 are silently ignored.
     if (key < 32 || key > 126)
+    {
+        return;
+    }
+    if (show_ended_)
     {
         return;
     }
