@@ -90,16 +90,37 @@ TEST_CASE("slide state is ON after set init", "[updateCurrentState]")
 // ── Tests: ON → OFF transition
 // ────────────────────────────────────────────────
 
-TEST_CASE("intro slide advances immediately when ON time expires",
+TEST_CASE("intro slide transitions to SLIDE_OFF when ON time expires",
           "[updateCurrentState]")
 {
     uint64_t fake_time = 0;
-    ofApp app = makeApp({"intro.jpg", "a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f);
+    ofApp app = makeApp({"intro.jpg", "a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f,
+                        /*off=*/500.0f);
 
-    app.updateCurrentState();  // init, t=0, index=0 (intro), ON
+    app.updateCurrentState();  // init, t=0, index=0, ON
 
     fake_time = 1500;
-    app.updateCurrentState();  // intro expires → skips OFF → index=1, ON
+    app.updateCurrentState();  // 1500 > 1000 → kSlideOff, index still 0
+
+    REQUIRE(app.current_state_.slide_index_ == 0);
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOff);
+}
+
+TEST_CASE("intro slide advances to next slide after off_time expires",
+          "[updateCurrentState]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"intro.jpg", "a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f,
+                        /*off=*/500.0f);
+
+    app.updateCurrentState();  // init, t=0, index=0, ON
+
+    fake_time = 1500;
+    app.updateCurrentState();  // ON expires → kSlideOff, phase=1500
+
+    fake_time = 2100;
+    app.updateCurrentState();  // 2100-1500=600 > 500 → changeSlide(1) → index=1, ON
 
     REQUIRE(app.current_state_.slide_index_ == 1);
     REQUIRE(app.current_state_.slide_state_ ==
@@ -110,15 +131,19 @@ TEST_CASE("slide transitions to OFF after max_on_time", "[updateCurrentState]")
 {
     uint64_t fake_time = 0;
     ofApp app =
-        makeApp({"intro.jpg", "a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f);
+        makeApp({"intro.jpg", "a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f,
+                /*off=*/500.0f);
 
-    app.updateCurrentState();  // init, t=0, index=0 (intro), ON
+    app.updateCurrentState();  // init, t=0, index=0, ON
 
     fake_time = 1500;
-    app.updateCurrentState();  // intro expires → index=1, ON, phase=1500
+    app.updateCurrentState();  // slide 0 ON expires → kSlideOff, phase=1500
 
-    fake_time = 3000;
-    app.updateCurrentState();  // index=1: 3000-1500=1500 > 1000 → OFF
+    fake_time = 2100;
+    app.updateCurrentState();  // slide 0 OFF expires → index=1, ON, phase=2100
+
+    fake_time = 3200;
+    app.updateCurrentState();  // 3200-2100=1100 > 1000 → kSlideOff
 
     REQUIRE(app.current_state_.slide_state_ ==
             ofApp::CurrentState::SlideState::kSlideOff);
@@ -128,15 +153,19 @@ TEST_CASE("slide stays ON before max_on_time elapses", "[updateCurrentState]")
 {
     uint64_t fake_time = 0;
     ofApp app =
-        makeApp({"intro.jpg", "a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f);
+        makeApp({"intro.jpg", "a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f,
+                /*off=*/500.0f);
 
-    app.updateCurrentState();  // init, index=0 (intro), ON
+    app.updateCurrentState();  // init, index=0, ON
 
     fake_time = 1500;
-    app.updateCurrentState();  // intro expires → index=1, ON, phase=1500
+    app.updateCurrentState();  // slide 0 ON expires → kSlideOff, phase=1500
 
-    fake_time = 2000;
-    app.updateCurrentState();  // 2000-1500=500 < 1000 → stays ON
+    fake_time = 2100;
+    app.updateCurrentState();  // slide 0 OFF expires → index=1, ON, phase=2100
+
+    fake_time = 2500;
+    app.updateCurrentState();  // 2500-2100=400 < 1000 → stays ON
 
     REQUIRE(app.current_state_.slide_state_ ==
             ofApp::CurrentState::SlideState::kSlideOn);
@@ -166,16 +195,19 @@ TEST_CASE("slide advances after max_off_time", "[updateCurrentState]")
     ofApp app = makeApp({"intro.jpg", "a.jpg", "b.jpg"}, fake_time,
                         /*on=*/1000.0f, /*off=*/500.0f);
 
-    app.updateCurrentState();  // init, t=0, index=0 (intro), ON
+    app.updateCurrentState();  // init, t=0, index=0, ON
 
     fake_time = 1500;
-    app.updateCurrentState();  // intro expires → index=1, ON, phase=1500
+    app.updateCurrentState();  // slide 0 ON expires → kSlideOff, phase=1500
 
-    fake_time = 2600;
-    app.updateCurrentState();  // index=1 ON: 2600-1500=1100 > 1000 → OFF, phase=2600
+    fake_time = 2100;
+    app.updateCurrentState();  // slide 0 OFF expires → index=1, ON, phase=2100
 
     fake_time = 3200;
-    app.updateCurrentState();  // OFF: 3200-2600=600 > 500 → index=2, ON
+    app.updateCurrentState();  // index=1 ON: 3200-2100=1100 > 1000 → OFF, phase=3200
+
+    fake_time = 3800;
+    app.updateCurrentState();  // OFF: 3800-3200=600 > 500 → index=2, ON
 
     REQUIRE(app.current_state_.slide_index_ == 2);
     REQUIRE(app.current_state_.slide_state_ ==

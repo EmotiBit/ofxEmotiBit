@@ -471,20 +471,11 @@ void ofApp::updateCurrentState()
     }
     if (CurrentState::SlideState::kSlideOff == current_state_.slide_state_)
     {
-        if (current_state_.slide_index_ == 0)
+        if ((float)get_time_msec_() -
+                (float)current_state_.phase_start_msec_ >
+            current_state_.state_times_.off_time_)
         {
-            // increment without wait if this is an intro slide
-            // no background for intro slide
             changeSlide(1);
-        }
-        else
-        {
-            if ((float)get_time_msec_() -
-                    (float)current_state_.phase_start_msec_ >
-                current_state_.state_times_.off_time_)
-            {
-                changeSlide(1);
-            }
         }
     }
 }
@@ -524,24 +515,16 @@ void ofApp::changeSlide(int delta)
                                                 (int)on_time_max);
         current_state_.state_times_.on_time_ = (float)dist(rng);
     }
-    if (current_state_.slide_index_ == 0)
+    if (off_time_min == off_time_max)
     {
-        // NOTE: intro slide has no off time
-        current_state_.state_times_.off_time_ = 0;
+        current_state_.state_times_.off_time_ = off_time_max;
     }
     else
     {
-        if (off_time_min == off_time_max)
-        {
-            current_state_.state_times_.off_time_ = off_time_max;
-        }
-        else
-        {
-            std::mt19937 rng{std::random_device{}()};
-            std::uniform_int_distribution<int> dist((int)off_time_min,
-                                                    (int)off_time_max);
-            current_state_.state_times_.off_time_ = (float)dist(rng);
-        }
+        std::mt19937 rng{std::random_device{}()};
+        std::uniform_int_distribution<int> dist((int)off_time_min,
+                                                (int)off_time_max);
+        current_state_.state_times_.off_time_ = (float)dist(rng);
     }
     current_state_.phase_start_msec_ = get_time_msec_();
     if (current_state_.slide_index_ >= (int)current_state_.slide_paths_.size())
