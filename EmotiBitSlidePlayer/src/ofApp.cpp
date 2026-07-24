@@ -546,7 +546,25 @@ void ofApp::changeSlide(int delta)
                  current_state_.slide_paths_[current_state_.slide_index_],
              "ON_TIME=" +
                  std::to_string(current_state_.state_times_.on_time_)});
-        if (current_state_.slide_index_ == 0 &&
+        bool paused_this_slide = false;
+        if (!beginning_pause_applied_ && app_settings_.start_paused_ &&
+            current_state_.slide_set_index_ == 0 &&
+            current_state_.slide_index_ == 0)
+        {
+            beginning_pause_applied_ = true;
+            paused_this_slide = true;
+            current_state_.slide_state_before_pause_ =
+                CurrentState::SlideState::kSlideOn;
+            current_state_.slide_state_ = CurrentState::SlideState::kSlidePause;
+            current_state_.time_since_phase_start_on_pause_ = 0;
+            logEvent("PAUSE",
+                     {"set_index=" +
+                          std::to_string(current_state_.slide_set_index_),
+                      "slide_index=" +
+                          std::to_string(current_state_.slide_index_),
+                      "reason=pause_at_beginning"});
+        }
+        if (!paused_this_slide && current_state_.slide_index_ == 0 &&
             !current_state_.slide_settings_.slide_set_intro_slide_.empty() &&
             current_state_.slide_settings_.pause_on_set_intro_slide_)
         {
@@ -637,6 +655,7 @@ void ofApp::keyReleased(int key)
     }
     if (app_settings_.keyboard_controls_.restart_slide_show_ == kKeyChar)
     {
+        beginning_pause_applied_ = false;
         current_state_.slide_set_index_ = -1;
         current_state_.init_new_set_ = true;
     }
@@ -704,6 +723,7 @@ void ofApp::keyReleased(int key)
                 logEvent("SETTINGS_RELOAD",
                          {"file=" + settings_file_name_,
                           "settings=" + settings_json_});
+                beginning_pause_applied_ = false;
                 current_state_.slide_set_index_ = -1;
                 current_state_.init_new_set_ = true;
                 current_state_.slide_state_ =
@@ -742,6 +762,7 @@ void ofApp::keyReleased(int key)
             startLogToFile();
             logEvent("LOG_DIR_SET", {"dir=" + chosen_dir});
             show_ended_ = false;
+            beginning_pause_applied_ = false;
             current_state_.slide_set_index_ = -1;
             current_state_.init_new_set_ = true;
             current_state_.slide_state_ = CurrentState::SlideState::kSlideOn;

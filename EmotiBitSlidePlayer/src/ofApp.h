@@ -172,6 +172,9 @@ class ofApp : public ofBaseApp
     /// @brief Set to true when the last slide set has finished. Freezes
     /// @c updateCurrentState() and disables key input.
     bool show_ended_ = false;
+    /// @brief Set to true once the pauseAtBeginning pause has fired.
+    /// Cleared whenever the show is restarted from the beginning.
+    bool beginning_pause_applied_ = false;
     /// @brief File name of the JSON settings file.
     std::string settings_file_name_ = "emotibitSlidePlayerSettings.json";
     /// @brief Compact single-line JSON snapshot of loaded settings, written to

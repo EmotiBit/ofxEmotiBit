@@ -30,6 +30,9 @@ static ofApp makeApp(std::vector<std::string> slide_paths,
     app.get_epoch_msec_ = []() -> uint64_t { return 1000000ULL; };
     app.open_directory_dialog_ = []() -> std::string { return ""; };
 
+    // disable start_paused so existing tests are not affected
+    app.app_settings_.start_paused_ = false;
+
     // one slide set with the given timing
     ofApp::AppSettings::SlideSet ss;
     ss.slide_directory_ = "./fake/";
@@ -602,4 +605,69 @@ TEST_CASE("L key: valid directory restarts slide show", "[keyReleased]")
     REQUIRE(app.current_state_.init_new_set_ == true);
     REQUIRE(app.current_state_.slide_state_ ==
             ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+// ── Tests: startPaused ────────────────────────────────────────────────────────
+
+TEST_CASE("startPaused: pauses on first slide of first set",
+          "[updateCurrentState]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    app.app_settings_.start_paused_ = true;
+
+    app.updateCurrentState();
+
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlidePause);
+    REQUIRE(app.current_state_.slide_index_ == 0);
+    REQUIRE(app.beginning_pause_applied_ == true);
+}
+
+TEST_CASE("startPaused: resumes normally after key press", "[updateCurrentState]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    app.app_settings_.start_paused_ = true;
+
+    app.updateCurrentState();  // paused at slide 0
+    app.keyReleased('P');      // resume
+
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("startPaused: does not pause again after advancing to next slide",
+          "[updateCurrentState]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    app.app_settings_.start_paused_ = true;
+
+    app.updateCurrentState();  // paused at slide 0
+    app.keyReleased('P');      // resume
+    app.keyReleased('N');      // advance to slide 1
+
+    REQUIRE(app.current_state_.slide_index_ == 1);
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("startPaused: fires again after show restart with R",
+          "[updateCurrentState]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    app.app_settings_.start_paused_ = true;
+
+    app.updateCurrentState();  // paused at slide 0
+    app.keyReleased('P');      // resume
+    app.keyReleased('N');      // advance
+    app.keyReleased('R');      // restart → clears beginning_pause_applied_
+
+    app.updateCurrentState();  // init set 0 again → should pause
+
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlidePause);
+    REQUIRE(app.beginning_pause_applied_ == true);
 }
