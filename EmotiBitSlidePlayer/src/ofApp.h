@@ -242,6 +242,15 @@ class ofApp : public ofBaseApp
         return result.bSuccess ? result.filePath : "";
     };
 
+    /// @brief Opens a folder picker dialog and returns the chosen directory
+    /// path, or empty string if the user cancelled. Injectable for testing.
+    std::function<std::string()> open_directory_dialog_ = []() -> std::string
+    {
+        ofFileDialogResult result =
+            ofSystemLoadDialog("Select Log Directory", true);
+        return result.bSuccess ? result.filePath : "";
+    };
+
     /// @brief Currently displayed slide image.
     ofImage current_slide_image_;
     /// @brief Background image shown during slide-off intervals.

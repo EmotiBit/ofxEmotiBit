@@ -28,6 +28,7 @@ static ofApp makeApp(std::vector<std::string> slide_paths,
     app.get_time_msec_ = [&fake_time]() { return fake_time; };
     app.get_timestamp_ = []() { return std::string("2026-01-01T00:00:00"); };
     app.get_epoch_msec_ = []() -> uint64_t { return 1000000ULL; };
+    app.open_directory_dialog_ = []() -> std::string { return ""; };
 
     // one slide set with the given timing
     ofApp::AppSettings::SlideSet ss;
@@ -527,4 +528,78 @@ TEST_CASE("show ends with background visible and keys disabled",
     REQUIRE(app.show_ended_ == true);
     REQUIRE(app.current_state_.slide_state_ ==
             ofApp::CurrentState::SlideState::kSlideOff);
+}
+
+// ── Tests: set log directory ('L') ───────────────────────────────────────────
+
+TEST_CASE("L key: cancel leaves slide state unchanged", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    app.open_directory_dialog_ = []() -> std::string { return ""; };
+
+    app.updateCurrentState();  // init, state = ON
+
+    app.keyReleased('L');
+
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("L key: non-directory path is ignored", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    app.open_directory_dialog_ = []() -> std::string
+    { return "/nonexistent/path_xyz_notadir"; };
+
+    app.updateCurrentState();
+
+    app.keyReleased('L');
+
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("L key: cancel restores timing so slide does not advance early",
+          "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time, /*on=*/1000.0f);
+    app.open_directory_dialog_ = [&fake_time]() -> std::string
+    {
+        fake_time += 5000;  // simulate dialog open for 5 seconds
+        return "";
+    };
+
+    app.updateCurrentState();  // init at t=0, ON
+
+    fake_time = 500;
+    app.keyReleased('L');  // dialog consumes 5000ms → t=5500, cancel
+
+    fake_time += 300;  // 800ms into on-time — should not advance
+    app.updateCurrentState();
+
+    REQUIRE(app.current_state_.slide_index_ == 0);
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
+}
+
+TEST_CASE("L key: valid directory restarts slide show", "[keyReleased]")
+{
+    uint64_t fake_time = 0;
+    ofApp app = makeApp({"a.jpg", "b.jpg"}, fake_time);
+    app.open_directory_dialog_ = []() -> std::string { return "/tmp"; };
+
+    app.updateCurrentState();  // init
+    app.keyReleased('N');      // advance to slide 1
+    app.updateCurrentState();
+
+    app.keyReleased('L');
+
+    REQUIRE(app.app_settings_.log_file_directory_ == "/tmp/");
+    REQUIRE(app.current_state_.slide_set_index_ == -1);
+    REQUIRE(app.current_state_.init_new_set_ == true);
+    REQUIRE(app.current_state_.slide_state_ ==
+            ofApp::CurrentState::SlideState::kSlideOn);
 }

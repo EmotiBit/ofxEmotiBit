@@ -718,6 +718,35 @@ void ofApp::keyReleased(int key)
             }
         }
     }
+    if (app_settings_.keyboard_controls_.set_log_file_directory_ == kKeyChar)
+    {
+        const auto kStateBeforeDialog = current_state_.slide_state_;
+        const float kElapsedBeforeDialog =
+            (float)get_time_msec_() - (float)current_state_.phase_start_msec_;
+        current_state_.slide_state_ = CurrentState::SlideState::kSlidePause;
+
+        std::string chosen_dir = open_directory_dialog_();
+
+        if (chosen_dir.empty() || !ofDirectory::doesDirectoryExist(chosen_dir))
+        {
+            current_state_.slide_state_ = kStateBeforeDialog;
+            current_state_.phase_start_msec_ =
+                get_time_msec_() - (uint64_t)kElapsedBeforeDialog;
+        }
+        else
+        {
+            if (chosen_dir.back() != '/')
+                chosen_dir += '/';
+            event_log_.close();
+            app_settings_.log_file_directory_ = chosen_dir;
+            startLogToFile();
+            logEvent("LOG_DIR_SET", {"dir=" + chosen_dir});
+            show_ended_ = false;
+            current_state_.slide_set_index_ = -1;
+            current_state_.init_new_set_ = true;
+            current_state_.slide_state_ = CurrentState::SlideState::kSlideOn;
+        }
+    }
 }
 
 void ofApp::mouseMoved(int x, int y)
