@@ -298,7 +298,7 @@ bool ofApp::startLogToFile()
         std::cerr << "Failed to open log file: " << log_file_name << std::endl;
         return false;
     }
-    event_log_ << "dateTime,epochMs,event,details\n";
+    event_log_ << "dateTime,epochS,event,details\n";
     log_stream_ = &event_log_;
     return true;
 }
@@ -314,13 +314,17 @@ void ofApp::logEvent(const std::string& event,
     }
     std::string timestamp = get_timestamp_();
     uint64_t epoch_ms = get_epoch_msec_();
+    std::string epoch_str = std::to_string(epoch_ms / 1000) + "." +
+                            (epoch_ms % 1000 < 100 ? "0" : "") +
+                            (epoch_ms % 1000 < 10 ? "0" : "") +
+                            std::to_string(epoch_ms % 1000);
     if (log_stream_ != nullptr)
     {
-        *log_stream_ << timestamp << ',' << epoch_ms << ',' << event << ','
+        *log_stream_ << timestamp << ',' << epoch_str << ',' << event << ','
                      << '"' << joined << '"' << '\n';
         log_stream_->flush();
     }
-    std::cout << timestamp << ' ' << epoch_ms << ' ' << event << ' ' << joined
+    std::cout << timestamp << ' ' << epoch_str << ' ' << event << ' ' << joined
               << '\n';
 }
 
