@@ -124,7 +124,7 @@ bool ofApp::parseSettings(const Json::Value& settings)
                         ofFilePath::join(ofFilePath::getUserHomeDir(),
                                          "Documents"),
                         "EmotiBit"),
-                    "EmotiBitSlidePlayer"),
+                    "EmotiBit SlidePlayer"),
                 "log");
             std::cerr
                 << "Warning: log file directory not specified. Using default: "
