@@ -30,11 +30,12 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_BUNDLE_NAME "EmotiBit SlidePlayer"
+    OUTPUT_NAME "EmotiBit SlidePlayer"
 )
 
 # ── Copy settings + slides to app bundle Resources ────────────────────────────
 set(BUNDLE_RESOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/bin/${PROJECT_NAME}.app/Contents/Resources")
+    "${CMAKE_CURRENT_SOURCE_DIR}/bin/EmotiBit SlidePlayer.app/Contents/Resources")
 add_custom_target(copy_settings ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory "${BUNDLE_RESOURCES}"
     COMMAND ${CMAKE_COMMAND} -E copy
