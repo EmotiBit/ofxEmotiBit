@@ -29,7 +29,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    MACOSX_BUNDLE_BUNDLE_NAME "EmotiBitSlidePlayer"
+    MACOSX_BUNDLE_BUNDLE_NAME "EmotiBit SlidePlayer"
 )
 
 # ── Copy settings + slides to app bundle Resources ────────────────────────────

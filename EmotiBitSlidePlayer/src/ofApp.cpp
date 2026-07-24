@@ -24,7 +24,7 @@ void ofApp::ensureSettingsFile()
         ofFilePath::join(
             ofFilePath::join(ofFilePath::getUserHomeDir(), "Documents"),
             "EmotiBit"),
-        "EmotiBitSlidePlayer");
+        "EmotiBit SlidePlayer");
     std::string target_path = ofFilePath::join(docs_dir, settings_file_name_);
     if (!ofFile(target_path).exists())
     {
@@ -46,7 +46,7 @@ void ofApp::setup()
 #ifdef TARGET_OSX
     ofSetDataPathRoot("../Resources");
 #endif
-    ofSetWindowTitle("EmotiBitSlidePlayer v" + ofxEmotiBitVersion);
+    ofSetWindowTitle("EmotiBit SlidePlayer v" + ofxEmotiBitVersion);
     ensureSettingsFile();
     ofSetLogLevel(OF_LOG_SILENT);
     if (!loadAppSettings())
