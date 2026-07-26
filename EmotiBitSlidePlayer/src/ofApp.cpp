@@ -13,6 +13,7 @@
 #include "ofFileUtils.h"
 #include "ofImage.h"
 #include "ofUtils.h"
+#include "ofxEmotiBitVersion.h"
 
 // ── Setup
 // ─────────────────────────────────────────────────────────────────────
@@ -23,7 +24,7 @@ void ofApp::ensureSettingsFile()
         ofFilePath::join(
             ofFilePath::join(ofFilePath::getUserHomeDir(), "Documents"),
             "EmotiBit"),
-        "EmotiBitSlidePlayer");
+        "EmotiBit SlidePlayer");
     std::string target_path = ofFilePath::join(docs_dir, settings_file_name_);
     if (!ofFile(target_path).exists())
     {
@@ -45,6 +46,7 @@ void ofApp::setup()
 #ifdef TARGET_OSX
     ofSetDataPathRoot("../Resources");
 #endif
+    ofSetWindowTitle("EmotiBit SlidePlayer v" + ofxEmotiBitVersion);
     ensureSettingsFile();
     ofSetLogLevel(OF_LOG_SILENT);
     if (!loadAppSettings())
@@ -53,18 +55,18 @@ void ofApp::setup()
         ofExit();
     }
     startLogToFile();
-    logEvent("APP_START", "settings=" + settings_file_name_ +
-                              " log_dir=" + app_settings_.log_file_directory_);
-    logEvent("SETTINGS_JSON", settings_json_);
+    logEvent("APP_START", {"settings=" + settings_file_name_,
+                           "log_dir=" + app_settings_.log_file_directory_});
+    logEvent("SETTINGS_JSON", {settings_json_});
     for (int i = 0; i < (int)app_settings_.slide_sets_.size(); i++)
     {
         const auto& ss = app_settings_.slide_sets_[i];
         logEvent("SETTINGS_LOAD",
-                 "set_index=" + std::to_string(i) +
-                     " dir=" + ss.slide_directory_ + " max_slides=" +
-                     std::to_string(ss.settings_.max_slides_per_set_) +
-                     " randomize=" +
-                     std::to_string(ss.settings_.slide_order_randomization_));
+                 {"set_index=" + std::to_string(i),
+                  "dir=" + ss.slide_directory_,
+                  "max_slides=" + std::to_string(ss.settings_.max_slides_per_set_),
+                  "randomize=" +
+                      std::to_string(ss.settings_.slide_order_randomization_)});
     }
 }
 
@@ -122,7 +124,7 @@ bool ofApp::parseSettings(const Json::Value& settings)
                         ofFilePath::join(ofFilePath::getUserHomeDir(),
                                          "Documents"),
                         "EmotiBit"),
-                    "EmotiBitSlidePlayer"),
+                    "EmotiBit SlidePlayer"),
                 "log");
             std::cerr
                 << "Warning: log file directory not specified. Using default: "
@@ -296,21 +298,34 @@ bool ofApp::startLogToFile()
         std::cerr << "Failed to open log file: " << log_file_name << std::endl;
         return false;
     }
-    event_log_ << "dateTime,event,details\n";
+    event_log_ << "dateTime,epochTime(S),event,details\n";
     log_stream_ = &event_log_;
     return true;
 }
 
-void ofApp::logEvent(const std::string& event, const std::string& details)
+void ofApp::logEvent(const std::string& event,
+                     const std::vector<std::string>& details)
 {
+    std::string joined;
+    for (size_t i = 0; i < details.size(); ++i)
+    {
+        if (i > 0) joined += log_details_delimiter_;
+        joined += details[i];
+    }
     std::string timestamp = get_timestamp_();
+    uint64_t epoch_ms = get_epoch_msec_();
+    std::string epoch_str = std::to_string(epoch_ms / 1000) + "." +
+                            (epoch_ms % 1000 < 100 ? "0" : "") +
+                            (epoch_ms % 1000 < 10 ? "0" : "") +
+                            std::to_string(epoch_ms % 1000);
     if (log_stream_ != nullptr)
     {
-        *log_stream_ << timestamp << ',' << event << ',' << '"' << details
-                     << '"' << '\n';
+        *log_stream_ << timestamp << ',' << epoch_str << ',' << event << ','
+                     << '"' << joined << '"' << '\n';
         log_stream_->flush();
     }
-    std::cout << timestamp << ' ' << event << ' ' << details << '\n';
+    std::cout << timestamp << ' ' << epoch_str << ' ' << event << ' ' << joined
+              << '\n';
 }
 
 // ── Per-frame
@@ -318,11 +333,6 @@ void ofApp::logEvent(const std::string& event, const std::string& details)
 
 void ofApp::update()
 {
-    if (should_exit_)
-    {
-        ofExit();
-        return;
-    }
     updateCurrentState();
 }
 
@@ -332,15 +342,20 @@ void ofApp::updateCurrentState()
     {
         return;
     }
+    if (show_ended_)
+    {
+        return;
+    }
     if (current_state_.init_new_set_)
     {
         current_state_.slide_set_index_++;
         if (current_state_.slide_set_index_ >=
             (int)app_settings_.slide_sets_.size())
         {
-            logEvent("APP_END", "reason=end_of_slide_show");
-            // TODO: consider if we want an end slide
-            should_exit_ = true;
+            logEvent("APP_END", {"reason=end_of_slide_show"});
+            show_ended_ = true;
+            current_state_.slide_state_ =
+                CurrentState::SlideState::kSlideOff;
             return;
         }
         current_state_.slide_index_ =
@@ -357,10 +372,11 @@ void ofApp::updateCurrentState()
 
         if (current_state_.slide_paths_.empty())
         {
-            logEvent(
-                "WARNING",
-                "set_index=" + std::to_string(current_state_.slide_set_index_) +
-                    " reason=no_slides_found dir=" + current_state_.slide_dir_);
+            logEvent("WARNING",
+                     {"set_index=" +
+                          std::to_string(current_state_.slide_set_index_),
+                      "reason=no_slides_found",
+                      "dir=" + current_state_.slide_dir_});
             current_state_.init_new_set_ = true;  // skip to next set
             return;
         }
@@ -421,15 +437,16 @@ void ofApp::updateCurrentState()
         std::string slide_list;
         for (const auto& path : current_state_.slide_paths_)
         {
-            slide_list += path + "|";
+            slide_list += path + ";";
         }
-        logEvent(
-            "SLIDE_SET_INIT",
-            "set_index=" + std::to_string(current_state_.slide_set_index_) +
-                " intro_slide=" + intro_path + " background=" +
-                current_state_.slide_settings_.background_ + " slide_count=" +
-                std::to_string(current_state_.slide_paths_.size()) +
-                " slides=" + slide_list);
+        logEvent("SLIDE_SET_INIT",
+                 {"set_index=" +
+                      std::to_string(current_state_.slide_set_index_),
+                  "intro_slide=" + intro_path,
+                  "background=" + current_state_.slide_settings_.background_,
+                  "slide_count=" +
+                      std::to_string(current_state_.slide_paths_.size()),
+                  "slides=" + slide_list});
         // use existing machinery to advance to the next slide
         changeSlide(1);
     }
@@ -448,33 +465,23 @@ void ofApp::updateCurrentState()
                 current_state_.slide_state_ =
                     CurrentState::SlideState::kSlideOff;
                 current_state_.phase_start_msec_ = get_time_msec_();
-                logEvent(
-                    "SLIDE_OFF",
-                    "set_index=" +
-                        std::to_string(current_state_.slide_set_index_) +
-                        " slide_index=" +
-                        std::to_string(current_state_.slide_index_) +
-                        " OFF_TIME=" +
-                        std::to_string(current_state_.state_times_.off_time_));
+                logEvent("SLIDE_OFF",
+                         {"set_index=" + std::to_string(
+                                             current_state_.slide_set_index_),
+                          "slide_index=" +
+                              std::to_string(current_state_.slide_index_),
+                          "OFF_TIME=" + std::to_string(
+                                            current_state_.state_times_.off_time_)});
             }
         }
     }
     if (CurrentState::SlideState::kSlideOff == current_state_.slide_state_)
     {
-        if (current_state_.slide_index_ == 0)
+        if ((float)get_time_msec_() -
+                (float)current_state_.phase_start_msec_ >
+            current_state_.state_times_.off_time_)
         {
-            // increment without wait if this is an intro slide
-            // no background for intro slide
             changeSlide(1);
-        }
-        else
-        {
-            if ((float)get_time_msec_() -
-                    (float)current_state_.phase_start_msec_ >
-                current_state_.state_times_.off_time_)
-            {
-                changeSlide(1);
-            }
         }
     }
 }
@@ -514,24 +521,16 @@ void ofApp::changeSlide(int delta)
                                                 (int)on_time_max);
         current_state_.state_times_.on_time_ = (float)dist(rng);
     }
-    if (current_state_.slide_index_ == 0)
+    if (off_time_min == off_time_max)
     {
-        // NOTE: intro slide has no off time
-        current_state_.state_times_.off_time_ = 0;
+        current_state_.state_times_.off_time_ = off_time_max;
     }
     else
     {
-        if (off_time_min == off_time_max)
-        {
-            current_state_.state_times_.off_time_ = off_time_max;
-        }
-        else
-        {
-            std::mt19937 rng{std::random_device{}()};
-            std::uniform_int_distribution<int> dist((int)off_time_min,
-                                                    (int)off_time_max);
-            current_state_.state_times_.off_time_ = (float)dist(rng);
-        }
+        std::mt19937 rng{std::random_device{}()};
+        std::uniform_int_distribution<int> dist((int)off_time_min,
+                                                (int)off_time_max);
+        current_state_.state_times_.off_time_ = (float)dist(rng);
     }
     current_state_.phase_start_msec_ = get_time_msec_();
     if (current_state_.slide_index_ >= (int)current_state_.slide_paths_.size())
@@ -545,12 +544,45 @@ void ofApp::changeSlide(int delta)
             current_state_.slide_paths_[current_state_.slide_index_]);
         logEvent(
             "SLIDE_ON",
-            "set_index=" + std::to_string(current_state_.slide_set_index_) +
-                " slide_index=" + std::to_string(current_state_.slide_index_) +
-                " path=" +
-                current_state_.slide_paths_[current_state_.slide_index_] +
-                " ON_TIME=" +
-                std::to_string(current_state_.state_times_.on_time_));
+            {"set_index=" + std::to_string(current_state_.slide_set_index_),
+             "slide_index=" + std::to_string(current_state_.slide_index_),
+             "path=" +
+                 current_state_.slide_paths_[current_state_.slide_index_],
+             "ON_TIME=" +
+                 std::to_string(current_state_.state_times_.on_time_)});
+        bool paused_this_slide = false;
+        if (!beginning_pause_applied_ && app_settings_.start_paused_ &&
+            current_state_.slide_set_index_ == 0 &&
+            current_state_.slide_index_ == 0)
+        {
+            beginning_pause_applied_ = true;
+            paused_this_slide = true;
+            current_state_.slide_state_before_pause_ =
+                CurrentState::SlideState::kSlideOn;
+            current_state_.slide_state_ = CurrentState::SlideState::kSlidePause;
+            current_state_.time_since_phase_start_on_pause_ = 0;
+            logEvent("PAUSE",
+                     {"set_index=" +
+                          std::to_string(current_state_.slide_set_index_),
+                      "slide_index=" +
+                          std::to_string(current_state_.slide_index_),
+                      "reason=pause_at_beginning"});
+        }
+        if (!paused_this_slide && current_state_.slide_index_ == 0 &&
+            !current_state_.slide_settings_.slide_set_intro_slide_.empty() &&
+            current_state_.slide_settings_.pause_on_set_intro_slide_)
+        {
+            current_state_.slide_state_before_pause_ =
+                CurrentState::SlideState::kSlideOn;
+            current_state_.slide_state_ = CurrentState::SlideState::kSlidePause;
+            current_state_.time_since_phase_start_on_pause_ = 0;
+            logEvent("PAUSE",
+                     {"set_index=" +
+                          std::to_string(current_state_.slide_set_index_),
+                      "slide_index=" +
+                          std::to_string(current_state_.slide_index_),
+                      "reason=pause_on_intro_slide"});
+        }
     }
 }
 
@@ -559,7 +591,12 @@ void ofApp::changeSlide(int delta)
 
 void ofApp::draw()
 {
-    if (CurrentState::SlideState::kSlideOff == current_state_.slide_state_)
+    const CurrentState::SlideState display_state =
+        (current_state_.slide_state_ == CurrentState::SlideState::kSlidePause)
+            ? current_state_.slide_state_before_pause_
+            : current_state_.slide_state_;
+
+    if (display_state == CurrentState::SlideState::kSlideOff)
     {
         drawImageFitted(background_image_);
     }
@@ -591,15 +628,23 @@ void ofApp::drawImageFitted(const ofImage& img)
 
 void ofApp::keyPressed(int key)
 {
+}
+
+void ofApp::keyReleased(int key)
+{
     // TODO: Time since phase change should be calculate for boath ON and OFF
-    // Modifier keys (Shift, Ctrl, etc.) produce large keycodes outside the
-    // printable ASCII range — skip them to avoid spurious log entries.
-    if (key > 127)
+    // Only handle printable ASCII (32–126). Control characters (including
+    // modifier key releases) and values above 126 are silently ignored.
+    if (key < 32 || key > 126)
     {
         return;
     }
-    const char kKeyChar = static_cast<char>(toupper(key));
-    logEvent("KEY_PRESS", std::string("key=") + kKeyChar);
+    if (show_ended_)
+    {
+        return;
+    }
+    const char kKeyChar = static_cast<char>(key);
+    logEvent("KEY_RELEASE", {std::string("key=") + kKeyChar});
     if (app_settings_.keyboard_controls_.next_slide_ == kKeyChar)
     {
         changeSlide(1);
@@ -614,6 +659,7 @@ void ofApp::keyPressed(int key)
     }
     if (app_settings_.keyboard_controls_.restart_slide_show_ == kKeyChar)
     {
+        beginning_pause_applied_ = false;
         current_state_.slide_set_index_ = -1;
         current_state_.init_new_set_ = true;
     }
@@ -628,11 +674,11 @@ void ofApp::keyPressed(int key)
             current_state_.time_since_phase_start_on_pause_ =
                 (float)get_time_msec_() -
                 (float)current_state_.phase_start_msec_;
-            logEvent(
-                "PAUSE",
-                "set_index=" + std::to_string(current_state_.slide_set_index_) +
-                    " slide_index=" +
-                    std::to_string(current_state_.slide_index_));
+            logEvent("PAUSE",
+                     {"set_index=" +
+                          std::to_string(current_state_.slide_set_index_),
+                      "slide_index=" +
+                          std::to_string(current_state_.slide_index_)});
         }
         else
         {
@@ -641,17 +687,91 @@ void ofApp::keyPressed(int key)
             current_state_.phase_start_msec_ =
                 get_time_msec_() -
                 (uint64_t)current_state_.time_since_phase_start_on_pause_;
-            logEvent(
-                "RESUME",
-                "set_index=" + std::to_string(current_state_.slide_set_index_) +
-                    " slide_index=" +
-                    std::to_string(current_state_.slide_index_));
+            logEvent("RESUME",
+                     {"set_index=" +
+                          std::to_string(current_state_.slide_set_index_),
+                      "slide_index=" +
+                          std::to_string(current_state_.slide_index_)});
         }
     }
-}
+    if (app_settings_.keyboard_controls_.toggle_full_screen_ == kKeyChar)
+    {
+        bool going_fullscreen = (ofGetWindowMode() == OF_WINDOW);
+        ofToggleFullscreen();
+        logEvent("FULL_SCREEN",
+                 {std::string("state=") + (going_fullscreen ? "on" : "off")});
+    }
+    if (app_settings_.keyboard_controls_.load_settings_file_ == kKeyChar)
+    {
+        // Freeze timing before the blocking dialog so wall-clock time
+        // consumed by the dialog does not advance the slide.
+        const auto kStateBeforeDialog = current_state_.slide_state_;
+        const float kElapsedBeforeDialog =
+            (float)get_time_msec_() - (float)current_state_.phase_start_msec_;
+        current_state_.slide_state_ = CurrentState::SlideState::kSlidePause;
 
-void ofApp::keyReleased(int key)
-{
+        std::string chosen_path = open_file_dialog_();
+
+        if (chosen_path.empty())
+        {
+            // User cancelled — restore timing as if no time passed.
+            current_state_.slide_state_ = kStateBeforeDialog;
+            current_state_.phase_start_msec_ =
+                get_time_msec_() - (uint64_t)kElapsedBeforeDialog;
+        }
+        else
+        {
+            settings_file_name_ = chosen_path;
+            if (loadAppSettings())
+            {
+                logEvent("SETTINGS_RELOAD",
+                         {"file=" + settings_file_name_,
+                          "settings=" + settings_json_});
+                beginning_pause_applied_ = false;
+                current_state_.slide_set_index_ = -1;
+                current_state_.init_new_set_ = true;
+                current_state_.slide_state_ =
+                    CurrentState::SlideState::kSlideOn;
+            }
+            else
+            {
+                // Bad file — restore timing so show resumes unchanged.
+                current_state_.slide_state_ = kStateBeforeDialog;
+                current_state_.phase_start_msec_ =
+                    get_time_msec_() - (uint64_t)kElapsedBeforeDialog;
+            }
+        }
+    }
+    if (app_settings_.keyboard_controls_.set_log_file_directory_ == kKeyChar)
+    {
+        const auto kStateBeforeDialog = current_state_.slide_state_;
+        const float kElapsedBeforeDialog =
+            (float)get_time_msec_() - (float)current_state_.phase_start_msec_;
+        current_state_.slide_state_ = CurrentState::SlideState::kSlidePause;
+
+        std::string chosen_dir = open_directory_dialog_();
+
+        if (chosen_dir.empty() || !ofDirectory::doesDirectoryExist(chosen_dir))
+        {
+            current_state_.slide_state_ = kStateBeforeDialog;
+            current_state_.phase_start_msec_ =
+                get_time_msec_() - (uint64_t)kElapsedBeforeDialog;
+        }
+        else
+        {
+            if (chosen_dir.back() != '/')
+                chosen_dir += '/';
+            event_log_.close();
+            app_settings_.log_file_directory_ = chosen_dir;
+            startLogToFile();
+            logEvent("LOG_DIR_SET", {"dir=" + chosen_dir});
+            show_ended_ = false;
+            beginning_pause_applied_ = false;
+            current_state_.slide_set_index_ = -1;
+            current_state_.init_new_set_ = true;
+            current_state_.slide_state_ = CurrentState::SlideState::kSlideOn;
+        }
+    }
 }
 
 void ofApp::mouseMoved(int x, int y)
