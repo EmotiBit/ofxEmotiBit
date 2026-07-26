@@ -298,7 +298,7 @@ bool ofApp::startLogToFile()
         std::cerr << "Failed to open log file: " << log_file_name << std::endl;
         return false;
     }
-    event_log_ << "dateTime,epochS,event,details\n";
+    event_log_ << "dateTime,epochTime(S),event,details\n";
     log_stream_ = &event_log_;
     return true;
 }

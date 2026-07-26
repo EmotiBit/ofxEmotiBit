@@ -4,7 +4,7 @@ Displays timed sequences of image slide sets and logs all events to a CSV file. 
 
 ## Settings file
 
-On first launch the app copies `emotibitSlidePlayerSettings.json` to `~/Documents/EmotiBit/` and reads it from there on every subsequent run. Edit that copy to configure the app.
+On first launch the app copies `emotibitSlidePlayerSettings.json` to `~/Documents/EmotiBit/EmotiBit SlidePlayer/` and reads it from there on every subsequent run. Edit that copy to configure the app.
 
 ### Global slide settings
 
@@ -24,8 +24,8 @@ On first launch the app copies `emotibitSlidePlayerSettings.json` to `~/Document
 | Key | Description |
 |-----|-------------|
 | `startFullScreen` | Start in full-screen mode |
-| `startPaused` | Start with the slideshow paused |
-| `logFileDirectory` | Directory for CSV log output (leave empty to log to the current directory) |
+| `startPaused` | If `true`, pause on the first slide when the show starts (one-shot — does not repeat mid-show; resets when the show is restarted with `R`, `S`, or `L`) |
+| `logFileDirectory` | Directory for CSV log output (leave empty to use the default: `~/Documents/EmotiBit/EmotiBit SlidePlayer`) |
 
 ### Keyboard controls (all keys re-bindable in settings)
 
@@ -54,20 +54,18 @@ Each entry in `slideSets` points to a directory of images (`.jpg`, `.jpeg`, `.pn
 ]
 ```
 
-Image paths can be relative (resolved from the app's `data/` directory) or absolute.
+Image paths can be relative (TODO: State the relative path location for windows and mac) or absolute.
 
 ## Event log
 
-A CSV file (`dateTime,event,details`) is written to `logFileDirectory` on each run. Logged events include `SLIDE_ON`, `SLIDE_OFF`, `KEY_PRESS`, `APP_END`, and others.
+A CSV file (`dateTime,epochTime(S),event,details`) is written to `logFileDirectory` on each run. `epochTime(S)` is UTC Unix time in seconds with millisecond precision (e.g. `1234567890.123`). To align slide events with physiological signals, correlate this column against the `LocalTimestamp` column in parsed EmotiBit data. Logged events include `SLIDE_ON`, `SLIDE_OFF`, `KEY_RELEASE`, `APP_END`, and others.
 
 > **Note:** If `logFileDirectory` does not exist the log file will silently fail to open. Ensure the directory exists before launching.
 
 ## Known TODOs
 
-- `startFullScreen` and `startPaused` settings are parsed but not yet implemented.
-- `S` (load settings) and `L` (set log directory) keyboard commands are not yet implemented.
+- `startFullScreen` setting is parsed but not yet implemented.
 - Pressing `B` at the start of a set does not cross back to the previous set; it stops at the first slide of the current set.
-- No end slide is shown when the last slide set finishes — the app exits immediately.
 - Supported image extensions (jpg/jpeg/png/bmp) are hardcoded; other formats are not loaded.
 - Time-elapsed tracking on key press only accounts for the ON phase, not the OFF phase.
 - Log directory existence is not validated before opening the log file.
