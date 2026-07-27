@@ -259,6 +259,7 @@ bool ofApp::parseSettings(const Json::Value& settings)
 
     if (settings.isMember("slideSets"))
     {
+        app_settings_.slide_sets_.clear();
         uint16_t num_slide_sets = settings["slideSets"].size();
         for (int i = 0; i < num_slide_sets; i++)
         {
