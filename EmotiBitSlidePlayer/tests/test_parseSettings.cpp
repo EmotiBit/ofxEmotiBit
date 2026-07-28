@@ -59,6 +59,33 @@ TEST_CASE("per-set inherits global when not overridden", "[parseSettings]")
             5);
 }
 
+TEST_CASE("reloading settings replaces slide sets instead of appending",
+          "[parseSettings]")
+{
+    Json::Value root1;
+    root1["globalSlideSettings"]["maxSlidesPerSet"] = 5;
+    root1["slideSets"][0]["slideDirectory"] = "./set01/";
+    root1["slideSets"][0]["maxSlidesPerSet"] = 5;
+    root1["slideSets"][1]["slideDirectory"] = "./set02/";
+
+    ofApp app;
+    app.parseSettings(root1);
+    REQUIRE(app.app_settings_.slide_sets_.size() == 2);
+
+    Json::Value root2;
+    root2["globalSlideSettings"]["maxSlidesPerSet"] = 5;
+    root2["slideSets"][0]["slideDirectory"] = "./set01/";
+    root2["slideSets"][0]["maxSlidesPerSet"] = 3;  // simulates the user's edit
+
+    app.parseSettings(root2);  // simulates pressing 'S' to reload
+
+    REQUIRE(app.app_settings_.slide_sets_.size() == 1);
+    REQUIRE(app.app_settings_.slide_sets_[0].slide_directory_ ==
+            ofToDataPath("./set01/", true));
+    REQUIRE(app.app_settings_.slide_sets_[0].settings_.max_slides_per_set_ ==
+            3);
+}
+
 TEST_CASE("slide set without slideDirectory is skipped", "[parseSettings]")
 {
     Json::Value root;
