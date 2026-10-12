@@ -623,8 +623,24 @@ void ofApp::drawImageFitted(const ofImage& img)
 // ── Input
 // ─────────────────────────────────────────────────────────────────────
 
-void ofApp::keyPressed(int key)
+void ofApp::keyPressed(ofKeyEventArgs& args)
 {
+    // Skip OS auto-repeats so a held key logs a single KEY_PRESS.
+    if (args.isRepeat)
+    {
+        return;
+    }
+    const int key = args.key;
+    if (key < 32 || key > 126)
+    {
+        return;
+    }
+    if (show_ended_)
+    {
+        return;
+    }
+    const char kKeyChar = static_cast<char>(key);
+    logEvent("KEY_PRESS", {std::string("key=") + kKeyChar});
 }
 
 void ofApp::keyReleased(int key)
