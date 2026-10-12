@@ -326,9 +326,10 @@ class ofApp : public ofBaseApp
     // ── Input
     // ─────────────────────────────────────────────────────────────────
 
-    /// @brief Handles key-down events for slide navigation, pause, and restart.
-    /// @param key ASCII key code. Modifier keys (>127) are ignored.
-    void keyPressed(int key);
+    /// @brief Logs key-down events. Controls are driven by keyReleased().
+    /// @param args Key event. Auto-repeats and keys outside printable ASCII
+    /// (32–126) are ignored.
+    void keyPressed(ofKeyEventArgs& args);
 
     /// @brief openFrameworks key-release callback (unused).
     void keyReleased(int key);
